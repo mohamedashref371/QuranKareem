@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,6 +28,9 @@ namespace QuranKareem {
         string author="-1";
 
         bool textMode =false;
+
+        static string newLine = @"
+";
 
         private void Form1_Load(object sender, EventArgs e) {
             color.SelectedIndex = 1;
@@ -104,10 +108,36 @@ namespace QuranKareem {
             
         }
 
+        BackgroundWorker bw = new BackgroundWorker();
         private void Button_Click(object sender, EventArgs e) {
             author = ((Guna2Button)sender).Tag+"";
-            quranAudios.QuranAudio(@"audios\" + ((Guna2Button)sender).Text, (int)Surah.Value, (int)Ayah.Value);
+            string s = @"audios\" + ((Guna2Button)sender).Text;
+            quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             NewDateTime();
+            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2) {
+                if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء","تحميل",MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                    Task.Run(() => DownloadFiles(s));
+                }
+            }
+        }
+
+        static void DownloadFiles(string s) {
+            try {
+                string[] links = File.ReadAllText(s + "\\download links.txt").Replace(newLine, "|").Split('|');
+                string[] temp;
+                WebClient client = new WebClient();
+                if (links.Length >= 114) {
+                    foreach (string link in links) {
+                        if (link.Length > 0) {
+                            try {
+                                temp = link.Split('/');
+                                client.DownloadFile(link, s + "\\" + temp.Last());
+                            } catch { }
+                        }
+                    }
+                    MessageBox.Show("انتهى تحميل المصحف");
+                } else MessageBox.Show("حدث خطأ ما");
+            } catch { MessageBox.Show("حدث خطأ ما"); }
         }
 
         private void Repeat_CheckedChanged(object sender, EventArgs e){
