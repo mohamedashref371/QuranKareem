@@ -225,7 +225,35 @@ namespace QuranKareem
             return tempString;
         }
 
-        // هنا سأكتب دالة ال search ان شاء الله  
+        private List<int> SearchIDs = new List<int>();
+        public string[] Search(string words) {
+            SearchIDs.Clear();
+            if (!success || words==null || words.Trim()=="") return new string[] { };
+            List<string> lst = new List<string>();
+            quran.Open();
+            reader = new SQLiteCommand("SELECT id,abstract_text FROM ayat", quran).ExecuteReader();
+            string s;
+            while (reader.Read()) {
+                s = reader.GetString(1);
+                if (s.Contains(words)) {
+                    lst.Add($"{(s.Length>50? s.Substring(0,50)+"..." : s)}");
+                    SearchIDs.Add(reader.GetInt32(0));
+                }
+            }
+            quran.Close();
+            return lst.ToArray();
+        }
+        public int[] SelectedSearchIndex(int i) {
+            if (!success || SearchIDs.Count == 0 || i<0 || i>= SearchIDs.Count) return null;
+            int[] sura_aya = new int[2];
+            quran.Open();
+            reader = new SQLiteCommand($"SELECT id,surah,ayah FROM ayat WHERE id={SearchIDs[i]}", quran).ExecuteReader();
+            reader.Read();
+            sura_aya[0] = reader.GetInt32(1);
+            sura_aya[1] = reader.GetInt32(2);
+            quran.Close();
+            return sura_aya;
+        }
 
         private string GetHtmlText() {
             string s = "<span";

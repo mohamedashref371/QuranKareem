@@ -352,6 +352,23 @@ namespace QuranKareem {
             } catch { }
         }
 
+        private void search_Click(object sender, EventArgs e) {
+            searchList.Items.Clear();
+            searchList.Items.AddRange(quranTexts.Search(searchText.Text));
+            searchList.Visible = true;
+            searchClose.Visible = true;
+        }
+
+        private void searchList_SelectedIndexChanged(object sender, EventArgs e) {
+            int[] sura_aya = quranTexts.SelectedSearchIndex(searchList.SelectedIndex);
+            Surah.Value = sura_aya[0]; Ayah.Value = sura_aya[1]>= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
+        }
+
+        private void searchClose_Click(object sender, EventArgs e) {
+            searchList.Visible = false;
+            searchClose.Visible = false;
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
             File.WriteAllText(save + "Surah", Surah.Value + "," + Ayah.Value+","+ moshaf + ","+author);
         }

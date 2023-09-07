@@ -65,6 +65,10 @@
             this.quranTxt = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.copy = new System.Windows.Forms.Button();
             this.normalText = new System.Windows.Forms.CheckBox();
+            this.searchList = new System.Windows.Forms.ListBox();
+            this.search = new System.Windows.Forms.Button();
+            this.searchText = new System.Windows.Forms.TextBox();
+            this.searchClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
@@ -571,13 +575,14 @@
             this.quranTxt.Name = "quranTxt";
             this.quranTxt.Size = new System.Drawing.Size(3, 2);
             this.quranTxt.TabIndex = 45;
+            this.quranTxt.Text = null;
             this.quranTxt.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.quranTxt.Visible = false;
             // 
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(903, 666);
+            this.copy.Location = new System.Drawing.Point(893, 656);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 46;
@@ -589,7 +594,7 @@
             // 
             this.normalText.AutoSize = true;
             this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.normalText.Location = new System.Drawing.Point(806, 677);
+            this.normalText.Location = new System.Drawing.Point(796, 667);
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
@@ -597,11 +602,57 @@
             this.normalText.Text = "نص عادي";
             this.normalText.UseVisualStyleBackColor = true;
             // 
+            // searchList
+            // 
+            this.searchList.FormattingEnabled = true;
+            this.searchList.Location = new System.Drawing.Point(12, 11);
+            this.searchList.Name = "searchList";
+            this.searchList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.searchList.Size = new System.Drawing.Size(222, 511);
+            this.searchList.TabIndex = 48;
+            this.searchList.Visible = false;
+            this.searchList.SelectedIndexChanged += new System.EventHandler(this.searchList_SelectedIndexChanged);
+            // 
+            // search
+            // 
+            this.search.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.search.Location = new System.Drawing.Point(129, 528);
+            this.search.Name = "search";
+            this.search.Size = new System.Drawing.Size(90, 32);
+            this.search.TabIndex = 49;
+            this.search.Text = "بحث";
+            this.search.UseVisualStyleBackColor = true;
+            this.search.Click += new System.EventHandler(this.search_Click);
+            // 
+            // searchText
+            // 
+            this.searchText.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.searchText.Location = new System.Drawing.Point(12, 566);
+            this.searchText.Name = "searchText";
+            this.searchText.Size = new System.Drawing.Size(222, 27);
+            this.searchText.TabIndex = 51;
+            // 
+            // searchClose
+            // 
+            this.searchClose.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.searchClose.Location = new System.Drawing.Point(33, 528);
+            this.searchClose.Name = "searchClose";
+            this.searchClose.Size = new System.Drawing.Size(90, 32);
+            this.searchClose.TabIndex = 52;
+            this.searchClose.Text = "الغاء";
+            this.searchClose.UseVisualStyleBackColor = true;
+            this.searchClose.Visible = false;
+            this.searchClose.Click += new System.EventHandler(this.searchClose_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.Controls.Add(this.searchClose);
+            this.Controls.Add(this.searchText);
+            this.Controls.Add(this.search);
+            this.Controls.Add(this.searchList);
             this.Controls.Add(this.normalText);
             this.Controls.Add(this.copy);
             this.Controls.Add(this.quranTxt);
@@ -694,6 +745,10 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel quranTxt;
         private System.Windows.Forms.Button copy;
         private System.Windows.Forms.CheckBox normalText;
+        private System.Windows.Forms.ListBox searchList;
+        private System.Windows.Forms.TextBox searchText;
+        private System.Windows.Forms.Button search;
+        private System.Windows.Forms.Button searchClose;
     }
 }
 
