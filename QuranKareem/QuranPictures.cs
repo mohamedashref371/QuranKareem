@@ -32,7 +32,7 @@ namespace QuranKareem
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
 
-        private int lineHeight; int temp,temp1;
+        private int lineHeight; private int temp,temp1;
 
         public static QuranPictures Instance { get; private set; } = new QuranPictures();
 
