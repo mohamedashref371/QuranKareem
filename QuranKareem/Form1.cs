@@ -19,34 +19,57 @@ namespace QuranKareem {
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.0.0","");
 
+        readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
         readonly QuranAudios quranAudios = QuranAudios.Instance;
 
         string moshaf = "0";
         string author="-1";
-        
-        private void Form1_Load(object sender, EventArgs e) {
-            color.SelectedIndex = 0;
-            string[] stringArray, picturesFolders, audiosFolders;
 
-            picturesFolders = Directory.GetDirectories("pictures"); // البحث في مجلد المصاحف المصورة
-            quranPictures.QuranPicture(picturesFolders[0], (int)Surah.Value, (int)Ayah.Value); // انا متأكد بوجود مجلد .. لهذا قمت بإدخاله على الكلاس مباشرة
-            
-            pB1.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
+        bool textMode =false;
+
+        private void Form1_Load(object sender, EventArgs e) {
+            color.SelectedIndex = 1;
+            string[] stringArray, textsFiles=null, picturesFolders=null, audiosFolders=null;
+
+            try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
+
+            if (textsFiles != null && textsFiles.Length > 0)
+                quranTexts.QuranText(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
+
+
+            try { picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */ } catch { }
+
+            if (picturesFolders != null && picturesFolders.Length > 0)
+                quranPictures.QuranPicture(picturesFolders[0], (int)Surah.Value, (int)Ayah.Value);
+
+            else if (textsFiles != null && textsFiles.Length > 0) {
+                textMode = true;
+                quranTxt.Visible = true;
+                quranPic.Visible = false;
+                /*try {*/ quranTxt.Font = new Font(quranTexts.fontFamily, 18F); /*} catch { }*/
+            }
+            else Close();
+
+            if (textMode) quranTxt.Text = quranTexts.PageText; // اظهار النص الذي سيعطيه لك
+            else quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
 
             Surahs.Items.Clear(); // إفراغ القائمة من ال ComboBox
-            Surahs.Items.AddRange(quranPictures.GetSurahNames()); // ملأها بأسماء السور
+            if (textMode) Surahs.Items.AddRange(quranTexts.GetSurahNames()); // ملأها بأسماء السور;
+            else Surahs.Items.AddRange(quranPictures.GetSurahNames());
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
             quranAudios.AddInControls(Controls); // 
             quranAudios.AddEventHandler(Audio_);
 
-            audiosFolders = Directory.GetDirectories("audios");
+            try { audiosFolders = Directory.GetDirectories("audios"); } catch { }
+
             //Button b;
             Guna2Button b;
             
-            int y = 0;
+            int y = 5;
             Color clr; Random rand = new Random();
+            if (audiosFolders!=null)
             for (int i=0; i< audiosFolders.Length;i++) {
                 clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
                 b = new Guna2Button(); // new Button();
@@ -54,7 +77,7 @@ namespace QuranKareem {
                 b.FillColor = clr;
                 b.Text = stringArray[stringArray.Length - 1];
                 b.Font = new Font("Segoe UI", 12F);
-                b.Location = new Point(0, y);
+                b.Location = new Point(5, y);
                 b.Size = new Size(230, 45);
                 b.Cursor = Cursors.Hand;
                 b.Tag = i;
@@ -95,30 +118,58 @@ namespace QuranKareem {
         private void Surahs_SelectedIndexChanged(object sender, EventArgs e) {
             if ( !allow) { return; }
             allow = false; // قفل الباب
-            quranPictures.surah(Surahs.SelectedIndex + 1); // استدعاء الميثود
-            Surah.Value = quranPictures.Surah; // وضع البيانات في ال NumericUpDown
-            Quarter.Value = quranPictures.Quarter;
-            Page.Value = quranPictures.Page;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+            if (textMode) {
+                quranTexts.surah(Surahs.SelectedIndex + 1);
+                Surah.Value = quranTexts.Surah; // وضع البيانات في ال NumericUpDown
+                Quarter.Value = quranTexts.Quarter;
+                Page.Value = quranTexts.Page;
+                Ayah.Minimum = quranTexts.AyahStart;
+                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Value = quranTexts.Ayah;
+                quranTxt.Text = quranTexts.PageText;
+            }
+
+            else {
+                quranPictures.surah(Surahs.SelectedIndex + 1); // استدعاء الميثود
+                Surah.Value = quranPictures.Surah; // وضع البيانات في ال NumericUpDown
+                Quarter.Value = quranPictures.Quarter;
+                Page.Value = quranPictures.Page;
+                Ayah.Minimum = quranPictures.AyahStart;
+                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Value = quranPictures.Ayah;
+                quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
+            }
+            
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
             allow = true; // فتح الباب
         }
 
         private void Surah_ValueChanged(object sender, EventArgs e) {
             if ( !allow) { return; }
             allow = false;
-            quranPictures.surah((int)Surah.Value);
-            Surahs.SelectedIndex = (int)Surah.Value - 1;
-            Quarter.Value = quranPictures.Quarter;
-            Page.Value = quranPictures.Page;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+            if (textMode) {
+                quranTexts.surah((int)Surah.Value);
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranTexts.Quarter;
+                Page.Value = quranTexts.Page;
+                Ayah.Minimum = quranTexts.AyahStart;
+                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Value = quranTexts.Ayah;
+                quranTxt.Text = quranTexts.PageText;
+            }
+
+            else {
+                quranPictures.surah((int)Surah.Value);
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranPictures.Quarter;
+                Page.Value = quranPictures.Page;
+                Ayah.Minimum = quranPictures.AyahStart;
+                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Value = quranPictures.Ayah;
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+            
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
             allow = true;
         }
 
@@ -140,80 +191,119 @@ namespace QuranKareem {
             allowJuz = true;
             if ( !allow) { return; }
             allow = false;
-            quranPictures.quarter((int)Quarter.Value);
-            Surah.Value = quranPictures.Surah;
-            Surahs.SelectedIndex = (int)Surah.Value - 1;
-            Page.Value = quranPictures.Page;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            if (textMode) {
+                quranTexts.quarter((int)Quarter.Value);
+                Surah.Value = quranTexts.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Page.Value = quranTexts.Page;
+                Ayah.Minimum = quranTexts.AyahStart;
+                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Value = quranTexts.Ayah;
+                quranTxt.Text = quranTexts.PageText;
+            }
+
+            else {
+                quranPictures.quarter((int)Quarter.Value);
+                Surah.Value = quranPictures.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Page.Value = quranPictures.Page;
+                Ayah.Minimum = quranPictures.AyahStart;
+                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Value = quranPictures.Ayah;
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+            
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
             allow = true;
         }
 
         private void Page_ValueChanged(object sender, EventArgs e) {
             if ( !allow) { return; }
             allow = false;
-            quranPictures.page((int)Page.Value);
-            Surah.Value = quranPictures.Surah;
-            Surahs.SelectedIndex = (int)Surah.Value - 1;
-            Quarter.Value = quranPictures.Quarter;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            if (textMode) {
+                quranTexts.page((int)Page.Value);
+                Surah.Value = quranTexts.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranTexts.Quarter;
+                Ayah.Minimum = quranTexts.AyahStart;
+                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Value = quranTexts.Ayah;
+                quranTxt.Text = quranTexts.PageText;
+            }
+
+            else {
+                quranPictures.page((int)Page.Value);
+                Surah.Value = quranPictures.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranPictures.Quarter;
+                Ayah.Minimum = quranPictures.AyahStart;
+                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Value = quranPictures.Ayah;
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+            
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
             allow = true;
         }
 
         private void Ayah_ValueChanged(object sender, EventArgs e) {
             if ( !allow) { return; }
             allow = false;
-            quranPictures.ayah((int)Surah.Value, (int)Ayah.Value);
-            Quarter.Value = quranPictures.Quarter;
-            Page.Value = quranPictures.Page;
-            pB1.BackgroundImage = quranPictures.Picture;
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
-            allow = true;
-        }
+            if (textMode) {
+                quranTexts.ayah((int)Surah.Value, (int)Ayah.Value);
+                Quarter.Value = quranTexts.Quarter;
+                Page.Value = quranTexts.Page;
+                quranTxt.Text = quranTexts.PageText;
+            }
 
-        private void Plus_Click(object sender, EventArgs e) {
-            if ( !allow) { return; }
-            allow = false;
-            quranPictures.AyahPlus();
-            Surah.Value = quranPictures.Surah;
-            Surahs.SelectedIndex = (int)Surah.Value - 1;
-            Quarter.Value = quranPictures.Quarter;
-            Page.Value = quranPictures.Page;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
-            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+            else {
+                quranPictures.ayah((int)Surah.Value, (int)Ayah.Value);
+                Quarter.Value = quranPictures.Quarter;
+                Page.Value = quranPictures.Page;
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+            
+             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
             allow = true;
         }
 
         private void Audio_(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
-            quranPictures.ayah(quranAudios.Surah, quranAudios.Ayah);
-            Surah.Value = quranPictures.Surah;
-            if (Surahs.SelectedIndex != (int)Surah.Value - 1) Surahs.SelectedIndex = (int)Surah.Value - 1;
-            Quarter.Value = quranPictures.Quarter;
-            Page.Value = quranPictures.Page;
-            Ayah.Minimum = quranPictures.AyahStart;
-            Ayah.Maximum = quranPictures.AyatCount;
-            Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
+
+            if (textMode) {
+                quranTexts.ayah(quranAudios.Surah, quranAudios.Ayah);
+                Surah.Value = quranTexts.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranTexts.Quarter;
+                Page.Value = quranTexts.Page;
+                Ayah.Minimum = quranTexts.AyahStart;
+                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Value = quranTexts.Ayah;
+                quranTxt.Text = quranTexts.PageText;
+            }
+
+            else {
+                quranPictures.ayah(quranAudios.Surah, quranAudios.Ayah);
+                Surah.Value = quranPictures.Surah;
+                Surahs.SelectedIndex = (int)Surah.Value - 1;
+                Quarter.Value = quranPictures.Quarter;
+                Page.Value = quranPictures.Page;
+                Ayah.Minimum = quranPictures.AyahStart;
+                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Value = quranPictures.Ayah;
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+
             NewDateTime();
             allow = true;
         }
 
         int x, y; // مكان مؤشر الماوس
-        private void PB1_MouseMove(object sender, MouseEventArgs e) { x = e.X; y = e.Y; } // يتم تحديث مؤشر الماوس باستمرار تحريك الماوس على الصورة
-
-        private void PB1_Click(object sender, EventArgs e) {
+        private void QuranPic_MouseMove(object sender, MouseEventArgs e) { x = e.X; y = e.Y; } // يتم تحديث مؤشر الماوس باستمرار تحريك الماوس على الصورة
+        private void QuranPic_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
             quranPictures.setXY(x, y /*, pB1.Width, pB1.Height*/);
@@ -223,7 +313,7 @@ namespace QuranKareem {
             Ayah.Minimum = quranPictures.AyahStart;
             Ayah.Maximum = quranPictures.AyatCount;
             Ayah.Value = quranPictures.Ayah;
-            pB1.BackgroundImage = quranPictures.Picture;
+            quranPic.BackgroundImage = quranPictures.Picture;
              quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah);
             NewDateTime();
             allow = true;
@@ -247,12 +337,19 @@ namespace QuranKareem {
         }
 
         private void Color_SelectedIndexChanged(object sender, EventArgs e) {
-            if (quranPictures == null) { return; }
-            if (color.SelectedIndex == 1) quranPictures.textColor = QuranPictures.TextColor.green;
-            else if (color.SelectedIndex == 2) quranPictures.textColor = QuranPictures.TextColor.blue;
-            else if (color.SelectedIndex == 3) quranPictures.textColor = QuranPictures.TextColor.darkCyan;
-            else if (color.SelectedIndex == 4) quranPictures.textColor = QuranPictures.TextColor.darkRed;
-            else quranPictures.textColor = QuranPictures.TextColor.red;
+            if (color.SelectedIndex == 1) { quranPictures.textColor = QuranPictures.TextColor.red; quranTexts.textColor = QuranTexts.TextColor.red; }
+            else if (color.SelectedIndex == 2) { quranPictures.textColor = QuranPictures.TextColor.green; quranTexts.textColor = QuranTexts.TextColor.green; }
+            else if (color.SelectedIndex == 3) { quranPictures.textColor = QuranPictures.TextColor.blue; quranTexts.textColor = QuranTexts.TextColor.blue; }
+            else if (color.SelectedIndex == 4) { quranPictures.textColor = QuranPictures.TextColor.darkCyan; quranTexts.textColor = QuranTexts.TextColor.darkCyan; }
+            else if (color.SelectedIndex == 5) { quranPictures.textColor = QuranPictures.TextColor.darkRed; quranTexts.textColor = QuranTexts.TextColor.darkRed; }
+            else { quranPictures.textColor = QuranPictures.TextColor.nothing; quranTexts.textColor = QuranTexts.TextColor.nothing; }
+        }
+
+        private void copy_Click(object sender, EventArgs e) {
+            try {
+                if (normalText.Checked) Clipboard.SetText(quranTexts.ayahAbstractText((int)Surah.Value, (int)Ayah.Value));
+                else Clipboard.SetText(quranTexts.ayahText((int)Surah.Value, (int)Ayah.Value));
+            } catch { }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {

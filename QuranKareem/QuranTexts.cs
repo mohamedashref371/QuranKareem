@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuranKareem
 {
@@ -15,7 +18,6 @@ namespace QuranKareem
         private SQLiteDataReader reader; // قارئ لتنفيذ ال sql select
 
         private int surahsCount, quartersCount, pagesCount;
-        private string font, comment;
         private int pageStartId, ayahId;
 
         public int Narration { get; private set; }
@@ -26,11 +28,18 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
+        public string Font { get; private set; }
+        public string Comment { get; private set; }
 
+        private bool isHTML=true;
         public string PageText { get; private set; }
-        private int[] finishedPosition;
+
+        private List<int> finishedPosition = new List<int>();
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
+
+        
+        public FontFamily fontFamily { get; private set; }
 
         public void QuranText(string path, int sura = 1, int aya = 0){
             
@@ -49,22 +58,24 @@ namespace QuranKareem
             surahsCount = reader.GetInt32(3);
             quartersCount = reader.GetInt32(4);
             pagesCount = reader.GetInt32(5);
-            font = reader.GetString(6);
-            comment= reader.GetString(7);
+            Font = reader.GetString(6);
+            Comment= reader.GetString(7);
             success = true;
+            quran.Close();
 
+            PrivateFontCollection collection = new PrivateFontCollection();
+            collection.AddFontFile(@"fonts\"+ Font+".ttf");
+            fontFamily = new FontFamily(Font, collection);
 
         }
 
-        public string[] GetSurahNames()
-        {
+        public string[] GetSurahNames() {
             if (!success) return new string[] { "" };
             string[] names = new string[surahsCount];
             quran.Open();
             reader = new SQLiteCommand($"SELECT name FROM surahs", quran).ExecuteReader();
             int i = 0;
-            while (reader.Read())
-            {
+            while (reader.Read()) {
                 names[i] = reader.GetString(0); // عمود واحد
                 i++;
             }
@@ -140,48 +151,47 @@ namespace QuranKareem
             ayahId = reader.GetInt32(0);
             Quarter = reader.GetInt32(2);
 
-            if (Page != reader.GetInt32(3)){
+            if (Page != reader.GetInt32(3)) {
                 Page = reader.GetInt32(3);
                 reader = new SQLiteCommand($"SELECT * FROM pages WHERE id={Page}", quran).ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
                 pageText(Page);
             }
+            quran.Close();
 
             PageText = OriginalPageText.ToString();
 
             // التلوين
-            if (textColor != TextColor.nothing) {
+            if (isHTML && textColor != TextColor.nothing) {
                 int k = ayahId - pageStartId;
                 int start = 0, finish;
                 if (k > 0) start = finishedPosition[k - 1];
                 finish = finishedPosition[k];
-                PageText = (start==0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish)+"</span>"+ PageText.Substring(finish);
+                PageText = (start>0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish)+"</span>"+ PageText.Substring(finish);
             }
+            if (isHTML) { PageText = "<span dir=\"rtl\">" + PageText.Replace(@"
+", "<br>") + "</span>"; }
 
         }
 
         private StringBuilder OriginalPageText = new StringBuilder();
         private void pageText(int i) {
             OriginalPageText.Clear();
-            quran.Open();
+            finishedPosition.Clear();
             reader = new SQLiteCommand($"SELECT id,page,finished_position,the_text FROM ayat WHERE page={i}", quran).ExecuteReader();
-            
-            finishedPosition = new int[reader.StepCount];
-            int k = 0;
+
             while (reader.Read()) {
                 OriginalPageText.Append(reader.GetString(3));
-                finishedPosition[k] = reader.GetInt32(2); k++;
+                finishedPosition.Add(reader.GetInt32(2));
             }
-            
-            quran.Close();
         }
 
         public void setCursor(int position) {
             if (!success) return;
             
             int temp=-1, temp1=0;
-            for (int i=0; i< finishedPosition.Length; i++) {
+            for (int i=0; i< finishedPosition.Count; i++) {
                 if (position< finishedPosition[i]) {
                     quran.Open();
                     reader = new SQLiteCommand($"SELECT id,surah,ayah FROM ayat WHERE id={i + pageStartId}", quran).ExecuteReader();

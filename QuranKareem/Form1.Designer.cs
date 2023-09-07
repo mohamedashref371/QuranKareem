@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.pB1 = new System.Windows.Forms.PictureBox();
+            this.quranPic = new System.Windows.Forms.PictureBox();
             this.Surah = new System.Windows.Forms.NumericUpDown();
             this.Page = new System.Windows.Forms.NumericUpDown();
             this.Ayah = new System.Windows.Forms.NumericUpDown();
@@ -62,7 +62,10 @@
             this.Juz = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.Hizb = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.pB1)).BeginInit();
+            this.quranTxt = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.copy = new System.Windows.Forms.Button();
+            this.normalText = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -74,19 +77,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.Hizb)).BeginInit();
             this.SuspendLayout();
             // 
-            // pB1
+            // quranPic
             // 
-            this.pB1.BackColor = System.Drawing.Color.Transparent;
-            this.pB1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pB1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pB1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pB1.Location = new System.Drawing.Point(240, 5);
-            this.pB1.Name = "pB1";
-            this.pB1.Size = new System.Drawing.Size(510, 900);
-            this.pB1.TabIndex = 2;
-            this.pB1.TabStop = false;
-            this.pB1.Click += new System.EventHandler(this.PB1_Click);
-            this.pB1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PB1_MouseMove);
+            this.quranPic.BackColor = System.Drawing.Color.Transparent;
+            this.quranPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.quranPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.quranPic.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.quranPic.Location = new System.Drawing.Point(240, 5);
+            this.quranPic.Name = "quranPic";
+            this.quranPic.Size = new System.Drawing.Size(510, 900);
+            this.quranPic.TabIndex = 2;
+            this.quranPic.TabStop = false;
+            this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
+            this.quranPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseMove);
             // 
             // Surah
             // 
@@ -264,6 +267,7 @@
             this.color.Font = new System.Drawing.Font("Tahoma", 13F);
             this.color.FormattingEnabled = true;
             this.color.Items.AddRange(new object[] {
+            "لا شيء",
             "أحمر",
             "أخضر",
             "أزرق",
@@ -348,9 +352,11 @@
             // guna2Panel1
             // 
             this.guna2Panel1.AutoScroll = true;
+            this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.guna2Panel1.BorderColor = System.Drawing.Color.Transparent;
             this.guna2Panel1.Location = new System.Drawing.Point(761, 46);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(255, 852);
+            this.guna2Panel1.Size = new System.Drawing.Size(255, 595);
             this.guna2Panel1.TabIndex = 0;
             // 
             // label6
@@ -440,6 +446,7 @@
             this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
             this.guna2HtmlLabel1.Font = new System.Drawing.Font("Times New Roman", 25F, System.Drawing.FontStyle.Bold);
             this.guna2HtmlLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.guna2HtmlLabel1.IsSelectionEnabled = false;
             this.guna2HtmlLabel1.Location = new System.Drawing.Point(12, 859);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
             this.guna2HtmlLabel1.Size = new System.Drawing.Size(217, 39);
@@ -556,11 +563,48 @@
             0});
             this.Hizb.ValueChanged += new System.EventHandler(this.Hizb_ValueChanged);
             // 
+            // quranTxt
+            // 
+            this.quranTxt.BackColor = System.Drawing.Color.Transparent;
+            this.quranTxt.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.quranTxt.Location = new System.Drawing.Point(240, 5);
+            this.quranTxt.Name = "quranTxt";
+            this.quranTxt.Size = new System.Drawing.Size(3, 2);
+            this.quranTxt.TabIndex = 45;
+            this.quranTxt.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.quranTxt.Visible = false;
+            // 
+            // copy
+            // 
+            this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.copy.Location = new System.Drawing.Point(903, 666);
+            this.copy.Name = "copy";
+            this.copy.Size = new System.Drawing.Size(90, 42);
+            this.copy.TabIndex = 46;
+            this.copy.Text = "نسخ الآية";
+            this.copy.UseVisualStyleBackColor = true;
+            this.copy.Click += new System.EventHandler(this.copy_Click);
+            // 
+            // normalText
+            // 
+            this.normalText.AutoSize = true;
+            this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.normalText.Location = new System.Drawing.Point(806, 677);
+            this.normalText.Name = "normalText";
+            this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.normalText.Size = new System.Drawing.Size(91, 23);
+            this.normalText.TabIndex = 47;
+            this.normalText.Text = "نص عادي";
+            this.normalText.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.Controls.Add(this.normalText);
+            this.Controls.Add(this.copy);
+            this.Controls.Add(this.quranTxt);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.Hizb);
             this.Controls.Add(this.label8);
@@ -590,7 +634,7 @@
             this.Controls.Add(this.Ayah);
             this.Controls.Add(this.Page);
             this.Controls.Add(this.Surah);
-            this.Controls.Add(this.pB1);
+            this.Controls.Add(this.quranPic);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -599,7 +643,7 @@
             this.Text = "Quran Kareem";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pB1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).EndInit();
@@ -615,7 +659,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox pB1;
+        private System.Windows.Forms.PictureBox quranPic;
         private System.Windows.Forms.NumericUpDown Surah;
         private System.Windows.Forms.NumericUpDown Page;
         private System.Windows.Forms.NumericUpDown Ayah;
@@ -647,6 +691,9 @@
         private System.Windows.Forms.NumericUpDown Hizb;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown Juz;
+        private Guna.UI2.WinForms.Guna2HtmlLabel quranTxt;
+        private System.Windows.Forms.Button copy;
+        private System.Windows.Forms.CheckBox normalText;
     }
 }
 
