@@ -229,13 +229,15 @@ namespace QuranKareem
         public string[] Search(string words) {
             SearchIDs.Clear();
             if (!success || words==null || words.Trim()=="") return new string[] { };
+            words = words.Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا");
             List<string> lst = new List<string>();
             quran.Open();
             reader = new SQLiteCommand("SELECT id,abstract_text FROM ayat", quran).ExecuteReader();
             string s;
             while (reader.Read()) {
-                s = reader.GetString(1);
+                s = reader.GetString(1).Replace("أ","ا").Replace("إ", "ا").Replace("آ", "ا");
                 if (s.Contains(words)) {
+                    s = reader.GetString(1);
                     lst.Add($"{(s.Length>50? s.Substring(0,50)+"..." : s)}");
                     SearchIDs.Add(reader.GetInt32(0));
                 }
