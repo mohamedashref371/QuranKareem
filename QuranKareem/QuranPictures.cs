@@ -166,27 +166,29 @@ namespace QuranKareem
 
             // التلوين
             Picture = (Bitmap)oPic.Clone();
+            
+            if (textColor != TextColor.nothing) {
+                if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
+                else {
+                    reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
+                    reader.Read();
+                    y5 = reader.GetInt32(5);
+                    x9 = reader.GetInt32(6);
+                    if (x9 == 0) { x9 = width - 1; y5 += 1; }
+                }
 
-            if (ayahId- pageStartId ==0) {x9 = width-1; y5 = 1;}
-            else {
-                reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
-                reader.Read();
-                y5 = reader.GetInt32(5);
-                x9 = reader.GetInt32(6);
-                if (x9==0) { x9 = width - 1; y5 += 1; }
+                if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) return;
+                if (y5 == y9) {
+                    y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
+                    fun(x5, x9, y5, y9);
+                }
+                else {
+                    if (y9 - y5 > 1) fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
+                    fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
+                    fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
+                }
             }
             quran.Close();
-
-            if (y5==1 && y9== linesCount && x5==0 && x9== width-1) return;
-            if (y5 == y9) {
-                y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
-                fun(x5, x9, y5, y9);
-            }
-            else {
-                if (y9 - y5 > 1) fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
-                fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
-                fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
-            }
         }
 
         private void picture(int i) { // الصورة الحالية
@@ -253,7 +255,7 @@ namespace QuranKareem
 
         public TextColor textColor = TextColor.red;
         public enum TextColor {
-            red=1, green=2, blue=3, darkCyan=4, darkRed=5
+            nothing = 0, red = 1, green=2, blue=3, darkCyan=4, darkRed=5
         }
     }
 }

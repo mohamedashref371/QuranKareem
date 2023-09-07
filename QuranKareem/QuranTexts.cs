@@ -28,8 +28,7 @@ namespace QuranKareem
         public int AyatCount { get; private set; }
 
         public string PageText { get; private set; }
-
-        private int temp, temp1;
+        private int[] finishedPosition;
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
 
@@ -86,7 +85,7 @@ namespace QuranKareem
             reader.Read();
             reader = new SQLiteCommand($"SELECT id,surah,ayah FROM ayat WHERE id={reader.GetInt32(1)}", quran).ExecuteReader();
             reader.Read();
-            temp = reader.GetInt32(1)/*surah*/; temp1 = reader.GetInt32(2)/*ayah*/;
+            int temp = reader.GetInt32(1)/*surah*/, temp1 = reader.GetInt32(2)/*ayah*/;
             quran.Close();
             ayah(temp, temp1); // أحاول تركيز كل المجهود على دالة واحدة
         }
@@ -102,7 +101,7 @@ namespace QuranKareem
             reader.Read();
             reader = new SQLiteCommand($"SELECT id,surah,ayah FROM ayat WHERE id={reader.GetInt32(1)}", quran).ExecuteReader();
             reader.Read();
-            temp = reader.GetInt32(1); temp1 = reader.GetInt32(2);
+            int temp = reader.GetInt32(1), temp1 = reader.GetInt32(2);
             quran.Close();
             ayah(temp, temp1);
         }
@@ -146,10 +145,52 @@ namespace QuranKareem
                 reader = new SQLiteCommand($"SELECT * FROM pages WHERE id={Page}", quran).ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
-                text(Page);
+                pageText(Page);
             }
 
+            PageText = OriginalPageText.ToString();
 
+            // التلوين
+            if (textColor != TextColor.nothing) {
+                int k = ayahId - pageStartId;
+                int start = 0, finish;
+                if (k > 0) start = finishedPosition[k - 1];
+                finish = finishedPosition[k];
+                PageText = (start==0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish)+"</span>"+ PageText.Substring(finish);
+            }
+
+        }
+
+        private StringBuilder OriginalPageText = new StringBuilder();
+        private void pageText(int i) {
+            OriginalPageText.Clear();
+            quran.Open();
+            reader = new SQLiteCommand($"SELECT id,page,finished_position,the_text FROM ayat WHERE page={i}", quran).ExecuteReader();
+            
+            finishedPosition = new int[reader.StepCount];
+            int k = 0;
+            while (reader.Read()) {
+                OriginalPageText.Append(reader.GetString(3));
+                finishedPosition[k] = reader.GetInt32(2); k++;
+            }
+            
+            quran.Close();
+        }
+
+        public void setCursor(int position) {
+            if (!success) return;
+            
+            int temp=-1, temp1=0;
+            for (int i=0; i< finishedPosition.Length; i++) {
+                if (position< finishedPosition[i]) {
+                    quran.Open();
+                    reader = new SQLiteCommand($"SELECT id,surah,ayah FROM ayat WHERE id={i + pageStartId}", quran).ExecuteReader();
+                    reader.Read();
+                    temp = reader.GetInt32(1); temp1 = reader.GetInt32(2);
+                    quran.Close();
+                }
+            }
+            if (temp!=-1) ayah(temp, temp1);
         }
 
         private string tempString;
@@ -173,22 +214,20 @@ namespace QuranKareem
             return tempString;
         }
 
-        private StringBuilder sb = new StringBuilder();
-        private void text(int i) {
-            sb.Clear();
-            quran.Open();
-            reader = new SQLiteCommand($"SELECT id,page,the_text FROM ayat WHERE page={i}", quran).ExecuteReader();
-
-            while (reader.Read()) {
-                sb.Append(reader.GetString(2));
-            }
-
-            PageText = sb.ToString();
-            quran.Close();
+        private string GetHtmlText() {
+            string s = "<span";
+            if (textColor != TextColor.nothing) s+= " style=\"color: ";
+            if (textColor == TextColor.red) s+="red\"";
+            else if (textColor == TextColor.green) s += "green\"";
+            else if (textColor == TextColor.blue) s += "blue\"";
+            else if (textColor == TextColor.darkCyan) s += "darkcyan\"";
+            else if (textColor == TextColor.darkRed) s += "darkred\"";
+            s += ">";
+            return s;
         }
-
-        public void setCursor(int i) {
-
+        public TextColor textColor = TextColor.nothing;
+        public enum TextColor {
+           nothing=0, red = 1, green = 2, blue = 3, darkCyan = 4, darkRed = 5
         }
     }
 }
