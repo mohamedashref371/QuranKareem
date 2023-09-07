@@ -127,7 +127,7 @@ namespace QuranKareem {
                 WebClient client = new WebClient();
                 if (links.Length >= 114) {
                     foreach (string link in links) {
-                        if (link.Length > 0) {
+                        if (link.Trim().Length > 0) {
                             try {
                                 temp = link.Split('/');
                                 client.DownloadFile(link, s + "\\" + temp.Last());
