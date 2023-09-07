@@ -566,7 +566,7 @@
             // quranTxt
             // 
             this.quranTxt.BackColor = System.Drawing.Color.Transparent;
-            this.quranTxt.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.quranTxt.Font = new System.Drawing.Font("KFGQPC HAFS Uthmanic Script", 20F);
             this.quranTxt.Location = new System.Drawing.Point(240, 5);
             this.quranTxt.Name = "quranTxt";
             this.quranTxt.Size = new System.Drawing.Size(3, 2);

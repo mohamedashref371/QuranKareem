@@ -28,8 +28,7 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
-        public string Font { get; private set; }
-        public string Comment { get; private set; }
+        string fontFile,fontName, comment;
 
         private bool isHTML=true;
         public string PageText { get; private set; }
@@ -38,8 +37,7 @@ namespace QuranKareem
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
 
-        
-        public FontFamily fontFamily { get; private set; }
+        public FontFamily fontFamily { get; private set; } = null;
 
         public void QuranText(string path, int sura = 1, int aya = 0){
             
@@ -58,14 +56,17 @@ namespace QuranKareem
             surahsCount = reader.GetInt32(3);
             quartersCount = reader.GetInt32(4);
             pagesCount = reader.GetInt32(5);
-            Font = reader.GetString(6);
-            Comment= reader.GetString(7);
+            fontFile = reader.GetString(6);
+            fontName = reader.GetString(7);
+            comment = reader.GetString(8);
             success = true;
             quran.Close();
 
-            PrivateFontCollection collection = new PrivateFontCollection();
-            collection.AddFontFile(@"fonts\"+ Font+".ttf");
-            fontFamily = new FontFamily(Font, collection);
+            try {
+                PrivateFontCollection collection = new PrivateFontCollection();
+                collection.AddFontFile(@"fonts\" + fontFile);
+                fontFamily = new FontFamily(fontName, collection);
+            } catch { }
 
         }
 
@@ -168,7 +169,7 @@ namespace QuranKareem
                 int start = 0, finish;
                 if (k > 0) start = finishedPosition[k - 1];
                 finish = finishedPosition[k];
-                PageText = (start>0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish)+"</span>"+ PageText.Substring(finish);
+                PageText = (start>0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish-start)+"</span>"+ PageText.Substring(finish);
             }
             if (isHTML) { PageText = "<span dir=\"rtl\">" + PageText.Replace(@"
 ", "<br>") + "</span>"; }
@@ -223,6 +224,8 @@ namespace QuranKareem
             quran.Close();
             return tempString;
         }
+
+        // هنا سأكتب دالة ال search ان شاء الله  
 
         private string GetHtmlText() {
             string s = "<span";

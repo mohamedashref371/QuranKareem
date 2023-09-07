@@ -47,7 +47,7 @@ namespace QuranKareem {
                 textMode = true;
                 quranTxt.Visible = true;
                 quranPic.Visible = false;
-                /*try {*/ quranTxt.Font = new Font(quranTexts.fontFamily, 18F); /*} catch { }*/
+                try { quranTxt.Font = new Font(quranTexts.fontFamily, 20F); } catch { }
             }
             else Close();
 
