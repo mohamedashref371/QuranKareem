@@ -108,7 +108,6 @@ namespace QuranKareem {
             
         }
 
-        BackgroundWorker bw = new BackgroundWorker();
         private void Button_Click(object sender, EventArgs e) {
             author = ((Guna2Button)sender).Tag+"";
             string s = @"audios\" + ((Guna2Button)sender).Text;
