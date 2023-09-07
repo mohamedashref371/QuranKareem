@@ -190,7 +190,6 @@ namespace QuranKareem
         }
 
         private void picture(int i) { // الصورة الحالية
-            if (!success) return;
             string s = i+"";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
