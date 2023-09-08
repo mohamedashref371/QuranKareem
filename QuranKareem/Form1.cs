@@ -297,7 +297,7 @@ namespace QuranKareem {
         private void PageRichText_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
-            quranTexts.setCursor(-1);
+            quranTexts.setCursor();
             Surah.Value = quranTexts.Surah;
             Surahs.SelectedIndex = (int)Surah.Value - 1;
             Quarter.Value = quranTexts.Quarter;
