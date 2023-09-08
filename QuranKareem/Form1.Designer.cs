@@ -347,7 +347,7 @@
             // 
             this.time5.AutoSize = true;
             this.time5.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.time5.Location = new System.Drawing.Point(12, 298);
+            this.time5.Location = new System.Drawing.Point(15, 298);
             this.time5.Name = "time5";
             this.time5.Size = new System.Drawing.Size(117, 22);
             this.time5.TabIndex = 29;
@@ -488,6 +488,7 @@
             // 
             // stop
             // 
+            this.stop.Image = global::QuranKareem.Properties.Resources.stop;
             this.stop.Location = new System.Drawing.Point(133, 297);
             this.stop.Name = "stop";
             this.stop.Size = new System.Drawing.Size(45, 23);

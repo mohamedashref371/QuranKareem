@@ -18,23 +18,23 @@ namespace QuranKareem {
 
         public Form1() { InitializeComponent(); }
 
-        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.0.0","");
+        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.0.0", "");
 
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
         readonly QuranAudios quranAudios = QuranAudios.Instance;
 
         string moshaf = "0";
-        string author="-1";
+        string author = "-1";
 
-        bool textMode =false;
+        bool textMode = false;
 
         static string newLine = @"
 ";
 
         private void Form1_Load(object sender, EventArgs e) {
             color.SelectedIndex = 1;
-            string[] stringArray, textsFiles=null, picturesFolders=null, audiosFolders=null;
+            string[] stringArray, textsFiles = null, picturesFolders = null, audiosFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
 
@@ -49,7 +49,7 @@ namespace QuranKareem {
 
             else if (textsFiles != null && textsFiles.Length > 0) {
                 textMode = true;
-                quranTexts.AddRichTextBoxInControls(Controls,240,5,510,900);
+                quranTexts.AddRichTextBoxInControls(Controls, 240, 5, 510, 900);
                 quranTexts.AddEventHandler(new EventHandler(PageRichText_Click));
                 quranPic.Visible = false;
             }
@@ -69,30 +69,30 @@ namespace QuranKareem {
 
             //Button b;
             Guna2Button b;
-            
+
             int y = 5;
             Color clr; Random rand = new Random();
-            if (audiosFolders!=null)
-            for (int i=0; i< audiosFolders.Length;i++) {
-                clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
-                b = new Guna2Button(); // new Button();
-                stringArray = audiosFolders[i].Split('\\');
-                b.FillColor = clr;
-                b.Text = stringArray[stringArray.Length - 1];
-                b.Font = new Font("Segoe UI", 12F);
-                b.Location = new Point(5, y);
-                b.Size = new Size(230, 45);
-                b.Cursor = Cursors.Hand;
-                b.Tag = i;
-                b.Click += new EventHandler(Button_Click); // event
-                b.BorderRadius = 15;
-                guna2Panel1.Controls.Add(b);
-                //panel1.Controls.Add(b);
-                y += 50;
-            }
+            if (audiosFolders != null)
+                for (int i = 0; i < audiosFolders.Length; i++) {
+                    clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
+                    b = new Guna2Button(); // new Button();
+                    stringArray = audiosFolders[i].Split('\\');
+                    b.FillColor = clr;
+                    b.Text = stringArray[stringArray.Length - 1];
+                    b.Font = new Font("Segoe UI", 12F);
+                    b.Location = new Point(5, y);
+                    b.Size = new Size(230, 45);
+                    b.Cursor = Cursors.Hand;
+                    b.Tag = i;
+                    b.Click += new EventHandler(Button_Click); // event
+                    b.BorderRadius = 15;
+                    guna2Panel1.Controls.Add(b);
+                    //panel1.Controls.Add(b);
+                    y += 50;
+                }
 
             try {
-                if (File.Exists(save + "Surah")){
+                if (File.Exists(save + "Surah")) {
                     stringArray = File.ReadAllText(save + "Surah").Split(',');
                     Surah.Value = Convert.ToInt32(stringArray[0]);
                     Ayah.Value = Convert.ToInt32(stringArray[1]);
@@ -104,16 +104,16 @@ namespace QuranKareem {
                     }
                 }
             } catch { }
-            
+
         }
 
         private void Button_Click(object sender, EventArgs e) {
-            author = ((Guna2Button)sender).Tag+"";
+            author = ((Guna2Button)sender).Tag + "";
             string s = @"audios\" + ((Guna2Button)sender).Text;
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             NewDateTime();
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2) {
-                if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء","تحميل",MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes) {
                     Task.Run(() => DownloadFiles(s));
                 }
             }
@@ -131,7 +131,7 @@ namespace QuranKareem {
                             try {
                                 client.DownloadFile(link, s + "\\" + temp.Last());
                             } catch {
-                                if(MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
+                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
                             }
                         }
                     }
@@ -140,13 +140,13 @@ namespace QuranKareem {
             } catch { MessageBox.Show("حدث خطأ ما"); }
         }
 
-        private void Repeat_CheckedChanged(object sender, EventArgs e){
+        private void Repeat_CheckedChanged(object sender, EventArgs e) {
             quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
         }
 
         bool allow = true; // أداة للتعامل مع الإستدعاءات التلقائية غير المرغوب فيها
         private void Surahs_SelectedIndexChanged(object sender, EventArgs e) {
-            if ( !allow) { return; }
+            if (!allow) { return; }
             allow = false; // قفل الباب
             if (textMode) {
                 quranTexts.surah(Surahs.SelectedIndex + 1);
@@ -168,13 +168,13 @@ namespace QuranKareem {
                 Ayah.Value = quranPictures.Ayah;
                 quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
             }
-            
-            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime();
             allow = true; // فتح الباب
         }
 
         private void Surah_ValueChanged(object sender, EventArgs e) {
-            if ( !allow) { return; }
+            if (!allow) { return; }
             allow = false;
             if (textMode) {
                 quranTexts.surah((int)Surah.Value);
@@ -196,20 +196,20 @@ namespace QuranKareem {
                 Ayah.Value = quranPictures.Ayah;
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
-            
-            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime();
             allow = true;
         }
 
-        bool allowJuz=true;
+        bool allowJuz = true;
         private void Juz_ValueChanged(object sender, EventArgs e) {
             if (!allowJuz) { return; }
-            Quarter.Value = Juz.Value * 8 -7;
+            Quarter.Value = Juz.Value * 8 - 7;
         }
 
         private void Hizb_ValueChanged(object sender, EventArgs e) {
             if (!allowJuz) { return; }
-            Quarter.Value = Hizb.Value * 4 -3;
+            Quarter.Value = Hizb.Value * 4 - 3;
         }
 
         private void Quarter_ValueChanged(object sender, EventArgs e) {
@@ -217,7 +217,7 @@ namespace QuranKareem {
             Juz.Value = Math.Ceiling(Quarter.Value / 8);
             Hizb.Value = Math.Ceiling(Quarter.Value / 4);
             allowJuz = true;
-            if ( !allow) { return; }
+            if (!allow) { return; }
             allow = false;
 
             if (textMode) {
@@ -240,13 +240,13 @@ namespace QuranKareem {
                 Ayah.Value = quranPictures.Ayah;
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
-            
-            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime();
             allow = true;
         }
 
         private void Page_ValueChanged(object sender, EventArgs e) {
-            if ( !allow) { return; }
+            if (!allow) { return; }
             allow = false;
 
             if (textMode) {
@@ -269,13 +269,13 @@ namespace QuranKareem {
                 Ayah.Value = quranPictures.Ayah;
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
-            
-            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime();
             allow = true;
         }
 
         private void Ayah_ValueChanged(object sender, EventArgs e) {
-            if ( !allow) { return; }
+            if (!allow) { return; }
             allow = false;
             if (textMode) {
                 quranTexts.ayah((int)Surah.Value, (int)Ayah.Value);
@@ -289,8 +289,8 @@ namespace QuranKareem {
                 Page.Value = quranPictures.Page;
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
-            
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime();
             allow = true;
         }
 
@@ -348,14 +348,14 @@ namespace QuranKareem {
             allow = false;
             quranPictures.setXY(x, y /*, pB1.Width, pB1.Height*/);
             Surah.Value = quranPictures.Surah;
-            Surahs.SelectedIndex= (int)Surah.Value - 1;
+            Surahs.SelectedIndex = (int)Surah.Value - 1;
             Quarter.Value = quranPictures.Quarter;
             Page.Value = quranPictures.Page;
             Ayah.Minimum = quranPictures.AyahStart;
             Ayah.Maximum = quranPictures.AyatCount;
             Ayah.Value = quranPictures.Ayah;
             quranPic.BackgroundImage = quranPictures.Picture;
-             quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah);
+            quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah);
             NewDateTime();
             allow = true;
         }
@@ -367,15 +367,16 @@ namespace QuranKareem {
 
             cp -= temp * 3600000;
             temp = cp / 60000;
-            time5.Text += temp + ":";
+            time5.Text += temp.ToString().PadLeft(2, '0') + ":";
 
             cp -= temp * 60000;
             temp = cp / 1000;
-            time5.Text += temp + ".";
+            time5.Text += temp.ToString().PadLeft(2, '0') + ".";
 
             cp -= temp * 1000;
-            time5.Text += cp;
+            time5.Text += cp.ToString().PadLeft(3, '0');
         }
+
 
         private void Color_SelectedIndexChanged(object sender, EventArgs e) {
             if (color.SelectedIndex == 1) { quranPictures.textColor = QuranPictures.TextColor.red; quranTexts.textColor = QuranTexts.TextColor.red; }
