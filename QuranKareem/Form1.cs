@@ -127,10 +127,12 @@ namespace QuranKareem {
                 if (links.Length >= 113) {
                     foreach (string link in links) {
                         if (link.Trim().Length > 0) {
+                            try { temp = link.Split('/'); } catch { continue; }
                             try {
-                                temp = link.Split('/');
                                 client.DownloadFile(link, s + "\\" + temp.Last());
-                            } catch { }
+                            } catch {
+                                if(MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
+                            }
                         }
                     }
                     MessageBox.Show("انتهى تحميل المصحف");
