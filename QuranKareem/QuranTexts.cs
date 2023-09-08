@@ -51,11 +51,11 @@ namespace QuranKareem
             } catch { }
         }
 
-        public void QuranText(string path, int sura = 1, int aya = 0){
+        public void QuranText(string file, int sura = 1, int aya = 0){
             
-            if (path == null || path.Trim().Length == 0) return;
+            if (file == null || file.Trim().Length == 0) return;
 
-            quran = new SQLiteConnection($"Data Source={path}; Version=3;"); // SQLite Connection
+            quran = new SQLiteConnection($"Data Source={file}; Version=3;"); // SQLite Connection
             success = false;
             quran.Open();
 
@@ -205,7 +205,7 @@ namespace QuranKareem
         private void pageText(int i) {
             OriginalPageText.Clear();
             finishedPosition.Clear();
-            reader = new SQLiteCommand($"SELECT id,line,finished_position,the_text FROM ayat WHERE page={i}", quran).ExecuteReader();
+            reader = new SQLiteCommand($"SELECT id,line,finished_position,text FROM ayat WHERE page={i}", quran).ExecuteReader();
 
             while (reader.Read()) {
                 OriginalPageText.Append(reader.GetString(3));
@@ -236,9 +236,9 @@ namespace QuranKareem
         public string ayahText(int sura, int aya) {
             if (!success) return "";
             quran.Open();
-            reader = new SQLiteCommand($"SELECT id,surah,ayah,the_text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
+            reader = new SQLiteCommand($"SELECT text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
             reader.Read();
-            tempString = reader.GetString(3);
+            tempString = reader.GetString(0);
             quran.Close();
             return tempString;
         }
@@ -246,9 +246,9 @@ namespace QuranKareem
         public string ayahAbstractText(int sura, int aya) {
             if (!success) return "";
             quran.Open();
-            reader = new SQLiteCommand($"SELECT id,surah,ayah,abstract_text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
+            reader = new SQLiteCommand($"SELECT abstract_text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
             reader.Read();
-            tempString = reader.GetString(3);
+            tempString = reader.GetString(0);
             quran.Close();
             return tempString;
         }

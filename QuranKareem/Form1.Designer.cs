@@ -69,6 +69,11 @@
             this.search = new System.Windows.Forms.Button();
             this.searchText = new System.Windows.Forms.TextBox();
             this.searchClose = new System.Windows.Forms.Button();
+            this.tafasir = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tafseerCopy = new System.Windows.Forms.Button();
+            this.saveRTF = new System.Windows.Forms.Button();
+            this.saveRichText = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
@@ -645,11 +650,68 @@
             this.searchClose.Visible = false;
             this.searchClose.Click += new System.EventHandler(this.searchClose_Click);
             // 
+            // tafasir
+            // 
+            this.tafasir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tafasir.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.tafasir.FormattingEnabled = true;
+            this.tafasir.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3"});
+            this.tafasir.Location = new System.Drawing.Point(12, 656);
+            this.tafasir.Name = "tafasir";
+            this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.tafasir.Size = new System.Drawing.Size(222, 29);
+            this.tafasir.TabIndex = 53;
+            this.tafasir.SelectedIndexChanged += new System.EventHandler(this.tafasir_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label10.Location = new System.Drawing.Point(77, 631);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 22);
+            this.label10.TabIndex = 54;
+            this.label10.Text = "التفاسير";
+            // 
+            // tafseerCopy
+            // 
+            this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.tafseerCopy.Location = new System.Drawing.Point(144, 691);
+            this.tafseerCopy.Name = "tafseerCopy";
+            this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
+            this.tafseerCopy.TabIndex = 55;
+            this.tafseerCopy.Text = "نسخ التفسير";
+            this.tafseerCopy.UseVisualStyleBackColor = true;
+            this.tafseerCopy.Click += new System.EventHandler(this.tafseerCopy_Click);
+            // 
+            // saveRTF
+            // 
+            this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.saveRTF.Location = new System.Drawing.Point(12, 691);
+            this.saveRTF.Name = "saveRTF";
+            this.saveRTF.Size = new System.Drawing.Size(126, 51);
+            this.saveRTF.TabIndex = 56;
+            this.saveRTF.Text = "save .rtf";
+            this.saveRTF.UseVisualStyleBackColor = true;
+            this.saveRTF.Click += new System.EventHandler(this.saveRTF_Click);
+            // 
+            // saveRichText
+            // 
+            this.saveRichText.FileName = "tafseer";
+            this.saveRichText.Filter = "Rich Text File|*.rtf";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.Controls.Add(this.saveRTF);
+            this.Controls.Add(this.tafseerCopy);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.tafasir);
             this.Controls.Add(this.searchClose);
             this.Controls.Add(this.searchText);
             this.Controls.Add(this.search);
@@ -750,6 +812,11 @@
         private System.Windows.Forms.TextBox searchText;
         private System.Windows.Forms.Button search;
         private System.Windows.Forms.Button searchClose;
+        private System.Windows.Forms.Button tafseerCopy;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox tafasir;
+        private System.Windows.Forms.Button saveRTF;
+        private System.Windows.Forms.SaveFileDialog saveRichText;
     }
 }
 

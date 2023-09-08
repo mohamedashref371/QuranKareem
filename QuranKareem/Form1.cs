@@ -23,9 +23,12 @@ namespace QuranKareem {
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
         readonly QuranAudios quranAudios = QuranAudios.Instance;
+        readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
 
-        string moshaf = "0";
-        string author = "-1";
+        string moshafText = "-1";
+        string moshafPic = "0";
+        string moshafAudio = "-1";
+        string Tafseer = "-1";
 
         bool textMode = false;
 
@@ -91,24 +94,37 @@ namespace QuranKareem {
                     y += 50;
                 }
 
+            try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
+            tafasir.Items.Clear();
+            if (textsFiles != null && textsFiles.Length > 0) {
+                foreach (string file in textsFiles) {
+                    tafasir.Items.Add(file.Split('\\').Last().Replace(".db",""));
+                }
+                tafasir.SelectedIndex = 0;
+            }
+
             try {
                 if (File.Exists(save + "Surah")) {
                     stringArray = File.ReadAllText(save + "Surah").Split(',');
                     Surah.Value = Convert.ToInt32(stringArray[0]);
                     Ayah.Value = Convert.ToInt32(stringArray[1]);
-                    if (stringArray[3] != "-1") {
-                        author = stringArray[3];
-                        quranAudios.QuranAudio(audiosFolders[Convert.ToInt32(stringArray[3])], (int)Surah.Value, (int)Ayah.Value);
+                    if (stringArray[4] != "-1") {
+                        moshafAudio = stringArray[4];
+                        quranAudios.QuranAudio(audiosFolders[Convert.ToInt32(stringArray[4])], (int)Surah.Value, (int)Ayah.Value);
                         NewDateTime();
                         quranAudios.Pause();
                     }
+                    if (stringArray[5] != "-1") {
+                        Tafseer = stringArray[5];
+                        tafasir.SelectedIndex = Convert.ToInt32(Tafseer);
+                    }
                 }
             } catch { }
-
+                
         }
 
         private void Button_Click(object sender, EventArgs e) {
-            author = ((Guna2Button)sender).Tag + "";
+            moshafAudio = ((Guna2Button)sender).Tag + "";
             string s = @"audios\" + ((Guna2Button)sender).Text;
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             NewDateTime();
@@ -394,6 +410,24 @@ namespace QuranKareem {
             } catch { }
         }
 
+        private void tafseerCopy_Click(object sender, EventArgs e) {
+            try {
+                Clipboard.SetText(quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value));
+            } catch { }
+        }
+
+        private void tafasir_SelectedIndexChanged(object sender, EventArgs e) {
+            quranTafasir.QuranTafseer(@"tafasir\" + tafasir.Text + ".db");
+        }
+
+        private void saveRTF_Click(object sender, EventArgs e) {
+            if(saveRichText.ShowDialog()== DialogResult.OK) {
+                RichTextBox rtb = new RichTextBox();
+                rtb.Text = quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value);
+                rtb.LoadFile(saveRichText.FileName, RichTextBoxStreamType.RichText);
+            }
+        }
+
         private void search_Click(object sender, EventArgs e) {
             searchList.Items.Clear();
             searchList.Items.AddRange(quranTexts.Search(searchText.Text));
@@ -412,7 +446,7 @@ namespace QuranKareem {
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-            File.WriteAllText(save + "Surah", Surah.Value + "," + Ayah.Value+","+ moshaf + ","+author);
+            File.WriteAllText(save + "Surah", Surah.Value + "," + Ayah.Value+","+ moshafText + "," + moshafPic + ","+ moshafAudio + "," + Tafseer);
         }
 
         private void Pause_Click(object sender, EventArgs e) { quranAudios.Pause(); }
