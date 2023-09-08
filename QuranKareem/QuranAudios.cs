@@ -42,7 +42,8 @@ namespace QuranKareem
                     Controls.Add(mp3);
                     mp3.Visible = false;
                     added = true;
-                } catch { } }
+                } catch { } 
+        }
 
         public static QuranAudios Instance { get; private set; } = new QuranAudios();
 

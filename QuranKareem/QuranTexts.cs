@@ -11,8 +11,8 @@ using System.Windows.Forms;
 
 namespace QuranKareem
 {
-    class QuranTexts
-    {
+    class QuranTexts {
+
         private SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranText ? :(
         private SQLiteDataReader reader; // قارئ لتنفيذ ال sql select
@@ -30,14 +30,26 @@ namespace QuranKareem
         public int AyatCount { get; private set; }
         string fontFile,fontName, comment;
 
-        private bool isHTML=true;
         public string PageText { get; private set; }
+        public string PageTextHTML { get; private set; }
+        public RichTextBox PageRichText { get; private set; } = new RichTextBox();
 
         private List<int> finishedPosition = new List<int>();
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
 
-        public FontFamily fontFamily { get; private set; } = null;
+        private bool added = false;
+        public void AddRichTextBoxInControls(Control.ControlCollection Controls, int locX, int locY, int width, int height) {
+            if (!added) try {
+                    PageRichText.Location = new Point(locX, locY);
+                    PageRichText.Size = new Size(width > 0 ? width : 10, height > 0 ? height : 10);
+                    PageRichText.RightToLeft = RightToLeft.Yes;
+                    PageRichText.WordWrap = false;
+                    textType = TextType.rich;
+                    Controls.Add(PageRichText);
+                    added = true;
+            } catch { }
+        }
 
         public void QuranText(string path, int sura = 1, int aya = 0){
             
@@ -63,11 +75,12 @@ namespace QuranKareem
             quran.Close();
 
             try {
-                PrivateFontCollection collection = new PrivateFontCollection();
+                var collection = new PrivateFontCollection();
                 collection.AddFontFile(@"fonts\" + fontFile);
-                fontFamily = new FontFamily(fontName, collection);
+                PageRichText.Font = new Font(new FontFamily(fontName, collection), 20F);
             } catch { }
 
+            if(added) ayah(sura, aya);
         }
 
         public string[] GetSurahNames() {
@@ -164,18 +177,30 @@ namespace QuranKareem
             PageText = OriginalPageText.ToString();
 
             // التلوين
-            if (isHTML && textColor != TextColor.nothing) {
-                int k = ayahId - pageStartId;
-                int start = 0, finish;
-                if (k > 0) start = finishedPosition[k - 1];
-                finish = finishedPosition[k];
-                PageText = (start>0? PageText.Substring(0, start):"") + GetHtmlText() + PageText.Substring(start, finish-start)+"</span>"+ PageText.Substring(finish);
+            int k = ayahId - pageStartId;
+            int start = 0, finish;
+            if (k > 0) start = finishedPosition[k - 1];
+            finish = finishedPosition[k];
+
+            if (textType == TextType.html) {
+                if (textColor != TextColor.nothing) {
+                    PageTextHTML = (start > 0 ? PageText.Substring(0, start) : "") + GetHtmlTextColor() + PageText.Substring(start, finish - start) + "</span>" + PageText.Substring(finish);
+                }
+                PageTextHTML = "<span dir=\"rtl\">" + PageText.Replace(newLine, "<br>") + "</span>";
             }
-            if (isHTML) { PageText = "<span dir=\"rtl\">" + PageText.Replace(@"
-", "<br>") + "</span>"; }
+            else if (textType == TextType.rich) {
+                PageRichText.Text = OriginalPageText.ToString();
+                if (textColor != TextColor.nothing) {
+                    PageRichText.Select(start, finish-start);
+                    PageRichText.SelectionColor = GetRichTextColor();
+                    PageRichText.SelectionStart = start;
+                }
+            }
 
         }
 
+        public static readonly string newLine = @"
+";
         private StringBuilder OriginalPageText = new StringBuilder();
         private void pageText(int i) {
             OriginalPageText.Clear();
@@ -190,7 +215,7 @@ namespace QuranKareem
 
         public void setCursor(int position) {
             if (!success) return;
-            
+            if (position < 0) position = PageRichText.SelectionStart;
             int temp=-1, temp1=0;
             for (int i=0; i< finishedPosition.Count; i++) {
                 if (position< finishedPosition[i]) {
@@ -199,6 +224,7 @@ namespace QuranKareem
                     reader.Read();
                     temp = reader.GetInt32(1); temp1 = reader.GetInt32(2);
                     quran.Close();
+                    break;
                 }
             }
             if (temp!=-1) ayah(temp, temp1);
@@ -257,7 +283,16 @@ namespace QuranKareem
             return sura_aya;
         }
 
-        private string GetHtmlText() {
+        private Color GetRichTextColor() {
+            if (textColor == TextColor.red) return Color.Red;
+            else if (textColor == TextColor.green) return Color.Green;
+            else if (textColor == TextColor.blue) return Color.Blue;
+            else if (textColor == TextColor.darkCyan) return Color.DarkCyan;
+            else if (textColor == TextColor.darkRed) return Color.DarkRed;
+            else return Color.Black;
+        }
+
+        private string GetHtmlTextColor() {
             string s = "<span";
             if (textColor != TextColor.nothing) s+= " style=\"color: ";
             if (textColor == TextColor.red) s+="red\"";
@@ -268,9 +303,17 @@ namespace QuranKareem
             s += ">";
             return s;
         }
+
+        public void AddEventHandler(EventHandler eh) { PageRichText.Click += eh; }
+
         public TextColor textColor = TextColor.nothing;
         public enum TextColor {
            nothing=0, red = 1, green = 2, blue = 3, darkCyan = 4, darkRed = 5
+        }
+
+        public TextType textType = TextType.plain;
+        public enum TextType {
+            plain = 0, html = 1, rich = 2
         }
     }
 }

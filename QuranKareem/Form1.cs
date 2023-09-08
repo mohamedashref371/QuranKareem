@@ -49,14 +49,13 @@ namespace QuranKareem {
 
             else if (textsFiles != null && textsFiles.Length > 0) {
                 textMode = true;
-                quranTxt.Visible = true;
+                quranTexts.AddRichTextBoxInControls(Controls,240,5,510,900);
+                quranTexts.AddEventHandler(new EventHandler(PageRichText_Click));
                 quranPic.Visible = false;
-                try { quranTxt.Font = new Font(quranTexts.fontFamily, 20F); } catch { }
             }
             else Close();
 
-            if (textMode) quranTxt.Text = quranTexts.PageText; // اظهار النص الذي سيعطيه لك
-            else quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
+            if (!textMode) quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
 
             Surahs.Items.Clear(); // إفراغ القائمة من ال ComboBox
             if (textMode) Surahs.Items.AddRange(quranTexts.GetSurahNames()); // ملأها بأسماء السور;
@@ -155,7 +154,6 @@ namespace QuranKareem {
                 Ayah.Minimum = quranTexts.AyahStart;
                 Ayah.Maximum = quranTexts.AyatCount;
                 Ayah.Value = quranTexts.Ayah;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -184,7 +182,6 @@ namespace QuranKareem {
                 Ayah.Minimum = quranTexts.AyahStart;
                 Ayah.Maximum = quranTexts.AyatCount;
                 Ayah.Value = quranTexts.Ayah;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -229,7 +226,6 @@ namespace QuranKareem {
                 Ayah.Minimum = quranTexts.AyahStart;
                 Ayah.Maximum = quranTexts.AyatCount;
                 Ayah.Value = quranTexts.Ayah;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -259,7 +255,6 @@ namespace QuranKareem {
                 Ayah.Minimum = quranTexts.AyahStart;
                 Ayah.Maximum = quranTexts.AyatCount;
                 Ayah.Value = quranTexts.Ayah;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -284,7 +279,6 @@ namespace QuranKareem {
                 quranTexts.ayah((int)Surah.Value, (int)Ayah.Value);
                 Quarter.Value = quranTexts.Quarter;
                 Page.Value = quranTexts.Page;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -295,6 +289,22 @@ namespace QuranKareem {
             }
             
              quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah); NewDateTime(); 
+            allow = true;
+        }
+
+        private void PageRichText_Click(object sender, EventArgs e) {
+            if (!allow) { return; }
+            allow = false;
+            quranTexts.setCursor(-1);
+            Surah.Value = quranTexts.Surah;
+            Surahs.SelectedIndex = (int)Surah.Value - 1;
+            Quarter.Value = quranTexts.Quarter;
+            Page.Value = quranTexts.Page;
+            Ayah.Minimum = quranTexts.AyahStart;
+            Ayah.Maximum = quranTexts.AyatCount;
+            Ayah.Value = quranTexts.Ayah;
+            quranAudios.ayah(quranTexts.Surah, quranTexts.Ayah);
+            NewDateTime();
             allow = true;
         }
 
@@ -311,7 +321,6 @@ namespace QuranKareem {
                 Ayah.Minimum = quranTexts.AyahStart;
                 Ayah.Maximum = quranTexts.AyatCount;
                 Ayah.Value = quranTexts.Ayah;
-                quranTxt.Text = quranTexts.PageText;
             }
 
             else {
@@ -337,6 +346,7 @@ namespace QuranKareem {
             allow = false;
             quranPictures.setXY(x, y /*, pB1.Width, pB1.Height*/);
             Surah.Value = quranPictures.Surah;
+            Surahs.SelectedIndex= (int)Surah.Value - 1;
             Quarter.Value = quranPictures.Quarter;
             Page.Value = quranPictures.Page;
             Ayah.Minimum = quranPictures.AyahStart;
