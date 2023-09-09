@@ -7,7 +7,6 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -94,6 +93,7 @@ namespace QuranKareem {
                     y += 50;
                 }
 
+            textsFiles = null;
             try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
             tafasir.Items.Clear();
             if (textsFiles != null && textsFiles.Length > 0) {
@@ -139,7 +139,7 @@ namespace QuranKareem {
             try {
                 string[] links = File.ReadAllText(s + "\\download links.txt").Replace(newLine, "|").Split('|');
                 string[] temp;
-                WebClient client = new WebClient();
+                System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length >= 113) {
                     foreach (string link in links) {
                         if (link.Trim().Length > 0) {
@@ -421,11 +421,10 @@ namespace QuranKareem {
         }
 
         private void saveRTF_Click(object sender, EventArgs e) {
-            if(saveRichText.ShowDialog()== DialogResult.OK) {
-                RichTextBox rtb = new RichTextBox();
-                rtb.Text = quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value);
-                rtb.LoadFile(saveRichText.FileName, RichTextBoxStreamType.RichText);
-            }
+            saveRichText.FileName = $"Tafseer Surah {Surah.Value} Ayah {Ayah.Value}";
+            rtb.Text = quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value);
+            if (rtb.Text!="" && saveRichText.ShowDialog() == DialogResult.OK)
+                rtb.SaveFile(saveRichText.FileName);
         }
 
         private void search_Click(object sender, EventArgs e) {
@@ -458,5 +457,8 @@ namespace QuranKareem {
 
         private void minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
+        private void about_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317");
+        }
     }
 }

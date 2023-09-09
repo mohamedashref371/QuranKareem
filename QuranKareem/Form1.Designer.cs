@@ -74,6 +74,8 @@
             this.tafseerCopy = new System.Windows.Forms.Button();
             this.saveRTF = new System.Windows.Forms.Button();
             this.saveRichText = new System.Windows.Forms.SaveFileDialog();
+            this.rtb = new System.Windows.Forms.RichTextBox();
+            this.about = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
@@ -670,7 +672,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label10.Location = new System.Drawing.Point(77, 631);
+            this.label10.Location = new System.Drawing.Point(86, 631);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 22);
             this.label10.TabIndex = 54;
@@ -703,11 +705,34 @@
             this.saveRichText.FileName = "tafseer";
             this.saveRichText.Filter = "Rich Text File|*.rtf";
             // 
+            // rtb
+            // 
+            this.rtb.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtb.Location = new System.Drawing.Point(-44, 691);
+            this.rtb.Name = "rtb";
+            this.rtb.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.rtb.Size = new System.Drawing.Size(50, 51);
+            this.rtb.TabIndex = 57;
+            this.rtb.Text = "";
+            this.rtb.Visible = false;
+            // 
+            // about
+            // 
+            this.about.Location = new System.Drawing.Point(12, 830);
+            this.about.Name = "about";
+            this.about.Size = new System.Drawing.Size(75, 23);
+            this.about.TabIndex = 58;
+            this.about.Text = "About";
+            this.about.UseVisualStyleBackColor = true;
+            this.about.Click += new System.EventHandler(this.about_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.Controls.Add(this.about);
+            this.Controls.Add(this.rtb);
             this.Controls.Add(this.saveRTF);
             this.Controls.Add(this.tafseerCopy);
             this.Controls.Add(this.label10);
@@ -817,6 +842,8 @@
         private System.Windows.Forms.ComboBox tafasir;
         private System.Windows.Forms.Button saveRTF;
         private System.Windows.Forms.SaveFileDialog saveRichText;
+        private System.Windows.Forms.RichTextBox rtb;
+        private System.Windows.Forms.Button about;
     }
 }
 
