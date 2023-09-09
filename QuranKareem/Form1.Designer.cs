@@ -367,7 +367,7 @@
             this.guna2Panel1.BorderColor = System.Drawing.Color.Transparent;
             this.guna2Panel1.Location = new System.Drawing.Point(761, 46);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(255, 595);
+            this.guna2Panel1.Size = new System.Drawing.Size(255, 852);
             this.guna2Panel1.TabIndex = 0;
             // 
             // label6
@@ -590,7 +590,7 @@
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(893, 656);
+            this.copy.Location = new System.Drawing.Point(129, 523);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 46;
@@ -602,7 +602,7 @@
             // 
             this.normalText.AutoSize = true;
             this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.normalText.Location = new System.Drawing.Point(796, 667);
+            this.normalText.Location = new System.Drawing.Point(32, 534);
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
@@ -616,7 +616,7 @@
             this.searchList.Location = new System.Drawing.Point(12, 11);
             this.searchList.Name = "searchList";
             this.searchList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.searchList.Size = new System.Drawing.Size(222, 511);
+            this.searchList.Size = new System.Drawing.Size(222, 576);
             this.searchList.TabIndex = 48;
             this.searchList.Visible = false;
             this.searchList.SelectedIndexChanged += new System.EventHandler(this.searchList_SelectedIndexChanged);
@@ -624,7 +624,7 @@
             // search
             // 
             this.search.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.search.Location = new System.Drawing.Point(129, 528);
+            this.search.Location = new System.Drawing.Point(116, 596);
             this.search.Name = "search";
             this.search.Size = new System.Drawing.Size(90, 32);
             this.search.TabIndex = 49;
@@ -635,7 +635,7 @@
             // searchText
             // 
             this.searchText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchText.Location = new System.Drawing.Point(12, 566);
+            this.searchText.Location = new System.Drawing.Point(12, 634);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(222, 27);
             this.searchText.TabIndex = 51;
@@ -643,7 +643,7 @@
             // searchClose
             // 
             this.searchClose.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchClose.Location = new System.Drawing.Point(33, 528);
+            this.searchClose.Location = new System.Drawing.Point(20, 596);
             this.searchClose.Name = "searchClose";
             this.searchClose.Size = new System.Drawing.Size(90, 32);
             this.searchClose.TabIndex = 52;
@@ -661,7 +661,7 @@
             "1",
             "2",
             "3"});
-            this.tafasir.Location = new System.Drawing.Point(12, 656);
+            this.tafasir.Location = new System.Drawing.Point(12, 715);
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tafasir.Size = new System.Drawing.Size(222, 29);
@@ -672,7 +672,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label10.Location = new System.Drawing.Point(86, 631);
+            this.label10.Location = new System.Drawing.Point(86, 690);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 22);
             this.label10.TabIndex = 54;
@@ -681,7 +681,7 @@
             // tafseerCopy
             // 
             this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tafseerCopy.Location = new System.Drawing.Point(144, 691);
+            this.tafseerCopy.Location = new System.Drawing.Point(144, 750);
             this.tafseerCopy.Name = "tafseerCopy";
             this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
             this.tafseerCopy.TabIndex = 55;
@@ -692,7 +692,7 @@
             // saveRTF
             // 
             this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.saveRTF.Location = new System.Drawing.Point(12, 691);
+            this.saveRTF.Location = new System.Drawing.Point(12, 750);
             this.saveRTF.Name = "saveRTF";
             this.saveRTF.Size = new System.Drawing.Size(126, 51);
             this.saveRTF.TabIndex = 56;
@@ -708,7 +708,7 @@
             // rtb
             // 
             this.rtb.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtb.Location = new System.Drawing.Point(-44, 691);
+            this.rtb.Location = new System.Drawing.Point(-44, 750);
             this.rtb.Name = "rtb";
             this.rtb.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.rtb.Size = new System.Drawing.Size(50, 51);
