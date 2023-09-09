@@ -76,6 +76,7 @@
             this.saveRichText = new System.Windows.Forms.SaveFileDialog();
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.about = new System.Windows.Forms.Button();
+            this.latest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
@@ -727,11 +728,22 @@
             this.about.UseVisualStyleBackColor = true;
             this.about.Click += new System.EventHandler(this.about_Click);
             // 
+            // latest
+            // 
+            this.latest.Location = new System.Drawing.Point(102, 821);
+            this.latest.Name = "latest";
+            this.latest.Size = new System.Drawing.Size(127, 23);
+            this.latest.TabIndex = 59;
+            this.latest.Text = "latest version";
+            this.latest.UseVisualStyleBackColor = true;
+            this.latest.Click += new System.EventHandler(this.latest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.Controls.Add(this.latest);
             this.Controls.Add(this.about);
             this.Controls.Add(this.rtb);
             this.Controls.Add(this.saveRTF);
@@ -845,6 +857,7 @@
         private System.Windows.Forms.SaveFileDialog saveRichText;
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.Button about;
+        private System.Windows.Forms.Button latest;
     }
 }
 

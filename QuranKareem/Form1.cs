@@ -458,6 +458,8 @@ namespace QuranKareem {
 
         private void minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
+        private void latest_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://www.mediafire.com/folder/fwzq0xlpp9oys"); }
+
         private void about_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317"); }
     }
 }
