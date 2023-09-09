@@ -42,7 +42,6 @@ namespace QuranKareem {
             if (textsFiles != null && textsFiles.Length > 0)
                 quranTexts.QuranText(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
-
             try { picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */ } catch { }
 
             if (picturesFolders != null && picturesFolders.Length > 0)
@@ -63,20 +62,18 @@ namespace QuranKareem {
             else Surahs.Items.AddRange(quranPictures.GetSurahNames());
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
-            quranAudios.AddInControls(Controls); // 
+            quranAudios.AddInControls(Controls);
             quranAudios.AddEventHandler(Audio_);
 
             try { audiosFolders = Directory.GetDirectories("audios"); } catch { }
 
-            //Button b;
             Guna2Button b;
-
             int y = 5;
             Color clr; Random rand = new Random();
             if (audiosFolders != null)
                 for (int i = 0; i < audiosFolders.Length; i++) {
                     clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
-                    b = new Guna2Button(); // new Button();
+                    b = new Guna2Button();
                     stringArray = audiosFolders[i].Split('\\');
                     b.FillColor = clr;
                     b.Text = stringArray[stringArray.Length - 1];
@@ -88,7 +85,6 @@ namespace QuranKareem {
                     b.Click += new EventHandler(Button_Click); // event
                     b.BorderRadius = 15;
                     guna2Panel1.Controls.Add(b);
-                    //panel1.Controls.Add(b);
                     y += 50;
                 }
 
@@ -134,6 +130,7 @@ namespace QuranKareem {
             }
         }
 
+        // تحميل المصاحف المسموعة في الخلفية
         static void DownloadFiles(string s) {
             try {
                 string[] links = File.ReadAllText(s + "\\download links.txt").Replace(newLine, "|").Split('|');
@@ -155,6 +152,7 @@ namespace QuranKareem {
             } catch { MessageBox.Show("حدث خطأ ما"); }
         }
 
+        // تفعيل التكرار
         private void Repeat_CheckedChanged(object sender, EventArgs e) {
             quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
         }
@@ -217,17 +215,17 @@ namespace QuranKareem {
         }
 
         bool allowJuz = true;
-        private void Juz_ValueChanged(object sender, EventArgs e) {
+        private void Juz_ValueChanged(object sender, EventArgs e) /* فهرس بالأجزاء */ {
             if (!allowJuz) { return; }
             Quarter.Value = Juz.Value * 8 - 7;
         }
 
-        private void Hizb_ValueChanged(object sender, EventArgs e) {
+        private void Hizb_ValueChanged(object sender, EventArgs e) /* فهرس بالحزب */ {
             if (!allowJuz) { return; }
             Quarter.Value = Hizb.Value * 4 - 3;
         }
 
-        private void Quarter_ValueChanged(object sender, EventArgs e) {
+        private void Quarter_ValueChanged(object sender, EventArgs e) /* فهرس بالربع */ {
             allowJuz = false;
             Juz.Value = Math.Ceiling(Quarter.Value / 8);
             Hizb.Value = Math.Ceiling(Quarter.Value / 4);
@@ -260,7 +258,7 @@ namespace QuranKareem {
             allow = true;
         }
 
-        private void Page_ValueChanged(object sender, EventArgs e) {
+        private void Page_ValueChanged(object sender, EventArgs e) /* فهرس بالصفحات */ {
             if (!allow) { return; }
             allow = false;
 
@@ -289,6 +287,7 @@ namespace QuranKareem {
             allow = true;
         }
 
+        // فهرس بالآية داخل السورة
         private void Ayah_ValueChanged(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
@@ -309,6 +308,7 @@ namespace QuranKareem {
             allow = true;
         }
 
+        // بديل عن المصحف المصور، ربما لن تراه في حياتك
         private void PageRichText_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
@@ -325,6 +325,7 @@ namespace QuranKareem {
             allow = true;
         }
 
+        // quranAudios -> AddEventHandler
         private void Audio_(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
@@ -394,12 +395,12 @@ namespace QuranKareem {
 
 
         private void Color_SelectedIndexChanged(object sender, EventArgs e) {
-            if (color.SelectedIndex == 1) { quranPictures.textColor = QuranPictures.TextColor.red; quranTexts.textColor = QuranTexts.TextColor.red; }
-            else if (color.SelectedIndex == 2) { quranPictures.textColor = QuranPictures.TextColor.green; quranTexts.textColor = QuranTexts.TextColor.green; }
-            else if (color.SelectedIndex == 3) { quranPictures.textColor = QuranPictures.TextColor.blue; quranTexts.textColor = QuranTexts.TextColor.blue; }
-            else if (color.SelectedIndex == 4) { quranPictures.textColor = QuranPictures.TextColor.darkCyan; quranTexts.textColor = QuranTexts.TextColor.darkCyan; }
-            else if (color.SelectedIndex == 5) { quranPictures.textColor = QuranPictures.TextColor.darkRed; quranTexts.textColor = QuranTexts.TextColor.darkRed; }
-            else { quranPictures.textColor = QuranPictures.TextColor.nothing; quranTexts.textColor = QuranTexts.TextColor.nothing; }
+            if (color.SelectedIndex == 1) { quranPictures.ayahColor = AyahColor.red; quranTexts.ayahColor = AyahColor.red; }
+            else if (color.SelectedIndex == 2) { quranPictures.ayahColor = AyahColor.green; quranTexts.ayahColor = AyahColor.green; }
+            else if (color.SelectedIndex == 3) { quranPictures.ayahColor = AyahColor.blue; quranTexts.ayahColor = AyahColor.blue; }
+            else if (color.SelectedIndex == 4) { quranPictures.ayahColor = AyahColor.darkCyan; quranTexts.ayahColor = AyahColor.darkCyan; }
+            else if (color.SelectedIndex == 5) { quranPictures.ayahColor = AyahColor.darkRed; quranTexts.ayahColor = AyahColor.darkRed; }
+            else { quranPictures.ayahColor = AyahColor.nothing; quranTexts.ayahColor = AyahColor.nothing; }
         }
 
         private void copy_Click(object sender, EventArgs e) {
@@ -417,6 +418,7 @@ namespace QuranKareem {
 
         private void tafasir_SelectedIndexChanged(object sender, EventArgs e) {
             quranTafasir.QuranTafseer(@"tafasir\" + tafasir.Text + ".db");
+            Tafseer = tafasir.SelectedIndex+"";
         }
 
         private void saveRTF_Click(object sender, EventArgs e) {

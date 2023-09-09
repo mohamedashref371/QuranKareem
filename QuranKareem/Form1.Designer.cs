@@ -639,6 +639,7 @@
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(222, 27);
             this.searchText.TabIndex = 51;
+            this.searchText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // searchClose
             // 
@@ -718,7 +719,7 @@
             // 
             // about
             // 
-            this.about.Location = new System.Drawing.Point(12, 830);
+            this.about.Location = new System.Drawing.Point(12, 821);
             this.about.Name = "about";
             this.about.Size = new System.Drawing.Size(75, 23);
             this.about.TabIndex = 58;

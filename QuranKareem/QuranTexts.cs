@@ -183,14 +183,14 @@ namespace QuranKareem
             finish = finishedPosition[k];
 
             if (textType == TextType.html) {
-                if (textColor != TextColor.nothing) {
+                if (ayahColor != AyahColor.nothing) {
                     PageTextHTML = (start > 0 ? PageText.Substring(0, start) : "") + GetHtmlTextColor() + PageText.Substring(start, finish - start) + "</span>" + PageText.Substring(finish);
                 }
                 PageTextHTML = "<span dir=\"rtl\">" + PageText.Replace(newLine, "<br>") + "</span>";
             }
             else if (textType == TextType.rich) {
                 PageRichText.Text = OriginalPageText.ToString();
-                if (textColor != TextColor.nothing) {
+                if (ayahColor != AyahColor.nothing) {
                     PageRichText.Select(start, finish-start);
                     PageRichText.SelectionColor = GetRichTextColor();
                     PageRichText.SelectionStart = start;
@@ -285,33 +285,30 @@ namespace QuranKareem
             return sura_aya;
         }
 
+        public AyahColor ayahColor = AyahColor.nothing;
+
         private Color GetRichTextColor() {
-            if (textColor == TextColor.red) return Color.Red;
-            else if (textColor == TextColor.green) return Color.Green;
-            else if (textColor == TextColor.blue) return Color.Blue;
-            else if (textColor == TextColor.darkCyan) return Color.DarkCyan;
-            else if (textColor == TextColor.darkRed) return Color.DarkRed;
+            if (ayahColor == AyahColor.red) return Color.Red;
+            else if (ayahColor == AyahColor.green) return Color.Green;
+            else if (ayahColor == AyahColor.blue) return Color.Blue;
+            else if (ayahColor == AyahColor.darkCyan) return Color.DarkCyan;
+            else if (ayahColor == AyahColor.darkRed) return Color.DarkRed;
             else return Color.Black;
         }
 
         private string GetHtmlTextColor() {
             string s = "<span";
-            if (textColor != TextColor.nothing) s+= " style=\"color: ";
-            if (textColor == TextColor.red) s+="red\"";
-            else if (textColor == TextColor.green) s += "green\"";
-            else if (textColor == TextColor.blue) s += "blue\"";
-            else if (textColor == TextColor.darkCyan) s += "darkcyan\"";
-            else if (textColor == TextColor.darkRed) s += "darkred\"";
+            if (ayahColor != AyahColor.nothing) s+= " style=\"color: ";
+            if (ayahColor == AyahColor.red) s+="red\"";
+            else if (ayahColor == AyahColor.green) s += "green\"";
+            else if (ayahColor == AyahColor.blue) s += "blue\"";
+            else if (ayahColor == AyahColor.darkCyan) s += "darkcyan\"";
+            else if (ayahColor == AyahColor.darkRed) s += "darkred\"";
             s += ">";
             return s;
         }
 
         public void AddEventHandler(EventHandler eh) { PageRichText.Click += eh; }
-
-        public TextColor textColor = TextColor.nothing;
-        public enum TextColor {
-           nothing=0, red = 1, green = 2, blue = 3, darkCyan = 4, darkRed = 5
-        }
 
         public TextType textType = TextType.plain;
         public enum TextType {

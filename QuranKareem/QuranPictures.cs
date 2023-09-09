@@ -167,7 +167,7 @@ namespace QuranKareem
             // التلوين
             Picture = (Bitmap)oPic.Clone();
             
-            if (textColor != TextColor.nothing) {
+            if (ayahColor != AyahColor.nothing) {
                 if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
                 else {
                     reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
@@ -234,6 +234,7 @@ namespace QuranKareem
             }
         }
 
+        public AyahColor ayahColor = AyahColor.red;
         void fun(int x5, int x9, int y5, int y9) { // كود التلوين
             if (!success) return;
             try {
@@ -242,20 +243,15 @@ namespace QuranKareem
                     for (int x1 = x5; x1 <= x9; x1++) {
                         p4 = Picture.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/) {
-                            if (textColor == TextColor.blue) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, p4.G, 255));
-                            else if (textColor == TextColor.green) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 128, p4.B));
-                            else if (textColor == TextColor.darkCyan) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 100, 100));
-                            else if (textColor == TextColor.darkRed) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G, p4.B));
+                            if (ayahColor == AyahColor.blue) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, p4.G, 255));
+                            else if (ayahColor == AyahColor.green) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 128, p4.B));
+                            else if (ayahColor == AyahColor.darkCyan) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 100, 100));
+                            else if (ayahColor == AyahColor.darkRed) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G, p4.B));
                             else Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G, p4.B)); // غير لونها الى الأحمر
                         }
                     }
                 }
             } catch { }
-        }
-
-        public TextColor textColor = TextColor.red;
-        public enum TextColor {
-            nothing = 0, red = 1, green=2, blue=3, darkCyan=4, darkRed=5
         }
     }
 }
