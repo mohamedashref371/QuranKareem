@@ -56,7 +56,7 @@ namespace QuranKareem {
             }
 
             else {
-                MessageBox.Show($"مجلد المصاحف غير موجودة،{newLine}سيتم إغلاق البرنامج.");
+                MessageBox.Show($"مجلدات المصاحف غير موجودة،{newLine}سيتم إغلاق البرنامج.");
                 Close();
             }
 
