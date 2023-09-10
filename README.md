@@ -5,7 +5,6 @@ Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/f
 
 To Download this program: ([pre-release](https://www.mediafire.com/file/v5mvraxoup56ggq)).
 
-
 I did not care about designing the form or adding forms yet, and instead I used the Guna UI 2.0 library.
 
 Wanting to revive an idea from 2002 ([Quran-CD-Roaya-5](https://archive.org/download/QuranCDRoaya5/Quran-CD-Roaya-5.iso)), I built a mostly standardized SQLite database model.
@@ -17,6 +16,5 @@ And to ensure myself correct data, I did the following:
 - I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) to my database model.
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
-https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
+https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain <span style="color: darkred">al-isti3azah</span>, and the json files start from the first verse. It may happen that the program accidentally reads the <span style="color: darkred">al-isti3azah</span> with the basmalah when reciting <span style="color: blue">al-basmalah</spsn>. This is not a problem with the database model structure and this will be updated later.
 
-Some of the audio surahs contain al-isti3azah, and the json files start from the first verse. It may happen that the program accidentally reads the al-isti3azah with the basmalah when reciting al-basmalah. This is not a problem with the database model structure and this will be updated later.
