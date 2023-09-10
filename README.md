@@ -18,3 +18,5 @@ And to ensure myself correct data, I did the following:
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
 https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
+
+Some of the audio surahs contain al-isti3azah, and the json files start from the first verse. It may happen that the program accidentally reads the al-isti3azah with the basmalah when reciting al-basmalah. This is not a problem with the database model structure and this will be updated later.
