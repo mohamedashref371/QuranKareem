@@ -34,6 +34,7 @@ namespace QuranKareem {
 ";
 
         private void Form1_Load(object sender, EventArgs e) {
+            try { rtb.SaveFile(save+"XXX"); } catch { }
             color.SelectedIndex = 1;
             string[] stringArray, textsFiles = null, picturesFolders = null, audiosFolders = null;
 

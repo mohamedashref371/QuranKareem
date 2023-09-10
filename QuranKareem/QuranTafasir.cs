@@ -40,9 +40,9 @@ namespace QuranKareem
         public string ayahTafseerText(int sura, int aya) {
             if (!success) return "";
             quran.Open();
-            reader = new SQLiteCommand($"SELECT id,text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
+            reader = new SQLiteCommand($"SELECT text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
             reader.Read();
-            tempString = reader.GetString(1);
+            tempString = reader.GetString(0);
             quran.Close();
             return tempString;
         }

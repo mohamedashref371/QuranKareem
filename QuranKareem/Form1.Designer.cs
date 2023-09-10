@@ -715,7 +715,7 @@
             this.rtb.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.rtb.Size = new System.Drawing.Size(50, 51);
             this.rtb.TabIndex = 57;
-            this.rtb.Text = "";
+            this.rtb.Text = "Tafseer";
             this.rtb.Visible = false;
             // 
             // about
