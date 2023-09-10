@@ -447,7 +447,9 @@ namespace QuranKareem {
 
         private void searchList_SelectedIndexChanged(object sender, EventArgs e) {
             int[] sura_aya = quranTexts.SelectedSearchIndex(searchList.SelectedIndex);
-            Surah.Value = sura_aya[0]; Ayah.Value = sura_aya[1]>= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
+            if (sura_aya == null) return;
+            Surah.Value = sura_aya[0];
+            Ayah.Value = sura_aya[1]>= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
         }
 
         private void searchClose_Click(object sender, EventArgs e) {
