@@ -16,7 +16,6 @@ And to ensure myself correct data, I did the following:
 - I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) to my database model.
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
-https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain $\textcolor{darkred}{\textsf{al-isti3azah}}$, and the json files start from the first verse. It may happen that the program accidentally reads the $\textcolor{darkred}{\textsf{al-isti3azah}}$ with the basmalah when reciting $\textcolor{darkblue}{\textsf{al-basmalah}}$. This is not a problem with the database model structure and this will be updated later.
-
+https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain <span style="color:darkred">al-isti3azah</span>, and the json files start from the first verse. It may happen that the program accidentally reads the <span style="color:darkred">al-isti3azah</span> with the basmalah when reciting <span style="color:darkblue">al-basmalah</spsn>. This is not a problem with the database model structure and this will be updated later.
 
 
