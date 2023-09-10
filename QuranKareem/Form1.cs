@@ -23,19 +23,18 @@ namespace QuranKareem {
         readonly QuranAudios quranAudios = QuranAudios.Instance;
         readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
 
-        string moshafText = "-1";
+        string moshafText = "-1"; bool textMode = false;
         string moshafPic = "0";
         string moshafAudio = "-1";
         string Tafseer = "-1";
 
-        bool textMode = false;
-
-        static string newLine = @"
+        readonly static string newLine = @"
 ";
 
         private void Form1_Load(object sender, EventArgs e) {
-            try { rtb.SaveFile(save+"XXX"); } catch { }
-            color.SelectedIndex = 1;
+            try { rtb.SaveFile(save+"XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
+
+            color.SelectedIndex = 1; // اللون الأحمر
             string[] stringArray, textsFiles = null, picturesFolders = null, audiosFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
@@ -48,26 +47,32 @@ namespace QuranKareem {
             if (picturesFolders != null && picturesFolders.Length > 0)
                 quranPictures.QuranPicture(picturesFolders[0], (int)Surah.Value, (int)Ayah.Value);
 
+            // مجلد الصور غير موجود ؟
             else if (textsFiles != null && textsFiles.Length > 0) {
-                textMode = true;
-                quranTexts.AddRichTextBoxInControls(Controls, 240, 5, 510, 900);
-                quranTexts.AddEventHandler(new EventHandler(PageRichText_Click));
+                textMode = true; // التبديل إلى RichTextBox
+                quranTexts.AddRichTextBoxInControls(Controls, 240, 5, 510, 900); // اظهاره في النافذة
+                quranTexts.AddEventHandler(new EventHandler(PageRichText_Click)); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
             }
-            else Close();
+
+            else {
+                MessageBox.Show($"مجلد المصاحف غير موجودة،{newLine}سيتم إغلاق البرنامج.");
+                Close();
+            }
 
             if (!textMode) quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
 
-            Surahs.Items.Clear(); // إفراغ القائمة من ال ComboBox
+            Surahs.Items.Clear(); // إفراغ قائمة ال ComboBox
             if (textMode) Surahs.Items.AddRange(quranTexts.GetSurahNames()); // ملأها بأسماء السور;
             else Surahs.Items.AddRange(quranPictures.GetSurahNames());
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
-            quranAudios.AddInControls(Controls);
-            quranAudios.AddEventHandler(Audio_);
+            quranAudios.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
+            quranAudios.AddEventHandler(Audio_); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
 
-            try { audiosFolders = Directory.GetDirectories("audios"); } catch { }
+            try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
 
+            // اضافة ازرار المشايخ
             Guna2Button b;
             int y = 5;
             Color clr; Random rand = new Random();
@@ -82,13 +87,14 @@ namespace QuranKareem {
                     b.Location = new Point(5, y);
                     b.Size = new Size(230, 45);
                     b.Cursor = Cursors.Hand;
-                    b.Tag = i;
-                    b.Click += new EventHandler(Button_Click); // event
+                    b.Tag = i; // اضافة رقم للشيخ
+                    b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
                     b.BorderRadius = 15;
                     guna2Panel1.Controls.Add(b);
                     y += 50;
                 }
 
+            // اضافة التفاسير
             textsFiles = null;
             try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
             tafasir.Items.Clear();
@@ -99,6 +105,7 @@ namespace QuranKareem {
                 tafasir.SelectedIndex = 0;
             }
 
+            // الوقوف عند الآية التي كنت فيها قبل اغلاق البرنامج آخر مرة
             try {
                 if (File.Exists(save + "Surah")) {
                     stringArray = File.ReadAllText(save + "Surah").Split(',');
@@ -119,9 +126,10 @@ namespace QuranKareem {
                 
         }
 
-        private void Button_Click(object sender, EventArgs e) {
+        // دالة عامة لجميع الأزرار عند الضغط عليها
+        private void Button_Click(object sender /* الزر الذي ضغطت عليه */, EventArgs e) {
             moshafAudio = ((Guna2Button)sender).Tag + "";
-            string s = @"audios\" + ((Guna2Button)sender).Text;
+            string s = @"audios\" + ((Guna2Button)sender).Text; 
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             NewDateTime();
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2) {
@@ -137,7 +145,7 @@ namespace QuranKareem {
                 string[] links = File.ReadAllText(s + "\\download links.txt").Replace(newLine, "|").Split('|');
                 string[] temp;
                 System.Net.WebClient client = new System.Net.WebClient();
-                if (links.Length >= 113) {
+                if (links.Length > 0) {
                     foreach (string link in links) {
                         if (link.Trim().Length > 0) {
                             try { temp = link.Split('/'); } catch { continue; }
@@ -310,6 +318,7 @@ namespace QuranKareem {
         }
 
         // بديل عن المصحف المصور، ربما لن تراه في حياتك
+        // quranTexts -> AddEventHandler
         private void PageRichText_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
@@ -413,7 +422,7 @@ namespace QuranKareem {
 
         private void tafseerCopy_Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value));
+                Clipboard.SetText(quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
             } catch { }
         }
 

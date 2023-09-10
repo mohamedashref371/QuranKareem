@@ -10,8 +10,8 @@ namespace QuranKareem
     class QuranTafasir
     {
         private SQLiteConnection quran; // SQLiteConnection
-        private bool success = false; // نجح استدعاء ال QuranText ? :(
-        private SQLiteDataReader reader; // قارئ لتنفيذ ال sql select
+        private bool success = false; // نجح استدعاء ال QuranTafseer ? :(
+        private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         public string Comment { get; private set; }
 

@@ -14,7 +14,7 @@ namespace QuranKareem
         private string path; // المسار
         private SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranAudio ? :(
-        private SQLiteDataReader reader; // قارئ لتنفيذ ال sql select
+        private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
         private string extension; // example: .mp3
