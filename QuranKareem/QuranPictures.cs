@@ -128,6 +128,9 @@ namespace QuranKareem
             else ayah(Surah, Ayah + 1);
         }
 
+        public void ayah() { ayah(Surah, Ayah); }
+        public void ayah(int aya) { ayah(Surah, aya); }
+
         public void ayah(int sura, int aya) { // كما ترى .. المجهود كله عليها
             if (!success) return;
 

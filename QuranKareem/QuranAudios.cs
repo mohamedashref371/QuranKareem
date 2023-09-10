@@ -32,24 +32,24 @@ namespace QuranKareem
 
         public int CurrentPosition { get; private set; }
 
-        private Timer timer = new Timer(); private bool ok=true;
+        private Timer timer = new Timer(); private bool ok = true;
         private AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
         private bool added = false;
-        public void AddInControls(Control.ControlCollection Controls) { 
-            if (!added) try { 
+        public void AddInControls(Control.ControlCollection Controls) {
+            if (!added) try {
                     timer.Tick += new EventHandler(timer_Tick);
                     Controls.Add(mp3);
                     mp3.Visible = false;
                     added = true;
-                } catch { } 
+                } catch { }
         }
 
         public static QuranAudios Instance { get; private set; } = new QuranAudios();
 
-        public bool CapturedAudio=false;
+        public bool CapturedAudio = false;
 
-        public void QuranAudio(string path, int sura = 1, int aya = 0){
+        public void QuranAudio(string path, int sura = 1, int aya = 0) {
             if (!added || path == null || path.Trim().Length == 0) return;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
@@ -75,7 +75,7 @@ namespace QuranKareem
                 comment = reader.GetString(5);
                 quran.Close();
                 success = true;
-             
+
                 ayah(sura, aya);
             } catch { return; }
         }
@@ -84,7 +84,7 @@ namespace QuranKareem
 
         public void AyahPlus() {
             if (!success) return;
-            if (AyahRepeatCounter< AyahRepeat-1 && Ayah!=0) { AyahRepeatCounter += 1; ok = true; ayah(Surah, Ayah); }
+            if (AyahRepeatCounter < AyahRepeat - 1 && Ayah != 0) { AyahRepeatCounter += 1; ok = true; ayah(Surah, Ayah); }
             else if (Ayah == AyatCount && SurahRepeatCounter < SurahRepeat - 1) { SurahRepeatCounter += 1; ok = true; ayah(Surah, 0); }
             else
             {
@@ -93,8 +93,11 @@ namespace QuranKareem
                 else if (Ayah == AyatCount) surah(1);
                 else ayah(Surah, Ayah + 1);
             }
-            
+
         }
+
+        public void ayah() { ayah(Surah, Ayah); }
+        public void ayah(int aya) { ayah(Surah, aya); }
 
         public void ayah(int sura, int aya) {
             if (!success) return;
