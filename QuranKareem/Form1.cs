@@ -127,6 +127,7 @@ namespace QuranKareem {
                 }
             } catch { }
 
+            // FormWindowState -> Maximized
             FormSize fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
             fs.SetControls(Controls);
             fs.SetControls(guna2Panel1.Controls);
@@ -163,7 +164,7 @@ namespace QuranKareem {
                         }
                     }
                     MessageBox.Show("انتهى تحميل المصحف");
-                } else MessageBox.Show("حدث خطأ ما");
+                } else MessageBox.Show("مجلد تحميل المصحف فارغ");
             } catch { MessageBox.Show("حدث خطأ ما"); }
         }
 
