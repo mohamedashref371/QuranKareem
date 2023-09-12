@@ -14,6 +14,8 @@ using Guna.UI2.WinForms;
 namespace QuranKareem {
     public partial class Form1 : Form {
 
+        private readonly int SizeX=1100, SizeY=910;
+
         public Form1() { InitializeComponent(); }
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.0.0", "");
@@ -32,6 +34,7 @@ namespace QuranKareem {
 ";
 
         private void Form1_Load(object sender, EventArgs e) {
+            
             try { rtb.SaveFile(save+"XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 
             color.SelectedIndex = 1; // اللون الأحمر
@@ -123,7 +126,10 @@ namespace QuranKareem {
                     }
                 }
             } catch { }
-                
+
+            FormSize fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
+            fs.SetControls(Controls);
+            fs.SetControls(guna2Panel1.Controls);
         }
 
         // دالة عامة لجميع الأزرار عند الضغط عليها

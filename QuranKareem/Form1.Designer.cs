@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.quranPic = new System.Windows.Forms.PictureBox();
             this.Surah = new System.Windows.Forms.NumericUpDown();
             this.Page = new System.Windows.Forms.NumericUpDown();
             this.Ayah = new System.Windows.Forms.NumericUpDown();
@@ -57,7 +56,6 @@
             this.guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.exitForm = new System.Windows.Forms.Button();
             this.minimize = new System.Windows.Forms.Button();
-            this.stop = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.Juz = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
@@ -77,7 +75,8 @@
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.about = new System.Windows.Forms.Button();
             this.latest = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
+            this.stop = new System.Windows.Forms.Button();
+            this.quranPic = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -87,26 +86,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.Rate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Juz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Hizb)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).BeginInit();
             this.SuspendLayout();
-            // 
-            // quranPic
-            // 
-            this.quranPic.BackColor = System.Drawing.Color.Transparent;
-            this.quranPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.quranPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.quranPic.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.quranPic.Location = new System.Drawing.Point(240, 5);
-            this.quranPic.Name = "quranPic";
-            this.quranPic.Size = new System.Drawing.Size(510, 900);
-            this.quranPic.TabIndex = 2;
-            this.quranPic.TabStop = false;
-            this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
-            this.quranPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseMove);
             // 
             // Surah
             // 
             this.Surah.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Surah.Location = new System.Drawing.Point(35, 47);
+            this.Surah.Location = new System.Drawing.Point(46, 47);
             this.Surah.Maximum = new decimal(new int[] {
             114,
             0,
@@ -132,7 +118,7 @@
             // Page
             // 
             this.Page.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Page.Location = new System.Drawing.Point(35, 212);
+            this.Page.Location = new System.Drawing.Point(46, 212);
             this.Page.Maximum = new decimal(new int[] {
             604,
             0,
@@ -158,7 +144,7 @@
             // Ayah
             // 
             this.Ayah.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Ayah.Location = new System.Drawing.Point(35, 257);
+            this.Ayah.Location = new System.Drawing.Point(46, 257);
             this.Ayah.Maximum = new decimal(new int[] {
             7,
             0,
@@ -184,7 +170,7 @@
             // Quarter
             // 
             this.Quarter.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Quarter.Location = new System.Drawing.Point(35, 164);
+            this.Quarter.Location = new System.Drawing.Point(46, 164);
             this.Quarter.Maximum = new decimal(new int[] {
             240,
             0,
@@ -216,7 +202,7 @@
             "1",
             "2",
             "3"});
-            this.Surahs.Location = new System.Drawing.Point(35, 12);
+            this.Surahs.Location = new System.Drawing.Point(46, 12);
             this.Surahs.Name = "Surahs";
             this.Surahs.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Surahs.Size = new System.Drawing.Size(95, 29);
@@ -226,8 +212,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label1.Location = new System.Drawing.Point(145, 15);
+            this.label1.Location = new System.Drawing.Point(156, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 22);
             this.label1.TabIndex = 10;
@@ -236,8 +223,9 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label2.Location = new System.Drawing.Point(145, 49);
+            this.label2.Location = new System.Drawing.Point(156, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 22);
             this.label2.TabIndex = 11;
@@ -246,8 +234,9 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label3.Location = new System.Drawing.Point(159, 166);
+            this.label3.Location = new System.Drawing.Point(170, 166);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 22);
             this.label3.TabIndex = 12;
@@ -256,8 +245,9 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label4.Location = new System.Drawing.Point(145, 214);
+            this.label4.Location = new System.Drawing.Point(156, 214);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 22);
             this.label4.TabIndex = 13;
@@ -266,8 +256,9 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label5.Location = new System.Drawing.Point(159, 259);
+            this.label5.Location = new System.Drawing.Point(170, 259);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 22);
             this.label5.TabIndex = 14;
@@ -285,7 +276,7 @@
             "أزرق",
             "سماوي غامق",
             "أحمر غامق"});
-            this.color.Location = new System.Drawing.Point(20, 332);
+            this.color.Location = new System.Drawing.Point(33, 332);
             this.color.Name = "color";
             this.color.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.color.Size = new System.Drawing.Size(109, 29);
@@ -295,7 +286,7 @@
             // AyahRepeat
             // 
             this.AyahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.AyahRepeat.Location = new System.Drawing.Point(20, 414);
+            this.AyahRepeat.Location = new System.Drawing.Point(38, 414);
             this.AyahRepeat.Maximum = new decimal(new int[] {
             10,
             0,
@@ -318,20 +309,21 @@
             // AyahRepeatCheck
             // 
             this.AyahRepeatCheck.AutoSize = true;
+            this.AyahRepeatCheck.BackColor = System.Drawing.Color.Transparent;
             this.AyahRepeatCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.AyahRepeatCheck.Location = new System.Drawing.Point(102, 416);
+            this.AyahRepeatCheck.Location = new System.Drawing.Point(120, 416);
             this.AyahRepeatCheck.Name = "AyahRepeatCheck";
             this.AyahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.AyahRepeatCheck.Size = new System.Drawing.Size(99, 26);
             this.AyahRepeatCheck.TabIndex = 4;
             this.AyahRepeatCheck.Text = "تكرار الآية";
-            this.AyahRepeatCheck.UseVisualStyleBackColor = true;
+            this.AyahRepeatCheck.UseVisualStyleBackColor = false;
             this.AyahRepeatCheck.CheckedChanged += new System.EventHandler(this.Repeat_CheckedChanged);
             // 
             // SurahRepeat
             // 
             this.SurahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.SurahRepeat.Location = new System.Drawing.Point(20, 380);
+            this.SurahRepeat.Location = new System.Drawing.Point(38, 380);
             this.SurahRepeat.Maximum = new decimal(new int[] {
             10,
             0,
@@ -354,8 +346,9 @@
             // time5
             // 
             this.time5.AutoSize = true;
+            this.time5.BackColor = System.Drawing.Color.Transparent;
             this.time5.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.time5.Location = new System.Drawing.Point(15, 298);
+            this.time5.Location = new System.Drawing.Point(25, 298);
             this.time5.Name = "time5";
             this.time5.Size = new System.Drawing.Size(117, 22);
             this.time5.TabIndex = 29;
@@ -366,16 +359,17 @@
             this.guna2Panel1.AutoScroll = true;
             this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.guna2Panel1.BorderColor = System.Drawing.Color.Transparent;
-            this.guna2Panel1.Location = new System.Drawing.Point(761, 46);
+            this.guna2Panel1.Location = new System.Drawing.Point(825, 46);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(255, 852);
+            this.guna2Panel1.Size = new System.Drawing.Size(263, 852);
             this.guna2Panel1.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label6.Location = new System.Drawing.Point(135, 335);
+            this.label6.Location = new System.Drawing.Point(148, 335);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 22);
             this.label6.TabIndex = 31;
@@ -384,19 +378,20 @@
             // SurahRepeatCheck
             // 
             this.SurahRepeatCheck.AutoSize = true;
+            this.SurahRepeatCheck.BackColor = System.Drawing.Color.Transparent;
             this.SurahRepeatCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.SurahRepeatCheck.Location = new System.Drawing.Point(81, 380);
+            this.SurahRepeatCheck.Location = new System.Drawing.Point(99, 380);
             this.SurahRepeatCheck.Name = "SurahRepeatCheck";
             this.SurahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SurahRepeatCheck.Size = new System.Drawing.Size(120, 26);
             this.SurahRepeatCheck.TabIndex = 3;
             this.SurahRepeatCheck.Text = "تكرار السورة";
-            this.SurahRepeatCheck.UseVisualStyleBackColor = true;
+            this.SurahRepeatCheck.UseVisualStyleBackColor = false;
             this.SurahRepeatCheck.CheckedChanged += new System.EventHandler(this.Repeat_CheckedChanged);
             // 
             // pause
             // 
-            this.pause.Location = new System.Drawing.Point(184, 297);
+            this.pause.Location = new System.Drawing.Point(211, 297);
             this.pause.Name = "pause";
             this.pause.Size = new System.Drawing.Size(45, 23);
             this.pause.TabIndex = 2;
@@ -413,7 +408,7 @@
             0,
             0,
             196608});
-            this.Rate.Location = new System.Drawing.Point(34, 468);
+            this.Rate.Location = new System.Drawing.Point(58, 470);
             this.Rate.Maximum = new decimal(new int[] {
             14,
             0,
@@ -439,8 +434,9 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.Transparent;
             this.label7.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label7.Location = new System.Drawing.Point(135, 470);
+            this.label7.Location = new System.Drawing.Point(159, 472);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 22);
             this.label7.TabIndex = 36;
@@ -451,17 +447,18 @@
             this.guna2BorderlessForm1.BorderRadius = 15;
             this.guna2BorderlessForm1.ContainerControl = this;
             this.guna2BorderlessForm1.DockIndicatorTransparencyValue = 0.8D;
+            this.guna2BorderlessForm1.DragForm = false;
             this.guna2BorderlessForm1.TransparentWhileDrag = true;
             // 
             // guna2HtmlLabel1
             // 
             this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel1.Font = new System.Drawing.Font("Times New Roman", 25F, System.Drawing.FontStyle.Bold);
+            this.guna2HtmlLabel1.Font = new System.Drawing.Font("Times New Roman", 30F, System.Drawing.FontStyle.Bold);
             this.guna2HtmlLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.guna2HtmlLabel1.IsSelectionEnabled = false;
-            this.guna2HtmlLabel1.Location = new System.Drawing.Point(12, 859);
+            this.guna2HtmlLabel1.Location = new System.Drawing.Point(9, 855);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(217, 39);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(263, 47);
             this.guna2HtmlLabel1.TabIndex = 37;
             this.guna2HtmlLabel1.Text = "<span style=\"color: red\">Q</span>uran <span style=\"color: blue\">K</span>areem";
             // 
@@ -471,7 +468,7 @@
             this.exitForm.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.exitForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exitForm.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.exitForm.Location = new System.Drawing.Point(980, 12);
+            this.exitForm.Location = new System.Drawing.Point(1052, 11);
             this.exitForm.Name = "exitForm";
             this.exitForm.Size = new System.Drawing.Size(36, 28);
             this.exitForm.TabIndex = 38;
@@ -486,29 +483,20 @@
             this.minimize.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minimize.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.minimize.Location = new System.Drawing.Point(935, 22);
+            this.minimize.Location = new System.Drawing.Point(1015, 21);
             this.minimize.Name = "minimize";
-            this.minimize.Size = new System.Drawing.Size(36, 10);
+            this.minimize.Size = new System.Drawing.Size(30, 10);
             this.minimize.TabIndex = 39;
             this.minimize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.minimize.UseVisualStyleBackColor = false;
             this.minimize.Click += new System.EventHandler(this.minimize_Click);
             // 
-            // stop
-            // 
-            this.stop.Image = global::QuranKareem.Properties.Resources.stop;
-            this.stop.Location = new System.Drawing.Point(133, 297);
-            this.stop.Name = "stop";
-            this.stop.Size = new System.Drawing.Size(45, 23);
-            this.stop.TabIndex = 40;
-            this.stop.UseVisualStyleBackColor = true;
-            this.stop.Click += new System.EventHandler(this.Stop_Click);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label8.Location = new System.Drawing.Point(156, 98);
+            this.label8.Location = new System.Drawing.Point(167, 98);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(46, 22);
             this.label8.TabIndex = 42;
@@ -517,7 +505,7 @@
             // Juz
             // 
             this.Juz.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Juz.Location = new System.Drawing.Point(35, 96);
+            this.Juz.Location = new System.Drawing.Point(46, 96);
             this.Juz.Maximum = new decimal(new int[] {
             30,
             0,
@@ -543,8 +531,9 @@
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label9.Location = new System.Drawing.Point(148, 132);
+            this.label9.Location = new System.Drawing.Point(159, 132);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 22);
             this.label9.TabIndex = 44;
@@ -553,7 +542,7 @@
             // Hizb
             // 
             this.Hizb.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Hizb.Location = new System.Drawing.Point(35, 130);
+            this.Hizb.Location = new System.Drawing.Point(46, 130);
             this.Hizb.Maximum = new decimal(new int[] {
             60,
             0,
@@ -591,7 +580,7 @@
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(129, 523);
+            this.copy.Location = new System.Drawing.Point(142, 520);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 46;
@@ -602,14 +591,15 @@
             // normalText
             // 
             this.normalText.AutoSize = true;
+            this.normalText.BackColor = System.Drawing.Color.Transparent;
             this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.normalText.Location = new System.Drawing.Point(32, 534);
+            this.normalText.Location = new System.Drawing.Point(45, 531);
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
             this.normalText.TabIndex = 47;
             this.normalText.Text = "نص عادي";
-            this.normalText.UseVisualStyleBackColor = true;
+            this.normalText.UseVisualStyleBackColor = false;
             // 
             // searchList
             // 
@@ -617,7 +607,7 @@
             this.searchList.Location = new System.Drawing.Point(12, 11);
             this.searchList.Name = "searchList";
             this.searchList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.searchList.Size = new System.Drawing.Size(222, 576);
+            this.searchList.Size = new System.Drawing.Size(262, 576);
             this.searchList.TabIndex = 48;
             this.searchList.Visible = false;
             this.searchList.SelectedIndexChanged += new System.EventHandler(this.searchList_SelectedIndexChanged);
@@ -625,7 +615,7 @@
             // search
             // 
             this.search.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.search.Location = new System.Drawing.Point(116, 596);
+            this.search.Location = new System.Drawing.Point(149, 596);
             this.search.Name = "search";
             this.search.Size = new System.Drawing.Size(90, 32);
             this.search.TabIndex = 49;
@@ -638,14 +628,14 @@
             this.searchText.Font = new System.Drawing.Font("Tahoma", 12F);
             this.searchText.Location = new System.Drawing.Point(12, 634);
             this.searchText.Name = "searchText";
-            this.searchText.Size = new System.Drawing.Size(222, 27);
+            this.searchText.Size = new System.Drawing.Size(262, 27);
             this.searchText.TabIndex = 51;
             this.searchText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // searchClose
             // 
             this.searchClose.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchClose.Location = new System.Drawing.Point(20, 596);
+            this.searchClose.Location = new System.Drawing.Point(42, 596);
             this.searchClose.Name = "searchClose";
             this.searchClose.Size = new System.Drawing.Size(90, 32);
             this.searchClose.TabIndex = 52;
@@ -663,18 +653,19 @@
             "1",
             "2",
             "3"});
-            this.tafasir.Location = new System.Drawing.Point(12, 715);
+            this.tafasir.Location = new System.Drawing.Point(12, 705);
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.tafasir.Size = new System.Drawing.Size(222, 29);
+            this.tafasir.Size = new System.Drawing.Size(262, 29);
             this.tafasir.TabIndex = 53;
             this.tafasir.SelectedIndexChanged += new System.EventHandler(this.tafasir_SelectedIndexChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label10.Location = new System.Drawing.Point(86, 690);
+            this.label10.Location = new System.Drawing.Point(105, 680);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 22);
             this.label10.TabIndex = 54;
@@ -683,7 +674,7 @@
             // tafseerCopy
             // 
             this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tafseerCopy.Location = new System.Drawing.Point(144, 750);
+            this.tafseerCopy.Location = new System.Drawing.Point(164, 740);
             this.tafseerCopy.Name = "tafseerCopy";
             this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
             this.tafseerCopy.TabIndex = 55;
@@ -694,7 +685,7 @@
             // saveRTF
             // 
             this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.saveRTF.Location = new System.Drawing.Point(12, 750);
+            this.saveRTF.Location = new System.Drawing.Point(18, 740);
             this.saveRTF.Name = "saveRTF";
             this.saveRTF.Size = new System.Drawing.Size(126, 51);
             this.saveRTF.TabIndex = 56;
@@ -710,7 +701,7 @@
             // rtb
             // 
             this.rtb.Font = new System.Drawing.Font("Times New Roman", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtb.Location = new System.Drawing.Point(-44, 750);
+            this.rtb.Location = new System.Drawing.Point(-43, 740);
             this.rtb.Name = "rtb";
             this.rtb.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.rtb.Size = new System.Drawing.Size(50, 51);
@@ -720,7 +711,7 @@
             // 
             // about
             // 
-            this.about.Location = new System.Drawing.Point(12, 821);
+            this.about.Location = new System.Drawing.Point(32, 821);
             this.about.Name = "about";
             this.about.Size = new System.Drawing.Size(75, 23);
             this.about.TabIndex = 58;
@@ -730,7 +721,7 @@
             // 
             // latest
             // 
-            this.latest.Location = new System.Drawing.Point(102, 821);
+            this.latest.Location = new System.Drawing.Point(129, 821);
             this.latest.Name = "latest";
             this.latest.Size = new System.Drawing.Size(127, 23);
             this.latest.TabIndex = 59;
@@ -738,11 +729,36 @@
             this.latest.UseVisualStyleBackColor = true;
             this.latest.Click += new System.EventHandler(this.latest_Click);
             // 
+            // stop
+            // 
+            this.stop.Image = global::QuranKareem.Properties.Resources.stop;
+            this.stop.Location = new System.Drawing.Point(160, 297);
+            this.stop.Name = "stop";
+            this.stop.Size = new System.Drawing.Size(45, 23);
+            this.stop.TabIndex = 40;
+            this.stop.UseVisualStyleBackColor = true;
+            this.stop.Click += new System.EventHandler(this.Stop_Click);
+            // 
+            // quranPic
+            // 
+            this.quranPic.BackColor = System.Drawing.Color.Transparent;
+            this.quranPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.quranPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.quranPic.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.quranPic.Location = new System.Drawing.Point(297, 5);
+            this.quranPic.Name = "quranPic";
+            this.quranPic.Size = new System.Drawing.Size(510, 900);
+            this.quranPic.TabIndex = 2;
+            this.quranPic.TabStop = false;
+            this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
+            this.quranPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseMove);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 910);
+            this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.searchList);
             this.Controls.Add(this.latest);
             this.Controls.Add(this.about);
             this.Controls.Add(this.rtb);
@@ -753,7 +769,6 @@
             this.Controls.Add(this.searchClose);
             this.Controls.Add(this.searchText);
             this.Controls.Add(this.search);
-            this.Controls.Add(this.searchList);
             this.Controls.Add(this.normalText);
             this.Controls.Add(this.copy);
             this.Controls.Add(this.quranHtmlText);
@@ -789,13 +804,12 @@
             this.Controls.Add(this.quranPic);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quran Kareem";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).EndInit();
@@ -805,6 +819,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Rate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Juz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Hizb)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quranPic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
