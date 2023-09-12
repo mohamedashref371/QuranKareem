@@ -159,13 +159,13 @@ namespace QuranKareem {
                             try {
                                 client.DownloadFile(link, s + "\\" + temp.Last());
                             } catch {
-                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
+                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
                             }
                         }
                     }
-                    MessageBox.Show("انتهى تحميل المصحف");
-                } else MessageBox.Show("مجلد تحميل المصحف فارغ");
-            } catch { MessageBox.Show("حدث خطأ ما"); }
+                    MessageBox.Show("انتهى تحميل المصحف" , ":)");
+                } else MessageBox.Show("مجلد تحميل المصحف فارغ", ":(");
+            } catch { MessageBox.Show("حدث خطأ ما", "-_-"); }
         }
 
         // تفعيل التكرار
