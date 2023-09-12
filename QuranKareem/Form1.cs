@@ -18,7 +18,7 @@ namespace QuranKareem {
 
         public Form1() { InitializeComponent(); }
 
-        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.0.0", "");
+        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.1.0", "");
 
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
