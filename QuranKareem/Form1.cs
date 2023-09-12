@@ -379,7 +379,7 @@ namespace QuranKareem {
         private void QuranPic_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
-            quranPictures.setXY(x, y /*, pB1.Width, pB1.Height*/);
+            quranPictures.setXY(x, y, quranPic.Width, quranPic.Height);
             Surah.Value = quranPictures.Surah;
             Surahs.SelectedIndex = (int)Surah.Value - 1;
             Quarter.Value = quranPictures.Quarter;
