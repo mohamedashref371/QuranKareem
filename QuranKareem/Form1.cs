@@ -473,6 +473,8 @@ namespace QuranKareem {
 
         private void Rate_ValueChanged(object sender, EventArgs e) { quranAudios.Rate((double)Rate.Value); }
 
+        private void guna2TrackBar1_Scroll(object sender, ScrollEventArgs e) { quranAudios.Volume(guna2TrackBar1.Value); }
+
         private void exitForm_Click(object sender, EventArgs e) { Close(); }
 
         private void minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }

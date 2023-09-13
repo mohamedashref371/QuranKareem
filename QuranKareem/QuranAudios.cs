@@ -188,6 +188,12 @@ namespace QuranKareem
             ayah(Surah, Ayah);
         }
 
+        public void Volume(int i) {
+            if (i < 10) i = 10;
+            else if (i > 100) i = 100;
+            mp3.settings.volume = i;
+        }
+
         void timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
 
         public void AddEventHandler(EventHandler eh) { timer.Tick += eh; }
