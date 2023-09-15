@@ -53,7 +53,7 @@ namespace QuranKareem {
             // مجلد الصور غير موجود ؟
             else if (textsFiles != null && textsFiles.Length > 0) {
                 textMode = true; // التبديل إلى RichTextBox
-                quranTexts.AddRichTextBoxInControls(Controls, 240, 5, 510, 900); // اظهاره في النافذة
+                quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranTexts.AddEventHandler(new EventHandler(PageRichText_Click)); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
             }
@@ -126,6 +126,8 @@ namespace QuranKareem {
                     }
                 }
             } catch { }
+
+            try { if (File.Exists(save + "Volume")) { volume.Value = Convert.ToInt32(File.ReadAllText(save + "Volume")); } } catch { }
 
             // FormWindowState -> Maximized
             FormSize fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
@@ -466,6 +468,7 @@ namespace QuranKareem {
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
             File.WriteAllText(save + "Surah", Surah.Value + "," + Ayah.Value+","+ moshafText + "," + moshafPic + ","+ moshafAudio + "," + Tafseer);
+            File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
         private void Pause_Click(object sender, EventArgs e) { quranAudios.Pause(); }
@@ -473,7 +476,7 @@ namespace QuranKareem {
 
         private void Rate_ValueChanged(object sender, EventArgs e) { quranAudios.Rate((double)Rate.Value); }
 
-        private void guna2TrackBar1_Scroll(object sender, ScrollEventArgs e) { quranAudios.Volume(guna2TrackBar1.Value); }
+        private void volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
 
         private void exitForm_Click(object sender, EventArgs e) { Close(); }
 

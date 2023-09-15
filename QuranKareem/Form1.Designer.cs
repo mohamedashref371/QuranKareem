@@ -77,7 +77,7 @@
             this.latest = new System.Windows.Forms.Button();
             this.stop = new System.Windows.Forms.Button();
             this.quranPic = new System.Windows.Forms.PictureBox();
-            this.guna2TrackBar1 = new Guna.UI2.WinForms.Guna2TrackBar();
+            this.volume = new Guna.UI2.WinForms.Guna2TrackBar();
             this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
@@ -755,15 +755,15 @@
             this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
             this.quranPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseMove);
             // 
-            // guna2TrackBar1
+            // volume
             // 
-            this.guna2TrackBar1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2TrackBar1.Location = new System.Drawing.Point(18, 324);
-            this.guna2TrackBar1.Name = "guna2TrackBar1";
-            this.guna2TrackBar1.Size = new System.Drawing.Size(140, 23);
-            this.guna2TrackBar1.TabIndex = 60;
-            this.guna2TrackBar1.ThumbColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(113)))), ((int)(((byte)(255)))));
-            this.guna2TrackBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.guna2TrackBar1_Scroll);
+            this.volume.BackColor = System.Drawing.Color.Transparent;
+            this.volume.Location = new System.Drawing.Point(18, 324);
+            this.volume.Name = "volume";
+            this.volume.Size = new System.Drawing.Size(140, 23);
+            this.volume.TabIndex = 60;
+            this.volume.ThumbColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(113)))), ((int)(((byte)(255)))));
+            this.volume.ValueChanged += new System.EventHandler(this.volume_ValueChanged);
             // 
             // label11
             // 
@@ -783,7 +783,7 @@
             this.ClientSize = new System.Drawing.Size(1100, 910);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.guna2TrackBar1);
+            this.Controls.Add(this.volume);
             this.Controls.Add(this.latest);
             this.Controls.Add(this.about);
             this.Controls.Add(this.rtb);
@@ -899,7 +899,7 @@
         private System.Windows.Forms.Button about;
         private System.Windows.Forms.Button latest;
         private System.Windows.Forms.Label label11;
-        private Guna.UI2.WinForms.Guna2TrackBar guna2TrackBar1;
+        private Guna.UI2.WinForms.Guna2TrackBar volume;
     }
 }
 
