@@ -140,8 +140,8 @@ namespace QuranKareem
             From = Math.Abs(reader.GetInt32(3));
             Ayah = aya;
 
-            if ((int)((To - From) / mp3.settings.rate) > 0)
-                timer.Interval = (int)((To - From) / mp3.settings.rate);
+            if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
+                timer.Interval = (int)((To - From) / /*mp3.settings.rate*/ rate);
             else timer.Interval = 1;
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
