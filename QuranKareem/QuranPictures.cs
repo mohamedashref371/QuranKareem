@@ -174,17 +174,20 @@ namespace QuranKareem
                 linesHelp = reader.GetString(2);
                 picture(Page);
             }
+            
+            Picture = (Bitmap)oPic.Clone();
+            quran.Close();
 
             // التلوين
-            Picture = (Bitmap)oPic.Clone();
-            
             if (ayahColor != AyahColor.nothing) {
                 if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
                 else {
+                    quran.Open();
                     reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
                     reader.Read();
                     y5 = reader.GetInt32(5);
                     x9 = reader.GetInt32(6);
+                    quran.Close();
                     if (x9 == 0) { x9 = width - 1; y5 += 1; }
                 }
 
@@ -199,7 +202,7 @@ namespace QuranKareem
                     fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
                 }
             }
-            quran.Close();
+            
         }
 
         private void picture(int i) { // الصورة الحالية

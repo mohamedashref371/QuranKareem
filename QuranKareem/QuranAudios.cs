@@ -204,5 +204,8 @@ namespace QuranKareem
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
         }
 
+        public void ayah(int sura, int aya, int timestamp_to) { 
+            
+        }
     }
 }
