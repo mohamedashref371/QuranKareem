@@ -204,8 +204,26 @@ namespace QuranKareem
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
         }
 
-        public void ayah(int sura, int aya, int timestamp_to) { 
-            
+
+        public void surah(int sura, int duration){
+            if (!success) return;
+            quran.Open();
+            new SQLiteCommand($"UPDATE surahs SET duration={duration} WHERE id={sura}", quran).ExecuteNonQuery();
+            quran.Close();
+        }
+
+        public void ayah(int sura, int aya, int timestampTo) {
+            if (!success) return;
+            quran.Open();
+            new SQLiteCommand($"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}", quran).ExecuteNonQuery();
+            quran.Close();
+        }
+
+        public void description(string comment, string extension=".mp3") {
+            if (!success) return;
+            quran.Open();
+            new SQLiteCommand($"UPDATE description SET comment={comment}; UPDATE description SET extension={extension}; VACUUM;", quran).ExecuteNonQuery();
+            quran.Close();
         }
     }
 }
