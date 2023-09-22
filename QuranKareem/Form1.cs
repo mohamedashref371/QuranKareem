@@ -497,6 +497,7 @@ namespace QuranKareem {
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
             int[] ayat = quranAudios.getTimestamps(sura);
+            string[] ayatS = quranTexts.surahAbstractTexts(sura);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;
@@ -515,6 +516,7 @@ namespace QuranKareem {
                 label.Size = labelSize;
                 label.TextAlign = ContentAlignment.MiddleCenter;
                 label.Tag = i;
+                label.Text = ayatS[i];
                 panel.Controls.Add(label);
 
                 num = new NumericUpDown();
@@ -569,6 +571,7 @@ namespace QuranKareem {
                 string[] audiosFolders=null;
                 try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
                 AddMashaykhButtons(audiosFolders);
+                addNewMoqrea.Text = "إضافة شيخ جديد";
             }
         }
     }

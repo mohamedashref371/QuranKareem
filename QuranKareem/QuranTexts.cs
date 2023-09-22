@@ -253,12 +253,23 @@ namespace QuranKareem
             return tempString;
         }
 
+        public string[] surahAbstractTexts(int sura){
+            if (!success) return null;
+            lst.Clear();
+            quran.Open();
+            reader = new SQLiteCommand($"SELECT abstract_text FROM ayat WHERE surah={sura}", quran).ExecuteReader();
+            while (reader.Read()) lst.Add(reader.GetString(0));
+            quran.Close();
+            return lst.ToArray();
+        }
+
         private List<int> SearchIDs = new List<int>();
+        List<string> lst = new List<string>();
         public string[] Search(string words) {
             SearchIDs.Clear();
             if (!success || words==null || words.Trim()=="") return new string[] { };
             words = words.Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا");
-            List<string> lst = new List<string>();
+            lst.Clear();
             quran.Open();
             reader = new SQLiteCommand("SELECT id,abstract_text FROM ayat", quran).ExecuteReader();
             string s;
