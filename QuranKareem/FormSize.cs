@@ -31,6 +31,16 @@ namespace QuranKareem
             foreach (Control control in controls) SetControl(control);
         }
 
+        public int getNewX(int x)
+        {
+            return Round(x * xDiv);
+        }
+
+        public int getNewY(int y)
+        {
+            return Round(y * yDiv);
+        }
+
         public static int Round(double num)
         {
             return (int)Math.Round(num);

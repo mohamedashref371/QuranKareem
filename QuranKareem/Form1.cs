@@ -33,12 +33,15 @@ namespace QuranKareem {
         readonly static string newLine = @"
 ";
 
+        FormSize fs;
+        string[] stringArray;
+
         private void Form1_Load(object sender, EventArgs e) {
             
             try { rtb.SaveFile(save+"XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 
             color.SelectedIndex = 1; // اللون الأحمر
-            string[] stringArray, textsFiles = null, picturesFolders = null, audiosFolders = null;
+            string[] textsFiles = null, picturesFolders = null, audiosFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
 
@@ -75,28 +78,6 @@ namespace QuranKareem {
 
             try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
 
-            // اضافة ازرار المشايخ
-            Guna2Button b;
-            int y = 5;
-            Color clr; Random rand = new Random();
-            if (audiosFolders != null)
-                for (int i = 0; i < audiosFolders.Length; i++) {
-                    clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
-                    b = new Guna2Button();
-                    stringArray = audiosFolders[i].Split('\\');
-                    b.FillColor = clr;
-                    b.Text = stringArray[stringArray.Length - 1];
-                    b.Font = new Font("Segoe UI", 12F);
-                    b.Location = new Point(5, y);
-                    b.Size = new Size(230, 45);
-                    b.Cursor = Cursors.Hand;
-                    b.Tag = i; // اضافة رقم للشيخ
-                    b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
-                    b.BorderRadius = 15;
-                    panel.Controls.Add(b);
-                    y += 50;
-                }
-
             // اضافة التفاسير
             textsFiles = null;
             try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
@@ -130,11 +111,36 @@ namespace QuranKareem {
             try { if (File.Exists(save + "Volume")) { volume.Value = Convert.ToInt32(File.ReadAllText(save + "Volume")); } } catch { }
 
             // FormWindowState -> Maximized
-            FormSize fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
+            fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
             fs.SetControls(Controls);
-            fs.SetControls(panel.Controls);
+            AddMashaykhButtons(audiosFolders);
         }
 
+        // اضافة ازرار المشايخ
+        void AddMashaykhButtons(string[] audiosFolders) {
+            panel.Controls.Clear();
+            Guna2Button b;
+            int y = 5;
+            Color clr; Random rand = new Random();
+            if (audiosFolders != null)
+                for (int i = 0; i < audiosFolders.Length; i++) {
+                    clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
+                    b = new Guna2Button();
+                    stringArray = audiosFolders[i].Split('\\');
+                    b.FillColor = clr;
+                    b.Text = stringArray[stringArray.Length - 1];
+                    b.Font = new Font("Segoe UI", fs.getNewX(12));
+                    b.Location = new Point(fs.getNewX(5), fs.getNewY(y));
+                    b.Size = new Size(fs.getNewX(230), fs.getNewY(45));
+                    b.Cursor = Cursors.Hand;
+                    b.Tag = i; // اضافة رقم للشيخ
+                    b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
+                    b.BorderRadius = 15;
+                    panel.Controls.Add(b);
+                    y += 50;
+                }
+        }
+        
         // دالة عامة لجميع الأزرار عند الضغط عليها
         private void Button_Click(object sender /* الزر الذي ضغطت عليه */, EventArgs e) {
             moshafAudio = ((Guna2Button)sender).Tag + "";
@@ -488,17 +494,81 @@ namespace QuranKareem {
 
 
 
-        private void addMoqrea_Click(object sender, EventArgs e) {
-            if(addMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
-                int[] ayat = quranAudios.getTimestamps((int)Surah.Value);
-                if (ayat == null) return;
-                panel.Controls.Clear();
-                addMoqrea.Text = "إلغاء";
-                
-                
+        void EditMoqreaSurah(int sura) {
+            panel.Controls.Clear();
+            int[] ayat = quranAudios.getTimestamps(sura);
+            if (ayat == null) return;
+
+            Label label; NumericUpDown num; Button btn;
+            Font font = new Font("Tahoma", fs.getNewX(13));
+            Size labelSize = new Size(fs.getNewX(257), fs.getNewY(33));
+            Size numSize = new Size(fs.getNewX(120), fs.getNewY(24));
+            Size btnSize = new Size(fs.getNewX(31), fs.getNewY(23));
+            Color clr = Color.FromArgb(255, 204, 172);
+
+            int y = 28;
+            for (int i = 0; i < ayat.Length; i++) {
+                label = new Label();
+                label.Font = font;
+                label.Location = new Point(fs.getNewX(13), fs.getNewY(y));
+                label.RightToLeft = RightToLeft.Yes;
+                label.Size = labelSize;
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Tag = i;
+                panel.Controls.Add(label);
+
+                num = new NumericUpDown();
+                num.BackColor = clr;
+                num.BorderStyle = BorderStyle.None;
+                num.DecimalPlaces = 3;
+                num.Font = font;
+                num.Location = new Point(fs.getNewX(18), fs.getNewY(y+37));
+                num.Size = numSize;
+                num.Tag = i;
+                num.TextAlign = HorizontalAlignment.Center;
+                num.Maximum = 99999;
+                num.Increment = 0.1M;
+                num.Value = ayat[i]/1000;
+                panel.Controls.Add(num);
+
+                btn = new Button();
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.Size = btnSize;
+                btn.Tag = i;
+                btn.Location = new Point(fs.getNewX(144), fs.getNewY(y + 37));
+                btn.ForeColor = Color.Red;
+                btn.Text = "O";
+                panel.Controls.Add(btn);
+
+                btn = new Button();
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.Size = btnSize;
+                btn.Tag = i;
+                btn.Location = new Point(fs.getNewX(181), fs.getNewY(y + 37));
+                btn.Text = "|>";
+                panel.Controls.Add(btn);
+
+                btn = new Button();
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.Size = btnSize;
+                btn.Tag = i;
+                btn.Location = new Point(fs.getNewX(218), fs.getNewY(y + 37));
+                btn.Text = "||";
+                panel.Controls.Add(btn);
+
+                y += 86;
+            }
+        }
+
+        private void addNewMoqrea_Click(object sender, EventArgs e) {
+            if(addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
+                addNewMoqrea.Text = "إلغاء";
+                EditMoqreaSurah((int)Surah.Value);
             }
             else {
-
+                string[] audiosFolders=null;
+                try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
+                AddMashaykhButtons(audiosFolders);
             }
         }
     }

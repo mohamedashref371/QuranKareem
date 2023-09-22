@@ -47,6 +47,9 @@
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
             this.panel = new Guna.UI2.WinForms.Guna2Panel();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
@@ -79,13 +82,14 @@
             this.quranPic = new System.Windows.Forms.PictureBox();
             this.volume = new Guna.UI2.WinForms.Guna2TrackBar();
             this.label11 = new System.Windows.Forms.Label();
-            this.addMoqrea = new System.Windows.Forms.Button();
+            this.addNewMoqrea = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Quarter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AyahRepeat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SurahRepeat)).BeginInit();
+            this.panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Rate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Juz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Hizb)).BeginInit();
@@ -366,10 +370,52 @@
             this.panel.AutoScroll = true;
             this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.panel.BorderColor = System.Drawing.Color.Transparent;
+            this.panel.Controls.Add(this.button3);
+            this.panel.Controls.Add(this.button2);
+            this.panel.Controls.Add(this.button1);
             this.panel.Location = new System.Drawing.Point(825, 46);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(263, 821);
             this.panel.TabIndex = 0;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.button3.ForeColor = System.Drawing.Color.Red;
+            this.button3.Location = new System.Drawing.Point(144, 65);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(31, 23);
+            this.button3.TabIndex = 66;
+            this.button3.Tag = "0";
+            this.button3.Text = "O";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Transparent;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Location = new System.Drawing.Point(218, 65);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(31, 23);
+            this.button2.TabIndex = 65;
+            this.button2.Tag = "0";
+            this.button2.Text = "||";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(181, 65);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(31, 23);
+            this.button1.TabIndex = 64;
+            this.button1.Tag = "0";
+            this.button1.Text = "|>";
+            this.button1.UseVisualStyleBackColor = false;
             // 
             // label6
             // 
@@ -781,23 +827,24 @@
             this.label11.TabIndex = 61;
             this.label11.Text = "حجم الصوت";
             // 
-            // addMoqrea
+            // addNewMoqrea
             // 
-            this.addMoqrea.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.addMoqrea.Location = new System.Drawing.Point(869, 873);
-            this.addMoqrea.Name = "addMoqrea";
-            this.addMoqrea.Size = new System.Drawing.Size(196, 32);
-            this.addMoqrea.TabIndex = 50;
-            this.addMoqrea.Text = "إضافة شيخ جديد";
-            this.addMoqrea.UseVisualStyleBackColor = true;
-            this.addMoqrea.Click += new System.EventHandler(this.addMoqrea_Click);
+            this.addNewMoqrea.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.addNewMoqrea.Location = new System.Drawing.Point(869, 873);
+            this.addNewMoqrea.Name = "addNewMoqrea";
+            this.addNewMoqrea.Size = new System.Drawing.Size(196, 32);
+            this.addNewMoqrea.TabIndex = 50;
+            this.addNewMoqrea.Text = "إضافة شيخ جديد";
+            this.addNewMoqrea.UseVisualStyleBackColor = true;
+            this.addNewMoqrea.Visible = false;
+            this.addNewMoqrea.Click += new System.EventHandler(this.addNewMoqrea_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.addMoqrea);
+            this.Controls.Add(this.addNewMoqrea);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volume);
@@ -858,6 +905,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Quarter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AyahRepeat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SurahRepeat)).EndInit();
+            this.panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Rate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Juz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Hizb)).EndInit();
@@ -917,7 +965,10 @@
         private System.Windows.Forms.Button latest;
         private System.Windows.Forms.Label label11;
         private Guna.UI2.WinForms.Guna2TrackBar volume;
-        private System.Windows.Forms.Button addMoqrea;
+        private System.Windows.Forms.Button addNewMoqrea;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button3;
     }
 }
 
