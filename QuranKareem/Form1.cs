@@ -508,6 +508,7 @@ namespace QuranKareem {
             Color clr = Color.FromArgb(255, 204, 172);
 
             int y = 28;
+            int k;
             for (int i = 0; i < ayat.Length; i++) {
                 label = new Label();
                 label.Font = font;
@@ -515,7 +516,10 @@ namespace QuranKareem {
                 label.RightToLeft = RightToLeft.Yes;
                 label.Size = labelSize;
                 label.TextAlign = ContentAlignment.MiddleCenter;
-                label.Tag = i;
+                if (Ayah.Minimum == 0) k = i - 1;
+                else if (i == 0) k = -1;
+                else k = i;
+                label.Tag = k;
                 label.Text = ayatS[i];
                 panel.Controls.Add(label);
 
@@ -526,17 +530,18 @@ namespace QuranKareem {
                 num.Font = font;
                 num.Location = new Point(fs.getNewX(18), fs.getNewY(y+37));
                 num.Size = numSize;
-                num.Tag = i;
+                num.Tag = label.Tag;
                 num.TextAlign = HorizontalAlignment.Center;
                 num.Maximum = 99999;
                 num.Increment = 0.1M;
-                num.Value = ayat[i]/1000;
+                num.Value = ayat[i]/1000M;
+                num.ValueChanged+= Timestamp_ValueChanged;
                 panel.Controls.Add(num);
 
                 btn = new Button();
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.Size = btnSize;
-                btn.Tag = i;
+                btn.Tag = label.Tag;
                 btn.Location = new Point(fs.getNewX(144), fs.getNewY(y + 37));
                 btn.ForeColor = Color.Red;
                 btn.Text = "O";
@@ -545,7 +550,7 @@ namespace QuranKareem {
                 btn = new Button();
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.Size = btnSize;
-                btn.Tag = i;
+                btn.Tag = label.Tag;
                 btn.Location = new Point(fs.getNewX(181), fs.getNewY(y + 37));
                 btn.Text = "|>";
                 panel.Controls.Add(btn);
@@ -553,13 +558,17 @@ namespace QuranKareem {
                 btn = new Button();
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.Size = btnSize;
-                btn.Tag = i;
+                btn.Tag = label.Tag;
                 btn.Location = new Point(fs.getNewX(218), fs.getNewY(y + 37));
                 btn.Text = "||";
                 panel.Controls.Add(btn);
 
                 y += 86;
             }
+        }
+
+        void Timestamp_ValueChanged(object sender, EventArgs e) {
+            quranAudios.ayah((int)Surah.Value,(int)((NumericUpDown)sender).Tag, (int)(((NumericUpDown)sender).Value*1000));
         }
 
         private void addNewMoqrea_Click(object sender, EventArgs e) {
