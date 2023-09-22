@@ -280,5 +280,7 @@ namespace QuranKareem
             new SQLiteCommand($"UPDATE description SET comment={comment}; UPDATE description SET extension={extension}; VACUUM;", quran).ExecuteNonQuery();
             quran.Close();
         }
+
+        public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
     }
 }
