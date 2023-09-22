@@ -253,12 +253,15 @@ namespace QuranKareem
             return tempString;
         }
 
-        public string[] surahAbstractTexts(int sura){
+        public string[] surahAbstractTexts(int sura, int length=-1){
             if (!success) return null;
             lst.Clear();
             quran.Open();
             reader = new SQLiteCommand($"SELECT abstract_text FROM ayat WHERE surah={sura}", quran).ExecuteReader();
-            while (reader.Read()) lst.Add(reader.GetString(0));
+            while (reader.Read()) {
+                tempString = reader.GetString(0);
+                lst.Add((length==-1 || tempString.Length< length)? tempString : tempString.Substring(0, length));
+            }
             quran.Close();
             return lst.ToArray();
         }

@@ -497,7 +497,7 @@ namespace QuranKareem {
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
             int[] ayat = quranAudios.getTimestamps(sura);
-            string[] ayatS = quranTexts.surahAbstractTexts(sura);
+            string[] ayatS = quranTexts.surahAbstractTexts(sura, 40);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;

@@ -790,7 +790,6 @@
             this.addNewMoqrea.TabIndex = 50;
             this.addNewMoqrea.Text = "إضافة شيخ جديد";
             this.addNewMoqrea.UseVisualStyleBackColor = true;
-            this.addNewMoqrea.Visible = false;
             this.addNewMoqrea.Click += new System.EventHandler(this.addNewMoqrea_Click);
             // 
             // Form1
