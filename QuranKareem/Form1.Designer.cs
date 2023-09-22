@@ -46,7 +46,7 @@
             this.AyahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
-            this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.panel = new Guna.UI2.WinForms.Guna2Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
@@ -79,6 +79,7 @@
             this.quranPic = new System.Windows.Forms.PictureBox();
             this.volume = new Guna.UI2.WinForms.Guna2TrackBar();
             this.label11 = new System.Windows.Forms.Label();
+            this.addMoqrea = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -285,6 +286,10 @@
             this.color.TabIndex = 1;
             this.color.SelectedIndexChanged += new System.EventHandler(this.Color_SelectedIndexChanged);
             // 
+            // folder
+            // 
+            this.folder.SelectedPath = "audios";
+            // 
             // AyahRepeat
             // 
             this.AyahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
@@ -356,15 +361,15 @@
             this.time5.TabIndex = 29;
             this.time5.Text = "00:00:00.000";
             // 
-            // guna2Panel1
+            // panel
             // 
-            this.guna2Panel1.AutoScroll = true;
-            this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.guna2Panel1.BorderColor = System.Drawing.Color.Transparent;
-            this.guna2Panel1.Location = new System.Drawing.Point(825, 46);
-            this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(263, 852);
-            this.guna2Panel1.TabIndex = 0;
+            this.panel.AutoScroll = true;
+            this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.panel.BorderColor = System.Drawing.Color.Transparent;
+            this.panel.Location = new System.Drawing.Point(825, 46);
+            this.panel.Name = "panel";
+            this.panel.Size = new System.Drawing.Size(263, 821);
+            this.panel.TabIndex = 0;
             // 
             // label6
             // 
@@ -776,11 +781,23 @@
             this.label11.TabIndex = 61;
             this.label11.Text = "حجم الصوت";
             // 
+            // addMoqrea
+            // 
+            this.addMoqrea.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.addMoqrea.Location = new System.Drawing.Point(869, 873);
+            this.addMoqrea.Name = "addMoqrea";
+            this.addMoqrea.Size = new System.Drawing.Size(196, 32);
+            this.addMoqrea.TabIndex = 50;
+            this.addMoqrea.Text = "إضافة شيخ جديد";
+            this.addMoqrea.UseVisualStyleBackColor = true;
+            this.addMoqrea.Click += new System.EventHandler(this.addMoqrea_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.addMoqrea);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volume);
@@ -810,7 +827,7 @@
             this.Controls.Add(this.pause);
             this.Controls.Add(this.SurahRepeatCheck);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.guna2Panel1);
+            this.Controls.Add(this.panel);
             this.Controls.Add(this.time5);
             this.Controls.Add(this.SurahRepeat);
             this.Controls.Add(this.AyahRepeatCheck);
@@ -868,7 +885,7 @@
         private System.Windows.Forms.CheckBox AyahRepeatCheck;
         private System.Windows.Forms.NumericUpDown SurahRepeat;
         private System.Windows.Forms.Label time5;
-        private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
+        private Guna.UI2.WinForms.Guna2Panel panel;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox SurahRepeatCheck;
         private System.Windows.Forms.Button pause;
@@ -900,6 +917,7 @@
         private System.Windows.Forms.Button latest;
         private System.Windows.Forms.Label label11;
         private Guna.UI2.WinForms.Guna2TrackBar volume;
+        private System.Windows.Forms.Button addMoqrea;
     }
 }
 

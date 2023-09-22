@@ -93,7 +93,7 @@ namespace QuranKareem {
                     b.Tag = i; // اضافة رقم للشيخ
                     b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
                     b.BorderRadius = 15;
-                    guna2Panel1.Controls.Add(b);
+                    panel.Controls.Add(b);
                     y += 50;
                 }
 
@@ -132,7 +132,7 @@ namespace QuranKareem {
             // FormWindowState -> Maximized
             FormSize fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
             fs.SetControls(Controls);
-            fs.SetControls(guna2Panel1.Controls);
+            fs.SetControls(panel.Controls);
         }
 
         // دالة عامة لجميع الأزرار عند الضغط عليها
@@ -485,5 +485,21 @@ namespace QuranKareem {
         private void latest_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://www.mediafire.com/folder/fwzq0xlpp9oys"); }
 
         private void about_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317"); }
+
+
+
+        private void addMoqrea_Click(object sender, EventArgs e) {
+            if(addMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
+                int[] ayat = quranAudios.getTimestamps((int)Surah.Value);
+                if (ayat == null) return;
+                panel.Controls.Clear();
+                addMoqrea.Text = "إلغاء";
+                
+                
+            }
+            else {
+
+            }
+        }
     }
 }
