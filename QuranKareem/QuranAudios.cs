@@ -282,5 +282,6 @@ namespace QuranKareem
         }
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
+        public void Mp3CurrentPosition(double cPos) { mp3.Ctlcontrols.currentPosition = cPos; }
     }
 }
