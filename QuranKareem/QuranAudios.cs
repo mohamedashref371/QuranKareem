@@ -168,7 +168,12 @@ namespace QuranKareem
             command.Cancel();
             Ayah = aya;
 
-            if (To <= 0 && aya > 0) { quran.Close(); ok = true; return; }
+            if (To <= 0 && aya > 0) { 
+                quran.Close();
+                if (ok && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
+                ok = true;
+                return; 
+            }
 
             if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
                 timer.Interval = (int)((To - From) / /*mp3.settings.rate*/ rate);
