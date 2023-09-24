@@ -536,7 +536,7 @@ namespace QuranKareem {
                 num.TextAlign = HorizontalAlignment.Center;
                 num.Maximum = 99999;
                 num.Increment = 0.1M;
-                num.Value = ayat[i]/1000M;
+                num.Value = ayat[i] / 1000M;
                 num.ValueChanged+= Timestamp_ValueChanged;
                 panel.Controls.Add(num);
 
@@ -552,6 +552,16 @@ namespace QuranKareem {
 
                 y += 86;
             }
+
+            btn = new Button();
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.Size = btnSize;
+            btn.Tag = ayat.Length * 3 -2;
+            btn.Location = new Point(fs.getNewX(200), fs.getNewY(y - 49));
+            btn.ForeColor = Color.Blue;
+            btn.Text = "O";
+            btn.Click += Mp3Duration_record;
+            panel.Controls.Add(btn);
         }
 
         void Timestamp_ValueChanged(object sender, EventArgs e) {
@@ -562,8 +572,12 @@ namespace QuranKareem {
           ((NumericUpDown) panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)quranAudios.Mp3CurrentPosition();
         }
 
+        void Mp3Duration_record(object sender, EventArgs e){
+            ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)quranAudios.Mp3Duration();
+        }
+
         private void addNewMoqrea_Click(object sender, EventArgs e) {
-            if(addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
+            if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);

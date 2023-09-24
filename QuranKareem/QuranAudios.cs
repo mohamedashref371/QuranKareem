@@ -39,7 +39,6 @@ namespace QuranKareem
         private bool added = false;
         public void AddInControls(Control.ControlCollection Controls) {
             if (!added) try {
-                    timer.Tick += new EventHandler(timer_Tick);
                     Controls.Add(mp3);
                     mp3.Visible = false;
                     added = true;
@@ -50,7 +49,8 @@ namespace QuranKareem
 
         public bool CapturedAudio = false;
 
-        private QuranAudios() { 
+        private QuranAudios() {
+            timer.Tick += timer_Tick;
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
         }
@@ -318,6 +318,7 @@ namespace QuranKareem
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
+            if (aya == AyatCount && timestampTo!=0) surah(sura, timestampTo);
         }
 
         public void setDescription(string extension, string comment) {
@@ -345,5 +346,6 @@ namespace QuranKareem
         }
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
+        public double Mp3Duration() { return mp3.currentMedia.duration; }
     }
 }

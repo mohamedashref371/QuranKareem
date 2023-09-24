@@ -826,8 +826,8 @@
             this.ShaykhDesc.TabIndex = 63;
             this.ShaykhDesc.Text = "الوصف";
             this.ShaykhDesc.UseVisualStyleBackColor = true;
-            this.ShaykhDesc.Click += new System.EventHandler(this.ShaykhDesc_);
             this.ShaykhDesc.EnabledChanged += new System.EventHandler(this.ShaykhDesc_);
+            this.ShaykhDesc.Click += new System.EventHandler(this.ShaykhDesc_);
             // 
             // lExt
             // 
@@ -880,6 +880,7 @@
             this.descSave.TabIndex = 68;
             this.descSave.Text = "حفظ";
             this.descSave.UseVisualStyleBackColor = true;
+            this.descSave.Visible = false;
             this.descSave.Click += new System.EventHandler(this.descSave_Click);
             // 
             // Form1
