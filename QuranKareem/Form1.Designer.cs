@@ -784,9 +784,9 @@
             // addNewMoqrea
             // 
             this.addNewMoqrea.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.addNewMoqrea.Location = new System.Drawing.Point(869, 873);
+            this.addNewMoqrea.Location = new System.Drawing.Point(884, 873);
             this.addNewMoqrea.Name = "addNewMoqrea";
-            this.addNewMoqrea.Size = new System.Drawing.Size(196, 32);
+            this.addNewMoqrea.Size = new System.Drawing.Size(161, 32);
             this.addNewMoqrea.TabIndex = 50;
             this.addNewMoqrea.Text = "إضافة شيخ جديد";
             this.addNewMoqrea.UseVisualStyleBackColor = true;

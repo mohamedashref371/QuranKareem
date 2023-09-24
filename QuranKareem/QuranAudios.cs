@@ -14,6 +14,7 @@ namespace QuranKareem
         private string path; // المسار
         private SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranAudio ? :(
+        SQLiteCommand command;
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
@@ -49,6 +50,11 @@ namespace QuranKareem
 
         public bool CapturedAudio = false;
 
+        private QuranAudios() { 
+            quran = new SQLiteConnection();
+            command = new SQLiteCommand(quran);
+        }
+
         public void QuranAudio(string path, int sura = 1, int aya = 0) {
             if (!added || path == null || path.Trim().Length == 0) return;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
@@ -60,12 +66,14 @@ namespace QuranKareem
             timer.Stop(); ok = true;
 
             try {
+                quran.Close();
                 if (File.Exists(path + "000.db"))
-                    quran = new SQLiteConnection("Data Source=" + path + "000.db;Version=3;"); // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;"; // SQLite Connection
                 else
-                    quran = new SQLiteConnection("Data Source=" + path + "0.db;Version=3;"); // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;"; // SQLite Connection
                 quran.Open();
-                reader = new SQLiteCommand($"SELECT * FROM description", quran).ExecuteReader();
+                command.CommandText = $"SELECT * FROM description";
+                reader = command.ExecuteReader();
                 if (!reader.HasRows) return;
                 reader.Read();
                 if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 3 || reader.GetInt32(1)/*version*/ != 1) return;
@@ -73,6 +81,8 @@ namespace QuranKareem
                 surahsCount = reader.GetInt32(3);
                 extension = reader.GetString(4);
                 comment = reader.GetString(5);
+                reader.Close();
+                command.Cancel();
                 quran.Close();
                 success = true;
 
@@ -115,30 +125,50 @@ namespace QuranKareem
                 // /*if(!*/ Check(sura); /*) return;*/
 
                 if (!CaptureAudio(sura)) { 
-                    
-                    mp3.URL = ""; quran.Close(); CapturedAudio = false; return;
+                    mp3.URL = "";
+                    quran.Close();
+                    CapturedAudio = false;
+                    return;
                 }
 
                 CapturedAudio = true;
-                reader = new SQLiteCommand($"SELECT * FROM surahs WHERE id={sura}", quran).ExecuteReader();
+                command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
+                reader = command.ExecuteReader();
                 reader.Read();
                 Surah = sura;
                 AyatCount = reader.GetInt32(2);
+                reader.Close();
+                command.Cancel();
             }
 
             if (aya > AyatCount) aya = AyatCount;
-            
+
             // لم أقم بتصليح مشكلة لو لا يوجد بسملة في اول المقطع
-            reader = new SQLiteCommand($"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
-            if (!reader.HasRows && aya == 0) { reader = new SQLiteCommand($"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}", quran).ExecuteReader(); aya = 1; }
+            command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
+            reader = command.ExecuteReader();
+            if (!reader.HasRows && aya == 0) {
+                reader.Close();
+                command.Cancel();
+                command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
+                reader = command.ExecuteReader();
+                aya = 1;
+            }
             reader.Read();
             To = reader.GetInt32(3);
             //if (To == 0 && aya == 0) To = 1; // هذا ليس الحل الأمثل
+
             ayahId = reader.GetInt32(0);
-            reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
+            reader.Close();
+            command.Cancel();
+            command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
+            reader = command.ExecuteReader();
             reader.Read();
             From = Math.Abs(reader.GetInt32(3));
+            reader.Close();
+            command.Cancel();
             Ayah = aya;
+
+            if (To <= 0 && aya > 0) { quran.Close(); ok = true; return; }
 
             if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
                 timer.Interval = (int)((To - From) / /*mp3.settings.rate*/ rate);
@@ -154,10 +184,13 @@ namespace QuranKareem
          bool Check(int surah) {
             if (!CaptureAudio(surah)) return false;
             //quran.Open();
-            reader = new SQLiteCommand($"SELECT id,duration FROM surahs WHERE id={surah}", quran).ExecuteReader();
+            command.CommandText = $"SELECT id,duration FROM surahs WHERE id={surah}";
+            reader = command.ExecuteReader();
             reader.Read();
             if (reader.IsDBNull(1)) { /*quran.Close();*/ return false; }
             int i = reader.GetInt32(1);
+            reader.Close();
+            command.Cancel();
             //quran.Close();
             if (mp3.currentMedia.duration == i) return true;
             return false;
@@ -210,7 +243,7 @@ namespace QuranKareem
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
             this.path = path; success = false;
 
-            Surah = 0;
+            CapturedAudio = false;
             timer.Stop(); ok = true;
             try {
                 if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) {
@@ -218,34 +251,40 @@ namespace QuranKareem
                     File.Copy(@"audios\database for audios.db", path+"000.db");
                 }
 
-                    if (File.Exists(path + "000.db"))
-                        quran = new SQLiteConnection("Data Source=" + path + "000.db;Version=3;");
-                    else
-                        quran = new SQLiteConnection("Data Source=" + path + "0.db;Version=3;");
-                    quran.Open();
-                    reader = new SQLiteCommand($"SELECT * FROM description", quran).ExecuteReader();
-                    if (!reader.HasRows) return false;
-                    reader.Read();
-                    if (reader.GetInt32(0) != 3 || reader.GetInt32(1) != 1) return false;
-                    Narration = reader.GetInt32(2);
-                    surahsCount = reader.GetInt32(3);
-                    extension = reader.GetString(4);
-                    comment = reader.GetString(5);
-                    quran.Close();
-                    success = true;
+                if (File.Exists(path + "000.db"))
+                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
+                else
+                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;";
+
+                quran.Open();
+                command.CommandText = $"SELECT * FROM description";
+                reader = command.ExecuteReader();
+                if (!reader.HasRows) return false;
+                reader.Read();
+                if (reader.GetInt32(0) != 3 || reader.GetInt32(1) != 1) return false;
+                Narration = reader.GetInt32(2);
+                surahsCount = reader.GetInt32(3);
+                extension = reader.GetString(4);
+                comment = reader.GetString(5);
+                reader.Close();
+                command.Cancel();
+                quran.Close();
+                success = true;
                 return true;
             } catch { return false; }
 
         }
-
         
         public int getTimestamp( int sura , int aya) {
             if (!success) return 0;
             int temp;
             quran.Open();
-            reader = new SQLiteCommand($"SELECT timestamp_to FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
+            command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura} AND ayah={aya}";
+            reader = command.ExecuteReader();
             reader.Read();
             temp = reader.GetInt32(0);
+            reader.Close();
+            command.Cancel();
             quran.Close();
             return temp;
         }
@@ -254,8 +293,11 @@ namespace QuranKareem
             if (!success) return null;
             List<int> list = new List<int>();
             quran.Open();
-            reader = new SQLiteCommand($"SELECT timestamp_to FROM ayat WHERE surah={sura}", quran).ExecuteReader();
-            while(reader.Read()) list.Add(reader.GetInt32(0));
+            command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura}";
+            reader = command.ExecuteReader();
+            while (reader.Read()) list.Add(reader.GetInt32(0));
+            reader.Close();
+            command.Cancel();
             quran.Close();
             return list.ToArray();
         }
@@ -263,25 +305,30 @@ namespace QuranKareem
         public void surah(int sura, int duration){
             if (!success) return;
             quran.Open();
-            new SQLiteCommand($"UPDATE surahs SET duration={duration} WHERE id={sura}", quran).ExecuteNonQuery();
+            command.CommandText = $"UPDATE surahs SET duration={duration} WHERE id={sura}";
+            command.ExecuteNonQuery();
+            command.Cancel();
             quran.Close();
         }
 
         public void ayah(int sura, int aya, int timestampTo) {
             if (!success) return;
             quran.Open();
-            new SQLiteCommand($"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}", quran).ExecuteNonQuery();
+            command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}";
+            command.ExecuteNonQuery();
+            command.Cancel();
             quran.Close();
         }
 
         public void description(string comment, string extension=".mp3") {
             if (!success) return;
             quran.Open();
-            new SQLiteCommand($"UPDATE description SET comment={comment}; UPDATE description SET extension={extension}; VACUUM;", quran).ExecuteNonQuery();
+            command.CommandText = $"UPDATE description SET comment={comment}; UPDATE description SET extension={extension}; VACUUM;";
+            command.ExecuteNonQuery();
+            command.Cancel();
             quran.Close();
         }
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
-        public void Mp3CurrentPosition(double cPos) { mp3.Ctlcontrols.currentPosition = cPos; }
     }
 }

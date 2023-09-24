@@ -210,7 +210,9 @@ namespace QuranKareem {
             allow = true; // فتح الباب
         }
 
+        // فهرس برقم السورة
         private void Surah_ValueChanged(object sender, EventArgs e) {
+            if (addNewMoqrea.Text == "إلغاء") EditMoqreaSurah((int)Surah.Value);
             if (!allow) { return; }
             allow = false;
             if (textMode) {
@@ -516,7 +518,8 @@ namespace QuranKareem {
                 label.RightToLeft = RightToLeft.Yes;
                 label.Size = labelSize;
                 label.TextAlign = ContentAlignment.MiddleCenter;
-                label.Text = ayatS[i];
+                if (i != 0) label.Text = ayatS[i];
+                else label.Text = "الإستعاذة";
                 panel.Controls.Add(label);
 
                 num = new NumericUpDown();
@@ -524,7 +527,7 @@ namespace QuranKareem {
                 num.BorderStyle = BorderStyle.None;
                 num.DecimalPlaces = 3;
                 num.Font = font;
-                num.Location = new Point(fs.getNewX(22), fs.getNewY(y+37));
+                num.Location = new Point(fs.getNewX(35), fs.getNewY(y+37));
                 num.Size = numSize;
                 if (Ayah.Minimum == 0) k = i - 1;
                 else if (i == 0) k = -1;
@@ -540,20 +543,11 @@ namespace QuranKareem {
                 btn = new Button();
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.Size = btnSize;
-                btn.Tag = i*4+1;
-                btn.Location = new Point(fs.getNewX(148), fs.getNewY(y + 37));
+                btn.Tag = i*3+1;
+                btn.Location = new Point(fs.getNewX(165), fs.getNewY(y + 37));
                 btn.ForeColor = Color.Red;
                 btn.Text = "O";
                 btn.Click += Timestamp_record;
-                panel.Controls.Add(btn);
-
-                btn = new Button();
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.Size = btnSize;
-                btn.Tag = btn.Tag;
-                btn.Location = new Point(fs.getNewX(185), fs.getNewY(y + 37));
-                btn.Text = "|>";
-                btn.Click += Timestamp_play;
                 panel.Controls.Add(btn);
 
                 y += 86;
@@ -568,20 +562,16 @@ namespace QuranKareem {
           ((NumericUpDown) panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)quranAudios.Mp3CurrentPosition();
         }
 
-        void Timestamp_play(object sender, EventArgs e) {
-             quranAudios.Mp3CurrentPosition((double)((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value);
-        }
-
         private void addNewMoqrea_Click(object sender, EventArgs e) {
             if(addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
-                addNewMoqrea.Text = "إلغاء";
+                addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 EditMoqreaSurah((int)Surah.Value);
             }
             else {
                 string[] audiosFolders=null;
                 try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
                 AddMashaykhButtons(audiosFolders);
-                addNewMoqrea.Text = "إضافة شيخ جديد";
+                addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
             }
         }
     }
