@@ -320,13 +320,28 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public void description(string comment, string extension=".mp3") {
+        public void setDescription(string extension, string comment) {
             if (!success) return;
             quran.Open();
-            command.CommandText = $"UPDATE description SET comment={comment}; UPDATE description SET extension={extension}; VACUUM;";
+            command.CommandText = $"UPDATE description SET extension={extension}; UPDATE description SET comment={comment}; VACUUM;";
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
+        }
+
+        public string[] getDescription() {
+            if (!success) return null;
+            string[] desc = new string[2];
+            quran.Open();
+            command.CommandText = $"SELECT extension,comment FROM description";
+            reader = command.ExecuteReader();
+            reader.Read();
+            desc[0] = reader.GetString(0);
+            desc[1] = reader.GetString(1);
+            reader.Close();
+            command.Cancel();
+            quran.Close();
+            return desc;
         }
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }

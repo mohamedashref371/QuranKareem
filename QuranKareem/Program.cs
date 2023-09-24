@@ -16,11 +16,11 @@ namespace QuranKareem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //try {
+            try {
                 _ = new System.Threading.Mutex(true, Application.ProductName, out bool createdNew);
                 if (createdNew /* لمنع فتح نسختين من البرنامج */) Application.Run(new Form1());
                 else MessageBox.Show("هناك نسخة من البرنامج مفتوحة");
-            //} catch { MessageBox.Show("حدث خطأ غير متوقع، سيتم إغلاق البرنامج"); }
+            } catch { MessageBox.Show("حدث خطأ غير متوقع، سيتم إغلاق البرنامج"); }
         }
     }
 }

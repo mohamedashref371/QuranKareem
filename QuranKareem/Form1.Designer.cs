@@ -68,7 +68,7 @@
             this.searchText = new System.Windows.Forms.TextBox();
             this.searchClose = new System.Windows.Forms.Button();
             this.tafasir = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.lTafseer = new System.Windows.Forms.Label();
             this.tafseerCopy = new System.Windows.Forms.Button();
             this.saveRTF = new System.Windows.Forms.Button();
             this.saveRichText = new System.Windows.Forms.SaveFileDialog();
@@ -80,6 +80,13 @@
             this.volume = new Guna.UI2.WinForms.Guna2TrackBar();
             this.label11 = new System.Windows.Forms.Label();
             this.addNewMoqrea = new System.Windows.Forms.Button();
+            this.addShaykhInfo = new Guna.UI2.WinForms.Guna2Button();
+            this.ShaykhDesc = new System.Windows.Forms.Button();
+            this.lExt = new System.Windows.Forms.Label();
+            this.extension = new System.Windows.Forms.TextBox();
+            this.lComment = new System.Windows.Forms.Label();
+            this.comment = new System.Windows.Forms.TextBox();
+            this.descSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -667,16 +674,16 @@
             this.tafasir.TabIndex = 53;
             this.tafasir.SelectedIndexChanged += new System.EventHandler(this.tafasir_SelectedIndexChanged);
             // 
-            // label10
+            // lTafseer
             // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.Transparent;
-            this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label10.Location = new System.Drawing.Point(109, 683);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 22);
-            this.label10.TabIndex = 54;
-            this.label10.Text = "التفاسير";
+            this.lTafseer.AutoSize = true;
+            this.lTafseer.BackColor = System.Drawing.Color.Transparent;
+            this.lTafseer.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.lTafseer.Location = new System.Drawing.Point(109, 683);
+            this.lTafseer.Name = "lTafseer";
+            this.lTafseer.Size = new System.Drawing.Size(71, 22);
+            this.lTafseer.TabIndex = 54;
+            this.lTafseer.Text = "التفاسير";
             // 
             // tafseerCopy
             // 
@@ -784,19 +791,109 @@
             // addNewMoqrea
             // 
             this.addNewMoqrea.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.addNewMoqrea.Location = new System.Drawing.Point(884, 873);
+            this.addNewMoqrea.Location = new System.Drawing.Point(905, 873);
             this.addNewMoqrea.Name = "addNewMoqrea";
-            this.addNewMoqrea.Size = new System.Drawing.Size(161, 32);
+            this.addNewMoqrea.Size = new System.Drawing.Size(145, 32);
             this.addNewMoqrea.TabIndex = 50;
             this.addNewMoqrea.Text = "إضافة شيخ جديد";
             this.addNewMoqrea.UseVisualStyleBackColor = true;
             this.addNewMoqrea.Click += new System.EventHandler(this.addNewMoqrea_Click);
+            // 
+            // addShaykhInfo
+            // 
+            this.addShaykhInfo.BorderRadius = 16;
+            this.addShaykhInfo.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.addShaykhInfo.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.addShaykhInfo.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.addShaykhInfo.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.addShaykhInfo.Enabled = false;
+            this.addShaykhInfo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.addShaykhInfo.ForeColor = System.Drawing.Color.White;
+            this.addShaykhInfo.Location = new System.Drawing.Point(1056, 873);
+            this.addShaykhInfo.Name = "addShaykhInfo";
+            this.addShaykhInfo.Size = new System.Drawing.Size(32, 32);
+            this.addShaykhInfo.TabIndex = 62;
+            this.addShaykhInfo.Text = "!";
+            this.addShaykhInfo.Click += new System.EventHandler(this.addShaykhInfo_Click);
+            // 
+            // ShaykhDesc
+            // 
+            this.ShaykhDesc.Enabled = false;
+            this.ShaykhDesc.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.ShaykhDesc.Location = new System.Drawing.Point(825, 873);
+            this.ShaykhDesc.Name = "ShaykhDesc";
+            this.ShaykhDesc.Size = new System.Drawing.Size(74, 32);
+            this.ShaykhDesc.TabIndex = 63;
+            this.ShaykhDesc.Text = "الوصف";
+            this.ShaykhDesc.UseVisualStyleBackColor = true;
+            this.ShaykhDesc.Click += new System.EventHandler(this.ShaykhDesc_);
+            this.ShaykhDesc.EnabledChanged += new System.EventHandler(this.ShaykhDesc_);
+            // 
+            // lExt
+            // 
+            this.lExt.AutoSize = true;
+            this.lExt.BackColor = System.Drawing.Color.Transparent;
+            this.lExt.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.lExt.Location = new System.Drawing.Point(216, 698);
+            this.lExt.Name = "lExt";
+            this.lExt.Size = new System.Drawing.Size(62, 22);
+            this.lExt.TabIndex = 64;
+            this.lExt.Text = "الامتداد";
+            this.lExt.Visible = false;
+            // 
+            // extension
+            // 
+            this.extension.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.extension.Location = new System.Drawing.Point(12, 695);
+            this.extension.Name = "extension";
+            this.extension.Size = new System.Drawing.Size(198, 28);
+            this.extension.TabIndex = 65;
+            this.extension.Visible = false;
+            // 
+            // lComment
+            // 
+            this.lComment.AutoSize = true;
+            this.lComment.BackColor = System.Drawing.Color.Transparent;
+            this.lComment.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.lComment.Location = new System.Drawing.Point(226, 740);
+            this.lComment.Name = "lComment";
+            this.lComment.Size = new System.Drawing.Size(52, 22);
+            this.lComment.TabIndex = 66;
+            this.lComment.Text = "تعليق";
+            this.lComment.Visible = false;
+            // 
+            // comment
+            // 
+            this.comment.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.comment.Location = new System.Drawing.Point(12, 737);
+            this.comment.Name = "comment";
+            this.comment.Size = new System.Drawing.Size(198, 28);
+            this.comment.TabIndex = 67;
+            this.comment.Visible = false;
+            // 
+            // descSave
+            // 
+            this.descSave.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.descSave.Location = new System.Drawing.Point(81, 775);
+            this.descSave.Name = "descSave";
+            this.descSave.Size = new System.Drawing.Size(116, 35);
+            this.descSave.TabIndex = 68;
+            this.descSave.Text = "حفظ";
+            this.descSave.UseVisualStyleBackColor = true;
+            this.descSave.Click += new System.EventHandler(this.descSave_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.descSave);
+            this.Controls.Add(this.comment);
+            this.Controls.Add(this.lComment);
+            this.Controls.Add(this.extension);
+            this.Controls.Add(this.lExt);
+            this.Controls.Add(this.ShaykhDesc);
+            this.Controls.Add(this.addShaykhInfo);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volume);
@@ -805,7 +902,7 @@
             this.Controls.Add(this.rtb);
             this.Controls.Add(this.saveRTF);
             this.Controls.Add(this.tafseerCopy);
-            this.Controls.Add(this.label10);
+            this.Controls.Add(this.lTafseer);
             this.Controls.Add(this.tafasir);
             this.Controls.Add(this.searchClose);
             this.Controls.Add(this.searchText);
@@ -908,7 +1005,7 @@
         private System.Windows.Forms.Button search;
         private System.Windows.Forms.Button searchClose;
         private System.Windows.Forms.Button tafseerCopy;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label lTafseer;
         private System.Windows.Forms.ComboBox tafasir;
         private System.Windows.Forms.Button saveRTF;
         private System.Windows.Forms.SaveFileDialog saveRichText;
@@ -918,6 +1015,13 @@
         private System.Windows.Forms.Label label11;
         private Guna.UI2.WinForms.Guna2TrackBar volume;
         private System.Windows.Forms.Button addNewMoqrea;
+        private Guna.UI2.WinForms.Guna2Button addShaykhInfo;
+        private System.Windows.Forms.Button ShaykhDesc;
+        private System.Windows.Forms.Label lExt;
+        private System.Windows.Forms.TextBox extension;
+        private System.Windows.Forms.TextBox comment;
+        private System.Windows.Forms.Label lComment;
+        private System.Windows.Forms.Button descSave;
     }
 }
 

@@ -565,6 +565,7 @@ namespace QuranKareem {
         private void addNewMoqrea_Click(object sender, EventArgs e) {
             if(addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
+                ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
             }
             else {
@@ -572,7 +573,44 @@ namespace QuranKareem {
                 try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
                 AddMashaykhButtons(audiosFolders);
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
+                ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
             }
         }
+
+        private void addShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها"); }
+
+        private void ShaykhDesc_(object sender, EventArgs e) {
+            if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled==true) {
+                string[] desc = quranAudios.getDescription();
+                if (desc == null) return;
+                ShaykhDesc.Text = "إلغاء";
+                lTafseer.Visible = false;
+                tafasir.Visible = false;
+                tafseerCopy.Visible = false;
+                saveRTF.Visible = false;
+                lExt.Visible = true;
+                extension.Text = desc[0];
+                extension.Visible = true;
+                lComment.Visible = true;
+                comment.Text = desc[1];
+                comment.Visible = true;
+                descSave.Visible = true;
+            }
+            else if (ShaykhDesc.Text == "إلغاء") {
+                ShaykhDesc.Text = "الوصف";
+                lExt.Visible = false;
+                extension.Visible = false;
+                lComment.Visible = false;
+                comment.Visible = false;
+                descSave.Visible = false;
+                lTafseer.Visible = true;
+                tafasir.Visible = true;
+                tafseerCopy.Visible = true;
+                saveRTF.Visible = true;
+            }
+            
+        }
+
+        private void descSave_Click(object sender, EventArgs e) { quranAudios.setDescription(extension.Text, comment.Text);}
     }
 }
