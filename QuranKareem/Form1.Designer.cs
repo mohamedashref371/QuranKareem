@@ -874,11 +874,11 @@
             // descSave
             // 
             this.descSave.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.descSave.Location = new System.Drawing.Point(81, 775);
+            this.descSave.Location = new System.Drawing.Point(55, 775);
             this.descSave.Name = "descSave";
-            this.descSave.Size = new System.Drawing.Size(116, 35);
+            this.descSave.Size = new System.Drawing.Size(155, 35);
             this.descSave.TabIndex = 68;
-            this.descSave.Text = "حفظ";
+            this.descSave.Text = "حفظ و تنظيف";
             this.descSave.UseVisualStyleBackColor = true;
             this.descSave.Visible = false;
             this.descSave.Click += new System.EventHandler(this.descSave_Click);

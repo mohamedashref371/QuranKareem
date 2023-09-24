@@ -18,7 +18,7 @@ namespace QuranKareem {
 
         public Form1() { InitializeComponent(); }
 
-        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.1.0", "");
+        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.5.0", "");
 
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
@@ -593,6 +593,8 @@ namespace QuranKareem {
 
         private void addShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها"); }
 
+        private void descSave_Click(object sender, EventArgs e) { quranAudios.setDescription(extension.Text, comment.Text); }
+
         private void ShaykhDesc_(object sender, EventArgs e) {
             if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled==true) {
                 string[] desc = quranAudios.getDescription();
@@ -625,6 +627,5 @@ namespace QuranKareem {
             
         }
 
-        private void descSave_Click(object sender, EventArgs e) { quranAudios.setDescription(extension.Text, comment.Text);}
     }
 }
