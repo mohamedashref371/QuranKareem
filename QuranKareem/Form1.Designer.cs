@@ -87,6 +87,7 @@
             this.lComment = new System.Windows.Forms.Label();
             this.comment = new System.Windows.Forms.TextBox();
             this.descSave = new System.Windows.Forms.Button();
+            this.timestampChangeEventCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -883,11 +884,27 @@
             this.descSave.Visible = false;
             this.descSave.Click += new System.EventHandler(this.descSave_Click);
             // 
+            // timestampChangeEventCheck
+            // 
+            this.timestampChangeEventCheck.AutoSize = true;
+            this.timestampChangeEventCheck.BackColor = System.Drawing.Color.Transparent;
+            this.timestampChangeEventCheck.Checked = true;
+            this.timestampChangeEventCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.timestampChangeEventCheck.Location = new System.Drawing.Point(837, 22);
+            this.timestampChangeEventCheck.Name = "timestampChangeEventCheck";
+            this.timestampChangeEventCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.timestampChangeEventCheck.Size = new System.Drawing.Size(154, 17);
+            this.timestampChangeEventCheck.TabIndex = 69;
+            this.timestampChangeEventCheck.Text = "التحسس من تغيير التوقيتات";
+            this.timestampChangeEventCheck.UseVisualStyleBackColor = false;
+            this.timestampChangeEventCheck.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.timestampChangeEventCheck);
             this.Controls.Add(this.descSave);
             this.Controls.Add(this.comment);
             this.Controls.Add(this.lComment);
@@ -1023,6 +1040,7 @@
         private System.Windows.Forms.TextBox comment;
         private System.Windows.Forms.Label lComment;
         private System.Windows.Forms.Button descSave;
+        private System.Windows.Forms.CheckBox timestampChangeEventCheck;
     }
 }
 

@@ -572,8 +572,13 @@ namespace QuranKareem {
             else Ayah.Value = 0;
         }
 
+        int tempInt;
         void Timestamp_ValueChanged(object sender, EventArgs e) {
-            quranAudios.ayah((int)Surah.Value,(int)((NumericUpDown)sender).Tag, (int)(((NumericUpDown)sender).Value*1000));
+            tempInt = (int)((NumericUpDown)sender).Tag;
+            quranAudios.ayah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value*1000));
+            if (tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
+                if (Ayah.Value != tempInt + 1) Ayah.Value = tempInt + 1;
+                else Ayah_ValueChanged(sender, e);
         }
 
         double temp;
@@ -592,6 +597,7 @@ namespace QuranKareem {
         private void addNewMoqrea_Click(object sender, EventArgs e) {
             if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
+                timestampChangeEventCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
             }
@@ -600,6 +606,7 @@ namespace QuranKareem {
                 try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
                 AddMashaykhButtons(audiosFolders);
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
+                timestampChangeEventCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
             }
         }
