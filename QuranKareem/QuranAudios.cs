@@ -329,7 +329,7 @@ namespace QuranKareem
         public void setDescription(string extension, string comment) {
             if (!success) return;
             quran.Open();
-            command.CommandText = $"UPDATE description SET extension={extension}; UPDATE description SET comment={comment}; VACUUM;";
+            command.CommandText = $"UPDATE description SET extension='{extension}'; UPDATE description SET comment='{comment}'; VACUUM;";
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
@@ -351,6 +351,6 @@ namespace QuranKareem
         }
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
-        public double Mp3Duration() { return mp3.currentMedia.duration; }
+        public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
     }
 }

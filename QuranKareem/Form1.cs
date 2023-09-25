@@ -499,7 +499,7 @@ namespace QuranKareem {
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
             int[] ayat = quranAudios.getTimestamps(sura);
-            string[] ayatS = quranTexts.surahAbstractTexts(sura, 40);
+            string[] ayatS = quranTexts.surahAbstractTexts(sura, 5, true);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;
@@ -512,14 +512,20 @@ namespace QuranKareem {
             int y = 28;
             int k;
             for (int i = 0; i < ayat.Length; i++) {
+                if (Ayah.Minimum == 0) k = i - 1;
+                else if (i == 0) k = -1;
+                else k = i;
+
                 label = new Label();
                 label.Font = font;
                 label.Location = new Point(fs.getNewX(3), fs.getNewY(y));
                 label.RightToLeft = RightToLeft.Yes;
-                label.Size = labelSize;
+                /*label.AutoSize=true; */ label.Size = labelSize;
                 label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Tag = k;
                 if (i != 0) label.Text = ayatS[i];
                 else label.Text = "الإستعاذة";
+                label.Click += label_Click;
                 panel.Controls.Add(label);
 
                 num = new NumericUpDown();
@@ -529,9 +535,6 @@ namespace QuranKareem {
                 num.Font = font;
                 num.Location = new Point(fs.getNewX(35), fs.getNewY(y+37));
                 num.Size = numSize;
-                if (Ayah.Minimum == 0) k = i - 1;
-                else if (i == 0) k = -1;
-                else k = i;
                 num.Tag = k;
                 num.TextAlign = HorizontalAlignment.Center;
                 num.Maximum = 99999;
@@ -564,16 +567,26 @@ namespace QuranKareem {
             panel.Controls.Add(btn);
         }
 
+        void label_Click(object sender, EventArgs e){
+            if ((int)((Label)sender).Tag >= 0) Ayah.Value = (int)((Label)sender).Tag;
+            else Ayah.Value = 0;
+        }
+
         void Timestamp_ValueChanged(object sender, EventArgs e) {
             quranAudios.ayah((int)Surah.Value,(int)((NumericUpDown)sender).Tag, (int)(((NumericUpDown)sender).Value*1000));
         }
 
+        double temp;
         void Timestamp_record(object sender, EventArgs e) {
-          ((NumericUpDown) panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)quranAudios.Mp3CurrentPosition();
+            temp = quranAudios.Mp3CurrentPosition();
+            if (temp == 0) return;
+            ((NumericUpDown) panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
         void Mp3Duration_record(object sender, EventArgs e){
-            ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)quranAudios.Mp3Duration();
+            temp = quranAudios.Mp3Duration();
+            if (temp == 0) return;
+            ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
         private void addNewMoqrea_Click(object sender, EventArgs e) {
