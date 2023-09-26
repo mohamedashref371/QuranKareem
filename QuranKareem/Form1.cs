@@ -18,17 +18,17 @@ namespace QuranKareem {
 
         public Form1() { InitializeComponent(); }
 
-        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.5.0", "");
+        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.7.0", "");
 
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
         readonly QuranAudios quranAudios = QuranAudios.Instance;
         readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
 
-        string moshafText = "-1"; bool textMode = false;
-        string moshafPic = "0";
-        string moshafAudio = "-1";
-        string Tafseer = "-1";
+        string moshafText = ""; bool textMode = false;
+        string moshafPic = "";
+        string moshafAudio = "";
+        string Tafseer = "";
 
         readonly static string newLine = @"
 ";
@@ -39,9 +39,8 @@ namespace QuranKareem {
         private void Form1_Load(object sender, EventArgs e) {
             
             try { rtb.SaveFile(save+"XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
-
             color.SelectedIndex = 1; // اللون الأحمر
-            string[] textsFiles = null, picturesFolders = null, audiosFolders = null;
+            string[] textsFiles = null, picturesFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
 
@@ -76,8 +75,6 @@ namespace QuranKareem {
             quranAudios.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
             quranAudios.AddEventHandler(Audio_); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
 
-            try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
-
             // اضافة التفاسير
             textsFiles = null;
             try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
@@ -91,20 +88,26 @@ namespace QuranKareem {
 
             // الوقوف عند الآية التي كنت فيها قبل اغلاق البرنامج آخر مرة
             try {
-                if (File.Exists(save + "Surah")) {
-                    stringArray = File.ReadAllText(save + "Surah").Split(',');
+                if (File.Exists(save + "AyahNumberCurrent")) {
+                    stringArray = File.ReadAllText(save + "AyahNumberCurrent").Split(',');
                     Surah.Value = Convert.ToInt32(stringArray[0]);
                     Ayah.Value = Convert.ToInt32(stringArray[1]);
-                    if (stringArray[4] != "-1") {
-                        moshafAudio = stringArray[4];
-                        quranAudios.QuranAudio(audiosFolders[Convert.ToInt32(stringArray[4])], (int)Surah.Value, (int)Ayah.Value);
-                        NewDateTime();
-                        quranAudios.Pause();
-                    }
-                    if (stringArray[5] != "-1") {
-                        Tafseer = stringArray[5];
-                        tafasir.SelectedIndex = Convert.ToInt32(Tafseer);
-                    }
+                }
+            } catch { }
+
+            try {
+                if (File.Exists(save + "MoshafAudioCurrent")) {
+                    moshafAudio = File.ReadAllText(save + "MoshafAudioCurrent");
+                    quranAudios.QuranAudio(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
+                    NewDateTime();
+                    quranAudios.Pause();
+                }
+            } catch { }
+            
+            try {
+                if (File.Exists(save + "TafseerCurrent")){
+                    Tafseer = File.ReadAllText(save + "TafseerCurrent");
+                    tafasir.SelectedItem = Tafseer;
                 }
             } catch { }
 
@@ -113,38 +116,63 @@ namespace QuranKareem {
             // FormWindowState -> Maximized
             fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
             fs.SetControls(Controls);
-            AddMashaykhButtons(audiosFolders);
+            AddMashaykhButtons();
         }
 
         // اضافة ازرار المشايخ
-        void AddMashaykhButtons(string[] audiosFolders) {
+        void AddMashaykhButtons() {
+            List<string> audiosFolders = new List<string>();
+            
+            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
+                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace(newLine,"*").Split('*').ToList());
+                for (int i=0; i< audiosFolders.Count; i++) {
+                    stringArray = audiosFolders[i].Split('|');
+                    if (Directory.Exists(stringArray[0]) || stringArray[0] == ":line:") { }
+                    else if (Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
+                    else audiosFolders[i]="";
+                }
+            }
+
             panel.Controls.Clear();
+            try { audiosFolders.AddRange(Directory.GetDirectories("audios").ToList()); } catch { } // البحث في مجلد الصوتيات
             Guna2Button b;
-            int y = 5;
+            int y = -45;
             Color clr; Random rand = new Random();
-            if (audiosFolders != null)
-                for (int i = 0; i < audiosFolders.Length; i++) {
-                    clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
-                    b = new Guna2Button();
+            for (int i = 0; i < audiosFolders.Count; i++) {
+                if (audiosFolders[i].Trim() == "") continue;
+                y += 50;
+                if (audiosFolders[i].Contains('|')) {
+                    stringArray = audiosFolders[i].Split('|');
+                    clr = Color.FromName(stringArray[1]);
+                    audiosFolders[i] = stringArray[0];
+                }
+                else clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
+
+                b = new Guna2Button();
+                b.FillColor = clr;
+                b.Location = new Point(fs.getNewX(5), fs.getNewY(y));
+                b.BorderRadius = 15;
+                if (audiosFolders[i]== ":line:") {
+                    b.Size = new Size(fs.getNewX(230), fs.getNewY(10));
+                    y -= 30;
+                }
+                else {
                     stringArray = audiosFolders[i].Split('\\');
-                    b.FillColor = clr;
                     b.Text = stringArray[stringArray.Length - 1];
                     b.Font = new Font("Segoe UI", fs.getNewX(12));
-                    b.Location = new Point(fs.getNewX(5), fs.getNewY(y));
                     b.Size = new Size(fs.getNewX(230), fs.getNewY(45));
                     b.Cursor = Cursors.Hand;
-                    b.Tag = i; // اضافة رقم للشيخ
+                    b.Tag = audiosFolders[i];
                     b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
-                    b.BorderRadius = 15;
-                    panel.Controls.Add(b);
-                    y += 50;
                 }
+                panel.Controls.Add(b);
+            }
         }
         
         // دالة عامة لجميع الأزرار عند الضغط عليها
         private void Button_Click(object sender /* الزر الذي ضغطت عليه */, EventArgs e) {
-            moshafAudio = ((Guna2Button)sender).Tag + "";
-            string s = @"audios\" + ((Guna2Button)sender).Text; 
+            string s = (string)((Guna2Button)sender).Tag;
+            moshafAudio = s;
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             NewDateTime();
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2) {
@@ -444,8 +472,8 @@ namespace QuranKareem {
         }
 
         private void tafasir_SelectedIndexChanged(object sender, EventArgs e) {
-            quranTafasir.QuranTafseer(@"tafasir\" + tafasir.Text + ".db");
-            Tafseer = tafasir.SelectedIndex+"";
+            Tafseer = tafasir.Text;
+            quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
         }
 
         private void saveRTF_Click(object sender, EventArgs e) {
@@ -475,7 +503,11 @@ namespace QuranKareem {
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-            File.WriteAllText(save + "Surah", Surah.Value + "," + Ayah.Value+","+ moshafText + "," + moshafPic + ","+ moshafAudio + "," + Tafseer);
+            File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
+            File.WriteAllText(save + "MoshafTextCurrent", moshafText);
+            File.WriteAllText(save + "MoshafPictureCurrent", moshafPic);
+            File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
+            File.WriteAllText(save + "TafseerCurrent", Tafseer);
             File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
@@ -597,14 +629,13 @@ namespace QuranKareem {
         private void addNewMoqrea_Click(object sender, EventArgs e) {
             if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
+                moshafAudio = folder.SelectedPath;
                 timestampChangeEventCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
             }
             else {
-                string[] audiosFolders=null;
-                try { audiosFolders = Directory.GetDirectories("audios"); } catch { } // البحث في مجلد الصوتيات
-                AddMashaykhButtons(audiosFolders);
+                AddMashaykhButtons();
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
                 timestampChangeEventCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
