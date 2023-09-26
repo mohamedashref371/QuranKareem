@@ -137,7 +137,8 @@ namespace QuranKareem {
             int y = -45;
             Color clr; Random rand = new Random();
             for (int i = 0; i < audiosFolders.Count; i++) {
-                if (audiosFolders[i].Trim() == "") continue;
+                if (audiosFolders[i].Trim() == "" || audiosFolders[i].Trim() == "audios\\") continue;
+                MessageBox.Show(audiosFolders[i]);
                 stringArray = null;
                 y += 50;
                 if (audiosFolders[i].Contains('|')) {
