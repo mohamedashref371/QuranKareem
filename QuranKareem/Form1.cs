@@ -127,8 +127,8 @@ namespace QuranKareem {
                 audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace(newLine,"*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
-                    if (Directory.Exists(stringArray[0]) || stringArray[0] == ":line:") { }
-                    else if (Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
+                    if (Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
+                    else if (Directory.Exists(stringArray[0]) || stringArray[0] == ":line:") { }
                     else audiosFolders[i]="";
                 }
             }
