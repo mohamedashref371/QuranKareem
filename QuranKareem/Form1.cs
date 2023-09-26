@@ -134,26 +134,19 @@ namespace QuranKareem {
             panel.Controls.Clear();
             try { audiosFolders.AddRange(Directory.GetDirectories("audios").ToList()); } catch { } // البحث في مجلد الصوتيات
 
-            try {
-                if (distinct) /* كود غير محترف */ {
-                    string[] stringArray2;
-                    for (int i = 0; i < audiosFolders.Count; i++) {
-                        stringArray = audiosFolders[i].Split('|');
-                        if (stringArray[0].Trim() == "") continue;
-                        stringArray[0] = stringArray[0].TrimStart();
-                        if (stringArray[0].First() == ':') continue;
-                        stringArray[0] = Path.GetFullPath(stringArray[0]);
-                        for (int j = i + 1; j < audiosFolders.Count; j++) {
-                            stringArray2 = audiosFolders[j].Split('|');
-                            if (stringArray2[0].Trim() == "") continue;
-                            stringArray2[0] = stringArray2[0].TrimStart();
-                            if (stringArray2[0].First() == ':') continue;
-                            stringArray2[0] = Path.GetFullPath(stringArray2[0]);
-                            if (stringArray[0] == stringArray2[0]) audiosFolders[j] = "";
-                        }
+            
+            if (distinct) /* كود غير محترف */ {
+                string temp,temp2;
+                for (int i = 0; i < audiosFolders.Count; i++) {
+                    temp = audiosFolders[i].Split('|').First();
+                    try { temp = Path.GetFullPath(temp); } catch { continue; }
+                    for (int j = i + 1; j < audiosFolders.Count; j++) {
+                        temp2 = audiosFolders[j].Split('|').First();
+                        try { temp2 = Path.GetFullPath(temp2); } catch { continue; }
+                        if (temp == temp2) audiosFolders[j] = "";
                     }
                 }
-            } catch { }
+            }
             
             Guna2Button b;
             int y = -45;
