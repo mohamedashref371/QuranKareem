@@ -34,7 +34,7 @@ namespace QuranKareem
         public string PageTextHTML { get; private set; }
         public RichTextBox PageRichText { get; private set; } = new RichTextBox();
 
-        private List<int> finishedPosition = new List<int>();
+        private readonly List<int> finishedPosition = new List<int>();
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
 
@@ -201,7 +201,7 @@ namespace QuranKareem
 
         public static readonly string newLine = @"
 ";
-        private StringBuilder OriginalPageText = new StringBuilder();
+        private readonly StringBuilder OriginalPageText = new StringBuilder();
         private void pageText(int i) {
             OriginalPageText.Clear();
             finishedPosition.Clear();
@@ -214,7 +214,7 @@ namespace QuranKareem
             }
         }
 
-        public void setCursor(int position=-1) {
+        public void SetCursor(int position=-1) {
             if (!success) return;
             if (position < 0) position = PageRichText.SelectionStart;
             int temp=-1, temp1=0;
@@ -233,7 +233,7 @@ namespace QuranKareem
         }
 
         private string tempString;
-        public string ayahText(int sura, int aya) {
+        public string AyahText(int sura, int aya) {
             if (!success) return "";
             quran.Open();
             reader = new SQLiteCommand($"SELECT text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
@@ -243,7 +243,7 @@ namespace QuranKareem
             return tempString;
         }
 
-        public string ayahAbstractText(int sura, int aya) {
+        public string AyahAbstractText(int sura, int aya) {
             if (!success) return "";
             quran.Open();
             reader = new SQLiteCommand($"SELECT abstract_text FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
@@ -253,7 +253,7 @@ namespace QuranKareem
             return tempString;
         }
 
-        public string[] surahAbstractTexts(int sura, int wordsCount=-1, bool end=false){
+        public string[] SurahAbstractTexts(int sura, int wordsCount=-1, bool end=false){
             if (!success) return null;
             lst.Clear();
             quran.Open();
@@ -272,8 +272,8 @@ namespace QuranKareem
             return lst.ToArray();
         }
 
-        private List<int> SearchIDs = new List<int>();
-        List<string> lst = new List<string>();
+        private readonly List<int> SearchIDs = new List<int>();
+        readonly List<string> lst = new List<string>();
         public string[] Search(string words) {
             SearchIDs.Clear();
             if (!success || words==null || words.Trim()=="") return new string[] { };

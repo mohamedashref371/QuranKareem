@@ -194,12 +194,12 @@ namespace QuranKareem
                 if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) return;
                 if (y5 == y9) {
                     y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
-                    fun(x5, x9, y5, y9);
+                    Fun(x5, x9, y5, y9);
                 }
                 else {
-                    if (y9 - y5 > 1) fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
-                    fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
-                    fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
+                    if (y9 - y5 > 1) Fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
+                    Fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
+                    Fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
                 }
             }
             
@@ -214,8 +214,8 @@ namespace QuranKareem
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
 
         }
-        public void setXY(int xMouse, int yMouse) { setXY(xMouse, yMouse, width, height); }
-        public void setXY(int xMouse, int yMouse, int width, int height) { // مؤشر الماوس
+        public void SetXY(int xMouse, int yMouse) { SetXY(xMouse, yMouse, width, height); }
+        public void SetXY(int xMouse, int yMouse, int width, int height) { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)( xMouse * (this.width / (decimal) width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)( yMouse * (this.height / (decimal) height));
@@ -249,7 +249,7 @@ namespace QuranKareem
         }
 
         public AyahColor ayahColor = AyahColor.red;
-        void fun(int x5, int x9, int y5, int y9) { // كود التلوين
+        void Fun(int x5, int x9, int y5, int y9) { // كود التلوين
             if (!success) return;
             try {
                 Color p4;

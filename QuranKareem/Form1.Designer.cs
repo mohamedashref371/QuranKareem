@@ -490,7 +490,7 @@
             this.exitForm.Text = "x";
             this.exitForm.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.exitForm.UseVisualStyleBackColor = false;
-            this.exitForm.Click += new System.EventHandler(this.exitForm_Click);
+            this.exitForm.Click += new System.EventHandler(this.ExitForm_Click);
             // 
             // minimize
             // 
@@ -504,7 +504,7 @@
             this.minimize.TabIndex = 39;
             this.minimize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.minimize.UseVisualStyleBackColor = false;
-            this.minimize.Click += new System.EventHandler(this.minimize_Click);
+            this.minimize.Click += new System.EventHandler(this.Minimize_Click);
             // 
             // label8
             // 
@@ -601,7 +601,7 @@
             this.copy.TabIndex = 46;
             this.copy.Text = "نسخ الآية";
             this.copy.UseVisualStyleBackColor = true;
-            this.copy.Click += new System.EventHandler(this.copy_Click);
+            this.copy.Click += new System.EventHandler(this.Copy_Click);
             // 
             // normalText
             // 
@@ -625,7 +625,7 @@
             this.searchList.Size = new System.Drawing.Size(262, 576);
             this.searchList.TabIndex = 48;
             this.searchList.Visible = false;
-            this.searchList.SelectedIndexChanged += new System.EventHandler(this.searchList_SelectedIndexChanged);
+            this.searchList.SelectedIndexChanged += new System.EventHandler(this.SearchList_SelectedIndexChanged);
             // 
             // search
             // 
@@ -636,7 +636,7 @@
             this.search.TabIndex = 49;
             this.search.Text = "بحث";
             this.search.UseVisualStyleBackColor = true;
-            this.search.Click += new System.EventHandler(this.search_Click);
+            this.search.Click += new System.EventHandler(this.Search_Click);
             // 
             // searchText
             // 
@@ -657,7 +657,7 @@
             this.searchClose.Text = "الغاء";
             this.searchClose.UseVisualStyleBackColor = true;
             this.searchClose.Visible = false;
-            this.searchClose.Click += new System.EventHandler(this.searchClose_Click);
+            this.searchClose.Click += new System.EventHandler(this.SearchClose_Click);
             // 
             // tafasir
             // 
@@ -673,7 +673,7 @@
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tafasir.Size = new System.Drawing.Size(262, 29);
             this.tafasir.TabIndex = 53;
-            this.tafasir.SelectedIndexChanged += new System.EventHandler(this.tafasir_SelectedIndexChanged);
+            this.tafasir.SelectedIndexChanged += new System.EventHandler(this.Tafasir_SelectedIndexChanged);
             // 
             // lTafseer
             // 
@@ -695,7 +695,7 @@
             this.tafseerCopy.TabIndex = 55;
             this.tafseerCopy.Text = "نسخ التفسير";
             this.tafseerCopy.UseVisualStyleBackColor = true;
-            this.tafseerCopy.Click += new System.EventHandler(this.tafseerCopy_Click);
+            this.tafseerCopy.Click += new System.EventHandler(this.TafseerCopy_Click);
             // 
             // saveRTF
             // 
@@ -706,7 +706,7 @@
             this.saveRTF.TabIndex = 56;
             this.saveRTF.Text = "save .rtf";
             this.saveRTF.UseVisualStyleBackColor = true;
-            this.saveRTF.Click += new System.EventHandler(this.saveRTF_Click);
+            this.saveRTF.Click += new System.EventHandler(this.SaveRTF_Click);
             // 
             // saveRichText
             // 
@@ -732,7 +732,7 @@
             this.about.TabIndex = 58;
             this.about.Text = "About";
             this.about.UseVisualStyleBackColor = true;
-            this.about.Click += new System.EventHandler(this.about_Click);
+            this.about.Click += new System.EventHandler(this.About_Click);
             // 
             // latest
             // 
@@ -742,7 +742,7 @@
             this.latest.TabIndex = 59;
             this.latest.Text = "latest version";
             this.latest.UseVisualStyleBackColor = true;
-            this.latest.Click += new System.EventHandler(this.latest_Click);
+            this.latest.Click += new System.EventHandler(this.Latest_Click);
             // 
             // stop
             // 
@@ -776,7 +776,7 @@
             this.volume.Size = new System.Drawing.Size(140, 23);
             this.volume.TabIndex = 60;
             this.volume.ThumbColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(113)))), ((int)(((byte)(255)))));
-            this.volume.ValueChanged += new System.EventHandler(this.volume_ValueChanged);
+            this.volume.ValueChanged += new System.EventHandler(this.Volume_ValueChanged);
             // 
             // label11
             // 
@@ -798,7 +798,7 @@
             this.addNewMoqrea.TabIndex = 50;
             this.addNewMoqrea.Text = "إضافة شيخ جديد";
             this.addNewMoqrea.UseVisualStyleBackColor = true;
-            this.addNewMoqrea.Click += new System.EventHandler(this.addNewMoqrea_Click);
+            this.addNewMoqrea.Click += new System.EventHandler(this.AddNewMoqrea_Click);
             // 
             // addShaykhInfo
             // 
@@ -815,7 +815,7 @@
             this.addShaykhInfo.Size = new System.Drawing.Size(32, 32);
             this.addShaykhInfo.TabIndex = 62;
             this.addShaykhInfo.Text = "!";
-            this.addShaykhInfo.Click += new System.EventHandler(this.addShaykhInfo_Click);
+            this.addShaykhInfo.Click += new System.EventHandler(this.AddShaykhInfo_Click);
             // 
             // ShaykhDesc
             // 
@@ -882,7 +882,7 @@
             this.descSave.Text = "حفظ و تنظيف";
             this.descSave.UseVisualStyleBackColor = true;
             this.descSave.Visible = false;
-            this.descSave.Click += new System.EventHandler(this.descSave_Click);
+            this.descSave.Click += new System.EventHandler(this.DescSave_Click);
             // 
             // timestampChangeEventCheck
             // 

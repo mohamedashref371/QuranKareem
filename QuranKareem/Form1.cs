@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -18,7 +16,7 @@ namespace QuranKareem {
 
         public Form1() { InitializeComponent(); }
 
-        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace("1.0.7.0", "");
+        readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
 
         readonly QuranTexts quranTexts = QuranTexts.Instance;
         readonly QuranPictures quranPictures = QuranPictures.Instance;
@@ -149,21 +147,23 @@ namespace QuranKareem {
                 }
                 else clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
 
-                b = new Guna2Button();
-                b.FillColor = clr;
-                b.Location = new Point(fs.getNewX(5), fs.getNewY(y));
-                b.BorderRadius = 15;
+                b = new Guna2Button
+                {
+                    FillColor = clr,
+                    Location = new Point(fs.GetNewX(5), fs.GetNewY(y)),
+                    BorderRadius = 15
+                };
                 if (stringArray!=null && stringArray.Length > 2) b.ForeColor = Color.FromName(stringArray[2]);
 
                 if (audiosFolders[i]== ":line:") {
-                    b.Size = new Size(fs.getNewX(230), fs.getNewY(10));
+                    b.Size = new Size(fs.GetNewX(230), fs.GetNewY(10));
                     y -= 30;
                 }
                 else {
                     stringArray = audiosFolders[i].Split('\\');
                     b.Text = stringArray[stringArray.Length - 1];
-                    b.Font = new Font("Segoe UI", fs.getNewX(12));
-                    b.Size = new Size(fs.getNewX(230), fs.getNewY(45));
+                    b.Font = new Font("Segoe UI", fs.GetNewX(12));
+                    b.Size = new Size(fs.GetNewX(230), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
                     b.Tag = audiosFolders[i];
                     b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
@@ -370,7 +370,7 @@ namespace QuranKareem {
         private void PageRichText_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
-            quranTexts.setCursor();
+            quranTexts.SetCursor();
             Surah.Value = quranTexts.Surah;
             Surahs.SelectedIndex = (int)Surah.Value - 1;
             Quarter.Value = quranTexts.Quarter;
@@ -420,7 +420,7 @@ namespace QuranKareem {
         private void QuranPic_Click(object sender, EventArgs e) {
             if (!allow) { return; }
             allow = false;
-            quranPictures.setXY(x, y, quranPic.Width, quranPic.Height);
+            quranPictures.SetXY(x, y, quranPic.Width, quranPic.Height);
             Surah.Value = quranPictures.Surah;
             Surahs.SelectedIndex = (int)Surah.Value - 1;
             Quarter.Value = quranPictures.Quarter;
@@ -461,46 +461,46 @@ namespace QuranKareem {
             else { quranPictures.ayahColor = AyahColor.nothing; quranTexts.ayahColor = AyahColor.nothing; }
         }
 
-        private void copy_Click(object sender, EventArgs e) {
+        private void Copy_Click(object sender, EventArgs e) {
             try {
-                if (normalText.Checked) Clipboard.SetText(quranTexts.ayahAbstractText((int)Surah.Value, (int)Ayah.Value));
-                else Clipboard.SetText(quranTexts.ayahText((int)Surah.Value, (int)Ayah.Value));
+                if (normalText.Checked) Clipboard.SetText(quranTexts.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
+                else Clipboard.SetText(quranTexts.AyahText((int)Surah.Value, (int)Ayah.Value));
             } catch { }
         }
 
-        private void tafseerCopy_Click(object sender, EventArgs e) {
+        private void TafseerCopy_Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
+                Clipboard.SetText(quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
             } catch { }
         }
 
-        private void tafasir_SelectedIndexChanged(object sender, EventArgs e) {
+        private void Tafasir_SelectedIndexChanged(object sender, EventArgs e) {
             Tafseer = tafasir.Text;
             quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
         }
 
-        private void saveRTF_Click(object sender, EventArgs e) {
+        private void SaveRTF_Click(object sender, EventArgs e) {
             saveRichText.FileName = $"Tafseer Surah {Surah.Value} Ayah {Ayah.Value}";
-            rtb.Text = quranTafasir.ayahTafseerText((int)Surah.Value, (int)Ayah.Value);
+            rtb.Text = quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value);
             if (rtb.Text!="" && saveRichText.ShowDialog() == DialogResult.OK)
                 rtb.SaveFile(saveRichText.FileName);
         }
 
-        private void search_Click(object sender, EventArgs e) {
+        private void Search_Click(object sender, EventArgs e) {
             searchList.Items.Clear();
             searchList.Items.AddRange(quranTexts.Search(searchText.Text));
             searchList.Visible = true;
             searchClose.Visible = true;
         }
 
-        private void searchList_SelectedIndexChanged(object sender, EventArgs e) {
+        private void SearchList_SelectedIndexChanged(object sender, EventArgs e) {
             int[] sura_aya = quranTexts.SelectedSearchIndex(searchList.SelectedIndex);
             if (sura_aya == null) return;
             Surah.Value = sura_aya[0];
             Ayah.Value = sura_aya[1]>= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
         }
 
-        private void searchClose_Click(object sender, EventArgs e) {
+        private void SearchClose_Click(object sender, EventArgs e) {
             searchList.Visible = false;
             searchClose.Visible = false;
         }
@@ -519,29 +519,29 @@ namespace QuranKareem {
 
         private void Rate_ValueChanged(object sender, EventArgs e) { quranAudios.Rate((double)Rate.Value); }
 
-        private void volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
+        private void Volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
 
-        private void exitForm_Click(object sender, EventArgs e) { Close(); }
+        private void ExitForm_Click(object sender, EventArgs e) { Close(); }
 
-        private void minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
+        private void Minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
-        private void latest_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://www.mediafire.com/folder/fwzq0xlpp9oys"); }
+        private void Latest_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://www.mediafire.com/folder/fwzq0xlpp9oys"); }
 
-        private void about_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317"); }
+        private void About_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317"); }
 
 
 
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
-            int[] ayat = quranAudios.getTimestamps(sura);
-            string[] ayatS = quranTexts.surahAbstractTexts(sura, 5, true);
+            int[] ayat = quranAudios.GetTimestamps(sura);
+            string[] ayatS = quranTexts.SurahAbstractTexts(sura, 5, true);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;
-            Font font = new Font("Tahoma", fs.getNewX(13));
-            Size labelSize = new Size(fs.getNewX(257), fs.getNewY(33));
-            Size numSize = new Size(fs.getNewX(120), fs.getNewY(24));
-            Size btnSize = new Size(fs.getNewX(31), fs.getNewY(23));
+            Font font = new Font("Tahoma", fs.GetNewX(13));
+            Size labelSize = new Size(fs.GetNewX(257), fs.GetNewY(33));
+            Size numSize = new Size(fs.GetNewX(120), fs.GetNewY(24));
+            Size btnSize = new Size(fs.GetNewX(31), fs.GetNewY(23));
             Color clr = Color.FromArgb(255, 204, 172);
 
             int y = 28;
@@ -551,58 +551,66 @@ namespace QuranKareem {
                 else if (i == 0) k = -1;
                 else k = i;
 
-                label = new Label();
-                label.Font = font;
-                label.Location = new Point(fs.getNewX(3), fs.getNewY(y));
-                label.RightToLeft = RightToLeft.Yes;
-                /*label.AutoSize=true; */ label.Size = labelSize;
-                label.TextAlign = ContentAlignment.MiddleCenter;
-                label.Tag = k;
+                label = new Label
+                {
+                    Font = font,
+                    Location = new Point(fs.GetNewX(3), fs.GetNewY(y)),
+                    RightToLeft = RightToLeft.Yes,
+                    Size = labelSize,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Tag = k
+                };
                 if (i != 0) label.Text = ayatS[i];
                 else label.Text = "الإستعاذة";
-                label.Click += label_Click;
+                label.Click += Label_Click;
                 panel.Controls.Add(label);
 
-                num = new NumericUpDown();
-                num.BackColor = clr;
-                num.BorderStyle = BorderStyle.None;
-                num.DecimalPlaces = 3;
-                num.Font = font;
-                num.Location = new Point(fs.getNewX(35), fs.getNewY(y+37));
-                num.Size = numSize;
-                num.Tag = k;
-                num.TextAlign = HorizontalAlignment.Center;
-                num.Maximum = 99999;
-                num.Increment = 0.1M;
-                num.Value = ayat[i] / 1000M;
+                num = new NumericUpDown
+                {
+                    BackColor = clr,
+                    BorderStyle = BorderStyle.None,
+                    DecimalPlaces = 3,
+                    Font = font,
+                    Location = new Point(fs.GetNewX(35), fs.GetNewY(y + 37)),
+                    Size = numSize,
+                    Tag = k,
+                    TextAlign = HorizontalAlignment.Center,
+                    Maximum = 99999,
+                    Increment = 0.1M,
+                    Value = ayat[i] / 1000M
+                };
                 num.ValueChanged+= Timestamp_ValueChanged;
                 panel.Controls.Add(num);
 
-                btn = new Button();
-                btn.FlatStyle = FlatStyle.Flat;
-                btn.Size = btnSize;
-                btn.Tag = i*3+1;
-                btn.Location = new Point(fs.getNewX(165), fs.getNewY(y + 37));
-                btn.ForeColor = Color.Red;
-                btn.Text = "O";
+                btn = new Button
+                {
+                    FlatStyle = FlatStyle.Flat,
+                    Size = btnSize,
+                    Tag = i * 3 + 1,
+                    Location = new Point(fs.GetNewX(165), fs.GetNewY(y + 37)),
+                    ForeColor = Color.Red,
+                    Text = "O"
+                };
                 btn.Click += Timestamp_record;
                 panel.Controls.Add(btn);
 
                 y += 86;
             }
 
-            btn = new Button();
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.Size = btnSize;
-            btn.Tag = ayat.Length * 3 -2;
-            btn.Location = new Point(fs.getNewX(200), fs.getNewY(y - 49));
-            btn.ForeColor = Color.Blue;
-            btn.Text = "O";
+            btn = new Button
+            {
+                FlatStyle = FlatStyle.Flat,
+                Size = btnSize,
+                Tag = ayat.Length * 3 - 2,
+                Location = new Point(fs.GetNewX(200), fs.GetNewY(y - 49)),
+                ForeColor = Color.Blue,
+                Text = "O"
+            };
             btn.Click += Mp3Duration_record;
             panel.Controls.Add(btn);
         }
 
-        void label_Click(object sender, EventArgs e){
+        void Label_Click(object sender, EventArgs e){
             if ((int)((Label)sender).Tag >= 0) Ayah.Value = (int)((Label)sender).Tag;
             else Ayah.Value = 0;
         }
@@ -629,7 +637,7 @@ namespace QuranKareem {
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
-        private void addNewMoqrea_Click(object sender, EventArgs e) {
+        private void AddNewMoqrea_Click(object sender, EventArgs e) {
             if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
@@ -645,13 +653,13 @@ namespace QuranKareem {
             }
         }
 
-        private void addShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها"); }
+        private void AddShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها"); }
 
-        private void descSave_Click(object sender, EventArgs e) { quranAudios.setDescription(extension.Text, comment.Text); }
+        private void DescSave_Click(object sender, EventArgs e) { quranAudios.SetDescription(extension.Text, comment.Text); }
 
         private void ShaykhDesc_(object sender, EventArgs e) {
             if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled==true) {
-                string[] desc = quranAudios.getDescription();
+                string[] desc = quranAudios.GetDescription();
                 if (desc == null) return;
                 ShaykhDesc.Text = "إلغاء";
                 lTafseer.Visible = false;

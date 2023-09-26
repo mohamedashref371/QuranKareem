@@ -10,8 +10,7 @@ namespace QuranKareem
 {
     class FormSize
     {
-        
-        private double xDiv,yDiv;
+        private readonly double xDiv, yDiv;
 
         public FormSize(int oldSizeX, int oldSizeY, int newSizeX, int newSizeY)
         {
@@ -31,12 +30,12 @@ namespace QuranKareem
             foreach (Control control in controls) SetControl(control);
         }
 
-        public int getNewX(int x)
+        public int GetNewX(int x)
         {
             return Round(x * xDiv);
         }
 
-        public int getNewY(int y)
+        public int GetNewY(int y)
         {
             return Round(y * yDiv);
         }

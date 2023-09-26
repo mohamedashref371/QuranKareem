@@ -12,9 +12,9 @@ namespace QuranKareem
     class QuranAudios
     {
         private string path; // المسار
-        private SQLiteConnection quran; // SQLiteConnection
+        private readonly SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranAudio ? :(
-        SQLiteCommand command;
+        readonly SQLiteCommand command;
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
@@ -33,8 +33,8 @@ namespace QuranKareem
 
         public int CurrentPosition { get; private set; }
 
-        private Timer timer = new Timer(); private bool ok = true;
-        private AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
+        private readonly Timer timer = new Timer(); private bool ok = true;
+        private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
         private bool added = false;
         public void AddInControls(Control.ControlCollection Controls) {
@@ -50,7 +50,7 @@ namespace QuranKareem
         public bool CapturedAudio = false;
 
         private QuranAudios() {
-            timer.Tick += timer_Tick;
+            timer.Tick += Timer_Tick;
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
         }
@@ -232,7 +232,7 @@ namespace QuranKareem
             mp3.settings.volume = i;
         }
 
-        void timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
+        void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
 
         public void AddEventHandler(EventHandler eh) { timer.Tick += eh; }
 
@@ -280,7 +280,7 @@ namespace QuranKareem
 
         }
         
-        public int getTimestamp( int sura , int aya) {
+        public int GetTimestamp( int sura , int aya) {
             if (!success) return 0;
             int temp;
             quran.Open();
@@ -294,7 +294,7 @@ namespace QuranKareem
             return temp;
         }
 
-        public int[] getTimestamps(int sura){
+        public int[] GetTimestamps(int sura){
             if (!success) return null;
             List<int> list = new List<int>();
             quran.Open();
@@ -326,7 +326,7 @@ namespace QuranKareem
             if (aya == AyatCount && timestampTo!=0) surah(sura, timestampTo);
         }
 
-        public void setDescription(string extension, string comment) {
+        public void SetDescription(string extension, string comment) {
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE description SET extension='{extension}'; UPDATE description SET comment='{comment}'; VACUUM;";
@@ -335,7 +335,7 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public string[] getDescription() {
+        public string[] GetDescription() {
             if (!success) return null;
             string[] desc = new string[2];
             quran.Open();
