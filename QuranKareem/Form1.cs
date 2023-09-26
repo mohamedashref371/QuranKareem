@@ -125,7 +125,7 @@ namespace QuranKareem {
                 audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace(newLine,"*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
-                    if (Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
+                    if (audiosFolders[i].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
                     else if (Directory.Exists(stringArray[0]) || stringArray[0] == ":line:") { }
                     else audiosFolders[i]="";
                 }
@@ -137,7 +137,7 @@ namespace QuranKareem {
             int y = -45;
             Color clr; Random rand = new Random();
             for (int i = 0; i < audiosFolders.Count; i++) {
-                if (audiosFolders[i].Trim() == "" || audiosFolders[i].Trim() == "audios\\") continue;
+                if (audiosFolders[i].Trim() == "") continue;
                 stringArray = null;
                 y += 50;
                 if (audiosFolders[i].Contains('|')) {
