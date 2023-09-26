@@ -120,24 +120,42 @@ namespace QuranKareem {
         // اضافة ازرار المشايخ
         void AddMashaykhButtons() {
             List<string> audiosFolders = new List<string>();
-            
+            bool distinct=false;
             if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
                 audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace(newLine,"*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
                     if (audiosFolders[i].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
-                    else if (Directory.Exists(stringArray[0]) || stringArray[0] == ":line:") { }
+                    else if (Directory.Exists(stringArray[0]) || stringArray[0].Trim() == ":line:") { }
+                    else if (stringArray[0].Trim() == ":distinct:") { distinct = true; }
                     else audiosFolders[i]="";
                 }
             }
-
             panel.Controls.Clear();
             try { audiosFolders.AddRange(Directory.GetDirectories("audios").ToList()); } catch { } // البحث في مجلد الصوتيات
+
+            try {
+                if (distinct) /* كود غير محترف */ {
+                    string[] stringArray2;
+                    for (int i = 0; i < audiosFolders.Count; i++) {
+                        stringArray = audiosFolders[i].Split('|');
+                        if (stringArray[0].Trim() == "" || stringArray[0].Contains(":")) continue;
+                        stringArray[0] = Path.GetFullPath(stringArray[0]);
+                        for (int j = i + 1; j < audiosFolders.Count; j++) {
+                            stringArray2 = audiosFolders[j].Split('|');
+                            if (stringArray2[0].Trim() == "" || stringArray2[0].Contains(":")) continue;
+                            stringArray2[0] = Path.GetFullPath(stringArray2[0]);
+                            if (stringArray[0] == stringArray2[0]) audiosFolders[j] = "";
+                        }
+                    }
+                }
+            } catch { }
+            
             Guna2Button b;
             int y = -45;
             Color clr; Random rand = new Random();
             for (int i = 0; i < audiosFolders.Count; i++) {
-                if (audiosFolders[i].Trim() == "") continue;
+                if (audiosFolders[i].Trim() == "" || audiosFolders[i].Trim()== ":distinct:") continue;
                 stringArray = null;
                 y += 50;
                 if (audiosFolders[i].Contains('|')) {

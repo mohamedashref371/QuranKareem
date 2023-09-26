@@ -58,7 +58,9 @@ namespace QuranKareem
         public void QuranAudio(string path, int sura = 1, int aya = 0) {
             if (!added || path == null || path.Trim().Length == 0) return;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
-            path = Path.GetFullPath(path);
+
+            try { path = Path.GetFullPath(path); } catch { return; }
+
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
 
             this.path = path; success = false;
