@@ -1,4 +1,4 @@
-﻿directory-path|color-name
+﻿directory-path|backcolor-name|forecolor-name
 محمد صديق المنشاوي
 محمود خليل الحصري
 مشاري العفاسي
