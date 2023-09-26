@@ -155,7 +155,7 @@ namespace QuranKareem {
             int y = -45;
             Color clr; Random rand = new Random();
             for (int i = 0; i < audiosFolders.Count; i++) {
-                if (audiosFolders[i].Trim() == "" || audiosFolders[i].Trim()== ":distinct:") continue;
+                if (audiosFolders[i].Trim() == "" || audiosFolders[i].Contains(":") && !audiosFolders[i].Contains(":line:")) continue;
                 stringArray = null;
                 y += 50;
                 if (audiosFolders[i].Contains('|')) {
@@ -173,7 +173,7 @@ namespace QuranKareem {
                 };
                 if (stringArray!=null && stringArray.Length > 2) b.ForeColor = Color.FromName(stringArray[2]);
 
-                if (audiosFolders[i]== ":line:") {
+                if (audiosFolders[i].Trim() == ":line:") {
                     b.Size = new Size(fs.GetNewX(230), fs.GetNewY(10));
                     y -= 30;
                 }
