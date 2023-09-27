@@ -126,7 +126,7 @@ namespace QuranKareem {
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
                     if (stringArray[0].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
-                    else if (Directory.Exists(stringArray[0]) || stringArray[0].Trim() == ":line:") { }
+                    else if (Directory.Exists(stringArray[0]) || stringArray[0].Trim() == ":line:" || stringArray[0].Trim() == ":space:") { }
                     else if (stringArray[0].Trim() == ":distinct:") { audiosFolders[i] = ""; distinct = true; }
                     else audiosFolders[i]="";
                 }
@@ -153,8 +153,9 @@ namespace QuranKareem {
             Color clr; Random rand = new Random();
             for (int i = 0; i < audiosFolders.Count; i++) {
                 if (audiosFolders[i].Trim() == "") continue;
-                y += 50;
                 stringArray = audiosFolders[i].Split('|');
+                if (stringArray[0].Trim() == ":space:") { y += 5; continue; }
+                y += 50;
                 if (stringArray.Length > 1 && stringArray[1].Trim() != "") clr = Color.FromName(stringArray[1].Trim());
                 else clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
                 audiosFolders[i] = stringArray[0];
@@ -168,7 +169,7 @@ namespace QuranKareem {
                 if (stringArray != null && stringArray.Length > 3 && stringArray[3].Trim() != "") b.Text = stringArray[3];
                 if (audiosFolders[i].Trim() == ":line:") {
                     b.Size = new Size(fs.GetNewX(230), fs.GetNewY(10));
-                    y -= 30;
+                    y -= 35;
                 }
                 else {
                     if (b.Text=="") b.Text = audiosFolders[i].Trim('\\', '/').Split('\\').Last();
