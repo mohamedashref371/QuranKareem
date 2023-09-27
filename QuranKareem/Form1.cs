@@ -586,6 +586,7 @@ namespace QuranKareem {
                     Size = numSize,
                     Tag = k,
                     TextAlign = HorizontalAlignment.Center,
+                    Minimum = -99999,
                     Maximum = 99999,
                     Increment = 0.1M,
                     Value = ayat[i] / 1000M
@@ -664,7 +665,7 @@ namespace QuranKareem {
             }
         }
 
-        private void AddShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها"); }
+        private void AddShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show($"هذه التوقيتات هي لنهاية الآيات وليس بدايتها{newLine}لو اخترت قيمة سالبة في آية فمعناها أن الآية ملغية ولكن التوقيت بالموجب للآية التي تليها"); }
 
         private void DescSave_Click(object sender, EventArgs e) { quranAudios.SetDescription(extension.Text, comment.Text); }
 
