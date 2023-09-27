@@ -1,8 +1,0 @@
-﻿directory-path|backcolor-name|forecolor-name|text
-محمد صديق المنشاوي
-محمود خليل الحصري
-مشاري العفاسي
-ياسر الدوسري
-:line:|black
-:space: * :space: * :space:
-:distinct:
