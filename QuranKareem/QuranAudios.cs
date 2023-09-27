@@ -192,11 +192,11 @@ namespace QuranKareem
          bool Check(int surah) {
             if (!CaptureAudio(surah)) return false;
             //quran.Open();
-            command.CommandText = $"SELECT id,duration FROM surahs WHERE id={surah}";
+            command.CommandText = $"SELECT duration FROM surahs WHERE id={surah}";
             reader = command.ExecuteReader();
             reader.Read();
-            if (reader.IsDBNull(1)) { /*quran.Close();*/ return false; }
-            int i = reader.GetInt32(1);
+            if (reader.IsDBNull(0)) { /*quran.Close();*/ return false; }
+            int i = reader.GetInt32(0);
             reader.Close();
             command.Cancel();
             //quran.Close();
@@ -204,17 +204,26 @@ namespace QuranKareem
             return false;
         }
 
-        bool CaptureAudio(int surah){
-            string s = surah + "";
+        bool CaptureAudio(int sura){
+            string s = sura + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += extension;
-
+            bool hold=true;
             if (File.Exists(path + s)) mp3.URL = path + s;
-            else if (File.Exists(path + surah + extension)) mp3.URL = path + surah + extension;
-            else return false;
+            else if (File.Exists(path + sura + extension)) mp3.URL = path + sura + extension;
+            else {
+                hold = false;
+                string[] filesName = Directory.GetFiles(path);
+                for (int i=0; i< filesName.Length;i++) {
+                    if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0'))) {
+                        mp3.URL = filesName[i];
+                        hold = true;
+                    }
+                }
+            }
             mp3.settings.rate = rate;
-            return true;
+            return hold;
         }
 
         public void Pause() { timer.Stop(); mp3.URL=""; CapturedAudio = false; }
