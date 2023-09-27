@@ -118,7 +118,7 @@ namespace QuranKareem {
         }
 
         // اضافة ازرار المشايخ
-        void AddMashaykhButtons() {
+        void AddMashaykhButtons() /* ليست أفضل شيئ */ {
             List<string> audiosFolders = new List<string>();
             bool distinct=false;
             if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
@@ -135,13 +135,13 @@ namespace QuranKareem {
             try { audiosFolders.AddRange(Directory.GetDirectories("audios").ToList()); } catch { } // البحث في مجلد الصوتيات
 
             
-            if (distinct) /* كود غير محترف */ {
+            if (distinct) {
                 string temp,temp2;
                 for (int i = 0; i < audiosFolders.Count; i++) {
-                    temp = audiosFolders[i].Split('|').First();
+                    temp = audiosFolders[i].Split('|').First().Trim('\\', '/');
                     try { temp = Path.GetFullPath(temp); } catch { continue; }
                     for (int j = i + 1; j < audiosFolders.Count; j++) {
-                        temp2 = audiosFolders[j].Split('|').First();
+                        temp2 = audiosFolders[j].Split('|').First().Trim('\\', '/');
                         try { temp2 = Path.GetFullPath(temp2); } catch { continue; }
                         if (temp == temp2) audiosFolders[j] = "";
                     }
@@ -175,8 +175,7 @@ namespace QuranKareem {
                     y -= 30;
                 }
                 else {
-                    stringArray = audiosFolders[i].Split('\\');
-                    b.Text = stringArray[stringArray.Length - 1];
+                    b.Text = audiosFolders[i].Trim('\\', '/').Split('\\').Last();
                     b.Font = new Font("Segoe UI", fs.GetNewX(12));
                     b.Size = new Size(fs.GetNewX(230), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
