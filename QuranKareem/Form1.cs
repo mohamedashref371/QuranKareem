@@ -235,13 +235,17 @@ namespace QuranKareem {
             if (textMode) {
                 if (allow) quranTexts.surah((int)Surah.Value);
                 Ayah.Minimum = quranTexts.AyahStart;
+                isChangeMaximum = true;
                 Ayah.Maximum = quranTexts.AyatCount;
+                isChangeMaximum = false;
                 setAyah();
             }
             else {
                 if (allow) quranPictures.surah((int)Surah.Value);
                 Ayah.Minimum = quranPictures.AyahStart;
+                isChangeMaximum = true;
                 Ayah.Maximum = quranPictures.AyatCount;
+                isChangeMaximum = false;
                 setAyah();
             }
             if (addNewMoqrea.Text == "إلغاء") EditMoqreaSurah((int)Surah.Value);
@@ -302,8 +306,9 @@ namespace QuranKareem {
         }
 
         // فهرس بالآية داخل السورة
+        bool isChangeMaximum=false;
         private void Ayah_ValueChanged(object sender, EventArgs e) {
-
+            if (isChangeMaximum) return;
             if (textMode) {
                 if (allow) {
                     quranTexts.ayah((int)Surah.Value, (int)Ayah.Value);
