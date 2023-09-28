@@ -265,7 +265,8 @@ namespace QuranKareem
                 if (wordsCount >= 1 && wordsCount < words.Length)
                     if (end) tempString = string.Join(" ", words, words.Length - wordsCount, wordsCount);
                     else tempString = string.Join(" ", words, 0, wordsCount);
-                if (end && reader.GetInt32(0)>0) tempString += " " + reader.GetInt32(0);
+                tempString += " ";
+                if (reader.GetInt32(0)>0) tempString += reader.GetInt32(0);
                 lst.Add(tempString);
             }
             quran.Close();
