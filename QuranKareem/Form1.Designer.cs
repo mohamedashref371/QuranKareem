@@ -88,6 +88,7 @@
             this.comment = new System.Windows.Forms.TextBox();
             this.descSave = new System.Windows.Forms.Button();
             this.timestampChangeEventCheck = new System.Windows.Forms.CheckBox();
+            this.endAyatCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -890,7 +891,7 @@
             this.timestampChangeEventCheck.BackColor = System.Drawing.Color.Transparent;
             this.timestampChangeEventCheck.Checked = true;
             this.timestampChangeEventCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.timestampChangeEventCheck.Location = new System.Drawing.Point(837, 22);
+            this.timestampChangeEventCheck.Location = new System.Drawing.Point(837, 28);
             this.timestampChangeEventCheck.Name = "timestampChangeEventCheck";
             this.timestampChangeEventCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.timestampChangeEventCheck.Size = new System.Drawing.Size(154, 17);
@@ -899,11 +900,26 @@
             this.timestampChangeEventCheck.UseVisualStyleBackColor = false;
             this.timestampChangeEventCheck.Visible = false;
             // 
+            // endAyatCheck
+            // 
+            this.endAyatCheck.AutoSize = true;
+            this.endAyatCheck.BackColor = System.Drawing.Color.Transparent;
+            this.endAyatCheck.Location = new System.Drawing.Point(865, 11);
+            this.endAyatCheck.Name = "endAyatCheck";
+            this.endAyatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.endAyatCheck.Size = new System.Drawing.Size(108, 17);
+            this.endAyatCheck.TabIndex = 70;
+            this.endAyatCheck.Text = "وضعية نهاية الآيات";
+            this.endAyatCheck.UseVisualStyleBackColor = false;
+            this.endAyatCheck.Visible = false;
+            this.endAyatCheck.CheckedChanged += new System.EventHandler(this.endAyatCheck_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.endAyatCheck);
             this.Controls.Add(this.timestampChangeEventCheck);
             this.Controls.Add(this.descSave);
             this.Controls.Add(this.comment);
@@ -1041,6 +1057,7 @@
         private System.Windows.Forms.Label lComment;
         private System.Windows.Forms.Button descSave;
         private System.Windows.Forms.CheckBox timestampChangeEventCheck;
+        private System.Windows.Forms.CheckBox endAyatCheck;
     }
 }
 

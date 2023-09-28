@@ -466,7 +466,7 @@ namespace QuranKareem {
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
             int[] ayat = quranAudios.GetTimestamps(sura);
-            string[] ayatS = quranTexts.SurahAbstractTexts(sura, 5);
+            string[] ayatS = quranTexts.SurahAbstractTexts(sura, 5, endAyatCheck.Checked);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;
@@ -491,14 +491,17 @@ namespace QuranKareem {
                     RightToLeft = RightToLeft.Yes,
                     Size = labelSize,
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Tag = Ayah.Minimum == 0 ? i : i+1
+                    Tag = endAyatCheck.Checked ? k : Ayah.Minimum == 0 ? i : i+1
                 };
-                if (i != ayat.Length - 1) {
-                    label.Text = ayatS[i + 1];
-                    label.Click += Label_Click;
+                if (endAyatCheck.Checked) {
+                    if (i != 0) label.Text = ayatS[i];
+                    else label.Text = "الإستعاذة";
                 }
-                else label.Text = "نهاية آخر آية";
-                
+                else {
+                    if (i != ayat.Length - 1) label.Text = ayatS[i + 1];
+                    else label.Text = "نهاية آخر آية";
+                }
+                if (endAyatCheck.Checked && i != 0 || !endAyatCheck.Checked && i != ayat.Length - 1) label.Click += Label_Click;
                 panel.Controls.Add(label);
 
                 num = new NumericUpDown
@@ -578,6 +581,7 @@ namespace QuranKareem {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
                 timestampChangeEventCheck.Visible = true;
+                endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
             }
@@ -585,11 +589,17 @@ namespace QuranKareem {
                 AddMashaykhButtons();
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
                 timestampChangeEventCheck.Visible = false;
+                endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
             }
         }
 
-        private void AddShaykhInfo_Click(object sender, EventArgs e) { MessageBox.Show($"هذه التوقيتات هي لبداية الآيات إلا آخر توقيت{newLine}لو اخترت قيمة سالبة في آية فمعناها أن الآية ملغية ولكن التوقيت بالموجب للآية التي تليها"); }
+        private void endAyatCheck_CheckedChanged(object sender, EventArgs e) { EditMoqreaSurah((int)Surah.Value); }
+
+        private void AddShaykhInfo_Click(object sender, EventArgs e) {
+            if (endAyatCheck.Checked) MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها");
+            else MessageBox.Show($"هذه التوقيتات هي لبداية الآيات إلا آخر توقيت");
+        }
 
         private void DescSave_Click(object sender, EventArgs e) { quranAudios.SetDescription(extension.Text, comment.Text); }
 
