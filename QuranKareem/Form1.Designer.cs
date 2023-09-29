@@ -912,7 +912,7 @@
             this.endAyatCheck.Text = "وضعية نهاية الآيات";
             this.endAyatCheck.UseVisualStyleBackColor = false;
             this.endAyatCheck.Visible = false;
-            this.endAyatCheck.CheckedChanged += new System.EventHandler(this.endAyatCheck_CheckedChanged);
+            this.endAyatCheck.CheckedChanged += new System.EventHandler(this.EndAyatCheck_CheckedChanged);
             // 
             // Form1
             // 

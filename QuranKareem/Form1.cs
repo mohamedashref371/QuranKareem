@@ -233,20 +233,20 @@ namespace QuranKareem {
             Surahs.SelectedIndex = (int)Surah.Value - 1;
             
             if (textMode) {
-                if (allow) quranTexts.surah((int)Surah.Value);
+                if (allow) quranTexts.Surah((int)Surah.Value);
                 Ayah.Minimum = quranTexts.AyahStart;
                 isChangeMaximum = true;
                 Ayah.Maximum = quranTexts.AyatCount;
                 isChangeMaximum = false;
-                setAyah();
+                SetAyah();
             }
             else {
-                if (allow) quranPictures.surah((int)Surah.Value);
+                if (allow) quranPictures.Surah((int)Surah.Value);
                 Ayah.Minimum = quranPictures.AyahStart;
                 isChangeMaximum = true;
                 Ayah.Maximum = quranPictures.AyatCount;
                 isChangeMaximum = false;
-                setAyah();
+                SetAyah();
             }
             if (addNewMoqrea.Text == "إلغاء") EditMoqreaSurah((int)Surah.Value);
         }
@@ -269,38 +269,38 @@ namespace QuranKareem {
             allowJuz = true;
 
             if (textMode && allow) {
-                quranTexts.quarter((int)Quarter.Value);
-                setAyah();
+                quranTexts.Quarter((int)Quarter.Value);
+                SetAyah();
             }
             else if (allow) {
-                quranPictures.quarter((int)Quarter.Value);
-                setAyah();
+                quranPictures.Quarter((int)Quarter.Value);
+                SetAyah();
             }
         }
 
         private void Page_ValueChanged(object sender, EventArgs e) /* فهرس بالصفحات */ {
 
             if (textMode && allow) {
-                quranTexts.page((int)Page.Value);
-                setAyah();
+                quranTexts.Page((int)Page.Value);
+                SetAyah();
             }
             else if (allow) {
-                quranPictures.page((int)Page.Value);
-                setAyah();
+                quranPictures.Page((int)Page.Value);
+                SetAyah();
             }
         }
 
-        void setAyah() {
+        void SetAyah() {
             allow = false;
             if (textMode) {
-                Surah.Value = quranPictures.Surah;
-                if (Ayah.Value == quranTexts.Ayah) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranTexts.Ayah;
+                Surah.Value = quranPictures.SurahNumber;
+                if (Ayah.Value == quranTexts.AyahNumber) Ayah_ValueChanged(null, null);
+                else Ayah.Value = quranTexts.AyahNumber;
             }
             else {
-                Surah.Value = quranPictures.Surah;
-                if (Ayah.Value == quranPictures.Ayah) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranPictures.Ayah;
+                Surah.Value = quranPictures.SurahNumber;
+                if (Ayah.Value == quranPictures.AyahNumber) Ayah_ValueChanged(null, null);
+                else Ayah.Value = quranPictures.AyahNumber;
             }
             allow = true;
         }
@@ -311,23 +311,23 @@ namespace QuranKareem {
             if (isChangeMaximum) return;
             if (textMode) {
                 if (allow) {
-                    quranTexts.ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranTexts.Ayah((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
-                Quarter.Value = quranTexts.Quarter;
-                Page.Value = quranTexts.Page;
+                Quarter.Value = quranTexts.QuarterNumber;
+                Page.Value = quranTexts.PageNumber;
             }
             else {
                 if (allow) {
-                    quranPictures.ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranPictures.Ayah((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
-                Quarter.Value = quranPictures.Quarter;
-                Page.Value = quranPictures.Page;
+                Quarter.Value = quranPictures.QuarterNumber;
+                Page.Value = quranPictures.PageNumber;
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
 
-            if (isAllow) quranAudios.ayah(quranPictures.Surah, quranPictures.Ayah);
+            if (isAllow) quranAudios.ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
             CurrentPosition();
             allow = true;
         }
@@ -337,12 +337,12 @@ namespace QuranKareem {
         private void Audio_(object sender, EventArgs e) {
             isAllow = false;
             if (textMode && allow) {
-                quranTexts.ayah(quranAudios.Surah, quranAudios.Ayah);
-                setAyah();
+                quranTexts.Ayah(quranAudios.SurahNumber, quranAudios.AyahNumber);
+                SetAyah();
             }
             else if (allow) {
-                quranPictures.ayah(quranAudios.Surah, quranAudios.Ayah);
-                setAyah();
+                quranPictures.Ayah(quranAudios.SurahNumber, quranAudios.AyahNumber);
+                SetAyah();
             }
             isAllow = true;
         }
@@ -352,7 +352,7 @@ namespace QuranKareem {
         private void QuranPic_Click(object sender, EventArgs e) {
             if (allow) {
                 quranPictures.SetXY(x, y, quranPic.Width, quranPic.Height);
-                setAyah();
+                SetAyah();
             }
         }
 
@@ -361,7 +361,7 @@ namespace QuranKareem {
         private void PageRichText_Click(object sender, EventArgs e) {
             if (allow) {
                 quranTexts.SetCursor();
-                setAyah();
+                SetAyah();
             }
         }
 
@@ -594,7 +594,7 @@ namespace QuranKareem {
             }
         }
 
-        private void endAyatCheck_CheckedChanged(object sender, EventArgs e) { EditMoqreaSurah((int)Surah.Value); }
+        private void EndAyatCheck_CheckedChanged(object sender, EventArgs e) { EditMoqreaSurah((int)Surah.Value); }
 
         private void AddShaykhInfo_Click(object sender, EventArgs e) {
             if (endAyatCheck.Checked) MessageBox.Show("هذه التوقيتات هي لنهاية الآيات وليس بدايتها");

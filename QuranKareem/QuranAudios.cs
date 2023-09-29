@@ -4,7 +4,6 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuranKareem
@@ -27,8 +26,8 @@ namespace QuranKareem
         public int From { get; private set; }
         public int To { get; private set; }
 
-        public int Surah { get; private set; }
-        public int Ayah { get; private set; }
+        public int SurahNumber { get; private set; }
+        public int AyahNumber { get; private set; }
         public int AyatCount { get; private set; }
 
         public int CurrentPosition { get; private set; }
@@ -65,7 +64,7 @@ namespace QuranKareem
 
             this.path = path; success = false;
 
-            Surah = 0;
+            SurahNumber = 0;
             timer.Stop(); ok = true;
 
             try {
@@ -97,20 +96,28 @@ namespace QuranKareem
 
         public void AyahPlus() {
             if (!success) return;
-            if (AyahRepeatCounter < AyahRepeat - 1 && Ayah != 0) { AyahRepeatCounter += 1; ok = true; ayah(Surah, Ayah); }
-            else if (Ayah == AyatCount && SurahRepeatCounter < SurahRepeat - 1) { SurahRepeatCounter += 1; ok = true; ayah(Surah, 0); }
+            if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0) { 
+                AyahRepeatCounter += 1;
+                ok = true; 
+                ayah(SurahNumber, AyahNumber);
+            }
+            else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1) { 
+                SurahRepeatCounter += 1;
+                ok = true;
+                ayah(SurahNumber, 0);
+            }
             else
             {
                 AyahRepeatCounter = 0;
-                if (Ayah == AyatCount && Surah < surahsCount) ayah(Surah + 1, 0);
-                else if (Ayah == AyatCount) surah(1);
-                else ayah(Surah, Ayah + 1);
+                if (AyahNumber == AyatCount && SurahNumber < surahsCount) ayah(SurahNumber + 1, 0);
+                else if (AyahNumber == AyatCount) surah(1);
+                else ayah(SurahNumber, AyahNumber + 1);
             }
 
         }
 
-        public void ayah() { ayah(Surah, Ayah); }
-        public void ayah(int aya) { ayah(Surah, aya); }
+        public void ayah() { ayah(SurahNumber, AyahNumber); }
+        public void ayah(int aya) { ayah(SurahNumber, aya); }
 
         public void ayah(int sura, int aya) {
             timer.Stop();
@@ -124,7 +131,7 @@ namespace QuranKareem
             else aya = Math.Abs(aya);
 
             quran.Open();
-            if (sura != Surah || !CapturedAudio || mp3.Ctlcontrols.currentPosition==0) {
+            if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition==0) {
                 // /*if(!*/ Check(sura); /*) return;*/
 
                 if (!CaptureAudio(sura)) { 
@@ -138,7 +145,7 @@ namespace QuranKareem
                 command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
                 reader.Read();
-                Surah = sura;
+                SurahNumber = sura;
                 AyatCount = reader.GetInt32(2);
                 reader.Close();
                 command.Cancel();
@@ -169,7 +176,7 @@ namespace QuranKareem
             From = Math.Abs(reader.GetInt32(3));
             reader.Close();
             command.Cancel();
-            Ayah = aya;
+            AyahNumber = aya;
 
             if (To <= 0 && aya > 0) { 
                 quran.Close();
@@ -235,7 +242,7 @@ namespace QuranKareem
             else if (i < 0.6) rate = 0.6;
             else rate=i;
             mp3.settings.rate = rate;
-            ayah(Surah, Ayah);
+            ayah(SurahNumber, AyahNumber);
         }
 
         public void Volume(int i) {
