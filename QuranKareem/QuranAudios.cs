@@ -18,7 +18,7 @@ namespace QuranKareem
 
         private int surahsCount;
         private string extension; // example: .mp3
-        private string comment;
+        public string Comment { get; private set; }
 
         private int ayahId;
 
@@ -82,44 +82,44 @@ namespace QuranKareem
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 extension = reader.GetString(4);
-                comment = reader.GetString(5);
+                Comment = reader.GetString(5);
                 reader.Close();
                 command.Cancel();
                 quran.Close();
                 success = true;
 
-                ayah(sura, aya);
+                Ayah(sura, aya);
             } catch {}
         }
 
-        public void surah(int i) { ayah(i, 0); }
+        public void Surah(int i) { Ayah(i, 0); }
 
         public void AyahPlus() {
             if (!success) return;
             if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0) { 
                 AyahRepeatCounter += 1;
                 ok = true; 
-                ayah(SurahNumber, AyahNumber);
+                Ayah(SurahNumber, AyahNumber);
             }
             else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1) { 
                 SurahRepeatCounter += 1;
                 ok = true;
-                ayah(SurahNumber, 0);
+                Ayah(SurahNumber, 0);
             }
             else
             {
                 AyahRepeatCounter = 0;
-                if (AyahNumber == AyatCount && SurahNumber < surahsCount) ayah(SurahNumber + 1, 0);
-                else if (AyahNumber == AyatCount) surah(1);
-                else ayah(SurahNumber, AyahNumber + 1);
+                if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
+                else if (AyahNumber == AyatCount) Surah(1);
+                else Ayah(SurahNumber, AyahNumber + 1);
             }
 
         }
 
-        public void ayah() { ayah(SurahNumber, AyahNumber); }
-        public void ayah(int aya) { ayah(SurahNumber, aya); }
+        public void Ayah() { Ayah(SurahNumber, AyahNumber); }
+        public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
-        public void ayah(int sura, int aya) {
+        public void Ayah(int sura, int aya) {
             timer.Stop();
             if (!success) return;
 
@@ -242,7 +242,7 @@ namespace QuranKareem
             else if (i < 0.6) rate = 0.6;
             else rate=i;
             mp3.settings.rate = rate;
-            ayah(SurahNumber, AyahNumber);
+            Ayah(SurahNumber, AyahNumber);
         }
 
         public void Volume(int i) {
@@ -289,7 +289,7 @@ namespace QuranKareem
                 Narration = reader.GetInt32(2);
                 surahsCount = reader.GetInt32(3);
                 extension = reader.GetString(4);
-                comment = reader.GetString(5);
+                Comment = reader.GetString(5);
                 reader.Close();
                 command.Cancel();
                 quran.Close();
@@ -326,7 +326,7 @@ namespace QuranKareem
             return list.ToArray();
         }
 
-        public void surah(int sura, int duration){
+        public void Surah(int sura, int duration){
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE surahs SET duration={duration} WHERE id={sura}";
@@ -335,14 +335,14 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public void ayah(int sura, int aya, int timestampTo) {
+        public void Ayah(int sura, int aya, int timestampTo) {
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}";
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
-            if (aya == AyatCount && timestampTo!=0) surah(sura, timestampTo);
+            if (aya == AyatCount && timestampTo!=0) Surah(sura, timestampTo);
         }
 
         public void SetDescription(string extension, string comment) {

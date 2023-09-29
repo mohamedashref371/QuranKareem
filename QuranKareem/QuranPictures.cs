@@ -169,7 +169,7 @@ namespace QuranKareem
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
                 linesHelp = reader.GetString(2);
-                picture(PageNumber);
+                PictureAt(PageNumber);
             }
             
             Picture = (Bitmap)oPic.Clone();
@@ -202,7 +202,7 @@ namespace QuranKareem
             
         }
 
-        private void picture(int i) { // الصورة الحالية
+        private void PictureAt(int i) { // الصورة الحالية
             string s = i+"";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;

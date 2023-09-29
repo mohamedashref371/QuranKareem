@@ -51,7 +51,7 @@ namespace QuranKareem {
             else if (textsFiles != null && textsFiles.Length > 0) {
                 textMode = true; // التبديل إلى RichTextBox
                 quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
-                quranTexts.AddEventHandler(new EventHandler(PageRichText_Click)); // اضافة دالة تُنفذ عند الضغط بالماوس
+                quranTexts.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
             }
 
@@ -336,7 +336,7 @@ namespace QuranKareem {
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
 
-            if (isAllow) quranAudios.ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
+            if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
             CurrentPosition();
             allow = true;
         }
@@ -403,6 +403,7 @@ namespace QuranKareem {
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه
+        // نسخ الآية
         private void Copy_Click(object sender, EventArgs e) {
             try {
                 if (normalText.Checked) Clipboard.SetText(quranTexts.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
@@ -410,17 +411,20 @@ namespace QuranKareem {
             } catch { }
         }
 
+        // نسخ تفسير الآية
         private void TafseerCopy_Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
             } catch { }
         }
 
+        // إختيار كتاب تفسير
         private void Tafasir_SelectedIndexChanged(object sender, EventArgs e) {
             Tafseer = tafasir.Text;
             quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
         }
 
+        // إنشاء تنسيق نص منسق لتفسير الآية 
         private void SaveRTF_Click(object sender, EventArgs e) {
             saveRichText.FileName = $"Tafseer Surah {Surah.Value} Ayah {Ayah.Value}";
             rtb.Text = quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value);
@@ -428,6 +432,7 @@ namespace QuranKareem {
                 rtb.SaveFile(saveRichText.FileName);
         }
 
+        // البحث بالكلمات في القرآن
         private void Search_Click(object sender, EventArgs e) {
             searchList.Items.Clear();
             searchList.Items.AddRange(quranTexts.Search(searchText.Text));
@@ -435,6 +440,7 @@ namespace QuranKareem {
             searchClose.Visible = true;
         }
 
+        // إختيار آية من قائمة البحث
         private void SearchList_SelectedIndexChanged(object sender, EventArgs e) {
             int[] sura_aya = quranTexts.SelectedSearchIndex(searchList.SelectedIndex);
             if (sura_aya == null) return;
@@ -442,6 +448,7 @@ namespace QuranKareem {
             Ayah.Value = sura_aya[1]>= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
         }
 
+        // إغلاق قائمة البحث
         private void SearchClose_Click(object sender, EventArgs e) {
             searchList.Visible = false;
             searchClose.Visible = false;
@@ -454,15 +461,18 @@ namespace QuranKareem {
             quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
         }
 
-        private void Pause_Click(object sender, EventArgs e) { quranAudios.Pause(); }
-        private void Stop_Click(object sender, EventArgs e) { quranAudios.Stop(); }
+        private void Pause_Click(object sender, EventArgs e) { quranAudios.Pause(); } // إيقاف مؤقت للصوت
+        private void Stop_Click(object sender, EventArgs e) { quranAudios.Stop(); } // إيقاف دائم للصوت
 
+        // سرعة الصوت
         private void Rate_ValueChanged(object sender, EventArgs e) { quranAudios.Rate((double)Rate.Value); }
 
+        // مستوى إرتفاع الصوت
         private void Volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
         #endregion
 
         #region إضافة شيخ جديد
+        // إضافة أدوات إضافة الشيخ الجديد
         void EditMoqreaSurah(int sura) {
             panel.Controls.Clear();
             int[] ayat = quranAudios.GetTimestamps(sura);
@@ -550,14 +560,12 @@ namespace QuranKareem {
             panel.Controls.Add(btn);
         }
 
-        void Label_Click(object sender, EventArgs e){
-            Ayah.Value = (int)((Label)sender).Tag;
-        }
+        void Label_Click(object sender, EventArgs e) { Ayah.Value = (int)((Label)sender).Tag; }
 
         int tempInt;
         void Timestamp_ValueChanged(object sender, EventArgs e) {
             tempInt = (int)((NumericUpDown)sender).Tag;
-            quranAudios.ayah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value*1000));
+            quranAudios.Ayah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value*1000));
             if (tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
                 if (Ayah.Value != tempInt + 1) Ayah.Value = tempInt + 1;
                 else Ayah_ValueChanged(sender, e);
@@ -576,6 +584,7 @@ namespace QuranKareem {
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
+        // زر تشغيل وضعية إضافة مقرئ جديد
         private void AddNewMoqrea_Click(object sender, EventArgs e) {
             if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
@@ -594,6 +603,7 @@ namespace QuranKareem {
             }
         }
 
+        // عند التفعيل سوف ترى نهاية الآيات بدل بدايتها
         private void EndAyatCheck_CheckedChanged(object sender, EventArgs e) { EditMoqreaSurah((int)Surah.Value); }
 
         private void AddShaykhInfo_Click(object sender, EventArgs e) {
@@ -601,8 +611,10 @@ namespace QuranKareem {
             else MessageBox.Show($"هذه التوقيتات هي لبداية الآيات إلا آخر توقيت");
         }
 
+        // زر تنظيف الداتابيز من الشوائب
         private void DescSave_Click(object sender, EventArgs e) { quranAudios.SetDescription(extension.Text, comment.Text); }
 
+        // إضافة وصف للشيخ
         private void ShaykhDesc_(object sender, EventArgs e) {
             if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled==true) {
                 string[] desc = quranAudios.GetDescription();

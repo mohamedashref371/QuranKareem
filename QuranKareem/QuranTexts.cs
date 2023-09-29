@@ -26,7 +26,8 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
-        string fontFile,fontName, comment;
+        public string Comment { get; private set; }
+        string fontFile,fontName;
 
         public string PageText { get; private set; }
         public string PageTextHTML { get; private set; }
@@ -68,7 +69,7 @@ namespace QuranKareem
             pagesCount = reader.GetInt32(5);
             fontFile = reader.GetString(7);
             fontName = reader.GetString(8);
-            comment = reader.GetString(9);
+            Comment = reader.GetString(9);
             success = true;
             quran.Close();
 
@@ -171,7 +172,7 @@ namespace QuranKareem
                 reader = new SQLiteCommand($"SELECT * FROM pages WHERE id={PageNumber}", quran).ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
-                pageText(PageNumber);
+                PageTextAt(PageNumber);
             }
             quran.Close();
 
@@ -203,7 +204,7 @@ namespace QuranKareem
         public static readonly string newLine = @"
 ";
         private readonly StringBuilder OriginalPageText = new StringBuilder();
-        private void pageText(int i) {
+        private void PageTextAt(int i) {
             OriginalPageText.Clear();
             finishedPosition.Clear();
             reader = new SQLiteCommand($"SELECT id,line,finished_position,text FROM ayat WHERE page={i}", quran).ExecuteReader();
