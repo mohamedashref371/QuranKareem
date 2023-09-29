@@ -177,6 +177,7 @@ namespace QuranKareem
             reader.Close();
             command.Cancel();
             AyahNumber = aya;
+            CurrentPosition = From;
 
             if (To <= 0 && aya > 0) { 
                 quran.Close();
@@ -190,7 +191,6 @@ namespace QuranKareem
             else timer.Interval = 1;
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
-            CurrentPosition = From;
             quran.Close();
             ok = true;
             timer.Start();
@@ -238,7 +238,7 @@ namespace QuranKareem
 
         double rate=1;
         public void Rate(double i =1.0) {
-            if (i > 1.4) rate = 1.4;
+            if (i > 1.5) rate = 1.5;
             else if (i < 0.6) rate = 0.6;
             else rate=i;
             mp3.settings.rate = rate;

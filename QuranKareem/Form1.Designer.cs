@@ -420,13 +420,13 @@
             this.Rate.DecimalPlaces = 3;
             this.Rate.Font = new System.Drawing.Font("Tahoma", 13F);
             this.Rate.Increment = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             196608});
             this.Rate.Location = new System.Drawing.Point(55, 365);
             this.Rate.Maximum = new decimal(new int[] {
-            14,
+            15,
             0,
             0,
             65536});
