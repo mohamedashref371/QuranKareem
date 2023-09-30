@@ -8,8 +8,10 @@ namespace QuranKareem
 {
     class QuranPictures {
         private string path; // المسار
-        private SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranPicture ? :(
+
+        private SQLiteConnection quran; // SQLite Connection
+        private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount, quartersCount, pagesCount, linesCount, width, height;
@@ -29,9 +31,14 @@ namespace QuranKareem
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
 
-        private int lineHeight; private int temp,temp1;
+        private int lineHeight; private int tempInt,tempInt2;
 
         public static QuranPictures Instance { get; private set; } = new QuranPictures();
+
+        private QuranPictures() {
+            quran = new SQLiteConnection();
+            command = new SQLiteCommand(quran);
+        }
 
         // الدالة البداية
         public void QuranPicture(string path, int sura = 1, int aya = 0){
@@ -44,11 +51,14 @@ namespace QuranKareem
 
             try {
                 if (File.Exists(path + "000.db"))
-                    quran = new SQLiteConnection("Data Source=" + path + "000.db;Version=3;"); // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
                 else
-                    quran = new SQLiteConnection("Data Source=" + path + "0.db;Version=3;"); // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;";
+
                 quran.Open();
-                reader = new SQLiteCommand($"SELECT * FROM description", quran).ExecuteReader();
+                command.CommandText = $"SELECT * FROM description";
+                reader = command.ExecuteReader();
+
                 if (!reader.HasRows) return;
                 reader.Read();
                 if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1)/*version*/ != 1) return;
@@ -63,6 +73,9 @@ namespace QuranKareem
                 background = Color.FromArgb(Convert.ToInt32(clr[3]), Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
                 extension = reader.GetString(11);
                 lineHeight = height / linesCount;
+
+                reader.Close();
+                command.Cancel();
                 quran.Close();
                 success = true;
 
@@ -74,12 +87,16 @@ namespace QuranKareem
             if (!success) return new string[]{""};
             string[] names = new string[surahsCount];
             quran.Open();
-            reader = new SQLiteCommand($"SELECT name FROM surahs", quran).ExecuteReader();
+            command.CommandText = $"SELECT name FROM surahs";
+            reader = command.ExecuteReader();
+
             int i = 0;
             while (reader.Read()) {
                 names[i] = reader.GetString(0); // عمود واحد
                 i++;
             }
+            reader.Close();
+            command.Cancel();
             quran.Close();
             return names;
         }
@@ -93,13 +110,14 @@ namespace QuranKareem
             else if (i > quartersCount) i = quartersCount;
 
             quran.Open();
-            reader = new SQLiteCommand($"SELECT * FROM quarters WHERE id={i}", quran).ExecuteReader();
-            reader.Read();
-            reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={reader.GetInt32(1)}", quran).ExecuteReader();
-            reader.Read();
-            temp = reader.GetInt32(1)/*surah*/; temp1 = reader.GetInt32(4)/*ayah*/;
+            command.CommandText = $"SELECT ayat_id_start FROM quarters WHERE id={i}";
+            reader = command.ExecuteReader();
+            if (!reader.Read()) return;
+            tempInt = reader.GetInt32(0);
+            reader.Close();
+            command.Cancel();
             quran.Close();
-            Ayah(temp, temp1); // أحاول تركيز كل المجهود على دالة واحدة
+            AyahAt(tempInt);
         }
 
         public void Page(int i) {
@@ -109,13 +127,14 @@ namespace QuranKareem
             else if (i > pagesCount) i = pagesCount;
 
             quran.Open();
-            reader = new SQLiteCommand($"SELECT * FROM pages WHERE id={i}", quran).ExecuteReader();
-            reader.Read();
-            reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={reader.GetInt32(1)}", quran).ExecuteReader();
-            reader.Read();
-            temp = reader.GetInt32(1); temp1 = reader.GetInt32(4);
+            command.CommandText = $"SELECT ayat_id_start FROM pages WHERE id={i}";
+            reader = command.ExecuteReader();
+            if (!reader.Read()) return;
+            tempInt = reader.GetInt32(0);
+            reader.Close();
+            command.Cancel();
             quran.Close();
-            Ayah(temp, temp1);
+            AyahAt(tempInt);
         }
 
         public void AyahPlus() {
@@ -123,6 +142,18 @@ namespace QuranKareem
             if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
             else if (AyahNumber == AyatCount) Surah(1);
             else Ayah(SurahNumber, AyahNumber + 1);
+        }
+
+        private void AyahAt(int id) {
+            quran.Open();
+            command.CommandText = $"SELECT surah,ayah FROM ayat WHERE id={id}";
+            reader = command.ExecuteReader();
+            reader.Read();
+            tempInt = reader.GetInt32(0)/*surah*/; tempInt2 = reader.GetInt32(1)/*ayah*/;
+            reader.Close();
+            command.Cancel();
+            quran.Close();
+            Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
         }
 
         public void Ayah() { Ayah(SurahNumber, AyahNumber); }
@@ -142,18 +173,26 @@ namespace QuranKareem
 
             quran.Open();
             if (sura != SurahNumber) {
-                reader = new SQLiteCommand($"SELECT * FROM surahs WHERE id={sura}", quran).ExecuteReader();
+                command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
+                reader = command.ExecuteReader();
                 reader.Read();
                 SurahNumber = sura;
                 Makya_Madanya = reader.GetBoolean(2);
                 AyatCount = reader.GetInt32(3);
+                reader.Close();
+                command.Cancel();
             }
             if (aya > AyatCount) aya = AyatCount;
             AyahNumber = aya;
-            reader = new SQLiteCommand($"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}", quran).ExecuteReader();
+
+            command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
+            reader = command.ExecuteReader();
             AyahStart = 0;
             if (!reader.HasRows && aya == 0) { // لا يوجد بسملة
-                reader = new SQLiteCommand($"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}", quran).ExecuteReader();
+                reader.Close();
+                command.Cancel();
+                command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
+                reader = command.ExecuteReader();
                 AyahNumber = 1;
                 AyahStart = 1;
             }
@@ -165,25 +204,34 @@ namespace QuranKareem
 
             if (PageNumber != reader.GetInt32(3)) {
                 PageNumber = reader.GetInt32(3);
-                reader = new SQLiteCommand($"SELECT * FROM pages WHERE id={PageNumber}", quran).ExecuteReader();
+                reader.Close();
+                command.Cancel();
+                command.CommandText = $"SELECT * FROM pages WHERE id={PageNumber}";
+                reader = command.ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
                 linesHelp = reader.GetString(2);
                 PictureAt(PageNumber);
             }
-            
-            Picture = (Bitmap)oPic.Clone();
+
+            reader.Close();
+            command.Cancel();
             quran.Close();
+
+            Picture = (Bitmap)oPic.Clone();
 
             // التلوين
             if (ayahColor != AyahColor.nothing) {
                 if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
                 else {
                     quran.Open();
-                    reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={ayahId - 1}", quran).ExecuteReader();
+                    command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
+                    reader = command.ExecuteReader();
                     reader.Read();
                     y5 = reader.GetInt32(5);
                     x9 = reader.GetInt32(6);
+                    reader.Close();
+                    command.Cancel();
                     quran.Close();
                     if (x9 == 0) { x9 = width - 1; y5 += 1; }
                 }
@@ -222,32 +270,37 @@ namespace QuranKareem
             
             if (position >= 0 /* صفحة سورة الفاتحة وأول سورة البقرة بها فراغ من الأسفل */) {
                 quran.Open();
-                reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={position + pageStartId}", quran).ExecuteReader();
+                command.CommandText = $"SELECT * FROM ayat WHERE id={position + pageStartId}";
+                reader = command.ExecuteReader();
                 reader.Read();
                 x = reader.GetInt32(6);
                 if (cLine<14 && position == Convert.ToInt32(linesHelp.Substring(cLine*2 +2, 2)) || x==0) {
-                    temp = reader.GetInt32(1);
-                    temp1 = reader.GetInt32(4);
+                    tempInt = reader.GetInt32(1);
+                    tempInt2 = reader.GetInt32(4);
                 }
                 else {
                     while (true) { // القليل من البحث الضئيل
                         if (xMouse>x || reader.GetInt32(5)> cLine+1) break;
                         position++;
-                        reader = new SQLiteCommand($"SELECT * FROM ayat WHERE id={position + pageStartId}", quran).ExecuteReader();
+                        reader.Close();
+                        command.Cancel();
+                        command.CommandText = $"SELECT * FROM ayat WHERE id={position + pageStartId}";
+                        reader = command.ExecuteReader();
                         reader.Read();
                         x = reader.GetInt32(6);
                     }
-                    temp = reader.GetInt32(1);
-                    temp1 = reader.GetInt32(4);
+                    tempInt = reader.GetInt32(1);
+                    tempInt2 = reader.GetInt32(4);
                 }
+                reader.Close();
+                command.Cancel();
                 quran.Close();
-                Ayah(temp, temp1); // استدعاء الملك
+                Ayah(tempInt, tempInt2); // استدعاء الملك
             }
         }
 
         public AyahColor ayahColor = AyahColor.red;
-        void Fun(int x5, int x9, int y5, int y9) { // كود التلوين
-            if (!success) return;
+        private void Fun(int x5, int x9, int y5, int y9) { // كود التلوين
             try {
                 Color p4;
                 for (int y1 = y5; y1 <= y9; y1++) {

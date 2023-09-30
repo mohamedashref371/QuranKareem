@@ -11,9 +11,10 @@ namespace QuranKareem
     class QuranAudios
     {
         private string path; // المسار
-        private readonly SQLiteConnection quran; // SQLiteConnection
         private bool success = false; // نجح استدعاء ال QuranAudio ? :(
-        readonly SQLiteCommand command;
+
+        private readonly SQLiteConnection quran; // SQLite Connection
+        private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
@@ -70,9 +71,9 @@ namespace QuranKareem
             try {
                 quran.Close();
                 if (File.Exists(path + "000.db"))
-                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;"; // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
                 else
-                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;"; // SQLite Connection
+                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;";
                 quran.Open();
                 command.CommandText = $"SELECT * FROM description";
                 reader = command.ExecuteReader();
