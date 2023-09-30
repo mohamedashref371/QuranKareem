@@ -3,8 +3,7 @@ With 40 audio Quran and 10 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
 
-To download this program with code: ([pre-release](https://codeload.github.com/mohamedashref371/QuranKareem/zip/refs/heads/master)) <br>
-To download program from MediaFire: ([pre-release](https://www.mediafire.com/folder/fwzq0xlpp9oys)).
+To download this program with code: ([pre-release](https://codeload.github.com/mohamedashref371/QuranKareem/zip/refs/heads/master))
 
 I did not care about designing the form or adding forms yet, and instead I used the Guna UI 2.0 library.
 
