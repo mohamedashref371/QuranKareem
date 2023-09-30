@@ -243,7 +243,8 @@ namespace QuranKareem
             else if (i < 0.6) rate = 0.6;
             else rate=i;
             mp3.settings.rate = rate;
-            Ayah(SurahNumber, AyahNumber);
+            timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition*1000) / rate);
+            mp3.Ctlcontrols.currentPosition = mp3.Ctlcontrols.currentPosition;
         }
 
         public void Volume(int i) {
