@@ -89,6 +89,8 @@
             this.descSave = new System.Windows.Forms.Button();
             this.timestampChangeEventCheck = new System.Windows.Forms.CheckBox();
             this.endAyatCheck = new System.Windows.Forms.CheckBox();
+            this.splitter = new System.Windows.Forms.Button();
+            this.splitAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -914,11 +916,34 @@
             this.endAyatCheck.Visible = false;
             this.endAyatCheck.CheckedChanged += new System.EventHandler(this.EndAyatCheck_CheckedChanged);
             // 
+            // splitter
+            // 
+            this.splitter.Location = new System.Drawing.Point(930, 13);
+            this.splitter.Name = "splitter";
+            this.splitter.Size = new System.Drawing.Size(71, 22);
+            this.splitter.TabIndex = 71;
+            this.splitter.Text = "حفظ الآية";
+            this.splitter.UseVisualStyleBackColor = true;
+            this.splitter.Click += new System.EventHandler(this.Splitter_Click);
+            // 
+            // splitAll
+            // 
+            this.splitAll.Location = new System.Drawing.Point(829, 13);
+            this.splitAll.Name = "splitAll";
+            this.splitAll.Size = new System.Drawing.Size(92, 22);
+            this.splitAll.TabIndex = 72;
+            this.splitAll.Text = "تقطيع السورة";
+            this.splitAll.UseVisualStyleBackColor = true;
+            this.splitAll.Click += new System.EventHandler(this.SplitAll_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.splitAll);
+            this.Controls.Add(this.searchList);
+            this.Controls.Add(this.splitter);
             this.Controls.Add(this.endAyatCheck);
             this.Controls.Add(this.timestampChangeEventCheck);
             this.Controls.Add(this.descSave);
@@ -928,7 +953,6 @@
             this.Controls.Add(this.lExt);
             this.Controls.Add(this.ShaykhDesc);
             this.Controls.Add(this.addShaykhInfo);
-            this.Controls.Add(this.searchList);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volume);
             this.Controls.Add(this.latest);
@@ -1058,6 +1082,8 @@
         private System.Windows.Forms.Button descSave;
         private System.Windows.Forms.CheckBox timestampChangeEventCheck;
         private System.Windows.Forms.CheckBox endAyatCheck;
+        private System.Windows.Forms.Button splitter;
+        private System.Windows.Forms.Button splitAll;
     }
 }
 

@@ -469,6 +469,18 @@ namespace QuranKareem {
 
         // مستوى إرتفاع الصوت
         private void Volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
+
+        // حفظ الآية
+        private void Splitter_Click(object sender, EventArgs e) { quranAudios.SurahSplitter(); }
+
+        // تقطيع السورة لآيات
+        private void SplitAll_Click(object sender, EventArgs e) {
+            for (int i=1; i <= quranAudios.AyatCount; i++) {
+                quranAudios.Ayah(i);
+                quranAudios.SurahSplitter();
+            }
+            Ayah.Value = 1;
+        }
         #endregion
 
         #region إضافة شيخ جديد
@@ -589,6 +601,7 @@ namespace QuranKareem {
             if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog()== DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath)) {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
+                splitter.Visible = false; splitAll.Visible = false;
                 timestampChangeEventCheck.Visible = true;
                 endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
@@ -600,6 +613,7 @@ namespace QuranKareem {
                 timestampChangeEventCheck.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
+                splitter.Visible = true; splitAll.Visible = true;
             }
         }
 
@@ -617,18 +631,16 @@ namespace QuranKareem {
         // إضافة وصف للشيخ
         private void ShaykhDesc_(object sender, EventArgs e) {
             if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled==true) {
-                string[] desc = quranAudios.GetDescription();
-                if (desc == null) return;
                 ShaykhDesc.Text = "إلغاء";
                 lTafseer.Visible = false;
                 tafasir.Visible = false;
                 tafseerCopy.Visible = false;
                 saveRTF.Visible = false;
                 lExt.Visible = true;
-                extension.Text = desc[0];
+                extension.Text = quranAudios.Extension;
                 extension.Visible = true;
                 lComment.Visible = true;
-                comment.Text = desc[1];
+                comment.Text = quranAudios.Comment;
                 comment.Visible = true;
                 descSave.Visible = true;
             }

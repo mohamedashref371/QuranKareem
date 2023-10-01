@@ -18,7 +18,7 @@ namespace QuranKareem
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
-        private string extension; // example: .mp3
+        public string Extension { get; private set; } // example: .mp3
         public string Comment { get; private set; }
 
         private int ayahId;
@@ -82,7 +82,7 @@ namespace QuranKareem
                 if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 3 || reader.GetInt32(1)/*version*/ != 1) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
-                extension = reader.GetString(4);
+                Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
                 reader.Close();
                 command.Cancel();
@@ -134,14 +134,14 @@ namespace QuranKareem
             quran.Open();
             if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition==0) {
                 // /*if(!*/ Check(sura); /*) return;*/
-
+                surahArray = null;
                 if (!CaptureAudio(sura)) { 
                     mp3.URL = "";
                     quran.Close();
                     CapturedAudio = false;
                     return;
                 }
-
+                
                 CapturedAudio = true;
                 command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
@@ -216,10 +216,10 @@ namespace QuranKareem
             string s = sura + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
-            s += extension;
+            s += Extension;
             bool hold=true;
             if (File.Exists(path + s)) mp3.URL = path + s;
-            else if (File.Exists(path + sura + extension)) mp3.URL = path + sura + extension;
+            else if (File.Exists(path + sura + Extension)) mp3.URL = path + sura + Extension;
             else {
                 hold = false;
                 string[] filesName = Directory.GetFiles(path);
@@ -290,7 +290,7 @@ namespace QuranKareem
                 if (reader.GetInt32(0) != 3 || reader.GetInt32(1) != 1) return false;
                 Narration = reader.GetInt32(2);
                 surahsCount = reader.GetInt32(3);
-                extension = reader.GetString(4);
+                Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
                 reader.Close();
                 command.Cancel();
@@ -356,7 +356,7 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public string[] GetDescription() {
+        public string[] GetDescription() /* لم يعد مستعملاً */{
             if (!success) return null;
             string[] desc = new string[2];
             quran.Open();
@@ -373,5 +373,19 @@ namespace QuranKareem
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
         public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
+
+        byte[] surahArray=null;
+        public void SurahSplitter() {
+            if (!success) return;
+            if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
+            if (mp3.URL == "") return;
+            if (To <= From) return;
+            if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
+            if (surahArray.Length == 0 || mp3.currentMedia.duration == 0) return;
+            double unit = surahArray.Length / (mp3.currentMedia.duration * 1000);
+            byte[] ayah = new byte[(int)(unit * (To - From))];
+            Array.Copy(surahArray, (int)(unit * From), ayah, 0, ayah.Length);
+            File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
+        }
     }
 }
