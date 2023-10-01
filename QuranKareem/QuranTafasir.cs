@@ -8,7 +8,7 @@ namespace QuranKareem
     {
         private bool success = false; // نجح استدعاء ال QuranTafseer ? :(
 
-        private SQLiteConnection quran; // SQLite Connection
+        private readonly SQLiteConnection quran; // SQLite Connection
         private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 

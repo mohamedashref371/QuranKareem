@@ -10,7 +10,7 @@ namespace QuranKareem
         private string path; // المسار
         private bool success = false; // نجح استدعاء ال QuranPicture ? :(
 
-        private SQLiteConnection quran; // SQLite Connection
+        private readonly SQLiteConnection quran; // SQLite Connection
         private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
@@ -70,7 +70,7 @@ namespace QuranKareem
                 width = reader.GetInt32(7);
                 height = reader.GetInt32(8);
                 var clr = reader.GetString(10).Split(',');
-                background = Color.FromArgb(Convert.ToInt32(clr[3]), Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+                background = Color.FromArgb(clr.Length>3? Convert.ToInt32(clr[3]):255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
                 extension = reader.GetString(11);
                 lineHeight = height / linesCount;
 
@@ -307,11 +307,11 @@ namespace QuranKareem
                     for (int x1 = x5; x1 <= x9; x1++) {
                         p4 = Picture.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/) {
-                            if (ayahColor == AyahColor.blue) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, p4.G, 255));
-                            else if (ayahColor == AyahColor.green) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 128, p4.B));
-                            else if (ayahColor == AyahColor.darkCyan) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R, 100, 100));
-                            else if (ayahColor == AyahColor.darkRed) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G, p4.B));
-                            else Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G, p4.B)); // غير لونها الى الأحمر
+                            if (ayahColor == AyahColor.blue) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
+                            else if (ayahColor == AyahColor.green) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
+                            else if (ayahColor == AyahColor.darkCyan) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
+                            else if (ayahColor == AyahColor.darkRed) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
+                            else Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
                         }
                     }
                 }
