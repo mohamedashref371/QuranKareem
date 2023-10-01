@@ -479,7 +479,8 @@ namespace QuranKareem {
                 quranAudios.Ayah(i);
                 quranAudios.SurahSplitter();
             }
-            Ayah.Value = 1;
+            if (Ayah.Value == 1) Ayah_ValueChanged(null, null);
+            else Ayah.Value = 1;
         }
         #endregion
 
