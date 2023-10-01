@@ -375,7 +375,7 @@ namespace QuranKareem
         public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
 
         byte[] surahArray=null;
-        public void SurahSplitter() {
+        public void SurahSplitter() /* ليست جيدة في بعض المقاطع الصوتية */ {
             if (!success) return;
             if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
             if (mp3.URL == "") return;
