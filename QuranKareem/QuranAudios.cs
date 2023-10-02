@@ -134,7 +134,7 @@ namespace QuranKareem
             quran.Open();
             if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition==0) {
                 // /*if(!*/ Check(sura); /*) return;*/
-                surahArray = null;
+                surahArray = null; start = -1;
                 if (!CaptureAudio(sura)) { 
                     mp3.URL = "";
                     quran.Close();
@@ -263,18 +263,29 @@ namespace QuranKareem
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
         }
 
-        byte[] surahArray = null;
-        // ليست جيدة في المقاطع الصوتية التي تحتوي على وصف وصورة في بداية الملف
+        byte[] surahArray = null; int start = -1;
+        // ليست جيدة في بعض المقاطع الصوتية التي تحتوي على وصف وصورة في بداية الملف
         public void SurahSplitter() {
             if (!success) return;
             if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
             if (mp3.URL == "") return;
             if (To <= From) return;
             if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
-            if (surahArray.Length == 0 || mp3.currentMedia.duration == 0) return;
-            double unit = surahArray.Length / (mp3.currentMedia.duration * 1000);
+            if (surahArray.Length <21000 || mp3.currentMedia.duration == 0) return;
+            if (start == -1) {
+                start = 0;
+                int j = 0;
+                for (int i=0; i<20000; i++) {
+                    if (surahArray[i] == 0) j += 1;
+                    else {
+                        if (j > 1000) { start = i; break; }
+                        j = 0;
+                    }
+                }
+            }
+            double unit = (surahArray.Length - start) / (mp3.currentMedia.duration * 1000);
             byte[] ayah = new byte[(int)(unit * (To - From))];
-            Array.Copy(surahArray, (int)(unit * From), ayah, 0, ayah.Length);
+            Array.Copy(surahArray, (int)(unit * From) + start, ayah, 0, ayah.Length);
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
