@@ -20,5 +20,7 @@ https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chap
 
 
 You can now add any sheikh you want smoothly and easily through the program.
+
 Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
+
 The current program is just an idea that can be improved and developed.
