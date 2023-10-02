@@ -475,7 +475,7 @@ namespace QuranKareem {
 
         // تقطيع السورة لآيات
         private void SplitAll_Click(object sender, EventArgs e) {
-            for (int i = 0; i <= quranAudios.AyatCount; i++) {
+            for (int i = 1; i <= quranAudios.AyatCount; i++) {
                 quranAudios.Ayah(i);
                 quranAudios.SurahSplitter();
             }
