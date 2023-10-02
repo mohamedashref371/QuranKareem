@@ -19,7 +19,7 @@ And to ensure myself correct data, I did the following:
 https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads the iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.
 
 
-You can now add any sheikh you want smoothly and easily through the program.
+You can now add any sheikh you want smoothly and easily through the program.<br>
 Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
 
 The current program is just an idea that can be improved and developed.
