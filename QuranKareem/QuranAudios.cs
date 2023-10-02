@@ -262,8 +262,23 @@ namespace QuranKareem
             this.SurahRepeat = (SurahRepeat >= 1) ? SurahRepeat : 1;
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
         }
-        //------------------------------------------------
 
+        byte[] surahArray = null;
+        // ليست جيدة في المقاطع الصوتية التي تحتوي على وصف وصورة في بداية الملف
+        public void SurahSplitter() {
+            if (!success) return;
+            if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
+            if (mp3.URL == "") return;
+            if (To <= From) return;
+            if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
+            if (surahArray.Length == 0 || mp3.currentMedia.duration == 0) return;
+            double unit = surahArray.Length / (mp3.currentMedia.duration * 1000);
+            byte[] ayah = new byte[(int)(unit * (To - From))];
+            Array.Copy(surahArray, (int)(unit * From), ayah, 0, ayah.Length);
+            File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
+        }
+
+        #region إضافة شيخ جديد
         public bool NewQuranAudio(string path) {
             if (!added || path == null || path.Trim().Length == 0) return false;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
@@ -373,19 +388,6 @@ namespace QuranKareem
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
         public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
-
-        byte[] surahArray=null;
-        public void SurahSplitter() /* ليست جيدة في بعض المقاطع الصوتية */ {
-            if (!success) return;
-            if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
-            if (mp3.URL == "") return;
-            if (To <= From) return;
-            if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
-            if (surahArray.Length == 0 || mp3.currentMedia.duration == 0) return;
-            double unit = surahArray.Length / (mp3.currentMedia.duration * 1000);
-            byte[] ayah = new byte[(int)(unit * (To - From))];
-            Array.Copy(surahArray, (int)(unit * From), ayah, 0, ayah.Length);
-            File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
-        }
+        #endregion
     }
 }
