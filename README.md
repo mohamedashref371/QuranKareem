@@ -19,3 +19,6 @@ And to ensure myself correct data, I did the following:
 https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain <span style="color:darkred">iste3athah</span>, and the json files start from the first verse. It may happen that the program accidentally reads the <span style="color:darkred">iste3athah</span> with <span style="color:darkblue">basmalah</spsn> when reciting <span style="color:darkblue">basmalah</spsn>. This is not a problem with the database model structure and this will be updated later.
 
 
+You can now add any sheikh you want smoothly and easily through the program.
+Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
+The current program is just an idea that can be improved and developed.
