@@ -1,4 +1,4 @@
-# Quran Kareem v1.0
+# Quran Kareem v1.1
 With 40 audio Quran and 10 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
@@ -16,6 +16,10 @@ And to ensure myself correct data, I did the following:
 - I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) to my database model.
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
-https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain <span style="color:darkred">iste3athah</span>, and the json files start from the first verse. It may happen that the program accidentally reads the <span style="color:darkred">iste3athah</span> with <span style="color:darkblue">basmalah</spsn> when reciting <span style="color:darkblue">basmalah</spsn>. This is not a problem with the database model structure and this will be updated later.
+https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads the iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.
 
 
+You can now add any sheikh you want smoothly and easily through the program.<br>
+Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
+
+The current program is just an idea that can be improved and developed.
