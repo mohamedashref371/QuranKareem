@@ -121,6 +121,7 @@ namespace QuranKareem
         public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
         public void Ayah(int sura, int aya) {
+            if (!timer.Enabled) ok = true;
             timer.Stop();
             if (!success) return;
 

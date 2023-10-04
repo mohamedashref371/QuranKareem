@@ -263,7 +263,7 @@ namespace QuranKareem
         public void SetXY(int xMouse, int yMouse, int width, int height) { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)( xMouse * (this.width / (decimal) width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
-            yMouse = (int)( yMouse * (this.height / (decimal) height));
+            yMouse = (int)( yMouse * (this.height / (decimal) height))+1;
             int cLine= (int)Math.Ceiling((decimal)yMouse / lineHeight) - 1;
             int position = Convert.ToInt32(linesHelp.Substring(cLine * 2, 2)); // الإستفادة من مساعد السطور التي تسهل عليا البحث عن الآية
             int x;
