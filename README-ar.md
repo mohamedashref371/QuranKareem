@@ -1,5 +1,5 @@
 # Quran Kareem v1.1
-<div dir="rtl"> مع ٤٠ شيخ و١٠ تفاسير
+مع ٤٠ شيخ و١٠ تفاسير
 
 متطلبات تشغيل البرنامج: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
 
@@ -11,14 +11,14 @@
 
 ولكي أضمن لنفسي بيانات سليمة، قمت بما يلي:
 
-- لقد استخدمت [UthmanicHafs_v2-1](https://fonts.qurancomplex.gov.sa/wp02/حفص) من [مجمع الملك فهد لطباعة المصحف الشريف](https://qurancomplex.gov.sa/) للحصول على المصحف المكتوب وتحويله إلى [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).
+<ul dir="rtl"><li>لقد استخدمت [UthmanicHafs_v2-1](https://fonts.qurancomplex.gov.sa/wp02/حفص) من [مجمع الملك فهد لطباعة المصحف الشريف](https://qurancomplex.gov.sa/) للحصول على المصحف المكتوب وتحويله إلى [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).</li>
 
-- لقد قمت باستخراج التفاسير مع بعض التعديلات من [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) إلى نموذج قاعدة البيانات الخاصة بي.
+<li>لقد قمت باستخراج التفاسير مع بعض التعديلات من [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) إلى نموذج قاعدة البيانات الخاصة بي.</li>
 
-- لقد استخدمت ملفات json التي يوفرها هذا الرابط للحصول على توقيت نهاية الآيات: https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
+<li>لقد استخدمت ملفات json التي يوفرها هذا الرابط للحصول على توقيت نهاية الآيات: https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true</li></ul>
 
 يمكنك الآن إضافة أي شيخ تريده بكل سهولة وسلاسة من خلال البرنامج.<br>
 قواعد البيانات قابلة للقراءة للعامة، لذا يمكنك إضافة المشايخ بأي طريقة أخرى تفضلها.
 
 البرنامج الحالي مجرد فكرة قابلة للتحسين والتطوير.
-</div>
+
