@@ -280,7 +280,7 @@ namespace QuranKareem
                 }
                 else {
                     while (true) { // القليل من البحث الضئيل
-                        if (xMouse>x || reader.GetInt32(5)> cLine+1) break;
+                        if (xMouse>=x || reader.GetInt32(5)> cLine+1) break;
                         position++;
                         reader.Close();
                         command.Cancel();
