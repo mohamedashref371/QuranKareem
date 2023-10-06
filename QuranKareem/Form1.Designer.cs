@@ -769,7 +769,6 @@
             this.quranPic.TabIndex = 2;
             this.quranPic.TabStop = false;
             this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
-            this.quranPic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseMove);
             // 
             // volume
             // 

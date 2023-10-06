@@ -356,11 +356,11 @@ namespace QuranKareem {
             isAllow = true;
         }
 
-        int x, y; // مكان مؤشر الماوس
-        private void QuranPic_MouseMove(object sender, MouseEventArgs e) { x = e.X; y = e.Y; } // يتم تحديث مؤشر الماوس باستمرار تحريك الماوس على الصورة
         private void QuranPic_Click(object sender, EventArgs e) {
             if (allow) {
-                quranPictures.SetXY(x, y, quranPic.Width, quranPic.Height);
+                quranPictures.SetXY( MousePosition.X - quranPic.Location.X - Location.X,
+                                     MousePosition.Y - quranPic.Location.Y - Location.Y,
+                                     quranPic.Width, quranPic.Height);
                 SetAyah();
             }
         }
