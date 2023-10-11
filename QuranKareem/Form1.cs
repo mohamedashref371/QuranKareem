@@ -26,8 +26,6 @@ namespace QuranKareem {
         bool textMode = false;
         string moshafText = "", moshafPic = "", moshafAudio = "", Tafseer = "";
         string[] stringArray;
-        readonly static string newLine = @"
-";
 
         #region Form EventArgs
         FormSize fs;
@@ -38,9 +36,6 @@ namespace QuranKareem {
             string[] textsFiles = null, picturesFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
-
-            if (textsFiles != null && textsFiles.Length > 0)
-                quranTexts.QuranText(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
             try { picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */ } catch { }
 
@@ -56,9 +51,12 @@ namespace QuranKareem {
             }
 
             else {
-                MessageBox.Show($"مجلدات المصاحف غير موجودة،{newLine}سيتم إغلاق البرنامج.");
+                MessageBox.Show($"مجلدات المصاحف غير موجودة،\nسيتم إغلاق البرنامج.");
                 Close();
             }
+
+            if (textsFiles != null && textsFiles.Length > 0)
+                quranTexts.QuranText(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
             if (!textMode) quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
 
@@ -134,7 +132,7 @@ namespace QuranKareem {
             List<string> audiosFolders = new List<string>();
             bool distinct=false;
             if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
-                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace(newLine,"*").Split('*').ToList());
+                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace("\n", "*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
                     if (stringArray[0].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
@@ -211,7 +209,7 @@ namespace QuranKareem {
         // تحميل المصاحف المسموعة في الخلفية
         static void DownloadFiles(string s) {
             try {
-                string[] links = File.ReadAllText(s + "\\download links.txt").Replace(newLine, "|").Split('|');
+                string[] links = File.ReadAllText(s + "\\download links.txt").Replace("\n", "|").Split('|');
                 string[] temp;
                 System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length > 0) {
@@ -221,7 +219,7 @@ namespace QuranKareem {
                             try {
                                 client.DownloadFile(link, s + "\\" + temp.Last());
                             } catch {
-                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} .. {newLine}هل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
+                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
                             }
                         }
                     }
@@ -302,7 +300,7 @@ namespace QuranKareem {
         void SetAyah() {
             allow = false;
             if (textMode) {
-                Surah.Value = quranPictures.SurahNumber;
+                Surah.Value = quranTexts.SurahNumber;
                 if (Ayah.Value == quranTexts.AyahNumber) Ayah_ValueChanged(null, null);
                 else Ayah.Value = quranTexts.AyahNumber;
             }

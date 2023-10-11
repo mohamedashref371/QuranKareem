@@ -89,13 +89,15 @@ namespace QuranKareem
                 success = true;
             } catch { }
 
+            if (!added) return;
+
             try {
                 var collection = new PrivateFontCollection();
                 collection.AddFontFile(@"fonts\" + fontFile);
                 PageRichText.Font = new Font(new FontFamily(fontName, collection), 20F);
             } catch { }
 
-            if(added) Ayah(sura, aya);
+            Ayah(sura, aya);
         }
 
         public string[] GetSurahNames() {
@@ -255,6 +257,8 @@ namespace QuranKareem
 ";
         private readonly StringBuilder OriginalPageText = new StringBuilder();
         private void PageTextAt(int i) {
+            reader.Close();
+            command.Cancel();
             OriginalPageText.Clear();
             finishedPosition.Clear();
             command.CommandText = $"SELECT id,line,finished_position,text FROM ayat WHERE page={i}";
