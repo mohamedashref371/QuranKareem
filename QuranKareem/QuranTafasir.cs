@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
+using System.Windows.Forms;
 
 namespace QuranKareem
 {
@@ -56,5 +58,32 @@ namespace QuranKareem
             return tempString;
         }
 
+         string[] SurahTafseerText(int sura) {
+            if (!success) return null;
+            quran.Open();
+            command.CommandText = $"SELECT text FROM ayat WHERE surah={sura}";
+            reader = command.ExecuteReader();
+            List<string> list = new List<string>();
+            while (reader.Read()) {
+                list.Add(!reader.IsDBNull(0)? reader.GetString(0) : "");
+            }
+            reader.Close();
+            command.Cancel();
+            quran.Close();
+            return list.ToArray();
+        }
+
+        string n = Environment.NewLine;
+        public string SubRipText(int surah, string[] timestamps) {
+            if (!success) return "";
+            string[] tafseer = SurahTafseerText(surah);
+            if (timestamps == null || tafseer.Length != timestamps.Length) return "";
+
+            string s = $"0{n}00:00:00.000 --> {timestamps[0]}{n}{tafseer[0]}{n}{n}";
+            for (int i=0; i< timestamps.Length-1; i++)
+                s += $"{i+1}{n}{timestamps[i]} --> {timestamps[i+1]}{n}{tafseer[i+1]}{n}{n}";
+            
+            return s;
+        }
     }
 }

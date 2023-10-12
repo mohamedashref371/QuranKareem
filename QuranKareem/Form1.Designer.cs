@@ -91,6 +91,8 @@
             this.endAyatCheck = new System.Windows.Forms.CheckBox();
             this.splitter = new System.Windows.Forms.Button();
             this.splitAll = new System.Windows.Forms.Button();
+            this.srtFile = new System.Windows.Forms.Button();
+            this.saveSRTFile = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -683,7 +685,7 @@
             this.lTafseer.AutoSize = true;
             this.lTafseer.BackColor = System.Drawing.Color.Transparent;
             this.lTafseer.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lTafseer.Location = new System.Drawing.Point(109, 683);
+            this.lTafseer.Location = new System.Drawing.Point(185, 683);
             this.lTafseer.Name = "lTafseer";
             this.lTafseer.Size = new System.Drawing.Size(71, 22);
             this.lTafseer.TabIndex = 54;
@@ -692,7 +694,7 @@
             // tafseerCopy
             // 
             this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tafseerCopy.Location = new System.Drawing.Point(168, 743);
+            this.tafseerCopy.Location = new System.Drawing.Point(168, 741);
             this.tafseerCopy.Name = "tafseerCopy";
             this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
             this.tafseerCopy.TabIndex = 55;
@@ -703,7 +705,7 @@
             // saveRTF
             // 
             this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.saveRTF.Location = new System.Drawing.Point(22, 743);
+            this.saveRTF.Location = new System.Drawing.Point(22, 741);
             this.saveRTF.Name = "saveRTF";
             this.saveRTF.Size = new System.Drawing.Size(126, 51);
             this.saveRTF.TabIndex = 56;
@@ -935,11 +937,29 @@
             this.splitAll.UseVisualStyleBackColor = true;
             this.splitAll.Click += new System.EventHandler(this.SplitAll_Click);
             // 
+            // srtFile
+            // 
+            this.srtFile.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.srtFile.Location = new System.Drawing.Point(18, 681);
+            this.srtFile.Name = "srtFile";
+            this.srtFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.srtFile.Size = new System.Drawing.Size(96, 25);
+            this.srtFile.TabIndex = 73;
+            this.srtFile.Text = "ملف SRT";
+            this.srtFile.UseVisualStyleBackColor = true;
+            this.srtFile.Click += new System.EventHandler(this.SrtFile_Click);
+            // 
+            // saveSRTFile
+            // 
+            this.saveSRTFile.FileName = "Surah";
+            this.saveSRTFile.Filter = "SubRip Subtitle|*.srt";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.srtFile);
             this.Controls.Add(this.splitAll);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.splitter);
@@ -1083,6 +1103,8 @@
         private System.Windows.Forms.CheckBox endAyatCheck;
         private System.Windows.Forms.Button splitter;
         private System.Windows.Forms.Button splitAll;
+        private System.Windows.Forms.Button srtFile;
+        private System.Windows.Forms.SaveFileDialog saveSRTFile;
     }
 }
 

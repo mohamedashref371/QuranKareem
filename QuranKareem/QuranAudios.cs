@@ -290,6 +290,38 @@ namespace QuranKareem
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
+        // Mp3 Current Position String
+        public string GetCurrentPosition() { return GetPositionOf(CurrentPosition); }
+        string s;
+        public string GetPositionOf(int num) {
+            int temp = num / 3600000;
+            s = temp + ":";
+
+            num -= temp * 3600000;
+            temp = num / 60000;
+            s += temp.ToString().PadLeft(2, '0') + ":";
+
+            num -= temp * 60000;
+            temp = num / 1000;
+            s += temp.ToString().PadLeft(2, '0') + ".";
+
+            num -= temp * 1000;
+            s += num.ToString().PadLeft(3, '0');
+
+            return s;
+        }
+
+        public string[] GetPositionsOf(int surah) {
+            if (!success) return null;
+            int[] timestampsT = GetTimestamps(surah);
+            string[] timestamps = new string[timestampsT.Length];
+
+            for (int i = 0; i < timestamps.Length; i++)
+                timestamps[i] = GetPositionOf(timestampsT[i]);
+
+            return timestamps;
+        }
+
         #region إضافة شيخ جديد
         public bool NewQuranAudio(string path) {
             if (!added || path == null || path.Trim().Length == 0) return false;

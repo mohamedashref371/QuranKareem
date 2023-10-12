@@ -92,7 +92,7 @@ namespace QuranKareem {
                 if (File.Exists(save + "MoshafAudioCurrent")) {
                     moshafAudio = File.ReadAllText(save + "MoshafAudioCurrent");
                     quranAudios.QuranAudio(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
-                    CurrentPosition();
+                    time5.Text = quranAudios.GetCurrentPosition();
                     quranAudios.Pause();
                 }
             } catch { }
@@ -131,8 +131,8 @@ namespace QuranKareem {
         void AddMashaykhButtons() /* ليست أفضل شيئ */ {
             List<string> audiosFolders = new List<string>();
             bool distinct=false;
-            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
-                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt").Replace("\n", "*").Split('*').ToList());
+            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Trim() != "") {
+                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Replace(Environment.NewLine, "*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
                     if (stringArray[0].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
@@ -198,7 +198,7 @@ namespace QuranKareem {
             string s = (string)((Guna2Button)sender).Tag;
             moshafAudio = s;
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
-            CurrentPosition();
+            time5.Text = quranAudios.GetCurrentPosition();
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2) {
                 if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes) {
                     Task.Run(() => DownloadFiles(s));
@@ -335,7 +335,7 @@ namespace QuranKareem {
             }
 
             if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
-            CurrentPosition();
+            time5.Text = quranAudios.GetCurrentPosition();
             allow = true;
         }
 
@@ -370,24 +370,6 @@ namespace QuranKareem {
                 quranTexts.SetCursor();
                 SetAyah();
             }
-        }
-
-        // Mp3 Current Position String
-        void CurrentPosition() {
-            int cp = quranAudios.CurrentPosition;
-            int temp = cp / 3600000;
-            time5.Text = temp + ":";
-
-            cp -= temp * 3600000;
-            temp = cp / 60000;
-            time5.Text += temp.ToString().PadLeft(2, '0') + ":";
-
-            cp -= temp * 60000;
-            temp = cp / 1000;
-            time5.Text += temp.ToString().PadLeft(2, '0') + ".";
-
-            cp -= temp * 1000;
-            time5.Text += cp.ToString().PadLeft(3, '0');
         }
 
         private void Color_SelectedIndexChanged(object sender, EventArgs e) {
@@ -450,6 +432,14 @@ namespace QuranKareem {
         private void SearchClose_Click(object sender, EventArgs e) {
             searchList.Visible = false;
             searchClose.Visible = false;
+        }
+
+        // إنشاء ملف ترجمة
+        private void SrtFile_Click(object sender, EventArgs e) {
+            saveSRTFile.FileName = $"Surah {Surah.Value.ToString().PadLeft(3, '0')}.srt";
+            if (saveSRTFile.ShowDialog() == DialogResult.OK) {
+                File.WriteAllText(saveSRTFile.FileName, quranTafasir.SubRipText((int)Surah.Value, quranAudios.GetPositionsOf((int)Surah.Value)));
+            }
         }
         #endregion
 
