@@ -244,7 +244,7 @@ namespace QuranKareem
             else if (i < 0.6) rate = 0.6;
             else rate=i;
             mp3.settings.rate = rate;
-            timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition*1000) / rate);
+            if (timer.Enabled && To - mp3.Ctlcontrols.currentPosition * 1000 > 0) timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition*1000) / rate);
             mp3.Ctlcontrols.currentPosition = mp3.Ctlcontrols.currentPosition;
         }
 
