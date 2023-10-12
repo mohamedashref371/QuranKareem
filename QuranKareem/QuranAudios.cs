@@ -295,7 +295,7 @@ namespace QuranKareem
         string s;
         public string GetPositionOf(int num) {
             int temp = num / 3600000;
-            s = temp + ":";
+            s = temp.ToString().PadLeft(2, '0') + ":";
 
             num -= temp * 3600000;
             temp = num / 60000;
