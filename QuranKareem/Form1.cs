@@ -624,6 +624,7 @@ namespace QuranKareem {
                 tafasir.Visible = false;
                 tafseerCopy.Visible = false;
                 saveRTF.Visible = false;
+                srtFile.Visible = false;
                 lExt.Visible = true;
                 extension.Text = quranAudios.Extension;
                 extension.Visible = true;
@@ -643,6 +644,7 @@ namespace QuranKareem {
                 tafasir.Visible = true;
                 tafseerCopy.Visible = true;
                 saveRTF.Visible = true;
+                srtFile.Visible = true;
             }
             
         }
