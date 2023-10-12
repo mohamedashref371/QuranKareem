@@ -131,7 +131,7 @@ namespace QuranKareem {
         void AddMashaykhButtons() /* ليست أفضل شيئ */ {
             List<string> audiosFolders = new List<string>();
             bool distinct=false;
-            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Trim() != "") {
+            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "") {
                 audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Replace(Environment.NewLine, "*").Split('*').ToList());
                 for (int i=0; i< audiosFolders.Count; i++) {
                     stringArray = audiosFolders[i].Split('|');
