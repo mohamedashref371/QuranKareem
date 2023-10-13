@@ -320,6 +320,7 @@
             this.AyahRepeat.Name = "AyahRepeat";
             this.AyahRepeat.Size = new System.Drawing.Size(55, 28);
             this.AyahRepeat.TabIndex = 6;
+            this.AyahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.AyahRepeat.Value = new decimal(new int[] {
             2,
             0,
@@ -357,6 +358,7 @@
             this.SurahRepeat.Name = "SurahRepeat";
             this.SurahRepeat.Size = new System.Drawing.Size(55, 28);
             this.SurahRepeat.TabIndex = 5;
+            this.SurahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.SurahRepeat.Value = new decimal(new int[] {
             2,
             0,
