@@ -675,7 +675,7 @@
             "1",
             "2",
             "3"});
-            this.tafasir.Location = new System.Drawing.Point(16, 708);
+            this.tafasir.Location = new System.Drawing.Point(16, 718);
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tafasir.Size = new System.Drawing.Size(262, 29);
@@ -687,7 +687,7 @@
             this.lTafseer.AutoSize = true;
             this.lTafseer.BackColor = System.Drawing.Color.Transparent;
             this.lTafseer.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lTafseer.Location = new System.Drawing.Point(142, 681);
+            this.lTafseer.Location = new System.Drawing.Point(142, 691);
             this.lTafseer.Name = "lTafseer";
             this.lTafseer.Size = new System.Drawing.Size(136, 22);
             this.lTafseer.TabIndex = 54;
@@ -696,7 +696,7 @@
             // tafseerCopy
             // 
             this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tafseerCopy.Location = new System.Drawing.Point(168, 741);
+            this.tafseerCopy.Location = new System.Drawing.Point(168, 751);
             this.tafseerCopy.Name = "tafseerCopy";
             this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
             this.tafseerCopy.TabIndex = 55;
@@ -707,7 +707,7 @@
             // saveRTF
             // 
             this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.saveRTF.Location = new System.Drawing.Point(22, 741);
+            this.saveRTF.Location = new System.Drawing.Point(22, 751);
             this.saveRTF.Name = "saveRTF";
             this.saveRTF.Size = new System.Drawing.Size(126, 51);
             this.saveRTF.TabIndex = 56;
@@ -942,7 +942,7 @@
             // srtFile
             // 
             this.srtFile.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.srtFile.Location = new System.Drawing.Point(16, 681);
+            this.srtFile.Location = new System.Drawing.Point(16, 691);
             this.srtFile.Name = "srtFile";
             this.srtFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.srtFile.Size = new System.Drawing.Size(96, 25);
