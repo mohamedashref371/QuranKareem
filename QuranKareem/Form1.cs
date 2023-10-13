@@ -412,7 +412,9 @@ namespace QuranKareem {
         // إختيار كتاب تفسير
         private void Tafasir_SelectedIndexChanged(object sender, EventArgs e) {
             Tafseer = tafasir.Text;
-            quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
+            if (!Tafseer.Contains("*"))
+                if (File.Exists(@"tafasir\" + Tafseer + ".db")) quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
+                else quranTafasir.QuranTafseer(@"translations\" + Tafseer + ".db");
         }
 
         // إنشاء تنسيق نص منسق لتفسير الآية 
