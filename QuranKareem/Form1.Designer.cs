@@ -128,7 +128,7 @@
             0});
             this.Surah.Name = "Surah";
             this.Surah.Size = new System.Drawing.Size(95, 28);
-            this.Surah.TabIndex = 9;
+            this.Surah.TabIndex = 1;
             this.Surah.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Surah.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Surah.Value = new decimal(new int[] {
@@ -154,7 +154,7 @@
             0});
             this.Page.Name = "Page";
             this.Page.Size = new System.Drawing.Size(95, 28);
-            this.Page.TabIndex = 11;
+            this.Page.TabIndex = 5;
             this.Page.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Page.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Page.Value = new decimal(new int[] {
@@ -180,7 +180,7 @@
             0});
             this.Ayah.Name = "Ayah";
             this.Ayah.Size = new System.Drawing.Size(95, 28);
-            this.Ayah.TabIndex = 12;
+            this.Ayah.TabIndex = 6;
             this.Ayah.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Ayah.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Ayah.Value = new decimal(new int[] {
@@ -206,7 +206,7 @@
             0});
             this.Quarter.Name = "Quarter";
             this.Quarter.Size = new System.Drawing.Size(95, 28);
-            this.Quarter.TabIndex = 10;
+            this.Quarter.TabIndex = 4;
             this.Quarter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Quarter.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Quarter.Value = new decimal(new int[] {
@@ -229,7 +229,7 @@
             this.Surahs.Name = "Surahs";
             this.Surahs.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Surahs.Size = new System.Drawing.Size(95, 29);
-            this.Surahs.TabIndex = 8;
+            this.Surahs.TabIndex = 0;
             this.Surahs.SelectedIndexChanged += new System.EventHandler(this.Surahs_SelectedIndexChanged);
             // 
             // label1
@@ -303,7 +303,7 @@
             this.color.Name = "color";
             this.color.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.color.Size = new System.Drawing.Size(109, 29);
-            this.color.TabIndex = 1;
+            this.color.TabIndex = 15;
             this.color.SelectedIndexChanged += new System.EventHandler(this.Color_SelectedIndexChanged);
             // 
             // folder
@@ -326,7 +326,7 @@
             0});
             this.AyahRepeat.Name = "AyahRepeat";
             this.AyahRepeat.Size = new System.Drawing.Size(55, 28);
-            this.AyahRepeat.TabIndex = 6;
+            this.AyahRepeat.TabIndex = 14;
             this.AyahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.AyahRepeat.Value = new decimal(new int[] {
             2,
@@ -343,7 +343,7 @@
             this.AyahRepeatCheck.Name = "AyahRepeatCheck";
             this.AyahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.AyahRepeatCheck.Size = new System.Drawing.Size(99, 26);
-            this.AyahRepeatCheck.TabIndex = 4;
+            this.AyahRepeatCheck.TabIndex = 13;
             this.AyahRepeatCheck.Text = "تكرار الآية";
             this.AyahRepeatCheck.UseVisualStyleBackColor = false;
             this.AyahRepeatCheck.CheckedChanged += new System.EventHandler(this.Repeat_CheckedChanged);
@@ -364,7 +364,7 @@
             0});
             this.SurahRepeat.Name = "SurahRepeat";
             this.SurahRepeat.Size = new System.Drawing.Size(55, 28);
-            this.SurahRepeat.TabIndex = 5;
+            this.SurahRepeat.TabIndex = 12;
             this.SurahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.SurahRepeat.Value = new decimal(new int[] {
             2,
@@ -413,7 +413,7 @@
             this.SurahRepeatCheck.Name = "SurahRepeatCheck";
             this.SurahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SurahRepeatCheck.Size = new System.Drawing.Size(120, 26);
-            this.SurahRepeatCheck.TabIndex = 3;
+            this.SurahRepeatCheck.TabIndex = 11;
             this.SurahRepeatCheck.Text = "تكرار السورة";
             this.SurahRepeatCheck.UseVisualStyleBackColor = false;
             this.SurahRepeatCheck.CheckedChanged += new System.EventHandler(this.Repeat_CheckedChanged);
@@ -423,7 +423,7 @@
             this.pause.Location = new System.Drawing.Point(213, 285);
             this.pause.Name = "pause";
             this.pause.Size = new System.Drawing.Size(45, 23);
-            this.pause.TabIndex = 2;
+            this.pause.TabIndex = 7;
             this.pause.Text = "||";
             this.pause.UseVisualStyleBackColor = true;
             this.pause.Click += new System.EventHandler(this.Pause_Click);
@@ -450,7 +450,7 @@
             65536});
             this.Rate.Name = "Rate";
             this.Rate.Size = new System.Drawing.Size(95, 28);
-            this.Rate.TabIndex = 6;
+            this.Rate.TabIndex = 10;
             this.Rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Rate.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Rate.Value = new decimal(new int[] {
@@ -515,7 +515,7 @@
             this.minimize.Location = new System.Drawing.Point(1015, 21);
             this.minimize.Name = "minimize";
             this.minimize.Size = new System.Drawing.Size(30, 10);
-            this.minimize.TabIndex = 39;
+            this.minimize.TabIndex = 37;
             this.minimize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.minimize.UseVisualStyleBackColor = false;
             this.minimize.Click += new System.EventHandler(this.Minimize_Click);
@@ -547,7 +547,7 @@
             0});
             this.Juz.Name = "Juz";
             this.Juz.Size = new System.Drawing.Size(95, 28);
-            this.Juz.TabIndex = 10;
+            this.Juz.TabIndex = 2;
             this.Juz.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Juz.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Juz.Value = new decimal(new int[] {
@@ -584,7 +584,7 @@
             0});
             this.Hizb.Name = "Hizb";
             this.Hizb.Size = new System.Drawing.Size(95, 28);
-            this.Hizb.TabIndex = 10;
+            this.Hizb.TabIndex = 3;
             this.Hizb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Hizb.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Hizb.Value = new decimal(new int[] {
@@ -612,7 +612,7 @@
             this.copy.Location = new System.Drawing.Point(142, 529);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
-            this.copy.TabIndex = 46;
+            this.copy.TabIndex = 16;
             this.copy.Text = "نسخ الآية";
             this.copy.UseVisualStyleBackColor = true;
             this.copy.Click += new System.EventHandler(this.Copy_Click);
@@ -626,7 +626,7 @@
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
-            this.normalText.TabIndex = 47;
+            this.normalText.TabIndex = 17;
             this.normalText.Text = "نص عادي";
             this.normalText.UseVisualStyleBackColor = false;
             // 
@@ -647,7 +647,7 @@
             this.search.Location = new System.Drawing.Point(149, 596);
             this.search.Name = "search";
             this.search.Size = new System.Drawing.Size(90, 32);
-            this.search.TabIndex = 49;
+            this.search.TabIndex = 18;
             this.search.Text = "بحث";
             this.search.UseVisualStyleBackColor = true;
             this.search.Click += new System.EventHandler(this.Search_Click);
@@ -658,7 +658,7 @@
             this.searchText.Location = new System.Drawing.Point(12, 634);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(262, 27);
-            this.searchText.TabIndex = 51;
+            this.searchText.TabIndex = 20;
             this.searchText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // searchClose
@@ -667,7 +667,7 @@
             this.searchClose.Location = new System.Drawing.Point(42, 596);
             this.searchClose.Name = "searchClose";
             this.searchClose.Size = new System.Drawing.Size(90, 32);
-            this.searchClose.TabIndex = 52;
+            this.searchClose.TabIndex = 19;
             this.searchClose.Text = "الغاء";
             this.searchClose.UseVisualStyleBackColor = true;
             this.searchClose.Visible = false;
@@ -686,7 +686,7 @@
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tafasir.Size = new System.Drawing.Size(262, 29);
-            this.tafasir.TabIndex = 53;
+            this.tafasir.TabIndex = 22;
             this.tafasir.SelectedIndexChanged += new System.EventHandler(this.Tafasir_SelectedIndexChanged);
             // 
             // lTafseer
@@ -706,7 +706,7 @@
             this.tafseerCopy.Location = new System.Drawing.Point(168, 751);
             this.tafseerCopy.Name = "tafseerCopy";
             this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
-            this.tafseerCopy.TabIndex = 55;
+            this.tafseerCopy.TabIndex = 23;
             this.tafseerCopy.Text = "نسخ التفسير";
             this.tafseerCopy.UseVisualStyleBackColor = true;
             this.tafseerCopy.Click += new System.EventHandler(this.TafseerCopy_Click);
@@ -717,7 +717,7 @@
             this.saveRTF.Location = new System.Drawing.Point(22, 751);
             this.saveRTF.Name = "saveRTF";
             this.saveRTF.Size = new System.Drawing.Size(126, 51);
-            this.saveRTF.TabIndex = 56;
+            this.saveRTF.TabIndex = 24;
             this.saveRTF.Text = "save .rtf";
             this.saveRTF.UseVisualStyleBackColor = true;
             this.saveRTF.Click += new System.EventHandler(this.SaveRTF_Click);
@@ -743,7 +743,7 @@
             this.about.Location = new System.Drawing.Point(32, 821);
             this.about.Name = "about";
             this.about.Size = new System.Drawing.Size(75, 23);
-            this.about.TabIndex = 58;
+            this.about.TabIndex = 29;
             this.about.Text = "About";
             this.about.UseVisualStyleBackColor = true;
             this.about.Click += new System.EventHandler(this.About_Click);
@@ -753,7 +753,7 @@
             this.latest.Location = new System.Drawing.Point(129, 821);
             this.latest.Name = "latest";
             this.latest.Size = new System.Drawing.Size(127, 23);
-            this.latest.TabIndex = 59;
+            this.latest.TabIndex = 28;
             this.latest.Text = "latest version";
             this.latest.UseVisualStyleBackColor = true;
             this.latest.Click += new System.EventHandler(this.Latest_Click);
@@ -764,7 +764,7 @@
             this.stop.Location = new System.Drawing.Point(162, 285);
             this.stop.Name = "stop";
             this.stop.Size = new System.Drawing.Size(45, 23);
-            this.stop.TabIndex = 40;
+            this.stop.TabIndex = 8;
             this.stop.UseVisualStyleBackColor = true;
             this.stop.Click += new System.EventHandler(this.Stop_Click);
             // 
@@ -787,7 +787,7 @@
             this.volume.Location = new System.Drawing.Point(18, 324);
             this.volume.Name = "volume";
             this.volume.Size = new System.Drawing.Size(140, 23);
-            this.volume.TabIndex = 60;
+            this.volume.TabIndex = 9;
             this.volume.ThumbColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(113)))), ((int)(((byte)(255)))));
             this.volume.ValueChanged += new System.EventHandler(this.Volume_ValueChanged);
             // 
@@ -808,7 +808,7 @@
             this.addNewMoqrea.Location = new System.Drawing.Point(905, 873);
             this.addNewMoqrea.Name = "addNewMoqrea";
             this.addNewMoqrea.Size = new System.Drawing.Size(145, 32);
-            this.addNewMoqrea.TabIndex = 50;
+            this.addNewMoqrea.TabIndex = 31;
             this.addNewMoqrea.Text = "إضافة شيخ جديد";
             this.addNewMoqrea.UseVisualStyleBackColor = true;
             this.addNewMoqrea.Click += new System.EventHandler(this.AddNewMoqrea_Click);
@@ -826,7 +826,7 @@
             this.addShaykhInfo.Location = new System.Drawing.Point(1056, 873);
             this.addShaykhInfo.Name = "addShaykhInfo";
             this.addShaykhInfo.Size = new System.Drawing.Size(32, 32);
-            this.addShaykhInfo.TabIndex = 62;
+            this.addShaykhInfo.TabIndex = 32;
             this.addShaykhInfo.Text = "!";
             this.addShaykhInfo.Click += new System.EventHandler(this.AddShaykhInfo_Click);
             // 
@@ -837,7 +837,7 @@
             this.ShaykhDesc.Location = new System.Drawing.Point(825, 873);
             this.ShaykhDesc.Name = "ShaykhDesc";
             this.ShaykhDesc.Size = new System.Drawing.Size(74, 32);
-            this.ShaykhDesc.TabIndex = 63;
+            this.ShaykhDesc.TabIndex = 30;
             this.ShaykhDesc.Text = "الوصف";
             this.ShaykhDesc.UseVisualStyleBackColor = true;
             this.ShaykhDesc.EnabledChanged += new System.EventHandler(this.ShaykhDesc_);
@@ -861,7 +861,7 @@
             this.extension.Location = new System.Drawing.Point(12, 695);
             this.extension.Name = "extension";
             this.extension.Size = new System.Drawing.Size(198, 28);
-            this.extension.TabIndex = 65;
+            this.extension.TabIndex = 25;
             this.extension.Visible = false;
             // 
             // lComment
@@ -882,7 +882,7 @@
             this.comment.Location = new System.Drawing.Point(12, 737);
             this.comment.Name = "comment";
             this.comment.Size = new System.Drawing.Size(198, 28);
-            this.comment.TabIndex = 67;
+            this.comment.TabIndex = 26;
             this.comment.Visible = false;
             // 
             // descSave
@@ -891,7 +891,7 @@
             this.descSave.Location = new System.Drawing.Point(55, 775);
             this.descSave.Name = "descSave";
             this.descSave.Size = new System.Drawing.Size(155, 35);
-            this.descSave.TabIndex = 68;
+            this.descSave.TabIndex = 27;
             this.descSave.Text = "حفظ و تنظيف";
             this.descSave.UseVisualStyleBackColor = true;
             this.descSave.Visible = false;
@@ -907,7 +907,7 @@
             this.timestampChangeEventCheck.Name = "timestampChangeEventCheck";
             this.timestampChangeEventCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.timestampChangeEventCheck.Size = new System.Drawing.Size(154, 17);
-            this.timestampChangeEventCheck.TabIndex = 69;
+            this.timestampChangeEventCheck.TabIndex = 34;
             this.timestampChangeEventCheck.Text = "التحسس من تغيير التوقيتات";
             this.timestampChangeEventCheck.UseVisualStyleBackColor = false;
             this.timestampChangeEventCheck.Visible = false;
@@ -920,7 +920,7 @@
             this.endAyatCheck.Name = "endAyatCheck";
             this.endAyatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.endAyatCheck.Size = new System.Drawing.Size(108, 17);
-            this.endAyatCheck.TabIndex = 70;
+            this.endAyatCheck.TabIndex = 33;
             this.endAyatCheck.Text = "وضعية نهاية الآيات";
             this.endAyatCheck.UseVisualStyleBackColor = false;
             this.endAyatCheck.Visible = false;
@@ -931,7 +931,7 @@
             this.splitter.Location = new System.Drawing.Point(930, 13);
             this.splitter.Name = "splitter";
             this.splitter.Size = new System.Drawing.Size(71, 22);
-            this.splitter.TabIndex = 71;
+            this.splitter.TabIndex = 36;
             this.splitter.Text = "حفظ الآية";
             this.splitter.UseVisualStyleBackColor = true;
             this.splitter.Click += new System.EventHandler(this.Splitter_Click);
@@ -941,7 +941,7 @@
             this.splitAll.Location = new System.Drawing.Point(829, 13);
             this.splitAll.Name = "splitAll";
             this.splitAll.Size = new System.Drawing.Size(92, 22);
-            this.splitAll.TabIndex = 72;
+            this.splitAll.TabIndex = 35;
             this.splitAll.Text = "تقطيع السورة";
             this.splitAll.UseVisualStyleBackColor = true;
             this.splitAll.Click += new System.EventHandler(this.SplitAll_Click);
@@ -953,7 +953,7 @@
             this.srtFile.Name = "srtFile";
             this.srtFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.srtFile.Size = new System.Drawing.Size(96, 25);
-            this.srtFile.TabIndex = 73;
+            this.srtFile.TabIndex = 21;
             this.srtFile.Text = "ملف SRT";
             this.srtFile.UseVisualStyleBackColor = true;
             this.srtFile.Click += new System.EventHandler(this.SrtFile_Click);
