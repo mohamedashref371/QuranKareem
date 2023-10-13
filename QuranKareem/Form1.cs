@@ -84,8 +84,7 @@ namespace QuranKareem {
             try { textsFiles = Directory.GetFiles("translations"); } catch { }
             if (textsFiles != null && textsFiles.Length > 0) {
                 tafasir.Items.Add("* التراجم ...");
-                foreach (string file in textsFiles)
-                {
+                foreach (string file in textsFiles) {
                     tafasir.Items.Add(file.Split('\\').Last().Replace(".db", ""));
                 }
                 tafasir.SelectedIndex = 0;
