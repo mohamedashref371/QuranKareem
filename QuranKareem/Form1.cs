@@ -73,8 +73,20 @@ namespace QuranKareem {
             try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
             tafasir.Items.Clear();
             if (textsFiles != null && textsFiles.Length > 0) {
+                tafasir.Items.Add("* التفاسير ...");
                 foreach (string file in textsFiles) {
                     tafasir.Items.Add(file.Split('\\').Last().Replace(".db",""));
+                }
+                tafasir.SelectedIndex = 0;
+            }
+            // اضافة التراجم
+            textsFiles = null;
+            try { textsFiles = Directory.GetFiles("translations"); } catch { }
+            if (textsFiles != null && textsFiles.Length > 0) {
+                tafasir.Items.Add("* التراجم ...");
+                foreach (string file in textsFiles)
+                {
+                    tafasir.Items.Add(file.Split('\\').Last().Replace(".db", ""));
                 }
                 tafasir.SelectedIndex = 0;
             }

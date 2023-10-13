@@ -685,11 +685,11 @@
             this.lTafseer.AutoSize = true;
             this.lTafseer.BackColor = System.Drawing.Color.Transparent;
             this.lTafseer.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lTafseer.Location = new System.Drawing.Point(185, 683);
+            this.lTafseer.Location = new System.Drawing.Point(142, 681);
             this.lTafseer.Name = "lTafseer";
-            this.lTafseer.Size = new System.Drawing.Size(71, 22);
+            this.lTafseer.Size = new System.Drawing.Size(136, 22);
             this.lTafseer.TabIndex = 54;
-            this.lTafseer.Text = "التفاسير";
+            this.lTafseer.Text = "التفاسير والتراجم";
             // 
             // tafseerCopy
             // 
@@ -940,7 +940,7 @@
             // srtFile
             // 
             this.srtFile.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.srtFile.Location = new System.Drawing.Point(18, 681);
+            this.srtFile.Location = new System.Drawing.Point(16, 681);
             this.srtFile.Name = "srtFile";
             this.srtFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.srtFile.Size = new System.Drawing.Size(96, 25);
