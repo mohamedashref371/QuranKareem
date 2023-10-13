@@ -93,6 +93,13 @@
             this.splitAll = new System.Windows.Forms.Button();
             this.srtFile = new System.Windows.Forms.Button();
             this.saveSRTFile = new System.Windows.Forms.SaveFileDialog();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -108,7 +115,7 @@
             // Surah
             // 
             this.Surah.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Surah.Location = new System.Drawing.Point(46, 48);
+            this.Surah.Location = new System.Drawing.Point(92, 48);
             this.Surah.Maximum = new decimal(new int[] {
             114,
             0,
@@ -134,7 +141,7 @@
             // Page
             // 
             this.Page.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Page.Location = new System.Drawing.Point(46, 201);
+            this.Page.Location = new System.Drawing.Point(92, 201);
             this.Page.Maximum = new decimal(new int[] {
             604,
             0,
@@ -160,7 +167,7 @@
             // Ayah
             // 
             this.Ayah.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Ayah.Location = new System.Drawing.Point(46, 244);
+            this.Ayah.Location = new System.Drawing.Point(92, 244);
             this.Ayah.Maximum = new decimal(new int[] {
             7,
             0,
@@ -186,7 +193,7 @@
             // Quarter
             // 
             this.Quarter.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Quarter.Location = new System.Drawing.Point(46, 158);
+            this.Quarter.Location = new System.Drawing.Point(92, 158);
             this.Quarter.Maximum = new decimal(new int[] {
             240,
             0,
@@ -218,7 +225,7 @@
             "1",
             "2",
             "3"});
-            this.Surahs.Location = new System.Drawing.Point(46, 13);
+            this.Surahs.Location = new System.Drawing.Point(92, 13);
             this.Surahs.Name = "Surahs";
             this.Surahs.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Surahs.Size = new System.Drawing.Size(95, 29);
@@ -230,7 +237,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label1.Location = new System.Drawing.Point(156, 16);
+            this.label1.Location = new System.Drawing.Point(197, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 22);
             this.label1.TabIndex = 10;
@@ -241,7 +248,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label2.Location = new System.Drawing.Point(156, 50);
+            this.label2.Location = new System.Drawing.Point(197, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 22);
             this.label2.TabIndex = 11;
@@ -252,7 +259,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label3.Location = new System.Drawing.Point(170, 160);
+            this.label3.Location = new System.Drawing.Point(211, 160);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 22);
             this.label3.TabIndex = 12;
@@ -263,7 +270,7 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label4.Location = new System.Drawing.Point(156, 203);
+            this.label4.Location = new System.Drawing.Point(197, 203);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 22);
             this.label4.TabIndex = 13;
@@ -274,7 +281,7 @@
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label5.Location = new System.Drawing.Point(170, 246);
+            this.label5.Location = new System.Drawing.Point(211, 246);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 22);
             this.label5.TabIndex = 14;
@@ -518,7 +525,7 @@
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label8.Location = new System.Drawing.Point(167, 92);
+            this.label8.Location = new System.Drawing.Point(208, 92);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(46, 22);
             this.label8.TabIndex = 42;
@@ -527,7 +534,7 @@
             // Juz
             // 
             this.Juz.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Juz.Location = new System.Drawing.Point(46, 90);
+            this.Juz.Location = new System.Drawing.Point(92, 90);
             this.Juz.Maximum = new decimal(new int[] {
             30,
             0,
@@ -555,7 +562,7 @@
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label9.Location = new System.Drawing.Point(159, 126);
+            this.label9.Location = new System.Drawing.Point(200, 126);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 22);
             this.label9.TabIndex = 44;
@@ -564,7 +571,7 @@
             // Hizb
             // 
             this.Hizb.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.Hizb.Location = new System.Drawing.Point(46, 124);
+            this.Hizb.Location = new System.Drawing.Point(92, 124);
             this.Hizb.Maximum = new decimal(new int[] {
             60,
             0,
@@ -956,13 +963,97 @@
             this.saveSRTFile.FileName = "Surah";
             this.saveSRTFile.Filter = "SubRip Subtitle|*.srt";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.Transparent;
+            this.label10.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label10.Location = new System.Drawing.Point(26, 126);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(44, 22);
+            this.label10.TabIndex = 80;
+            this.label10.Text = "Hizb";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.BackColor = System.Drawing.Color.Transparent;
+            this.label12.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label12.Location = new System.Drawing.Point(29, 92);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(36, 22);
+            this.label12.TabIndex = 79;
+            this.label12.Text = "Juz";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.BackColor = System.Drawing.Color.Transparent;
+            this.label13.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label13.Location = new System.Drawing.Point(26, 246);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(49, 22);
+            this.label13.TabIndex = 78;
+            this.label13.Text = "Ayah";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.BackColor = System.Drawing.Color.Transparent;
+            this.label14.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label14.Location = new System.Drawing.Point(26, 203);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(48, 22);
+            this.label14.TabIndex = 77;
+            this.label14.Text = "Page";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.Transparent;
+            this.label15.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label15.Location = new System.Drawing.Point(19, 160);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(69, 22);
+            this.label15.TabIndex = 76;
+            this.label15.Text = "Quarter";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BackColor = System.Drawing.Color.Transparent;
+            this.label16.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label16.Location = new System.Drawing.Point(21, 50);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(55, 22);
+            this.label16.TabIndex = 75;
+            this.label16.Text = "Surah";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.BackColor = System.Drawing.Color.Transparent;
+            this.label17.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.label17.Location = new System.Drawing.Point(21, 16);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(55, 22);
+            this.label17.TabIndex = 74;
+            this.label17.Text = "Surah";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.splitAll);
             this.Controls.Add(this.searchList);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.splitAll);
             this.Controls.Add(this.splitter);
             this.Controls.Add(this.endAyatCheck);
             this.Controls.Add(this.timestampChangeEventCheck);
@@ -1107,6 +1198,13 @@
         private System.Windows.Forms.Button splitAll;
         private System.Windows.Forms.Button srtFile;
         private System.Windows.Forms.SaveFileDialog saveSRTFile;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
     }
 }
 
