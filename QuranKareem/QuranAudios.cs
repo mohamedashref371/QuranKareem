@@ -413,6 +413,7 @@ namespace QuranKareem
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
+            Extension = extension; Comment = comment;
         }
 
         public string[] GetDescription() /* لم يعد مستعملاً */{
