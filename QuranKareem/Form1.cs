@@ -452,7 +452,7 @@ namespace QuranKareem {
         private void SrtFile_Click(object sender, EventArgs e) {
             saveSRTFile.FileName = $"Surah {Surah.Value.ToString().PadLeft(3, '0')}.srt";
             if (saveSRTFile.ShowDialog() == DialogResult.OK) {
-                File.WriteAllText(saveSRTFile.FileName, quranTafasir.SubRipText((int)Surah.Value, quranAudios.GetPositionsOf((int)Surah.Value)));
+                File.WriteAllText(saveSRTFile.FileName, quranTafasir.SubRipText((int)Surah.Value, quranAudios.GetPositionsOf((int)Surah.Value)), Encoding.UTF8);
             }
         }
         #endregion
