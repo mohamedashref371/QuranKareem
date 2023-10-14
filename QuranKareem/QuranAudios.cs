@@ -13,8 +13,8 @@ namespace QuranKareem
         private string path; // المسار
         private bool success = false; // نجح استدعاء ال QuranAudio ? :(
 
-        private readonly SQLiteConnection quran; // SQLite Connection
-        private readonly SQLiteCommand command; // SQLite Command
+        private readonly SQLiteConnection quran;
+        private readonly SQLiteCommand command;
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount;
@@ -409,7 +409,7 @@ namespace QuranKareem
         public void SetDescription(string extension, string comment) {
             if (!success) return;
             quran.Open();
-            command.CommandText = $"UPDATE description SET extension='{extension}'; UPDATE description SET comment='{comment}'; VACUUM;";
+            command.CommandText = $"UPDATE description SET extension='{extension}', comment='{comment}'; VACUUM;";
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();

@@ -13,8 +13,8 @@ namespace QuranKareem
 
         private bool success = false; // نجح استدعاء ال QuranText ? :(
 
-        private readonly SQLiteConnection quran; // SQLite Connection
-        private readonly SQLiteCommand command; // SQLite Command
+        private readonly SQLiteConnection quran;
+        private readonly SQLiteCommand command;
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount, quartersCount, pagesCount;

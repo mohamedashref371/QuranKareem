@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
-using System.Windows.Forms;
 
 namespace QuranKareem
 {
     class QuranTafasir
     {
-        private bool success = false; // نجح استدعاء ال QuranTafseer ? :(
+        private bool success = false;
 
-        private readonly SQLiteConnection quran; // SQLite Connection
-        private readonly SQLiteCommand command; // SQLite Command
-        private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
+        private readonly SQLiteConnection quran;
+        private readonly SQLiteCommand command;
+        private SQLiteDataReader reader;
 
         public string Comment { get; private set; }
 
@@ -73,7 +72,7 @@ namespace QuranKareem
             return list.ToArray();
         }
 
-        string n = Environment.NewLine;
+        readonly string n = Environment.NewLine;
         public string SubRipText(int surah, string[] timestamps) {
             if (!success) return "";
             string[] tafseer = SurahTafseerText(surah);
