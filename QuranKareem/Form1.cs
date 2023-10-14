@@ -15,6 +15,7 @@ namespace QuranKareem {
         private readonly int SizeX=1100, SizeY=910;
 
         public Form1() { InitializeComponent(); }
+        // إن شاء الله ستكون الخطوة القادمة هي تحسين واجهة البرنامج
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
 

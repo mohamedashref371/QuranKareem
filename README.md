@@ -23,3 +23,6 @@ You can now add any sheikh you want smoothly and easily through the program.<br>
 Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
 
 The current program is just an idea that can be improved and developed.
+
+
+To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs)

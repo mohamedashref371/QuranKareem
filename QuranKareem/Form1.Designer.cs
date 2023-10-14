@@ -740,7 +740,7 @@
             // 
             // about
             // 
-            this.about.Location = new System.Drawing.Point(32, 821);
+            this.about.Location = new System.Drawing.Point(32, 826);
             this.about.Name = "about";
             this.about.Size = new System.Drawing.Size(75, 23);
             this.about.TabIndex = 29;
@@ -750,7 +750,7 @@
             // 
             // latest
             // 
-            this.latest.Location = new System.Drawing.Point(129, 821);
+            this.latest.Location = new System.Drawing.Point(129, 826);
             this.latest.Name = "latest";
             this.latest.Size = new System.Drawing.Size(127, 23);
             this.latest.TabIndex = 28;
