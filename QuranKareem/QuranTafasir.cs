@@ -51,7 +51,7 @@ namespace QuranKareem
             quran.Open();
             command.CommandText = $"SELECT text FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
-            if (reader.Read()) tempString = reader.GetString(0);
+            tempString = reader.Read() && !reader.IsDBNull(0)? reader.GetString(0) : "";
             reader.Close();
             command.Cancel();
             quran.Close();
