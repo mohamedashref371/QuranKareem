@@ -1,5 +1,5 @@
 # Quran Kareem v1.1
-With 40 audio Quran and 10 tafasir
+With 40 audio Quran and 11 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
 
@@ -13,7 +13,7 @@ And to ensure myself correct data, I did the following:
 
 - I used [UthmanicHafs_v2-1](https://fonts.qurancomplex.gov.sa/wp02/حفص) from [King Fahd Glorious Qur'an Printing Complex](https://qurancomplex.gov.sa/) to get the written Qur’an and convert it to [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).
 
-- I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) to my database model.
+- I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) and [Tanzil.net](https://tanzil.net/) to my database model.
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
 https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads the iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.

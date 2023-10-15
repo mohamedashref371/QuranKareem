@@ -13,7 +13,7 @@
 
  • لقد استخدمت [UthmanicHafs_v2-1](https://fonts.qurancomplex.gov.sa/wp02/حفص) من [مجمع الملك فهد لطباعة المصحف الشريف](https://qurancomplex.gov.sa/) للحصول على المصحف المكتوب وتحويله إلى [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).
 
- • لقد قمت باستخراج التفاسير مع بعض التعديلات من [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) إلى نموذج قاعدة البيانات الخاصة بي.
+ • لقد قمت باستخراج التفاسير مع بعض التعديلات من [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) و [Tanzil.net](https://tanzil.net/) إلى نموذج قاعدة البيانات الخاصة بي.
 
  • لقد استخدمت ملفات json التي يوفرها هذا الرابط للحصول على توقيت نهاية الآيات: https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
 
