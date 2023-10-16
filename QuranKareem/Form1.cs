@@ -670,5 +670,6 @@ namespace QuranKareem {
         private void About_Click(object sender, EventArgs e) { System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317"); }
 
         private void guna2HtmlLabel1_Click(object sender, EventArgs e) { }
+
     }
 }
