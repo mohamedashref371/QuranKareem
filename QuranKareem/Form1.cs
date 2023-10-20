@@ -140,6 +140,7 @@ namespace QuranKareem
             fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);
             fs.SetControls(Controls);
             AddMashaykhButtons();
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, color, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, about, latest, addNewMoqrea, splitAll, splitter });
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -156,26 +157,42 @@ namespace QuranKareem
 
         private void Minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
+        List<Control> ControlsList = new List<Control>();
         private void Dark_Click(object sender, EventArgs e)
         {
             if (dark.Text == "Dark")
             {
                 dark.Text = "Light";
+                BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
                 quranPic.BackColor = Color.Black;
                 quranPictures.IsDark = true;
-
+                quranTexts.IsDark = true; quranTexts.IsDarkChanged();
+                panel.BackColor = Color.FromArgb(0, 31, 63);
+                for (int i = 0; i < ControlsList.Count; i++)
+                {
+                    ControlsList[i].BackColor = BackColor;
+                    ControlsList[i].ForeColor = ForeColor;
+                }
+                ShaykhDesc.BackColor = Color.Gray;
             }
             else
             {
                 dark.Text = "Dark";
+                BackColor = default; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
                 quranPic.BackColor = Color.White;
-                
                 quranPictures.IsDark = false;
-
+                quranTexts.IsDark = false; quranTexts.IsDarkChanged();
+                panel.BackColor = Color.FromArgb(255, 224, 192);
+                for (int i = 0; i < ControlsList.Count; i++)
+                {
+                    ControlsList[i].BackColor = default;
+                    ControlsList[i].ForeColor = ForeColor;
+                }
+                ShaykhDesc.BackColor = default;
             }
             Ayah_ValueChanged(sender, e);
         }
@@ -607,8 +624,8 @@ namespace QuranKareem
             Size labelSize = new Size(fs.GetNewX(257), fs.GetNewY(33));
             Size numSize = new Size(fs.GetNewX(120), fs.GetNewY(24));
             Size btnSize = new Size(fs.GetNewX(31), fs.GetNewY(23));
-            Color clr = Color.FromArgb(255, 204, 172);
-
+            Color clr = dark.Text == "Dark" ? Color.FromArgb(255, 204, 172) : Color.FromArgb(0, 51, 83);
+            Color Fclr = dark.Text == "Dark" ? Color.Black : Color.White;
             int y = 28;
             int k;
             for (int i = 0; i < ayat.Length; i++)
@@ -643,6 +660,7 @@ namespace QuranKareem
                 num = new NumericUpDown
                 {
                     BackColor = clr,
+                    ForeColor = Fclr,
                     BorderStyle = BorderStyle.None,
                     DecimalPlaces = 3,
                     Font = font,
