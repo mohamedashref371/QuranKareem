@@ -21,6 +21,7 @@ namespace QuranKareem
         private int pageStartId, ayahId;
         private Bitmap oPic;
         public Bitmap Picture { get; private set; }
+        FastPixel fp;
 
         public int Narration { get; private set; }
         public int SurahNumber { get; private set; }
@@ -219,7 +220,8 @@ namespace QuranKareem
             quran.Close();
 
             Picture = (Bitmap)oPic.Clone();
-
+            fp = new FastPixel(Picture);
+            fp.Lock();
             // التلوين
             if (ayahColor != AyahColor.nothing) {
                 if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
@@ -236,7 +238,7 @@ namespace QuranKareem
                     if (x9 == 0) { x9 = width - 1; y5 += 1; }
                 }
 
-                if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) return;
+                //if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) ;
                 if (y5 == y9) {
                     y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
                     Fun(x5, x9, y5, y9);
@@ -247,7 +249,7 @@ namespace QuranKareem
                     Fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
                 }
             }
-            
+            fp.Unlock(true);
         }
 
         private void PictureAt(int i) { // الصورة الحالية
@@ -305,13 +307,13 @@ namespace QuranKareem
                 Color p4;
                 for (int y1 = y5; y1 <= y9; y1++) {
                     for (int x1 = x5; x1 <= x9; x1++) {
-                        p4 = Picture.GetPixel(x1, y1);
+                        p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/) {
-                            if (ayahColor == AyahColor.blue) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
-                            else if (ayahColor == AyahColor.green) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
-                            else if (ayahColor == AyahColor.darkCyan) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
-                            else if (ayahColor == AyahColor.darkRed) Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
-                            else Picture.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
+                            if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
+                            else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
+                            else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
+                            else if (ayahColor == AyahColor.darkRed) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
+                            else fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
                         }
                     }
                 }
