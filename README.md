@@ -1,4 +1,4 @@
-﻿# Quran Kareem v1.1
+﻿# Quran Kareem v1.2
 With 43 audio Quran and 11 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
@@ -24,5 +24,6 @@ Databases are publicly readable, so you can add Al-Mashaykh in any other way you
 
 The current program is just an idea that can be improved and developed.
 
+Night mode feature has been added.
 
 To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs)
