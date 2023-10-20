@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Windows.Forms;
 namespace QuranKareem
 {
-    class QuranPictures {
+    class QuranPictures
+    {
         private string path; // المسار
         private bool success = false; // نجح استدعاء ال QuranPicture ? :(
 
@@ -31,26 +32,30 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
+        public bool IsDark { get; set; } = false;
 
-        private int lineHeight; private int tempInt,tempInt2;
+        private int lineHeight; private int tempInt, tempInt2;
 
         public static QuranPictures Instance { get; private set; } = new QuranPictures();
 
-        private QuranPictures() {
+        private QuranPictures()
+        {
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
         }
 
         // الدالة البداية
-        public void QuranPicture(string path, int sura = 1, int aya = 0){
+        public void QuranPicture(string path, int sura = 1, int aya = 0)
+        {
 
             if (path == null || path.Trim().Length == 0) return;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
-            
+
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
             this.path = path; success = false;
 
-            try {
+            try
+            {
                 if (File.Exists(path + "000.db"))
                     quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
                 else
@@ -71,7 +76,7 @@ namespace QuranKareem
                 width = reader.GetInt32(7);
                 height = reader.GetInt32(8);
                 var clr = reader.GetString(10).Split(',');
-                background = Color.FromArgb(clr.Length>3? Convert.ToInt32(clr[3]):255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+                background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
                 extension = reader.GetString(11);
                 lineHeight = height / linesCount;
 
@@ -81,18 +86,21 @@ namespace QuranKareem
                 success = true;
 
                 Ayah(sura, aya);
-            } catch { return; }
+            }
+            catch { return; }
         }
-        
-        public string[] GetSurahNames() {
-            if (!success) return new string[]{""};
+
+        public string[] GetSurahNames()
+        {
+            if (!success) return new string[] { "" };
             string[] names = new string[surahsCount];
             quran.Open();
             command.CommandText = $"SELECT name FROM surahs";
             reader = command.ExecuteReader();
 
             int i = 0;
-            while (reader.Read()) {
+            while (reader.Read())
+            {
                 names[i] = reader.GetString(0); // عمود واحد
                 i++;
             }
@@ -104,7 +112,8 @@ namespace QuranKareem
 
         public void Surah(int i) { Ayah(i, 0); }
 
-        public void Quarter(int i) {
+        public void Quarter(int i)
+        {
             if (!success) return;
             i = Math.Abs(i);
             if (i == 0) i = 1;
@@ -121,7 +130,8 @@ namespace QuranKareem
             AyahAt(tempInt);
         }
 
-        public void Page(int i) {
+        public void Page(int i)
+        {
             if (!success) return;
             i = Math.Abs(i);
             if (i == 0) i = 1;
@@ -138,14 +148,16 @@ namespace QuranKareem
             AyahAt(tempInt);
         }
 
-        public void AyahPlus() {
+        public void AyahPlus()
+        {
             if (!success) return;
             if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
             else if (AyahNumber == AyatCount) Surah(1);
             else Ayah(SurahNumber, AyahNumber + 1);
         }
 
-        private void AyahAt(int id) {
+        private void AyahAt(int id)
+        {
             quran.Open();
             command.CommandText = $"SELECT surah,ayah FROM ayat WHERE id={id}";
             reader = command.ExecuteReader();
@@ -160,7 +172,8 @@ namespace QuranKareem
         public void Ayah() { Ayah(SurahNumber, AyahNumber); }
         public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
-        public void Ayah(int sura, int aya) { // كما ترى .. المجهود كله عليها
+        public void Ayah(int sura, int aya)
+        { // كما ترى .. المجهود كله عليها
             if (!success) return;
 
             sura = Math.Abs(sura); // تصحيح رقم السورة
@@ -173,7 +186,8 @@ namespace QuranKareem
             int x5, x9, y5, y9; // متغيرات التلوين
 
             quran.Open();
-            if (sura != SurahNumber) {
+            if (sura != SurahNumber)
+            {
                 command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
                 reader.Read();
@@ -189,7 +203,8 @@ namespace QuranKareem
             command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
             AyahStart = 0;
-            if (!reader.HasRows && aya == 0) { // لا يوجد بسملة
+            if (!reader.HasRows && aya == 0)
+            { // لا يوجد بسملة
                 reader.Close();
                 command.Cancel();
                 command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
@@ -198,12 +213,13 @@ namespace QuranKareem
                 AyahStart = 1;
             }
             reader.Read();
-            ayahId= reader.GetInt32(0);
+            ayahId = reader.GetInt32(0);
             QuarterNumber = reader.GetInt32(2); // رقم الربع 
             y9 = reader.GetInt32(5);
-            x5= reader.GetInt32(6);
+            x5 = reader.GetInt32(6);
 
-            if (PageNumber != reader.GetInt32(3)) {
+            if (PageNumber != reader.GetInt32(3))
+            {
                 PageNumber = reader.GetInt32(3);
                 reader.Close();
                 command.Cancel();
@@ -219,13 +235,18 @@ namespace QuranKareem
             command.Cancel();
             quran.Close();
 
+
             Picture = (Bitmap)oPic.Clone();
             fp = new FastPixel(Picture);
             fp.Lock();
+
+            if (IsDark) FunWhite(0, width - 1, 0, height - 1);
             // التلوين
-            if (ayahColor != AyahColor.nothing) {
+            if (ayahColor != AyahColor.nothing)
+            {
                 if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
-                else {
+                else
+                {
                     quran.Open();
                     command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
                     reader = command.ExecuteReader();
@@ -238,12 +259,14 @@ namespace QuranKareem
                     if (x9 == 0) { x9 = width - 1; y5 += 1; }
                 }
 
-                //if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) ;
-                if (y5 == y9) {
+                if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) { fp.Unlock(true); return; }
+                if (y5 == y9)
+                {
                     y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
                     Fun(x5, x9, y5, y9);
                 }
-                else {
+                else
+                {
                     if (y9 - y5 > 1) Fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
                     Fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
                     Fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
@@ -252,8 +275,9 @@ namespace QuranKareem
             fp.Unlock(true);
         }
 
-        private void PictureAt(int i) { // الصورة الحالية
-            string s = i+"";
+        private void PictureAt(int i)
+        { // الصورة الحالية
+            string s = i + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += extension;
@@ -262,27 +286,32 @@ namespace QuranKareem
 
         }
         public void SetXY(int xMouse, int yMouse) { SetXY(xMouse, yMouse, width, height); }
-        public void SetXY(int xMouse, int yMouse, int width, int height) { // مؤشر الماوس
+        public void SetXY(int xMouse, int yMouse, int width, int height)
+        { // مؤشر الماوس
             if (!success) return;
-            xMouse = (int)( xMouse * (this.width / (decimal) width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
-            yMouse = (int)( yMouse * (this.height / (decimal) height))+1;
-            int cLine= (int)Math.Ceiling((decimal)yMouse / lineHeight) - 1;
+            xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
+            yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
+            int cLine = (int)Math.Ceiling((decimal)yMouse / lineHeight) - 1;
             int position = Convert.ToInt32(linesHelp.Substring(cLine * 2, 2)); // الإستفادة من مساعد السطور التي تسهل عليا البحث عن الآية
             int x;
-            
-            if (position >= 0 /* صفحة سورة الفاتحة وأول سورة البقرة بها فراغ من الأسفل */) {
+
+            if (position >= 0 /* صفحة سورة الفاتحة وأول سورة البقرة بها فراغ من الأسفل */)
+            {
                 quran.Open();
                 command.CommandText = $"SELECT * FROM ayat WHERE id={position + pageStartId}";
                 reader = command.ExecuteReader();
                 reader.Read();
                 x = reader.GetInt32(6);
-                if (cLine<14 && position == Convert.ToInt32(linesHelp.Substring(cLine*2 +2, 2)) || x==0) {
+                if (cLine < 14 && position == Convert.ToInt32(linesHelp.Substring(cLine * 2 + 2, 2)) || x == 0)
+                {
                     tempInt = reader.GetInt32(1);
                     tempInt2 = reader.GetInt32(4);
                 }
-                else {
-                    while (true) { // القليل من البحث الضئيل
-                        if (xMouse>=x || reader.GetInt32(5)> cLine+1) break;
+                else
+                {
+                    while (true)
+                    { // القليل من البحث الضئيل
+                        if (xMouse >= x || reader.GetInt32(5) > cLine + 1) break;
                         position++;
                         reader.Close();
                         command.Cancel();
@@ -302,13 +331,18 @@ namespace QuranKareem
         }
 
         public AyahColor ayahColor = AyahColor.red;
-        private void Fun(int x5, int x9, int y5, int y9) { // كود التلوين
-            try {
+        private void Fun(int x5, int x9, int y5, int y9)
+        { // كود التلوين
+            try
+            {
                 Color p4;
-                for (int y1 = y5; y1 <= y9; y1++) {
-                    for (int x1 = x5; x1 <= x9; x1++) {
+                for (int y1 = y5; y1 <= y9; y1++)
+                {
+                    for (int x1 = x5; x1 <= x9; x1++)
+                    {
                         p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/) {
+                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        {
                             if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
                             else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
                             else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
@@ -317,7 +351,28 @@ namespace QuranKareem
                         }
                     }
                 }
-            } catch { }
+            }
+            catch { }
+        }
+
+        private void FunWhite(int x5, int x9, int y5, int y9)
+        {
+            try
+            {
+                Color p4;
+                for (int y1 = y5; y1 <= y9; y1++)
+                {
+                    for (int x1 = x5; x1 <= x9; x1++)
+                    {
+                        p4 = fp.GetPixel(x1, y1);
+                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        {
+                            fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
+                        }
+                    }
+                }
+            }
+            catch { }
         }
     }
 }

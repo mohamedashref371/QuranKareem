@@ -30,6 +30,7 @@ namespace QuranKareem
         public int AyatCount { get; private set; }
         public string Comment { get; private set; }
         string fontFile,fontName;
+        public bool IsDark { get; set; } = false;
 
         public string PageText { get; private set; }
         public string PageTextHTML { get; private set; }
@@ -54,6 +55,11 @@ namespace QuranKareem
                     PageRichText.RightToLeft = RightToLeft.Yes;
                     PageRichText.WordWrap = false;
                     textType = TextType.rich;
+                    if (IsDark)
+                    {
+                        PageRichText.ForeColor = Color.White;
+                        PageRichText.BackColor = Color.Black;
+                    }
                     Controls.Add(PageRichText);
                     added = true;
             } catch { }

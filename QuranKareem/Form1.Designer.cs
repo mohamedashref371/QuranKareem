@@ -100,6 +100,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.dark = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -741,7 +742,7 @@
             // 
             // about
             // 
-            this.about.Location = new System.Drawing.Point(32, 826);
+            this.about.Location = new System.Drawing.Point(13, 826);
             this.about.Name = "about";
             this.about.Size = new System.Drawing.Size(75, 23);
             this.about.TabIndex = 29;
@@ -751,9 +752,9 @@
             // 
             // latest
             // 
-            this.latest.Location = new System.Drawing.Point(129, 826);
+            this.latest.Location = new System.Drawing.Point(95, 826);
             this.latest.Name = "latest";
-            this.latest.Size = new System.Drawing.Size(127, 23);
+            this.latest.Size = new System.Drawing.Size(112, 23);
             this.latest.TabIndex = 28;
             this.latest.Text = "latest version";
             this.latest.UseVisualStyleBackColor = true;
@@ -1041,11 +1042,29 @@
             this.label17.TabIndex = 74;
             this.label17.Text = "Surah";
             // 
+            // dark
+            // 
+            this.dark.BorderRadius = 16;
+            this.dark.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.dark.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.dark.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.dark.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.dark.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.dark.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.dark.ForeColor = System.Drawing.Color.White;
+            this.dark.Location = new System.Drawing.Point(217, 820);
+            this.dark.Name = "dark";
+            this.dark.Size = new System.Drawing.Size(74, 32);
+            this.dark.TabIndex = 81;
+            this.dark.Text = "Dark";
+            this.dark.Click += new System.EventHandler(this.Dark_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.dark);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label12);
@@ -1206,6 +1225,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
+        private Guna.UI2.WinForms.Guna2Button dark;
     }
 }
 
