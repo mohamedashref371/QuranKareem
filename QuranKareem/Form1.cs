@@ -157,7 +157,7 @@ namespace QuranKareem
 
         private void Minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
-        List<Control> ControlsList = new List<Control>();
+        readonly List<Control> ControlsList = new List<Control>();
         private void Dark_Click(object sender, EventArgs e)
         {
             if (dark.Text == "Dark")
@@ -194,6 +194,7 @@ namespace QuranKareem
                 }
                 ShaykhDesc.BackColor = default;
             }
+            quranPictures.RefreshPage();
             Ayah_ValueChanged(sender, e);
         }
         #endregion

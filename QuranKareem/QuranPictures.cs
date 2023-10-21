@@ -240,7 +240,6 @@ namespace QuranKareem
             fp = new FastPixel(Picture);
             fp.Lock();
 
-            if (IsDark) FunWhite(0, width - 1, 0, height - 1);
             // التلوين
             if (ayahColor != AyahColor.nothing)
             {
@@ -284,6 +283,10 @@ namespace QuranKareem
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
 
+            fp = new FastPixel(oPic);
+            fp.Lock();
+            if (IsDark) FunWhite(0, width - 1, 0, height - 1);
+            fp.Unlock(true);
         }
         public void SetXY(int xMouse, int yMouse) { SetXY(xMouse, yMouse, width, height); }
         public void SetXY(int xMouse, int yMouse, int width, int height)
@@ -329,6 +332,8 @@ namespace QuranKareem
                 Ayah(tempInt, tempInt2); // استدعاء الملك
             }
         }
+
+        public void RefreshPage() { PageNumber = 0; }
 
         public AyahColor ayahColor = AyahColor.red;
         private void Fun(int x5, int x9, int y5, int y9)
