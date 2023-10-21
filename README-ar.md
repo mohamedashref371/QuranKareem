@@ -25,3 +25,5 @@
 تم إضافة ميزة الوضع الليلي.
 
 لتسمية ملفات السور: [هنا](https://github.com/mohamedashref371/Naming-Surahs)
+
+أحب أن أشكر [موقع codeproject](https://www.codeproject.com/) على [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP)
