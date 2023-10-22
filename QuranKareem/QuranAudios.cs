@@ -37,25 +37,30 @@ namespace QuranKareem
         private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
         private bool added = false;
-        public void AddInControls(Control.ControlCollection Controls) {
-            if (!added) try {
+        public void AddInControls(Control.ControlCollection Controls)
+        {
+            if (!added) try
+                {
                     Controls.Add(mp3);
                     mp3.Visible = false;
                     added = true;
-                } catch { }
+                }
+                catch { }
         }
 
         public static QuranAudios Instance { get; private set; } = new QuranAudios();
 
         public bool CapturedAudio = false;
 
-        private QuranAudios() {
+        private QuranAudios()
+        {
             timer.Tick += Timer_Tick;
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
         }
 
-        public void QuranAudio(string path, int sura = 1, int aya = 0) {
+        public void QuranAudio(string path, int sura = 1, int aya = 0)
+        {
             if (!added || path == null || path.Trim().Length == 0) return;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
 
@@ -68,7 +73,8 @@ namespace QuranKareem
             SurahNumber = 0;
             timer.Stop(); ok = true;
 
-            try {
+            try
+            {
                 quran.Close();
                 if (File.Exists(path + "000.db"))
                     quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
@@ -90,19 +96,23 @@ namespace QuranKareem
                 success = true;
 
                 Ayah(sura, aya);
-            } catch {}
+            }
+            catch { }
         }
 
         public void Surah(int i) { Ayah(i, 0); }
 
-        public void AyahPlus() {
+        public void AyahPlus()
+        {
             if (!success) return;
-            if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0) { 
+            if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0)
+            {
                 AyahRepeatCounter += 1;
-                ok = true; 
+                ok = true;
                 Ayah(SurahNumber, AyahNumber);
             }
-            else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1) { 
+            else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
+            {
                 SurahRepeatCounter += 1;
                 ok = true;
                 Ayah(SurahNumber, 0);
@@ -120,7 +130,8 @@ namespace QuranKareem
         public void Ayah() { Ayah(SurahNumber, AyahNumber); }
         public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
-        public void Ayah(int sura, int aya) {
+        public void Ayah(int sura, int aya)
+        {
             if (!timer.Enabled) ok = true;
             timer.Stop();
             if (!success) return;
@@ -133,16 +144,18 @@ namespace QuranKareem
             else aya = Math.Abs(aya);
 
             quran.Open();
-            if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition==0) {
+            if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition == 0)
+            {
                 // /*if(!*/ Check(sura); /*) return;*/
                 surahArray = null; start = -1;
-                if (!CaptureAudio(sura)) { 
+                if (!CaptureAudio(sura))
+                {
                     mp3.URL = "";
                     quran.Close();
                     CapturedAudio = false;
                     return;
                 }
-                
+
                 CapturedAudio = true;
                 command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
@@ -158,7 +171,8 @@ namespace QuranKareem
             // لم أقم بتصليح مشكلة لو لا يوجد بسملة في اول المقطع
             command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
-            if (!reader.HasRows && aya == 0) {
+            if (!reader.HasRows && aya == 0)
+            {
                 reader.Close();
                 command.Cancel();
                 command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
@@ -181,11 +195,12 @@ namespace QuranKareem
             AyahNumber = aya;
             CurrentPosition = From;
 
-            if (To <= 0 && aya > 0) { 
+            if (To <= 0 && aya > 0)
+            {
                 quran.Close();
                 if (ok && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
                 ok = true;
-                return; 
+                return;
             }
 
             if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
@@ -198,7 +213,8 @@ namespace QuranKareem
             timer.Start();
         }
 
-         bool Check(int surah) {
+        bool Check(int surah)
+        {
             if (!CaptureAudio(surah)) return false;
             //quran.Open();
             command.CommandText = $"SELECT duration FROM surahs WHERE id={surah}";
@@ -213,19 +229,23 @@ namespace QuranKareem
             return false;
         }
 
-        bool CaptureAudio(int sura){
+        bool CaptureAudio(int sura)
+        {
             string s = sura + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += Extension;
-            bool hold=true;
+            bool hold = true;
             if (File.Exists(path + s)) mp3.URL = path + s;
             else if (File.Exists(path + sura + Extension)) mp3.URL = path + sura + Extension;
-            else {
+            else
+            {
                 hold = false;
                 string[] filesName = Directory.GetFiles(path);
-                for (int i=0; i< filesName.Length;i++) {
-                    if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0'))) {
+                for (int i = 0; i < filesName.Length; i++)
+                {
+                    if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0')))
+                    {
                         mp3.URL = filesName[i];
                         hold = true;
                     }
@@ -235,20 +255,22 @@ namespace QuranKareem
             return hold;
         }
 
-        public void Pause() { timer.Stop(); mp3.URL=""; CapturedAudio = false; }
+        public void Pause() { timer.Stop(); mp3.URL = ""; CapturedAudio = false; }
         public void Stop() { success = false; Pause(); }
 
-        double rate=1;
-        public void Rate(double i =1.0) {
+        double rate = 1;
+        public void Rate(double i = 1.0)
+        {
             if (i > 1.5) rate = 1.5;
             else if (i < 0.6) rate = 0.6;
-            else rate=i;
+            else rate = i;
             mp3.settings.rate = rate;
-            if (timer.Enabled && To - mp3.Ctlcontrols.currentPosition * 1000 > 0) timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition*1000) / rate);
+            if (timer.Enabled && To - mp3.Ctlcontrols.currentPosition * 1000 > 0) timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition * 1000) / rate);
             mp3.Ctlcontrols.currentPosition = mp3.Ctlcontrols.currentPosition;
         }
 
-        public void Volume(int i) {
+        public void Volume(int i)
+        {
             if (i < 10) i = 10;
             else if (i > 100) i = 100;
             mp3.settings.volume = i;
@@ -258,27 +280,32 @@ namespace QuranKareem
 
         public void AddEventHandler(EventHandler eh) { timer.Tick += eh; }
 
-        int SurahRepeat=1, AyahRepeat=1, SurahRepeatCounter =0, AyahRepeatCounter =0;
-        public void Repeat( int SurahRepeat = 1, int AyahRepeat=1) {
+        int SurahRepeat = 1, AyahRepeat = 1, SurahRepeatCounter = 0, AyahRepeatCounter = 0;
+        public void Repeat(int SurahRepeat = 1, int AyahRepeat = 1)
+        {
             this.SurahRepeat = (SurahRepeat >= 1) ? SurahRepeat : 1;
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
         }
 
         byte[] surahArray = null; int start = -1;
         // ليست جيدة في بعض المقاطع الصوتية التي تحتوي على وصف وصورة في بداية الملف
-        public void SurahSplitter() {
+        public void SurahSplitter()
+        {
             if (!success) return;
             if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
             if (mp3.URL == "") return;
             if (To <= From) return;
             if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
-            if (surahArray.Length <21000 || mp3.currentMedia.duration == 0) return;
-            if (start == -1) {
+            if (surahArray.Length < 21000 || mp3.currentMedia.duration == 0) return;
+            if (start == -1)
+            {
                 start = 0;
                 int j = 0;
-                for (int i=0; i<20000; i++) {
+                for (int i = 0; i < 20000; i++)
+                {
                     if (surahArray[i] == 0) j += 1;
-                    else {
+                    else
+                    {
                         if (j > 1000) { start = i; break; }
                         j = 0;
                     }
@@ -293,7 +320,8 @@ namespace QuranKareem
         // Mp3 Current Position String
         public string GetCurrentPosition() { return GetPositionOf(CurrentPosition); }
         string s;
-        public string GetPositionOf(int num) {
+        public string GetPositionOf(int num)
+        {
             int temp = num / 3600000;
             s = temp.ToString().PadLeft(2, '0') + ":";
 
@@ -311,7 +339,8 @@ namespace QuranKareem
             return s;
         }
 
-        public string[] GetPositionsOf(int surah) {
+        public string[] GetPositionsOf(int surah)
+        {
             if (!success) return null;
             int[] timestampsT = GetTimestamps(surah);
             string[] timestamps = new string[timestampsT.Length];
@@ -323,17 +352,20 @@ namespace QuranKareem
         }
 
         #region إضافة شيخ جديد
-        public bool NewQuranAudio(string path) {
+        public bool NewQuranAudio(string path)
+        {
             if (!added || path == null || path.Trim().Length == 0) return false;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
             this.path = path; success = false;
 
             CapturedAudio = false;
             timer.Stop(); ok = true;
-            try {
-                if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) {
+            try
+            {
+                if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db"))
+                {
                     if (!File.Exists(@"audios\database for audios.db")) return false;
-                    File.Copy(@"audios\database for audios.db", path+"000.db");
+                    File.Copy(@"audios\database for audios.db", path + "000.db");
                 }
 
                 if (File.Exists(path + "000.db"))
@@ -356,11 +388,13 @@ namespace QuranKareem
                 quran.Close();
                 success = true;
                 return true;
-            } catch { return false; }
+            }
+            catch { return false; }
 
         }
-        
-        public int GetTimestamp( int sura , int aya) {
+
+        public int GetTimestamp(int sura, int aya)
+        {
             if (!success) return 0;
             int temp;
             quran.Open();
@@ -374,7 +408,8 @@ namespace QuranKareem
             return temp;
         }
 
-        public int[] GetTimestamps(int sura){
+        public int[] GetTimestamps(int sura)
+        {
             if (!success) return null;
             List<int> list = new List<int>();
             quran.Open();
@@ -387,7 +422,8 @@ namespace QuranKareem
             return list.ToArray();
         }
 
-        public void Surah(int sura, int duration){
+        public void Surah(int sura, int duration)
+        {
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE surahs SET duration={duration} WHERE id={sura}";
@@ -396,17 +432,19 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public void Ayah(int sura, int aya, int timestampTo) {
+        public void Ayah(int sura, int aya, int timestampTo)
+        {
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}";
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
-            if (aya == AyatCount && timestampTo!=0) Surah(sura, timestampTo);
+            if (aya == AyatCount && timestampTo != 0) Surah(sura, timestampTo);
         }
 
-        public void SetDescription(string extension, string comment) {
+        public void SetDescription(string extension, string comment)
+        {
             if (!success) return;
             quran.Open();
             command.CommandText = $"UPDATE description SET extension='{extension}', comment='{comment}'; VACUUM;";
@@ -416,7 +454,8 @@ namespace QuranKareem
             Extension = extension; Comment = comment;
         }
 
-        public string[] GetDescription() /* لم يعد مستعملاً */{
+        public string[] GetDescription() /* لم يعد مستعملاً */
+        {
             if (!success) return null;
             string[] desc = new string[2];
             quran.Open();

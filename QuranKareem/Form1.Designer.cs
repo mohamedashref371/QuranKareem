@@ -491,7 +491,7 @@
             this.guna2HtmlLabel1.Size = new System.Drawing.Size(263, 47);
             this.guna2HtmlLabel1.TabIndex = 37;
             this.guna2HtmlLabel1.Text = "<span style=\"color: red\">Q</span>uran <span style=\"color: blue\">K</span>areem";
-            this.guna2HtmlLabel1.Click += new System.EventHandler(this.guna2HtmlLabel1_Click);
+            this.guna2HtmlLabel1.Click += new System.EventHandler(this.Guna2HtmlLabel1_Click);
             // 
             // exitForm
             // 
