@@ -95,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AyahColor.cs" />
-    <Compile Include="FastPixel.cs" />
+    <Compile Include="NotMyCode\FastPixel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

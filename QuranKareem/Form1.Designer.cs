@@ -46,7 +46,7 @@
             this.AyahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
-            this.panel = new Guna.UI2.WinForms.Guna2Panel();
+            this.panel = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
@@ -388,7 +388,6 @@
             // 
             this.panel.AutoScroll = true;
             this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.panel.BorderColor = System.Drawing.Color.Transparent;
             this.panel.Location = new System.Drawing.Point(825, 46);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(263, 821);
@@ -1172,7 +1171,7 @@
         private System.Windows.Forms.CheckBox AyahRepeatCheck;
         private System.Windows.Forms.NumericUpDown SurahRepeat;
         private System.Windows.Forms.Label time5;
-        private Guna.UI2.WinForms.Guna2Panel panel;
+        private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox SurahRepeatCheck;
         private System.Windows.Forms.Button pause;
