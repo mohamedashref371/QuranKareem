@@ -180,7 +180,7 @@ namespace QuranKareem
             else
             {
                 dark.Text = "Dark";
-                BackColor = default; ForeColor = Color.Black;
+                BackColor = Color.Empty; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
                 quranPic.BackColor = Color.White;
@@ -189,10 +189,12 @@ namespace QuranKareem
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
-                    ControlsList[i].BackColor = default;
+                    ControlsList[i].BackColor = BackColor;
                     ControlsList[i].ForeColor = ForeColor;
+                    if (ControlsList[i] is Button) ((Button)ControlsList[i]).UseVisualStyleBackColor = true;
                 }
-                ShaykhDesc.BackColor = default;
+                ShaykhDesc.BackColor = BackColor;
+                ShaykhDesc.UseVisualStyleBackColor = true;
             }
             if (textMode)
             {
