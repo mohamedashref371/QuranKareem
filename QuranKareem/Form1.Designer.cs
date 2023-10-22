@@ -316,7 +316,7 @@
             this.AyahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
             this.AyahRepeat.Location = new System.Drawing.Point(51, 445);
             this.AyahRepeat.Maximum = new decimal(new int[] {
-            10,
+            99,
             0,
             0,
             0});
@@ -354,7 +354,7 @@
             this.SurahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
             this.SurahRepeat.Location = new System.Drawing.Point(51, 411);
             this.SurahRepeat.Maximum = new decimal(new int[] {
-            10,
+            99,
             0,
             0,
             0});
