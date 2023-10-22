@@ -78,6 +78,7 @@ namespace QuranKareem
                 PageRichText.ForeColor = Color.Black;
                 PageRichText.BackColor = Color.White;
             }
+            Ayah();
         }
 
         public void QuranText(string file, int sura = 1, int aya = 0)

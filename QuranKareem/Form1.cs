@@ -168,7 +168,7 @@ namespace QuranKareem
                 dark.ForeColor = Color.Black;
                 quranPic.BackColor = Color.Black;
                 quranPictures.IsDark = true;
-                quranTexts.IsDark = true; quranTexts.IsDarkChanged();
+                quranTexts.IsDark = true; 
                 panel.BackColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -185,7 +185,7 @@ namespace QuranKareem
                 dark.ForeColor = Color.White;
                 quranPic.BackColor = Color.White;
                 quranPictures.IsDark = false;
-                quranTexts.IsDark = false; quranTexts.IsDarkChanged();
+                quranTexts.IsDark = false;
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -194,8 +194,15 @@ namespace QuranKareem
                 }
                 ShaykhDesc.BackColor = default;
             }
-            quranPictures.RefreshPage();
-            Ayah_ValueChanged(sender, e);
+            if (textMode)
+            {
+                quranTexts.IsDarkChanged();
+            }
+            else
+            {
+                quranPictures.RefreshPage();
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
         }
         #endregion
 
@@ -448,7 +455,8 @@ namespace QuranKareem
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
 
-            if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
+            if (isAllow && textMode) quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
+            else if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
             time5.Text = quranAudios.GetCurrentPosition();
             allow = true;
         }

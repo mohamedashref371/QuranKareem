@@ -333,7 +333,11 @@ namespace QuranKareem
             }
         }
 
-        public void RefreshPage() { PageNumber = 0; }
+        public void RefreshPage()
+        {
+            PageNumber = 0;
+            Ayah();
+        }
 
         public AyahColor ayahColor = AyahColor.red;
         private void Fun(int x5, int x9, int y5, int y9)
