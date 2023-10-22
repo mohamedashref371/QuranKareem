@@ -191,7 +191,7 @@ namespace QuranKareem
                 {
                     ControlsList[i].BackColor = BackColor;
                     ControlsList[i].ForeColor = ForeColor;
-                    if (ControlsList[i] is Button) ((Button)ControlsList[i]).UseVisualStyleBackColor = true;
+                    if (ControlsList[i] is Button button) button.UseVisualStyleBackColor = true;
                 }
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
