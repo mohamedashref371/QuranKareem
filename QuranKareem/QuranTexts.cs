@@ -396,22 +396,31 @@ namespace QuranKareem
 
         private readonly List<int> SearchIDs = new List<int>();
         readonly List<string> lst = new List<string>();
-        public string[] Search(string words)
+        public string[] Search(string words, bool spellingErrors = false)
         {
             SearchIDs.Clear();
             if (!success || words == null || words.Trim() == "") return new string[] { };
-            words = words.Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا");
+            if (spellingErrors) words = words.Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
+                    .Replace("ذ", "ز").Replace("ظ", "ز")
+                    .Replace("ة", "ت").Replace("ط", "ت")
+                    .Replace("ث", "س").Replace("ص", "س")
+                    .Replace("ق", "ك");
             lst.Clear();
             quran.Open();
-            command.CommandText = "SELECT id,abstract_text FROM ayat";
+            command.CommandText = "SELECT id, surah, ayah, abstract_text FROM ayat";
             reader = command.ExecuteReader();
             string s;
             while (reader.Read())
             {
-                s = reader.GetString(1).Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا");
+                s = reader.GetString(3);
+                if (spellingErrors) s = s.Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
+                        .Replace("ذ", "ز").Replace("ظ", "ز")
+                        .Replace("ة", "ت").Replace("ط", "ت")
+                        .Replace("ث", "س").Replace("ص", "س")
+                        .Replace("ق", "ك");
                 if (s.Contains(words))
                 {
-                    s = reader.GetString(1);
+                    s = reader.GetString(3);
                     lst.Add($"{(s.Length > 50 ? s.Substring(0, 50) + "..." : s)}");
                     SearchIDs.Add(reader.GetInt32(0));
                 }

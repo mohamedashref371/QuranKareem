@@ -101,6 +101,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.dark = new Guna.UI2.WinForms.Guna2Button();
+            this.spellingErrors = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -645,7 +646,7 @@
             // search
             // 
             this.search.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.search.Location = new System.Drawing.Point(149, 596);
+            this.search.Location = new System.Drawing.Point(149, 593);
             this.search.Name = "search";
             this.search.Size = new System.Drawing.Size(90, 32);
             this.search.TabIndex = 18;
@@ -656,7 +657,7 @@
             // searchText
             // 
             this.searchText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchText.Location = new System.Drawing.Point(12, 634);
+            this.searchText.Location = new System.Drawing.Point(12, 631);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(262, 27);
             this.searchText.TabIndex = 20;
@@ -665,7 +666,7 @@
             // searchClose
             // 
             this.searchClose.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchClose.Location = new System.Drawing.Point(42, 596);
+            this.searchClose.Location = new System.Drawing.Point(42, 593);
             this.searchClose.Name = "searchClose";
             this.searchClose.Size = new System.Drawing.Size(90, 32);
             this.searchClose.TabIndex = 19;
@@ -1058,6 +1059,17 @@
             this.dark.Text = "Dark";
             this.dark.Click += new System.EventHandler(this.Dark_Click);
             // 
+            // spellingErrors
+            // 
+            this.spellingErrors.AutoSize = true;
+            this.spellingErrors.Location = new System.Drawing.Point(175, 658);
+            this.spellingErrors.Name = "spellingErrors";
+            this.spellingErrors.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.spellingErrors.Size = new System.Drawing.Size(99, 17);
+            this.spellingErrors.TabIndex = 82;
+            this.spellingErrors.Text = "مع أخطاء إملائية";
+            this.spellingErrors.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1130,6 +1142,7 @@
             this.Controls.Add(this.quranPic);
             this.Controls.Add(this.addNewMoqrea);
             this.Controls.Add(this.srtFile);
+            this.Controls.Add(this.spellingErrors);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -1225,6 +1238,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private Guna.UI2.WinForms.Guna2Button dark;
+        private System.Windows.Forms.CheckBox spellingErrors;
     }
 }
 

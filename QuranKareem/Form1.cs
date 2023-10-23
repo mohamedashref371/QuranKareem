@@ -558,7 +558,7 @@ namespace QuranKareem
         private void Search_Click(object sender, EventArgs e)
         {
             searchList.Items.Clear();
-            searchList.Items.AddRange(quranTexts.Search(searchText.Text));
+            searchList.Items.AddRange(quranTexts.Search(searchText.Text, spellingErrors.Checked));
             searchList.Visible = true;
             searchClose.Visible = true;
         }
