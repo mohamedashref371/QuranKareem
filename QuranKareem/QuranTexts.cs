@@ -404,6 +404,7 @@ namespace QuranKareem
                     .Replace("ذ", "ز").Replace("ظ", "ز")
                     .Replace("ة", "ت").Replace("ط", "ت")
                     .Replace("ث", "س").Replace("ص", "س")
+                    .Replace("ض", "د")
                     .Replace("ق", "ك");
             lst.Clear();
             quran.Open();
@@ -417,6 +418,7 @@ namespace QuranKareem
                         .Replace("ذ", "ز").Replace("ظ", "ز")
                         .Replace("ة", "ت").Replace("ط", "ت")
                         .Replace("ث", "س").Replace("ص", "س")
+                        .Replace("ض", "د")
                         .Replace("ق", "ك");
                 if (s.Contains(words))
                 {
