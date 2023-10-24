@@ -129,10 +129,10 @@
             0,
             0});
             this.Surah.Name = "Surah";
+            this.Surah.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Surah.Size = new System.Drawing.Size(95, 28);
             this.Surah.TabIndex = 1;
             this.Surah.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Surah.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Surah.Value = new decimal(new int[] {
             1,
             0,
@@ -155,10 +155,10 @@
             0,
             0});
             this.Page.Name = "Page";
+            this.Page.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Page.Size = new System.Drawing.Size(95, 28);
             this.Page.TabIndex = 5;
             this.Page.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Page.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Page.Value = new decimal(new int[] {
             1,
             0,
@@ -181,10 +181,10 @@
             0,
             0});
             this.Ayah.Name = "Ayah";
+            this.Ayah.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Ayah.Size = new System.Drawing.Size(95, 28);
             this.Ayah.TabIndex = 6;
             this.Ayah.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Ayah.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Ayah.Value = new decimal(new int[] {
             1,
             0,
@@ -207,10 +207,10 @@
             0,
             0});
             this.Quarter.Name = "Quarter";
+            this.Quarter.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Quarter.Size = new System.Drawing.Size(95, 28);
             this.Quarter.TabIndex = 4;
             this.Quarter.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Quarter.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Quarter.Value = new decimal(new int[] {
             1,
             0,
@@ -327,6 +327,7 @@
             0,
             0});
             this.AyahRepeat.Name = "AyahRepeat";
+            this.AyahRepeat.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.AyahRepeat.Size = new System.Drawing.Size(55, 28);
             this.AyahRepeat.TabIndex = 14;
             this.AyahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -365,6 +366,7 @@
             0,
             0});
             this.SurahRepeat.Name = "SurahRepeat";
+            this.SurahRepeat.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SurahRepeat.Size = new System.Drawing.Size(55, 28);
             this.SurahRepeat.TabIndex = 12;
             this.SurahRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -450,10 +452,10 @@
             0,
             65536});
             this.Rate.Name = "Rate";
+            this.Rate.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Rate.Size = new System.Drawing.Size(95, 28);
             this.Rate.TabIndex = 10;
             this.Rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Rate.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Rate.Value = new decimal(new int[] {
             1,
             0,
@@ -548,10 +550,10 @@
             0,
             0});
             this.Juz.Name = "Juz";
+            this.Juz.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Juz.Size = new System.Drawing.Size(95, 28);
             this.Juz.TabIndex = 2;
             this.Juz.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Juz.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Juz.Value = new decimal(new int[] {
             1,
             0,
@@ -585,10 +587,10 @@
             0,
             0});
             this.Hizb.Name = "Hizb";
+            this.Hizb.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Hizb.Size = new System.Drawing.Size(95, 28);
             this.Hizb.TabIndex = 3;
             this.Hizb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Hizb.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.Hizb.Value = new decimal(new int[] {
             1,
             0,
@@ -1075,7 +1077,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.searchList);
             this.Controls.Add(this.dark);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label12);
@@ -1143,6 +1144,7 @@
             this.Controls.Add(this.addNewMoqrea);
             this.Controls.Add(this.srtFile);
             this.Controls.Add(this.spellingErrors);
+            this.Controls.Add(this.searchList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
