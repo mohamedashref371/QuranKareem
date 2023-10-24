@@ -261,21 +261,21 @@ namespace QuranKareem
                 b = new Guna2Button
                 {
                     FillColor = clr,
-                    Location = new Point(fs.GetNewX(5), fs.GetNewY(y)),
+                    Location = new Point(fs.GetNewX(3), fs.GetNewY(y)),
                     BorderRadius = 15
                 };
                 if (stringArray != null && stringArray.Length > 2 && stringArray[2].Trim() != "") b.ForeColor = Color.FromName(stringArray[2].Trim());
                 if (stringArray != null && stringArray.Length > 3 && stringArray[3].Trim() != "") b.Text = stringArray[3];
                 if (audiosFolders[i].Trim() == ":line:")
                 {
-                    b.Size = new Size(fs.GetNewX(230), fs.GetNewY(10));
+                    b.Size = new Size(fs.GetNewX(243), fs.GetNewY(10));
                     y -= 35;
                 }
                 else
                 {
                     if (b.Text == "") b.Text = audiosFolders[i].Trim('\\', '/').Split('\\').Last();
                     b.Font = new Font("Segoe UI", fs.GetNewX(12));
-                    b.Size = new Size(fs.GetNewX(230), fs.GetNewY(45));
+                    b.Size = new Size(fs.GetNewX(243), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
                     b.Tag = audiosFolders[i];
                     b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
