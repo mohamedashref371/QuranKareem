@@ -15,10 +15,11 @@ namespace QuranKareem
         private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
-        private int surahsCount, quartersCount, pagesCount, linesCount, width, height;
+        private int surahsCount, quartersCount, pagesCount /*,linesCount*/;
+        int width, height;
         private string extension; // example: .png
         private Color background;
-        private string linesHelp; // setXY function help
+        //private string linesHelp; // setXY function help
         private int pageStartId, ayahId;
         private Bitmap oPic;
         public Bitmap Picture { get; private set; }
@@ -32,9 +33,12 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
+        public int CurrentWord { get; set; } = -1;
         public bool IsDark { get; set; } = false;
 
-        private int lineHeight; private int tempInt, tempInt2;
+
+        //private int lineHeight;
+        private int tempInt, tempInt2;
 
         public static QuranPictures Instance { get; private set; } = new QuranPictures();
 
@@ -67,18 +71,19 @@ namespace QuranKareem
 
                 if (!reader.HasRows) return;
                 reader.Read();
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1)/*version*/ != 1) return;
+                /* قررت التخلي عن الإصدار الأول من الداتابيز تماماً*/
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1)/*version*/ != 2) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 quartersCount = reader.GetInt32(4);
                 pagesCount = reader.GetInt32(5);
-                linesCount = reader.GetInt32(6);
-                width = reader.GetInt32(7);
-                height = reader.GetInt32(8);
-                var clr = reader.GetString(10).Split(',');
+                //linesCount = reader.GetInt32(6);
+                width = reader.GetInt32(6);
+                height = reader.GetInt32(7);
+                var clr = reader.GetString(9).Split(',');
                 background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
-                extension = reader.GetString(11);
-                lineHeight = height / linesCount;
+                extension = reader.GetString(10);
+                //lineHeight = height / linesCount;
 
                 reader.Close();
                 command.Cancel();
@@ -87,7 +92,7 @@ namespace QuranKareem
 
                 Ayah(sura, aya);
             }
-            catch { return; }
+            catch { }
         }
 
         public string[] GetSurahNames()
@@ -172,7 +177,7 @@ namespace QuranKareem
         public void Ayah() { Ayah(SurahNumber, AyahNumber); }
         public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
-        public void Ayah(int sura, int aya)
+        public void Ayah(int sura, int aya, int word = -1, bool ColoringAyah = true)
         { // كما ترى .. المجهود كله عليها
             if (!success) return;
 
@@ -182,8 +187,6 @@ namespace QuranKareem
 
             if (aya == -1) aya = 0;
             else aya = Math.Abs(aya);
-
-            int x5, x9, y5, y9; // متغيرات التلوين
 
             quran.Open();
             if (sura != SurahNumber)
@@ -215,8 +218,6 @@ namespace QuranKareem
             reader.Read();
             ayahId = reader.GetInt32(0);
             QuarterNumber = reader.GetInt32(2); // رقم الربع 
-            y9 = reader.GetInt32(5);
-            x5 = reader.GetInt32(6);
 
             if (PageNumber != reader.GetInt32(3))
             {
@@ -227,7 +228,6 @@ namespace QuranKareem
                 reader = command.ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
-                linesHelp = reader.GetString(2);
                 PictureAt(PageNumber);
             }
 
@@ -235,42 +235,31 @@ namespace QuranKareem
             command.Cancel();
             quran.Close();
 
-
+            CurrentWord = -1;
             Picture = (Bitmap)oPic.Clone();
             fp = new FastPixel(Picture);
             fp.Lock();
 
             // التلوين
-            if (ayahColor != AyahColor.nothing)
+            quran.Open();
+            if (ColoringAyah && ayahColor != AyahColor.nothing)
             {
-                if (ayahId - pageStartId == 0) { x9 = width - 1; y5 = 1; }
-                else
-                {
-                    quran.Open();
-                    command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
-                    reader = command.ExecuteReader();
-                    reader.Read();
-                    y5 = reader.GetInt32(5);
-                    x9 = reader.GetInt32(6);
-                    reader.Close();
-                    command.Cancel();
-                    quran.Close();
-                    if (x9 == 0) { x9 = width - 1; y5 += 1; }
-                }
-
-                if (y5 == 1 && y9 == linesCount && x5 == 0 && x9 == width - 1) { fp.Unlock(true); return; }
-                if (y5 == y9)
-                {
-                    y5 = lineHeight * y5 - lineHeight; y9 = lineHeight * y9 - 1;
-                    Fun(x5, x9, y5, y9);
-                }
-                else
-                {
-                    if (y9 - y5 > 1) Fun(0, width - 1, lineHeight * y5, lineHeight * y9 - lineHeight - 1);
-                    Fun(0, x9, lineHeight * y5 - lineHeight, lineHeight * y5 - 1);
-                    Fun(x5, width - 1, lineHeight * y9 - lineHeight, lineHeight * y9 - 1);
-                }
+                command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
+                reader = command.ExecuteReader();
+                while (reader.Read()) Fun(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
+                reader.Close();
+                command.Cancel();
             }
+            if (word >= 1)
+            {
+                command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word={word}";
+                reader = command.ExecuteReader();
+                if (reader.HasRows) CurrentWord = word;
+                while (reader.Read()) FunWord(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
+                reader.Close();
+                command.Cancel();
+            }
+            quran.Close();
             fp.Unlock(true);
         }
 
@@ -282,55 +271,54 @@ namespace QuranKareem
             s += extension;
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
-
-            fp = new FastPixel(oPic);
-            fp.Lock();
-            if (IsDark) FunWhite(0, width - 1, 0, height - 1);
-            fp.Unlock(true);
+            if (IsDark)
+            {
+                fp = new FastPixel(oPic);
+                fp.Lock();
+                FunWhite(0, width - 1, 0, height - 1);
+                fp.Unlock(true);
+            } 
         }
         public void SetXY(int xMouse, int yMouse) { SetXY(xMouse, yMouse, width, height); }
-        public void SetXY(int xMouse, int yMouse, int width, int height)
+        public void SetXY(int xMouse, int yMouse, int width, int height, bool words=false)
         { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
-            int cLine = (int)Math.Ceiling((decimal)yMouse / lineHeight) - 1;
-            int position = Convert.ToInt32(linesHelp.Substring(cLine * 2, 2)); // الإستفادة من مساعد السطور التي تسهل عليا البحث عن الآية
-            int x;
-
-            if (position >= 0 /* صفحة سورة الفاتحة وأول سورة البقرة بها فراغ من الأسفل */)
+            int ayah = -1; tempInt = -371;
+            quran.Open();
+            
+            if (words)
             {
-                quran.Open();
-                command.CommandText = $"SELECT * FROM ayat WHERE id={position + pageStartId}";
+                command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
                 reader = command.ExecuteReader();
-                reader.Read();
-                x = reader.GetInt32(6);
-                if (cLine < 14 && position == Convert.ToInt32(linesHelp.Substring(cLine * 2 + 2, 2)) || x == 0)
+                if (reader.Read())
                 {
-                    tempInt = reader.GetInt32(1);
-                    tempInt2 = reader.GetInt32(4);
+                    tempInt = reader.GetInt32(0);
+                    tempInt2 = reader.GetInt32(1);
+                    ayah = !reader.IsDBNull(2)? reader.GetInt32(2) : -1;
                 }
-                else
-                {
-                    while (true)
-                    { // القليل من البحث الضئيل
-                        if (xMouse >= x || reader.GetInt32(5) > cLine + 1) break;
-                        position++;
-                        reader.Close();
-                        command.Cancel();
-                        command.CommandText = $"SELECT * FROM ayat WHERE id={position + pageStartId}";
-                        reader = command.ExecuteReader();
-                        reader.Read();
-                        x = reader.GetInt32(6);
-                    }
-                    tempInt = reader.GetInt32(1);
-                    tempInt2 = reader.GetInt32(4);
+                else {
+                    words = false;
+                    reader.Close();
+                    command.Cancel();
                 }
-                reader.Close();
-                command.Cancel();
-                quran.Close();
-                Ayah(tempInt, tempInt2); // استدعاء الملك
             }
+            if (!words)
+            {
+                command.CommandText = $"SELECT surah,ayah FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM parts WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as partss on partss.ayah_id = ayats.id";
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    tempInt = reader.GetInt32(0);
+                    tempInt2 = reader.GetInt32(1);
+                }
+            }
+            
+            reader.Close();
+            command.Cancel();
+            quran.Close();
+            if (tempInt != -371) Ayah(tempInt, tempInt2, ayah); // استدعاء الملك
         }
 
         public void RefreshPage()
@@ -357,6 +345,26 @@ namespace QuranKareem
                             else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
                             else if (ayahColor == AyahColor.darkRed) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
                             else fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void FunWord(int x5, int x9, int y5, int y9)
+        {
+            try
+            {
+                Color p4;
+                for (int y1 = y5; y1 <= y9; y1++)
+                {
+                    for (int x1 = x5; x1 <= x9; x1++)
+                    {
+                        p4 = fp.GetPixel(x1, y1);
+                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        {
+                            fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
                         }
                     }
                 }
