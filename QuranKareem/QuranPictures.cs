@@ -349,7 +349,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (!Equal2Color(p4, background, 30))
+                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
                             {
                                 if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
                                 else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
@@ -376,7 +376,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (!Equal2Color(p4, background, 30)) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
+                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30))) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
                         }
                     }
                 }
