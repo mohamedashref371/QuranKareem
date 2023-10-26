@@ -263,14 +263,15 @@ namespace QuranKareem
             fp.Unlock(true);
         }
 
-        private void PictureAt(int i)
+        private void PictureAt(int sura)
         { // الصورة الحالية
-            string s = i + "";
+            string s = sura + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += extension;
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
+            else if (File.Exists($"{path}{sura}{extension}")) oPic = new Bitmap($"{path}{sura}{extension}");
             if (IsDark)
             {
                 fp = new FastPixel(oPic);
