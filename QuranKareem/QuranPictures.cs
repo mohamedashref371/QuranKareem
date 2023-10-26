@@ -18,7 +18,7 @@ namespace QuranKareem
         private int surahsCount, quartersCount, pagesCount /*,linesCount*/;
         int width, height;
         private string extension; // example: .png
-        private Color background, textColor;
+        private Color background, textColor = Color.Empty;
         //private string linesHelp; // setXY function help
         private int pageStartId, ayahId;
         private Bitmap oPic;
@@ -349,11 +349,14 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
-                            else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
-                            else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
-                            else if (ayahColor == AyahColor.darkRed) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
-                            else fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
+                            if (p4.A < 255 || !Equal2Color(p4, background, 30))
+                            {
+                                if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
+                                else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
+                                else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
+                                else if (ayahColor == AyahColor.darkRed) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
+                                else fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
+                            }
                         }
                     }
                 }
@@ -373,7 +376,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
+                            if (p4.A < 255 || !Equal2Color(p4, background, 30)) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
                         }
                     }
                 }
@@ -391,14 +394,16 @@ namespace QuranKareem
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/)
-                        {
-                            fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
-                        }
+                        if (p4.A != 0) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
                     }
                 }
             }
             catch { }
+        }
+
+        private bool Equal2Color(Color clr1, Color clr2, int delta=0)
+        {
+            return Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
         }
     }
 }
