@@ -349,7 +349,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (background.A < 255 || p4.A < 255 || !Equal2Color(p4, background, 30))
+                            if (!Equal2Color(p4, background, 30))
                             {
                                 if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
                                 else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
@@ -376,7 +376,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (background.A < 255 || p4.A < 255 || !Equal2Color(p4, background, 30)) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
+                            if (!Equal2Color(p4, background, 30)) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
                         }
                     }
                 }
@@ -403,7 +403,7 @@ namespace QuranKareem
 
         private bool Equal2Color(Color clr1, Color clr2, int delta=0)
         {
-            return Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
+            return clr1.A==255 && clr2.A==255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
         }
     }
 }
