@@ -18,7 +18,7 @@ namespace QuranKareem
         private int surahsCount, quartersCount, pagesCount /*,linesCount*/;
         int width, height;
         private string extension; // example: .png
-        private Color background;
+        private Color background, textColor;
         //private string linesHelp; // setXY function help
         private int pageStartId, ayahId;
         private Bitmap oPic;
@@ -34,8 +34,17 @@ namespace QuranKareem
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
         public int CurrentWord { get; set; } = -1;
-        public bool IsDark { get; set; } = false;
 
+        public bool IsDark { get; private set; } = false;
+        public void ChangeDark()
+        {
+            if (!success) return;
+            IsDark = !IsDark;
+            PageNumber = 0;
+            background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
+            textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
+            Ayah();
+        }
 
         //private int lineHeight;
         private int tempInt, tempInt2;
@@ -80,8 +89,13 @@ namespace QuranKareem
                 //linesCount = reader.GetInt32(6);
                 width = reader.GetInt32(6);
                 height = reader.GetInt32(7);
-                var clr = reader.GetString(9).Split(',');
-                background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+
+                string[] clr;
+                clr = reader.GetString(8).Split(',');
+                if (clr.Length == 3) textColor = Color.FromArgb(Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+                clr = reader.GetString(9).Split(',');
+                if (clr.Length >= 3) background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+                
                 extension = reader.GetString(10);
                 //lineHeight = height / linesCount;
 
@@ -322,12 +336,6 @@ namespace QuranKareem
             if (tempInt != -371) Ayah(tempInt, tempInt2, ayah); // استدعاء الملك
         }
 
-        public void RefreshPage()
-        {
-            PageNumber = 0;
-            Ayah();
-        }
-
         public AyahColor ayahColor = AyahColor.red;
         private void Fun(int x5, int x9, int y5, int y9)
         { // كود التلوين
@@ -383,7 +391,7 @@ namespace QuranKareem
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        if (p4.A != 0 /*البكسل ليس شفافا*/)
                         {
                             fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
                         }

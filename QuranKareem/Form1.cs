@@ -167,8 +167,8 @@ namespace QuranKareem
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
                 quranPic.BackColor = Color.Black;
-                quranPictures.IsDark = true;
-                quranTexts.IsDark = true; 
+                quranPictures.ChangeDark();
+                quranTexts.ChangeDark();
                 panel.BackColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -184,8 +184,8 @@ namespace QuranKareem
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
                 quranPic.BackColor = Color.White;
-                quranPictures.IsDark = false;
-                quranTexts.IsDark = false;
+                quranPictures.ChangeDark();
+                quranTexts.ChangeDark();
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -196,15 +196,7 @@ namespace QuranKareem
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
             }
-            if (textMode)
-            {
-                quranTexts.IsDarkChanged();
-            }
-            else
-            {
-                quranPictures.RefreshPage();
-                quranPic.BackgroundImage = quranPictures.Picture;
-            }
+            if (!textMode) quranPic.BackgroundImage = quranPictures.Picture;
         }
         #endregion
 
