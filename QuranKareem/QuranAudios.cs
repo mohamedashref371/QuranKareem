@@ -23,6 +23,7 @@ namespace QuranKareem
 
         private int ayahId;
 
+        int version;
         public int Narration { get; private set; }
         public int From { get; private set; }
         public int To { get; private set; }
@@ -85,7 +86,8 @@ namespace QuranKareem
                 reader = command.ExecuteReader();
                 if (!reader.HasRows) return;
                 reader.Read();
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 3 || reader.GetInt32(1)/*version*/ != 1) return;
+                version = reader.GetInt32(1);
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || (version != 1 && version != 2)) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
