@@ -35,6 +35,7 @@ namespace QuranKareem
         public int CurrentPosition { get; private set; }
 
         private readonly Timer timer = new Timer(); private bool ok = true;
+        private readonly Timer wordsTimer = new Timer();
         private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
         private bool added = false;
@@ -170,7 +171,6 @@ namespace QuranKareem
 
             if (aya > AyatCount) aya = AyatCount;
 
-            // لم أقم بتصليح مشكلة لو لا يوجد بسملة في اول المقطع
             command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
             if (!reader.HasRows && aya == 0)
@@ -183,7 +183,6 @@ namespace QuranKareem
             }
             reader.Read();
             To = reader.GetInt32(3);
-            //if (To == 0 && aya == 0) To = 1; // هذا ليس الحل الأمثل
 
             ayahId = reader.GetInt32(0);
             reader.Close();
@@ -280,7 +279,7 @@ namespace QuranKareem
 
         void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
 
-        public void AddEventHandler(EventHandler eh) { timer.Tick += eh; }
+        public void AddEventHandler(EventHandler eh) => timer.Tick += eh;
 
         int SurahRepeat = 1, AyahRepeat = 1, SurahRepeatCounter = 0, AyahRepeatCounter = 0;
         public void Repeat(int SurahRepeat = 1, int AyahRepeat = 1)
@@ -424,7 +423,7 @@ namespace QuranKareem
             return list.ToArray();
         }
 
-        public void Surah(int sura, int duration)
+        public void SetSurah(int sura, int duration)
         {
             if (!success) return;
             quran.Open();
@@ -434,7 +433,7 @@ namespace QuranKareem
             quran.Close();
         }
 
-        public void Ayah(int sura, int aya, int timestampTo)
+        public void SetAyah(int sura, int aya, int timestampTo)
         {
             if (!success) return;
             quran.Open();
@@ -442,7 +441,7 @@ namespace QuranKareem
             command.ExecuteNonQuery();
             command.Cancel();
             quran.Close();
-            if (aya == AyatCount && timestampTo != 0) Surah(sura, timestampTo);
+            if (aya == AyatCount && timestampTo != 0) SetSurah(sura, timestampTo);
         }
 
         public void SetDescription(string extension, string comment)

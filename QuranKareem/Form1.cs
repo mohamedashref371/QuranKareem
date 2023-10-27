@@ -713,7 +713,7 @@ namespace QuranKareem
         void Timestamp_ValueChanged(object sender, EventArgs e)
         {
             tempInt = (int)((NumericUpDown)sender).Tag;
-            quranAudios.Ayah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value * 1000));
+            quranAudios.SetAyah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value * 1000));
             if (tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
                 if (Ayah.Value != tempInt + 1) Ayah.Value = tempInt + 1;
                 else Ayah_ValueChanged(sender, e);

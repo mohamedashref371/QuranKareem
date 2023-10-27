@@ -4,6 +4,8 @@ using System.Data.SQLite;
 using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
 namespace QuranKareem
 {
     class QuranPictures
@@ -20,9 +22,10 @@ namespace QuranKareem
         private string extension; // example: .png
         private Color background, textColor = Color.Empty;
         //private string linesHelp; // setXY function help
-        private int pageStartId, ayahId;
+        private int ayahId;
         private Bitmap oPic;
         public Bitmap Picture { get; private set; }
+        public Bitmap WordPicture { get; private set; }
         FastPixel fp;
 
         public int Narration { get; private set; }
@@ -35,6 +38,7 @@ namespace QuranKareem
         public int AyatCount { get; private set; }
         public int CurrentWord { get; set; } = -1;
 
+        public bool WordMode { get; set; } = true;
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
         {
@@ -191,7 +195,7 @@ namespace QuranKareem
         public void Ayah() { Ayah(SurahNumber, AyahNumber); }
         public void Ayah(int aya) { Ayah(SurahNumber, aya); }
 
-        public void Ayah(int sura, int aya, int word = -1, bool ColoringAyah = true)
+        public void Ayah(int sura, int aya)
         { // كما ترى .. المجهود كله عليها
             if (!success) return;
 
@@ -236,27 +240,25 @@ namespace QuranKareem
             if (PageNumber != reader.GetInt32(3))
             {
                 PageNumber = reader.GetInt32(3);
-                reader.Close();
-                command.Cancel();
-                command.CommandText = $"SELECT * FROM pages WHERE id={PageNumber}";
-                reader = command.ExecuteReader();
-                reader.Read();
-                pageStartId = reader.GetInt32(1);
+                //reader.Close();
+                //command.Cancel();
+                //command.CommandText = $"SELECT * FROM pages WHERE id={PageNumber}";
+                //reader = command.ExecuteReader();
+                //reader.Read();
+                //pageStartId = reader.GetInt32(1);
                 PictureAt(PageNumber);
             }
 
             reader.Close();
             command.Cancel();
-            quran.Close();
 
-            CurrentWord = -1;
+            CurrentWord = -1; words.Clear();
             Picture = (Bitmap)oPic.Clone();
             fp = new FastPixel(Picture);
             fp.Lock();
 
             // التلوين
-            quran.Open();
-            if (ColoringAyah && ayahColor != AyahColor.nothing)
+            if (ayahColor != AyahColor.nothing)
             {
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
@@ -264,16 +266,27 @@ namespace QuranKareem
                 reader.Close();
                 command.Cancel();
             }
-            if (word >= 1)
+            fp.Unlock(true);
+            if (WordMode)
             {
-                command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word={word}";
+                command.CommandText = $"SELECT DISTINCT(word),min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word IS NOT NULL ORDER BY word ASC"; // AND word={word}
                 reader = command.ExecuteReader();
-                if (reader.HasRows) CurrentWord = word;
-                while (reader.Read()) FunWord(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
+                while (reader.Read()) words.AddRange(new int[] { reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4) });
                 reader.Close();
                 command.Cancel();
             }
             quran.Close();
+        }
+
+        private readonly List<int> words = new List<int>();
+        public void WordPictureOf(int word)
+        {
+            if (word <= 0 || word * 4 > words.Count) { WordPicture = null; return; }
+            WordPicture = (Bitmap)Picture.Clone();
+            fp = new FastPixel(WordPicture);
+            fp.Lock();
+            FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
+            CurrentWord = word;
             fp.Unlock(true);
         }
 
@@ -294,13 +307,13 @@ namespace QuranKareem
                 fp.Unlock(true);
             } 
         }
-        public void SetXY(int xMouse, int yMouse) { SetXY(xMouse, yMouse, width, height); }
+        public void SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
         public void SetXY(int xMouse, int yMouse, int width, int height, bool words=false)
         { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
-            int ayah = -1; tempInt = -371;
+            int word = -1; tempInt = -371;
             quran.Open();
             
             if (words)
@@ -311,7 +324,7 @@ namespace QuranKareem
                 {
                     tempInt = reader.GetInt32(0);
                     tempInt2 = reader.GetInt32(1);
-                    ayah = !reader.IsDBNull(2)? reader.GetInt32(2) : -1;
+                    word = !reader.IsDBNull(2)? reader.GetInt32(2) : -1;
                 }
                 else {
                     words = false;
@@ -333,7 +346,8 @@ namespace QuranKareem
             reader.Close();
             command.Cancel();
             quran.Close();
-            if (tempInt != -371) Ayah(tempInt, tempInt2, ayah); // استدعاء الملك
+            if (tempInt != -371) Ayah(tempInt, tempInt2); // استدعاء الملك
+            if (words) WordPictureOf(word);
         }
 
         public AyahColor ayahColor = AyahColor.red;
