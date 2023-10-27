@@ -455,21 +455,21 @@ namespace QuranKareem
             Extension = extension; Comment = comment;
         }
 
-        public string[] GetDescription() /* لم يعد مستعملاً */
-        {
-            if (!success) return null;
-            string[] desc = new string[2];
-            quran.Open();
-            command.CommandText = $"SELECT extension,comment FROM description";
-            reader = command.ExecuteReader();
-            reader.Read();
-            desc[0] = reader.GetString(0);
-            desc[1] = reader.GetString(1);
-            reader.Close();
-            command.Cancel();
-            quran.Close();
-            return desc;
-        }
+        //public string[] GetDescription() /* لم يعد مستعملاً */
+        //{
+        //    if (!success) return null;
+        //    string[] desc = new string[2];
+        //    quran.Open();
+        //    command.CommandText = $"SELECT extension,comment FROM description";
+        //    reader = command.ExecuteReader();
+        //    reader.Read();
+        //    desc[0] = reader.GetString(0);
+        //    desc[1] = reader.GetString(1);
+        //    reader.Close();
+        //    command.Cancel();
+        //    quran.Close();
+        //    return desc;
+        //}
 
         public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
         public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
