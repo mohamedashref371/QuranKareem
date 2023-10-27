@@ -446,7 +446,8 @@ namespace QuranKareem
                 }
                 Quarter.Value = quranPictures.QuarterNumber;
                 Page.Value = quranPictures.PageNumber;
-                quranPic.BackgroundImage = quranPictures.Picture;
+
+                quranPic.BackgroundImage = quranPictures.WordPicture?? quranPictures.Picture;
             }
 
             if (isAllow && textMode) quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
@@ -478,8 +479,8 @@ namespace QuranKareem
             if (allow)
             {
                 quranPictures.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
-                                     MousePosition.Y - quranPic.Location.Y - Location.Y,
-                                     quranPic.Width, quranPic.Height);
+                                    MousePosition.Y - quranPic.Location.Y - Location.Y,
+                                     quranPic.Width, quranPic.Height, wordModeCheck.Checked);
                 SetAyah();
             }
         }

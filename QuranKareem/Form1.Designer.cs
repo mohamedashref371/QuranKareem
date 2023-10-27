@@ -102,6 +102,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.dark = new Guna.UI2.WinForms.Guna2Button();
             this.spellingErrors = new System.Windows.Forms.CheckBox();
+            this.wordModeCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -932,7 +933,7 @@
             // 
             // splitter
             // 
-            this.splitter.Location = new System.Drawing.Point(930, 13);
+            this.splitter.Location = new System.Drawing.Point(930, 3);
             this.splitter.Name = "splitter";
             this.splitter.Size = new System.Drawing.Size(71, 22);
             this.splitter.TabIndex = 36;
@@ -942,7 +943,7 @@
             // 
             // splitAll
             // 
-            this.splitAll.Location = new System.Drawing.Point(829, 13);
+            this.splitAll.Location = new System.Drawing.Point(829, 3);
             this.splitAll.Name = "splitAll";
             this.splitAll.Size = new System.Drawing.Size(92, 22);
             this.splitAll.TabIndex = 35;
@@ -1072,12 +1073,25 @@
             this.spellingErrors.Text = "مع أخطاء إملائية";
             this.spellingErrors.UseVisualStyleBackColor = true;
             // 
+            // wordModeCheck
+            // 
+            this.wordModeCheck.AutoSize = true;
+            this.wordModeCheck.BackColor = System.Drawing.Color.Transparent;
+            this.wordModeCheck.Location = new System.Drawing.Point(834, 28);
+            this.wordModeCheck.Name = "wordModeCheck";
+            this.wordModeCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.wordModeCheck.Size = new System.Drawing.Size(164, 17);
+            this.wordModeCheck.TabIndex = 83;
+            this.wordModeCheck.Text = "خاصية التعليم بالكلمة إن أمكن";
+            this.wordModeCheck.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.searchList);
+            this.Controls.Add(this.panel);
+            this.Controls.Add(this.wordModeCheck);
             this.Controls.Add(this.dark);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label12);
@@ -1125,7 +1139,6 @@
             this.Controls.Add(this.pause);
             this.Controls.Add(this.SurahRepeatCheck);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.panel);
             this.Controls.Add(this.time5);
             this.Controls.Add(this.SurahRepeat);
             this.Controls.Add(this.AyahRepeatCheck);
@@ -1145,6 +1158,7 @@
             this.Controls.Add(this.addNewMoqrea);
             this.Controls.Add(this.srtFile);
             this.Controls.Add(this.spellingErrors);
+            this.Controls.Add(this.searchList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -1241,6 +1255,7 @@
         private System.Windows.Forms.Label label17;
         private Guna.UI2.WinForms.Guna2Button dark;
         private System.Windows.Forms.CheckBox spellingErrors;
+        private System.Windows.Forms.CheckBox wordModeCheck;
     }
 }
 
