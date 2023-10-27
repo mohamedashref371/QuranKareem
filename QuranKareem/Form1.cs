@@ -743,6 +743,7 @@ namespace QuranKareem
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
                 splitter.Visible = false; splitAll.Visible = false;
+                wordModeCheck.Visible = false;
                 timestampChangeEventCheck.Visible = true;
                 endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
@@ -755,6 +756,7 @@ namespace QuranKareem
                 timestampChangeEventCheck.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
+                wordModeCheck.Visible = true;
                 splitter.Visible = true; splitAll.Visible = true;
             }
         }
