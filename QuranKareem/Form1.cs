@@ -480,7 +480,7 @@ namespace QuranKareem
             {
                 quranPictures.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
                                     MousePosition.Y - quranPic.Location.Y - Location.Y,
-                                     quranPic.Width, quranPic.Height, wordModeCheck.Checked);
+                                     quranPic.Width, quranPic.Height);
                 SetAyah();
             }
         }
@@ -505,6 +505,8 @@ namespace QuranKareem
             else if (color.SelectedIndex == 5) { quranPictures.ayahColor = AyahColor.darkRed; quranTexts.ayahColor = AyahColor.darkRed; }
             else { quranPictures.ayahColor = AyahColor.nothing; quranTexts.ayahColor = AyahColor.nothing; }
         }
+
+        private void WordModeCheck_CheckedChanged(object sender, EventArgs e) => quranPictures.WordMode = wordModeCheck.Checked;
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه

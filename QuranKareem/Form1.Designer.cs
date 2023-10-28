@@ -1084,6 +1084,7 @@
             this.wordModeCheck.TabIndex = 83;
             this.wordModeCheck.Text = "خاصية التعليم بالكلمة إن أمكن";
             this.wordModeCheck.UseVisualStyleBackColor = false;
+            this.wordModeCheck.CheckedChanged += new System.EventHandler(this.WordModeCheck_CheckedChanged);
             // 
             // Form1
             // 

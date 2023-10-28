@@ -39,14 +39,14 @@ namespace QuranKareem
         public int AyatCount { get; private set; }
         public int CurrentWord { get; set; } = -1;
 
-        public bool WordMode { get; set; } = true;
+        public bool WordMode { get; set; } = false;
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
         {
             if (!success) return;
             IsDark = !IsDark;
             PageNumber = 0;
-            background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
+            if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
             if (textColor != Color.Empty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
             Ayah();
         }
@@ -253,7 +253,7 @@ namespace QuranKareem
             reader.Close();
             command.Cancel();
 
-            CurrentWord = -1; words.Clear();
+            CurrentWord = -1; words.Clear(); WordPicture = null;
             Picture = (Bitmap)oPic.Clone();
             fp = new FastPixel(Picture);
             fp.Lock();
@@ -282,7 +282,7 @@ namespace QuranKareem
         private readonly List<int> words = new List<int>();
         public void WordPictureOf(int word)
         {
-            if (word <= 0 || word * 4 > words.Count) { WordPicture = null; return; }
+            if (word <= 0 || word * 4 > words.Count || !WordMode) { WordPicture = null; return; }
             WordPicture = (Bitmap)Picture.Clone();
             fp = new FastPixel(WordPicture);
             fp.Lock();
@@ -319,14 +319,14 @@ namespace QuranKareem
             }
         }
         public void SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
-        public void SetXY(int xMouse, int yMouse, int width, int height, bool words = false)
+        public void SetXY(int xMouse, int yMouse, int width, int height)
         { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
             int word = -1; tempInt = -371;
             quran.Open();
-
+            bool words = WordMode;
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
@@ -402,7 +402,7 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30))) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 121, 255, 225));
+                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30))) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 44, 164, 171));
                         }
                     }
                 }
