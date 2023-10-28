@@ -5,6 +5,7 @@ using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuranKareem
 {
@@ -46,7 +47,7 @@ namespace QuranKareem
             IsDark = !IsDark;
             PageNumber = 0;
             background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
-            textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
+            if (textColor != Color.Empty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
             Ayah();
         }
 
@@ -99,7 +100,7 @@ namespace QuranKareem
                 if (clr.Length == 3) textColor = Color.FromArgb(Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
                 clr = reader.GetString(9).Split(',');
                 if (clr.Length >= 3) background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
-                
+
                 extension = reader.GetString(10);
                 //lineHeight = height / linesCount;
 
@@ -299,23 +300,33 @@ namespace QuranKareem
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
             else if (File.Exists($"{path}{sura}{extension}")) oPic = new Bitmap($"{path}{sura}{extension}");
+            else
+            {
+                string[] filesName = Directory.GetFiles(path);
+                for (int i = 0; i < filesName.Length; i++)
+                {
+                    if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0')))
+                        oPic = new Bitmap(filesName[i]);
+                }
+            }
+
             if (IsDark)
             {
                 fp = new FastPixel(oPic);
                 fp.Lock();
                 FunWhite(0, width - 1, 0, height - 1);
                 fp.Unlock(true);
-            } 
+            }
         }
         public void SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
-        public void SetXY(int xMouse, int yMouse, int width, int height, bool words=false)
+        public void SetXY(int xMouse, int yMouse, int width, int height, bool words = false)
         { // مؤشر الماوس
             if (!success) return;
             xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
             int word = -1; tempInt = -371;
             quran.Open();
-            
+
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
@@ -324,9 +335,10 @@ namespace QuranKareem
                 {
                     tempInt = reader.GetInt32(0);
                     tempInt2 = reader.GetInt32(1);
-                    word = !reader.IsDBNull(2)? reader.GetInt32(2) : -1;
+                    word = !reader.IsDBNull(2) ? reader.GetInt32(2) : -1;
                 }
-                else {
+                else
+                {
                     words = false;
                     reader.Close();
                     command.Cancel();
@@ -342,7 +354,7 @@ namespace QuranKareem
                     tempInt2 = reader.GetInt32(1);
                 }
             }
-            
+
             reader.Close();
             command.Cancel();
             quran.Close();
@@ -415,9 +427,9 @@ namespace QuranKareem
             catch { }
         }
 
-        private bool Equal2Color(Color clr1, Color clr2, int delta=0)
+        private bool Equal2Color(Color clr1, Color clr2, int delta = 0)
         {
-            return clr1.A==255 && clr2.A==255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
+            return clr1.A == 255 && clr2.A == 255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
         }
     }
 }
