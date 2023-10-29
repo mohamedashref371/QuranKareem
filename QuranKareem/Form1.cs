@@ -484,7 +484,11 @@ namespace QuranKareem
             }
             else
             {
-                quranPictures.WordOf(quranAudios.CurrentWord);
+                //MessageBox.Show(quranAudios.CurrentWord+"");
+                if (quranAudios.CurrentWord > 0) {
+                    quranPictures.WordOf(quranAudios.CurrentWord);
+                    quranPic.BackgroundImage = quranPictures.WordPicture;
+                }
             }
         }
 

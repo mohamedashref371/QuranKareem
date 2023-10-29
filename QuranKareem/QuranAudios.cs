@@ -60,6 +60,7 @@ namespace QuranKareem
         private QuranAudios()
         {
             timer.Tick += Timer_Tick;
+            wordsTimer.Tick += WordsTimer_Tick;
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
         }
@@ -213,19 +214,19 @@ namespace QuranKareem
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
-            words.Clear(); CurrentWord = -1;
+            words.Clear(); CurrentWord = -1; idWord = 0;
             if (WordMode)
             {
-                int wordCount=0;
+                int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
                 reader = command.ExecuteReader();
                 reader.Read();
                 wordCount = reader.GetInt32(0);
                 reader.Close();
-                command.CommandText = $"SELECT word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
+                command.CommandText = $"SELECT id,word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
                 reader = command.ExecuteReader();
                 for (int i = 0; i < wordCount; i++) words.Add(-1);
-                while (reader.Read()) words[reader.GetInt32(0)-1] = reader.GetInt32(1);
+                while (reader.Read()) words[reader.GetInt32(1) - 1] = reader.GetInt32(2);
                 reader.Close();
                 command.Cancel();
 
@@ -234,10 +235,9 @@ namespace QuranKareem
                 while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
                 reader.Close();
                 command.Cancel();
-                Words();
             }
-
             quran.Close();
+            if (!ok && WordMode) Words();
             ok = true;
             timer.Start();
         }
@@ -245,21 +245,34 @@ namespace QuranKareem
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            //wordsTimer.Stop();
-            if (WordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
+            if (success && WordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
             {
+                wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
                 mp3.Ctlcontrols.currentPosition = words[word - 1] / 1000.0;
-                CurrentWord = word;
+                idWord = 0;
+                Words();
             }
 
         }
-        private readonly List<int> FullWords = new List<int>();
+        private readonly List<int> FullWords = new List<int>(); int idWord = 0;
         private void Words()
         {
             wordsTimer.Stop();
-
-            //wordsTimer.Start();
+            CurrentWord = -1;
+            wordsTimer.Interval = 100;
+            int num = (int)(mp3.Ctlcontrols.currentPosition * 1000);
+            for (int i = idWord; i < FullWords.Count / 3; i++)
+            {
+                if (num >= FullWords[i * 3 + 1] && num <= FullWords[i * 3 + 2])
+                {
+                    wordsTimer.Interval = FullWords[i * 3 + 2] - num > 0 ? FullWords[i * 3 + 2] - num : 1;
+                    CurrentWord = FullWords[i * 3];
+                    idWord++;
+                    break;
+                }
+            }
+            wordsTimer.Start();
         }
 
         bool Check(int surah)
@@ -304,7 +317,7 @@ namespace QuranKareem
             return hold;
         }
 
-        public void Pause() { timer.Stop(); mp3.URL = ""; CapturedAudio = false; }
+        public void Pause() { timer.Stop(); wordsTimer.Stop(); mp3.URL = ""; CapturedAudio = false; }
         public void Stop() { success = false; Pause(); }
 
         double rate = 1;
@@ -326,6 +339,7 @@ namespace QuranKareem
         }
 
         void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
+        void WordsTimer_Tick(object sender, EventArgs e) { Words(); }
 
         public void AddEventHandlerOfAyah(EventHandler eH) => timer.Tick += eH;
         public void AddEventHandlerOfWord(EventHandler eH) => wordsTimer.Tick += eH;
