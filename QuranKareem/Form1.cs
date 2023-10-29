@@ -72,7 +72,8 @@ namespace QuranKareem
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
             quranAudios.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
-            quranAudios.AddEventHandler(Audio_); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
+            quranAudios.AddEventHandlerOfAyah(AyahAudio); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
+            quranAudios.AddEventHandlerOfWord(WordAudio);
 
             // اضافة التفاسير
             textsFiles = null;
@@ -452,13 +453,14 @@ namespace QuranKareem
 
             if (isAllow && textMode) quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
             else if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
+            if (wordModeCheck.Checked && quranPictures.CurrentWord > 0) quranAudios.WordOf(quranPictures.CurrentWord);
             time5.Text = quranAudios.GetCurrentPosition();
             allow = true;
         }
 
         // quranAudios -> AddEventHandler
         bool isAllow = true;
-        private void Audio_(object sender, EventArgs e)
+        private void AyahAudio(object sender, EventArgs e)
         {
             isAllow = false;
             if (textMode && allow)
@@ -472,6 +474,18 @@ namespace QuranKareem
                 SetAyah();
             }
             isAllow = true;
+        }
+
+        private void WordAudio(object sender, EventArgs e)
+        {
+            if (textMode)
+            {
+
+            }
+            else
+            {
+                quranPictures.WordOf(quranAudios.CurrentWord);
+            }
         }
 
         private void QuranPic_Click(object sender, EventArgs e)
@@ -506,7 +520,11 @@ namespace QuranKareem
             else { quranPictures.ayahColor = AyahColor.nothing; quranTexts.ayahColor = AyahColor.nothing; }
         }
 
-        private void WordModeCheck_CheckedChanged(object sender, EventArgs e) => quranPictures.WordMode = wordModeCheck.Checked;
+        private void WordModeCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            quranPictures.WordMode = wordModeCheck.Checked;
+            quranAudios.WordMode = wordModeCheck.Checked;
+        }
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه

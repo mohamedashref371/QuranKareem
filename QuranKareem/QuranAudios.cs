@@ -35,8 +35,11 @@ namespace QuranKareem
         public int CurrentPosition { get; private set; }
 
         private readonly Timer timer = new Timer(); private bool ok = true;
-        private readonly Timer wordsTimer = new Timer();
         private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
+
+        private readonly Timer wordsTimer = new Timer();
+        public int CurrentWord { get; private set; } = -1;
+        public bool WordMode { get; set; } = false;
 
         private bool added = false;
         public void AddInControls(Control.ControlCollection Controls)
@@ -136,7 +139,7 @@ namespace QuranKareem
         public void Ayah(int sura, int aya)
         {
             if (!timer.Enabled) ok = true;
-            timer.Stop();
+            timer.Stop(); wordsTimer.Stop();
             if (!success) return;
 
             sura = Math.Abs(sura);
@@ -209,9 +212,54 @@ namespace QuranKareem
             else timer.Interval = 1;
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
+
+            words.Clear(); CurrentWord = -1;
+            if (WordMode)
+            {
+                int wordCount=0;
+                command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
+                reader = command.ExecuteReader();
+                reader.Read();
+                wordCount = reader.GetInt32(0);
+                reader.Close();
+                command.CommandText = $"SELECT word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
+                reader = command.ExecuteReader();
+                for (int i = 0; i < wordCount; i++) words.Add(-1);
+                while (reader.Read()) words[reader.GetInt32(0)-1] = reader.GetInt32(1);
+                reader.Close();
+                command.Cancel();
+
+                command.CommandText = $"SELECT word,timestamp_from,timestamp_to FROM words WHERE ayah_id={ayahId}";
+                reader = command.ExecuteReader();
+                while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
+                reader.Close();
+                command.Cancel();
+                Words();
+            }
+
             quran.Close();
             ok = true;
             timer.Start();
+        }
+
+        private readonly List<int> words = new List<int>();
+        public void WordOf(int word)
+        {
+            //wordsTimer.Stop();
+            if (WordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
+            {
+                timer.Interval = (int)((To - words[word - 1]) / rate);
+                mp3.Ctlcontrols.currentPosition = words[word - 1] / 1000.0;
+                CurrentWord = word;
+            }
+
+        }
+        private readonly List<int> FullWords = new List<int>();
+        private void Words()
+        {
+            wordsTimer.Stop();
+
+            //wordsTimer.Start();
         }
 
         bool Check(int surah)
@@ -279,7 +327,8 @@ namespace QuranKareem
 
         void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
 
-        public void AddEventHandler(EventHandler eh) => timer.Tick += eh;
+        public void AddEventHandlerOfAyah(EventHandler eH) => timer.Tick += eH;
+        public void AddEventHandlerOfWord(EventHandler eH) => wordsTimer.Tick += eH;
 
         int SurahRepeat = 1, AyahRepeat = 1, SurahRepeatCounter = 0, AyahRepeatCounter = 0;
         public void Repeat(int SurahRepeat = 1, int AyahRepeat = 1)

@@ -37,7 +37,7 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
-        public int CurrentWord { get; set; } = -1;
+        public int CurrentWord { get; private set; } = -1;
 
         public bool WordMode { get; set; } = false;
         public bool IsDark { get; private set; } = false;
@@ -270,7 +270,7 @@ namespace QuranKareem
             fp.Unlock(true);
             if (WordMode)
             {
-                command.CommandText = $"SELECT DISTINCT(word),min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word IS NOT NULL ORDER BY word ASC"; // AND word={word}
+                command.CommandText = $"SELECT word,min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word IS NOT NULL GROUP BY word ORDER BY word ASC";
                 reader = command.ExecuteReader();
                 while (reader.Read()) words.AddRange(new int[] { reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4) });
                 reader.Close();
@@ -280,7 +280,7 @@ namespace QuranKareem
         }
 
         private readonly List<int> words = new List<int>();
-        public void WordPictureOf(int word)
+        public void WordOf(int word)
         {
             if (word <= 0 || word * 4 > words.Count || !WordMode) { WordPicture = null; return; }
             WordPicture = (Bitmap)Picture.Clone();
@@ -359,7 +359,7 @@ namespace QuranKareem
             command.Cancel();
             quran.Close();
             if (tempInt != -371) Ayah(tempInt, tempInt2); // استدعاء الملك
-            if (words) WordPictureOf(word);
+            if (words) WordOf(word);
         }
 
         public AyahColor ayahColor = AyahColor.red;
