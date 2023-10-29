@@ -189,7 +189,7 @@ namespace QuranKareem
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
-                    ControlsList[i].BackColor = BackColor;
+                    ControlsList[i].BackColor = SystemColors.Window;
                     ControlsList[i].ForeColor = ForeColor;
                     if (ControlsList[i] is Button button) button.UseVisualStyleBackColor = true;
                 }
