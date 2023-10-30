@@ -220,19 +220,23 @@ namespace QuranKareem
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
                 reader = command.ExecuteReader();
-                reader.Read();
-                wordCount = reader.GetInt32(0);
-                reader.Close();
-                command.CommandText = $"SELECT word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
-                reader = command.ExecuteReader();
-                for (int i = 0; i < wordCount; i++) words.Add(-1);
-                while (reader.Read()) words[reader.GetInt32(0) - 1] = reader.GetInt32(1);
-                reader.Close();
-                command.Cancel();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    wordCount = reader.GetInt32(0);
+                    reader.Close();
+                    command.Cancel();
+                    command.CommandText = $"SELECT word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
+                    reader = command.ExecuteReader();
+                    for (int i = 0; i < wordCount; i++) words.Add(-1);
+                    while (reader.Read()) words[reader.GetInt32(0) - 1] = reader.GetInt32(1);
+                    reader.Close();
+                    command.Cancel();
 
-                command.CommandText = $"SELECT word,timestamp_from,timestamp_to FROM words WHERE ayah_id={ayahId}";
-                reader = command.ExecuteReader();
-                while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
+                    command.CommandText = $"SELECT word,timestamp_from,timestamp_to FROM words WHERE ayah_id={ayahId}";
+                    reader = command.ExecuteReader();
+                    while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
+                }
                 reader.Close();
                 command.Cancel();
             }
