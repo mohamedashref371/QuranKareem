@@ -223,10 +223,10 @@ namespace QuranKareem
                 reader.Read();
                 wordCount = reader.GetInt32(0);
                 reader.Close();
-                command.CommandText = $"SELECT id,word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
+                command.CommandText = $"SELECT word,timestamp_from FROM words WHERE ayah_id={ayahId} GROUP BY word";
                 reader = command.ExecuteReader();
                 for (int i = 0; i < wordCount; i++) words.Add(-1);
-                while (reader.Read()) words[reader.GetInt32(1) - 1] = reader.GetInt32(2);
+                while (reader.Read()) words[reader.GetInt32(0) - 1] = reader.GetInt32(1);
                 reader.Close();
                 command.Cancel();
 
@@ -237,9 +237,9 @@ namespace QuranKareem
                 command.Cancel();
             }
             quran.Close();
-            if (!ok && WordMode) Words();
             ok = true;
             timer.Start();
+            if (WordMode) Words();
         }
 
         private readonly List<int> words = new List<int>();

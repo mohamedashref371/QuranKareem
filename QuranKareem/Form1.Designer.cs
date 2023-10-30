@@ -1082,7 +1082,7 @@
             this.wordModeCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wordModeCheck.Size = new System.Drawing.Size(164, 17);
             this.wordModeCheck.TabIndex = 83;
-            this.wordModeCheck.Text = "خاصية التعليم بالكلمة إن أمكن";
+            this.wordModeCheck.Text = "خاصية التحديد بالكلمة إن أمكن";
             this.wordModeCheck.UseVisualStyleBackColor = false;
             this.wordModeCheck.CheckedChanged += new System.EventHandler(this.WordModeCheck_CheckedChanged);
             // 
