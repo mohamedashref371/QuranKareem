@@ -487,7 +487,7 @@ namespace QuranKareem
                 //MessageBox.Show(quranAudios.CurrentWord+"");
                 if (quranAudios.CurrentWord > 0) {
                     quranPictures.WordOf(quranAudios.CurrentWord);
-                    quranPic.BackgroundImage = quranPictures.WordPicture;
+                    quranPic.BackgroundImage = quranPictures.WordPicture ?? quranPictures.Picture;
                 }
                 else quranPic.BackgroundImage = quranPictures.Picture;
             }
