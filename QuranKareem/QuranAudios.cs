@@ -215,7 +215,7 @@ namespace QuranKareem
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); CurrentWord = -1; idWord = 0;
-            if (WordMode)
+            if (WordMode && version==2)
             {
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
@@ -243,13 +243,13 @@ namespace QuranKareem
             quran.Close();
             ok = true;
             timer.Start();
-            if (WordMode) Words();
+            if (WordMode && version == 2) Words();
         }
 
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            if (success && WordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
+            if (success && WordMode && version == 2 && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
             {
                 wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
