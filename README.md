@@ -26,6 +26,8 @@ The current program is just an idea that can be improved and developed.
 
 Night mode feature has been added.
 
+I took the idea of recitation by selecting words from Quran.com
+
 To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs)
 
 I would like to thank [codeproject website](https://www.codeproject.com/) for [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP).
