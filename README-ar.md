@@ -1,4 +1,4 @@
-﻿# Quran Kareem v1.1
+﻿# Quran Kareem v1.2
 مع ٤٣ شيخ و١١ تفسير
 
 متطلبات تشغيل البرنامج: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
