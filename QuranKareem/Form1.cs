@@ -154,7 +154,70 @@ namespace QuranKareem
             File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
-        private void ExitForm_Click(object sender, EventArgs e) { Close(); }
+        private void ExitForm_Click(object sender, EventArgs e)
+        {
+            if (zoom)
+            {
+                zoom = !zoom;
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if ((string)Controls[i].Tag == "Visible == true")
+                    {
+                        Controls[i].Visible = true;
+                        Controls[i].Tag = null;
+                    }
+                }
+                exitForm.TabStop = true;
+                quranPic.Size = quranPicSize;
+                quranPic.Location = quranPicLoc;
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        bool zoom = false; Size quranPicSize; Point quranPicLoc; int NumOfTimesPicRise = 0;
+        private void pageZoom_Click(object sender, EventArgs e)
+        {
+            if (!zoom)
+            {
+                zoom = !zoom;
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if (Controls[i].Visible == true)
+                    {
+                        Controls[i].Tag = "Visible == true";
+                        Controls[i].Visible = false;
+                    }
+                }
+                exitForm.Visible = true; exitForm.TabStop = false;
+                quranPic.Visible = true;
+                quranPicSize = quranPic.Size;
+                quranPicLoc = quranPic.Location;
+                quranPic.Location = new Point(30, exitForm.Location.Y + exitForm.Size.Height + 5);
+                quranPic.Size = new Size(Width - 60, (int)(quranPic.Size.Height * (Width - 60.0) / quranPicSize.Width));
+            }
+            NumOfTimesPicRise = 0;
+            quranPic.Select();
+        }
+
+        private void quranPic_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (zoom)
+            {
+                if (e.Delta < 0 && NumOfTimesPicRise < 3)
+                {
+                    NumOfTimesPicRise++;
+                    quranPic.Location = new Point(quranPic.Location.X, (int)(quranPic.Location.Y - quranPic.Size.Height * 0.25));
+                }
+                else if(e.Delta > 0 && NumOfTimesPicRise >= 0)
+                {
+                    NumOfTimesPicRise--;
+                    quranPic.Location = new Point(quranPic.Location.X, (int)(quranPic.Location.Y + quranPic.Size.Height * 0.25));
+                }
+            }
+        }
 
         private void Minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 

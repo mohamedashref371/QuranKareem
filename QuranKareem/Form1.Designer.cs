@@ -103,6 +103,7 @@
             this.dark = new Guna.UI2.WinForms.Guna2Button();
             this.spellingErrors = new System.Windows.Forms.CheckBox();
             this.wordModeCheck = new System.Windows.Forms.CheckBox();
+            this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -745,9 +746,9 @@
             // 
             // about
             // 
-            this.about.Location = new System.Drawing.Point(13, 826);
+            this.about.Location = new System.Drawing.Point(78, 825);
             this.about.Name = "about";
-            this.about.Size = new System.Drawing.Size(75, 23);
+            this.about.Size = new System.Drawing.Size(63, 23);
             this.about.TabIndex = 29;
             this.about.Text = "About";
             this.about.UseVisualStyleBackColor = true;
@@ -755,9 +756,9 @@
             // 
             // latest
             // 
-            this.latest.Location = new System.Drawing.Point(95, 826);
+            this.latest.Location = new System.Drawing.Point(145, 825);
             this.latest.Name = "latest";
-            this.latest.Size = new System.Drawing.Size(112, 23);
+            this.latest.Size = new System.Drawing.Size(84, 23);
             this.latest.TabIndex = 28;
             this.latest.Text = "latest version";
             this.latest.UseVisualStyleBackColor = true;
@@ -785,6 +786,7 @@
             this.quranPic.TabIndex = 2;
             this.quranPic.TabStop = false;
             this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
+            this.quranPic.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.quranPic_MouseWheel);
             // 
             // volume
             // 
@@ -1055,9 +1057,9 @@
             this.dark.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.dark.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.dark.ForeColor = System.Drawing.Color.White;
-            this.dark.Location = new System.Drawing.Point(217, 820);
+            this.dark.Location = new System.Drawing.Point(233, 820);
             this.dark.Name = "dark";
-            this.dark.Size = new System.Drawing.Size(74, 32);
+            this.dark.Size = new System.Drawing.Size(61, 32);
             this.dark.TabIndex = 81;
             this.dark.Text = "Dark";
             this.dark.Click += new System.EventHandler(this.Dark_Click);
@@ -1086,11 +1088,29 @@
             this.wordModeCheck.UseVisualStyleBackColor = false;
             this.wordModeCheck.CheckedChanged += new System.EventHandler(this.WordModeCheck_CheckedChanged);
             // 
+            // pageZoom
+            // 
+            this.pageZoom.BorderRadius = 16;
+            this.pageZoom.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.pageZoom.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.pageZoom.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.pageZoom.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.pageZoom.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.pageZoom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.pageZoom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.pageZoom.Location = new System.Drawing.Point(4, 820);
+            this.pageZoom.Name = "pageZoom";
+            this.pageZoom.Size = new System.Drawing.Size(70, 32);
+            this.pageZoom.TabIndex = 84;
+            this.pageZoom.Text = "Zoom";
+            this.pageZoom.Click += new System.EventHandler(this.pageZoom_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.wordModeCheck);
@@ -1257,6 +1277,7 @@
         private Guna.UI2.WinForms.Guna2Button dark;
         private System.Windows.Forms.CheckBox spellingErrors;
         private System.Windows.Forms.CheckBox wordModeCheck;
+        private Guna.UI2.WinForms.Guna2Button pageZoom;
     }
 }
 
