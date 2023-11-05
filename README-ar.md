@@ -17,7 +17,7 @@
 
  • لقد استخدمت ملفات json التي يوفرها هذا الرابط للحصول على توقيت نهاية الآيات: https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
 
-'فكرة التلاوة مع تحديد الكلمات' أخذت من [Quran.com](https://quran.com)<br>
+'فكرة التلاوة مع تحديد الكلمات' أُخذت من [Quran.com](https://quran.com)<br>
 بما أني اقتبست مواقيت الكلمات من موقع [Quran.com](https://quran.com)، فسوف أعتمد حسابهم لكلمات القرآن وهو 77429 كلمة.
 
 يمكنك الآن إضافة أي شيخ تريده بكل سهولة وسلاسة من خلال البرنامج.<br>
