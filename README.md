@@ -16,9 +16,9 @@ And to ensure myself correct data, I did the following:
 - I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) and [Tanzil.net](https://tanzil.net/) to my database model.
 
 - I used the json files provided by this link to obtain the timing of the end of the verses:
-https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads the iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.
+https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.
 
-I took the idea of recitation by selecting words from [Quran.com](https://quran.com)<br>
+'The idea of recitation by selecting words' was taken from [Quran.com](https://quran.com)<br>
 Since I quoted the words timings from [Quran.com](https://quran.com), I will adopt their calculation of the words of the Quran, which is 77429 words.
 
 You can now add any sheikh you want smoothly and easily through the program.<br>
