@@ -178,7 +178,7 @@ namespace QuranKareem
         }
 
         bool zoom = false; Size quranPicSize; Point quranPicLoc; int NumOfTimesPicRise = 0;
-        private void pageZoom_Click(object sender, EventArgs e)
+        private void PageZoom_Click(object sender, EventArgs e)
         {
             if (!zoom)
             {
@@ -202,7 +202,7 @@ namespace QuranKareem
             quranPic.Select();
         }
 
-        private void quranPic_MouseWheel(object sender, MouseEventArgs e)
+        private void QuranPic_MouseWheel(object sender, MouseEventArgs e)
         {
             if (zoom)
             {

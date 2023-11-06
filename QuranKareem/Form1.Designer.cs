@@ -786,7 +786,7 @@
             this.quranPic.TabIndex = 2;
             this.quranPic.TabStop = false;
             this.quranPic.Click += new System.EventHandler(this.QuranPic_Click);
-            this.quranPic.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.quranPic_MouseWheel);
+            this.quranPic.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.QuranPic_MouseWheel);
             // 
             // volume
             // 
@@ -1103,7 +1103,7 @@
             this.pageZoom.Size = new System.Drawing.Size(70, 32);
             this.pageZoom.TabIndex = 84;
             this.pageZoom.Text = "Zoom";
-            this.pageZoom.Click += new System.EventHandler(this.pageZoom_Click);
+            this.pageZoom.Click += new System.EventHandler(this.PageZoom_Click);
             // 
             // Form1
             // 
