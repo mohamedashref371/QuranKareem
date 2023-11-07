@@ -446,7 +446,8 @@ namespace QuranKareem
                 reader = command.ExecuteReader();
                 if (!reader.HasRows) return false;
                 reader.Read();
-                if (reader.GetInt32(0) != 3 || reader.GetInt32(1) != 1) return false;
+                version = reader.GetInt32(1);
+                if (reader.GetInt32(0) != 3 || (version != 1 && version != 2)) return false;
                 Narration = reader.GetInt32(2);
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
