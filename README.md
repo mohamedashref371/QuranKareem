@@ -19,7 +19,8 @@ And to ensure myself correct data, I did the following:
 https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true <br><br>Some of the audio surahs contain iste3athah, and the json files start from the first verse. It may happen that the program accidentally reads iste3athah with basmalah when reciting basmalah. This is not a problem with the database model structure and this will be updated later.
 
 'The idea of recitation by selecting words' was taken from [Quran.com](https://quran.com)<br>
-Since I quoted the words timings from [Quran.com](https://quran.com), I will adopt their calculation of the words of the Quran, which is 77429 words.
+Since I quoted the words timings from [Quran.com](https://quran.com), I will adopt their calculation of the words of the Quran,
+which is 77429 words for visual quran or 77430 words for audio quran. (the difference is in Surah 037, Ayah 130, the third word)
 
 You can now add any sheikh you want smoothly and easily through the program.<br>
 Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
