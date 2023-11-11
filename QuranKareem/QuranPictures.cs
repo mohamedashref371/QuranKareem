@@ -318,6 +318,7 @@ namespace QuranKareem
                 fp.Unlock(true);
             }
         }
+
         public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
         public bool SetXY(int xMouse, int yMouse, int width, int height)
         { // مؤشر الماوس
@@ -363,6 +364,7 @@ namespace QuranKareem
             return tempInt != -371;
         }
 
+        #region Colors
         public AyahColor ayahColor = AyahColor.red;
         private void Fun(int x5, int x9, int y5, int y9)
         { // كود التلوين
@@ -432,5 +434,7 @@ namespace QuranKareem
         {
             return clr1.A == 255 && clr2.A == 255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
         }
+        #endregion
+
     }
 }
