@@ -318,10 +318,10 @@ namespace QuranKareem
                 fp.Unlock(true);
             }
         }
-        public void SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
-        public void SetXY(int xMouse, int yMouse, int width, int height)
+        public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
+        public bool SetXY(int xMouse, int yMouse, int width, int height)
         { // مؤشر الماوس
-            if (!success) return;
+            if (!success) return false;
             xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
             int word = -1; tempInt = -371;
@@ -359,7 +359,8 @@ namespace QuranKareem
             command.Cancel();
             quran.Close();
             if (tempInt != -371) Ayah(tempInt, tempInt2); // استدعاء الملك
-            if (words) WordOf(word);
+            if (words && tempInt != -371) WordOf(word);
+            return tempInt != -371;
         }
 
         public AyahColor ayahColor = AyahColor.red;
