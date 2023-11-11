@@ -184,7 +184,10 @@ namespace QuranKareem
 
         private void Minimize_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
-        bool zoom = false; Size quranPicSize; Point quranPictureLocation; int NumberOfTimesPictureRise = 0;
+        bool zoom = false;
+        Size quranPicSize;
+        Point quranPictureLocation;
+        int NumberOfTimesPictureRise = 0;
         private void PageZoom_Click(object sender, EventArgs e)
         {
             if (!zoom)
