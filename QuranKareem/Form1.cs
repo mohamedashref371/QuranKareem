@@ -572,24 +572,18 @@ namespace QuranKareem
 
         private void QuranPic_Click(object sender, EventArgs e)
         {
-            if (allow)
-            {
-                quranPictures.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
+            if (allow
+                && quranPictures.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
                                     MousePosition.Y - quranPic.Location.Y - Location.Y,
-                                     quranPic.Width, quranPic.Height);
-                SetAyah();
-            }
+                                     quranPic.Width, quranPic.Height)
+                ) SetAyah();
         }
 
         // بديل عن المصحف المصور، ربما لن تراه في حياتك
         // quranTexts -> AddEventHandler
         private void PageRichText_Click(object sender, EventArgs e)
         {
-            if (allow)
-            {
-                quranTexts.SetCursor();
-                SetAyah();
-            }
+            if (allow && quranTexts.SetCursor()) SetAyah();
         }
 
         private void Color_SelectedIndexChanged(object sender, EventArgs e)

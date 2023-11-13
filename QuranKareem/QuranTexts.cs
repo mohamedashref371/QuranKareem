@@ -317,9 +317,9 @@ namespace QuranKareem
             command.Cancel();
         }
 
-        public void SetCursor(int position = -1)
+        public bool SetCursor(int position = -1)
         {
-            if (!success) return;
+            if (!success) return false;
             if (position < 0) position = PageRichText.SelectionStart;
             tempInt = -1; tempInt2 = 0;
             for (int i = 0; i < finishedPosition.Count; i++)
@@ -339,6 +339,7 @@ namespace QuranKareem
             }
             if (tempInt != -1) Ayah(tempInt, tempInt2);
             PageRichText.DeselectAll();
+            return tempInt != -1;
         }
 
         private string tempString;
