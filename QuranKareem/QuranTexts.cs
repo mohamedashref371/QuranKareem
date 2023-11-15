@@ -354,7 +354,7 @@ namespace QuranKareem
             reader.Close();
             command.Cancel();
             quran.Close();
-            return tempString;
+            return tempString.Replace(Environment.NewLine, " ").Trim();
         }
 
         public string AyahAbstractText(int sura, int aya)
