@@ -40,14 +40,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.color = new System.Windows.Forms.ComboBox();
+            this.ayahColors = new System.Windows.Forms.ComboBox();
             this.folder = new System.Windows.Forms.FolderBrowserDialog();
             this.AyahRepeat = new System.Windows.Forms.NumericUpDown();
             this.AyahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
+            this.ayahColorsCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
             this.Rate = new System.Windows.Forms.NumericUpDown();
@@ -104,6 +104,8 @@
             this.spellingErrors = new System.Windows.Forms.CheckBox();
             this.wordModeCheck = new System.Windows.Forms.CheckBox();
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
+            this.wordColorsCheck = new System.Windows.Forms.CheckBox();
+            this.wordColors = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -291,24 +293,17 @@
             this.label5.TabIndex = 14;
             this.label5.Text = "الآية";
             // 
-            // color
+            // ayahColors
             // 
-            this.color.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.color.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.color.FormattingEnabled = true;
-            this.color.Items.AddRange(new object[] {
-            "لا شيء",
-            "أحمر",
-            "أخضر",
-            "أزرق",
-            "سماوي غامق",
-            "أحمر غامق"});
-            this.color.Location = new System.Drawing.Point(40, 487);
-            this.color.Name = "color";
-            this.color.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.color.Size = new System.Drawing.Size(109, 29);
-            this.color.TabIndex = 15;
-            this.color.SelectedIndexChanged += new System.EventHandler(this.Color_SelectedIndexChanged);
+            this.ayahColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ayahColors.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.ayahColors.FormattingEnabled = true;
+            this.ayahColors.Location = new System.Drawing.Point(20, 479);
+            this.ayahColors.Name = "ayahColors";
+            this.ayahColors.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ayahColors.Size = new System.Drawing.Size(133, 29);
+            this.ayahColors.TabIndex = 15;
+            this.ayahColors.SelectedIndexChanged += new System.EventHandler(this.AyahColors_SelectedIndexChanged);
             // 
             // folder
             // 
@@ -317,7 +312,7 @@
             // AyahRepeat
             // 
             this.AyahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.AyahRepeat.Location = new System.Drawing.Point(51, 445);
+            this.AyahRepeat.Location = new System.Drawing.Point(51, 440);
             this.AyahRepeat.Maximum = new decimal(new int[] {
             99,
             0,
@@ -344,7 +339,7 @@
             this.AyahRepeatCheck.AutoSize = true;
             this.AyahRepeatCheck.BackColor = System.Drawing.Color.Transparent;
             this.AyahRepeatCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.AyahRepeatCheck.Location = new System.Drawing.Point(133, 447);
+            this.AyahRepeatCheck.Location = new System.Drawing.Point(133, 442);
             this.AyahRepeatCheck.Name = "AyahRepeatCheck";
             this.AyahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.AyahRepeatCheck.Size = new System.Drawing.Size(99, 26);
@@ -356,7 +351,7 @@
             // SurahRepeat
             // 
             this.SurahRepeat.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.SurahRepeat.Location = new System.Drawing.Point(51, 411);
+            this.SurahRepeat.Location = new System.Drawing.Point(51, 406);
             this.SurahRepeat.Maximum = new decimal(new int[] {
             99,
             0,
@@ -398,23 +393,27 @@
             this.panel.Size = new System.Drawing.Size(263, 821);
             this.panel.TabIndex = 0;
             // 
-            // label6
+            // ayahColorsCheck
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.label6.Location = new System.Drawing.Point(155, 490);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 22);
-            this.label6.TabIndex = 31;
-            this.label6.Text = "تلوين الآية";
+            this.ayahColorsCheck.AutoSize = true;
+            this.ayahColorsCheck.BackColor = System.Drawing.Color.Transparent;
+            this.ayahColorsCheck.Checked = true;
+            this.ayahColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ayahColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.ayahColorsCheck.Location = new System.Drawing.Point(169, 482);
+            this.ayahColorsCheck.Name = "ayahColorsCheck";
+            this.ayahColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ayahColorsCheck.Size = new System.Drawing.Size(90, 26);
+            this.ayahColorsCheck.TabIndex = 31;
+            this.ayahColorsCheck.Text = "لون الآية";
+            this.ayahColorsCheck.UseVisualStyleBackColor = false;
             // 
             // SurahRepeatCheck
             // 
             this.SurahRepeatCheck.AutoSize = true;
             this.SurahRepeatCheck.BackColor = System.Drawing.Color.Transparent;
             this.SurahRepeatCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.SurahRepeatCheck.Location = new System.Drawing.Point(112, 411);
+            this.SurahRepeatCheck.Location = new System.Drawing.Point(112, 406);
             this.SurahRepeatCheck.Name = "SurahRepeatCheck";
             this.SurahRepeatCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SurahRepeatCheck.Size = new System.Drawing.Size(120, 26);
@@ -615,7 +614,7 @@
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(142, 529);
+            this.copy.Location = new System.Drawing.Point(142, 540);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 16;
@@ -628,7 +627,7 @@
             this.normalText.AutoSize = true;
             this.normalText.BackColor = System.Drawing.Color.Transparent;
             this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.normalText.Location = new System.Drawing.Point(45, 540);
+            this.normalText.Location = new System.Drawing.Point(45, 551);
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
@@ -1105,13 +1104,42 @@
             this.pageZoom.Text = "Zoom";
             this.pageZoom.Click += new System.EventHandler(this.PageZoom_Click);
             // 
+            // wordColorsCheck
+            // 
+            this.wordColorsCheck.AutoSize = true;
+            this.wordColorsCheck.BackColor = System.Drawing.Color.Transparent;
+            this.wordColorsCheck.Checked = true;
+            this.wordColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.wordColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.wordColorsCheck.Location = new System.Drawing.Point(158, 513);
+            this.wordColorsCheck.Name = "wordColorsCheck";
+            this.wordColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.wordColorsCheck.Size = new System.Drawing.Size(106, 26);
+            this.wordColorsCheck.TabIndex = 86;
+            this.wordColorsCheck.Text = "لون الكلمة";
+            this.wordColorsCheck.UseVisualStyleBackColor = false;
+            // 
+            // wordColors
+            // 
+            this.wordColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.wordColors.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.wordColors.FormattingEnabled = true;
+            this.wordColors.Location = new System.Drawing.Point(20, 510);
+            this.wordColors.Name = "wordColors";
+            this.wordColors.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.wordColors.Size = new System.Drawing.Size(133, 29);
+            this.wordColors.TabIndex = 85;
+            this.wordColors.SelectedIndexChanged += new System.EventHandler(this.WordColors_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.searchList);
+            this.Controls.Add(this.wordColorsCheck);
+            this.Controls.Add(this.wordColors);
+            this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.wordModeCheck);
             this.Controls.Add(this.dark);
@@ -1160,12 +1188,12 @@
             this.Controls.Add(this.Rate);
             this.Controls.Add(this.pause);
             this.Controls.Add(this.SurahRepeatCheck);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.ayahColorsCheck);
             this.Controls.Add(this.time5);
             this.Controls.Add(this.SurahRepeat);
             this.Controls.Add(this.AyahRepeatCheck);
             this.Controls.Add(this.AyahRepeat);
-            this.Controls.Add(this.color);
+            this.Controls.Add(this.ayahColors);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -1215,14 +1243,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox color;
+        private System.Windows.Forms.ComboBox ayahColors;
         private System.Windows.Forms.FolderBrowserDialog folder;
         private System.Windows.Forms.NumericUpDown AyahRepeat;
         private System.Windows.Forms.CheckBox AyahRepeatCheck;
         private System.Windows.Forms.NumericUpDown SurahRepeat;
         private System.Windows.Forms.Label time5;
         private System.Windows.Forms.Panel panel;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox ayahColorsCheck;
         private System.Windows.Forms.CheckBox SurahRepeatCheck;
         private System.Windows.Forms.Button pause;
         private System.Windows.Forms.NumericUpDown Rate;
@@ -1278,6 +1306,8 @@
         private System.Windows.Forms.CheckBox spellingErrors;
         private System.Windows.Forms.CheckBox wordModeCheck;
         private Guna.UI2.WinForms.Guna2Button pageZoom;
+        private System.Windows.Forms.CheckBox wordColorsCheck;
+        private System.Windows.Forms.ComboBox wordColors;
     }
 }
 

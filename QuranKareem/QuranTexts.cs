@@ -6,6 +6,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
@@ -276,7 +277,7 @@ namespace QuranKareem
 
             if (textType == TextType.html)
             {
-                if (ayahColor != AyahColor.nothing)
+                if (AyahColor[3] != 0)
                 {
                     PageTextHTML = (start > 0 ? PageText.Substring(0, start) : "") + GetHtmlTextColor() + PageText.Substring(start, finish - start) + "</span>" + PageText.Substring(finish);
                 }
@@ -285,10 +286,10 @@ namespace QuranKareem
             else if (textType == TextType.rich)
             {
                 PageRichText.Text = OriginalPageText.ToString();
-                if (ayahColor != AyahColor.nothing)
+                if (AyahColor[3] != 0)
                 {
                     PageRichText.Select(start, finish - start);
-                    PageRichText.SelectionColor = GetRichTextColor();
+                    PageRichText.SelectionColor = GetAyahColor();
                     PageRichText.SelectionStart = start;
                 }
             }
@@ -452,27 +453,10 @@ namespace QuranKareem
             return sura_aya;
         }
 
-        public AyahColor ayahColor = AyahColor.nothing;
-
-        private Color GetRichTextColor()
-        {
-            if (ayahColor == AyahColor.red) return Color.Red;
-            else if (ayahColor == AyahColor.green) return Color.Green;
-            else if (ayahColor == AyahColor.blue) return Color.Blue;
-            else if (ayahColor == AyahColor.darkCyan) return Color.DarkCyan;
-            else if (ayahColor == AyahColor.darkRed) return Color.DarkRed;
-            else return Color.Black;
-        }
-
         private string GetHtmlTextColor()
         {
             string s = "<span";
-            if (ayahColor != AyahColor.nothing) s += " style=\"color: ";
-            if (ayahColor == AyahColor.red) s += "red\"";
-            else if (ayahColor == AyahColor.green) s += "green\"";
-            else if (ayahColor == AyahColor.blue) s += "blue\"";
-            else if (ayahColor == AyahColor.darkCyan) s += "darkcyan\"";
-            else if (ayahColor == AyahColor.darkRed) s += "darkred\"";
+            if (AyahColor[3] != 0) s += $" style=\"color: rgb({AyahColor[0]},{AyahColor[1]},{AyahColor[2]});\"";
             s += ">";
             return s;
         }

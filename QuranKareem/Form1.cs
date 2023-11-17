@@ -34,9 +34,15 @@ namespace QuranKareem
         FormSize fs;
         private void Form1_Load(object sender, EventArgs e)
         {
+            // colors
+            ayahColors.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
+            wordColors.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
+
+            ayahColors.SelectedItem = "Red"; // اللون الأحمر
+            wordColors.SelectedItem = "LightSeaGreen";
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
-            color.SelectedIndex = 1; // اللون الأحمر
+
             string[] textsFiles = null, picturesFolders = null;
 
             try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
@@ -145,7 +151,7 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, color, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, about, latest, addNewMoqrea, splitAll, splitter });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, about, latest, addNewMoqrea, splitAll, splitter });
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -586,14 +592,19 @@ namespace QuranKareem
             if (allow && quranTexts.SetCursor()) SetAyah();
         }
 
-        private void Color_SelectedIndexChanged(object sender, EventArgs e)
+        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (color.SelectedIndex == 1) { quranPictures.ayahColor = AyahColor.red; quranTexts.ayahColor = AyahColor.red; }
-            else if (color.SelectedIndex == 2) { quranPictures.ayahColor = AyahColor.green; quranTexts.ayahColor = AyahColor.green; }
-            else if (color.SelectedIndex == 3) { quranPictures.ayahColor = AyahColor.blue; quranTexts.ayahColor = AyahColor.blue; }
-            else if (color.SelectedIndex == 4) { quranPictures.ayahColor = AyahColor.darkCyan; quranTexts.ayahColor = AyahColor.darkCyan; }
-            else if (color.SelectedIndex == 5) { quranPictures.ayahColor = AyahColor.darkRed; quranTexts.ayahColor = AyahColor.darkRed; }
-            else { quranPictures.ayahColor = AyahColor.nothing; quranTexts.ayahColor = AyahColor.nothing; }
+            if (ayahColorsCheck.Checked)
+                Coloring.SetAyahColor(ayahColors.Text);
+            else
+                Coloring.SetAyahColor("Nothing");
+        }
+        private void WordColors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (wordColorsCheck.Checked)
+                Coloring.SetWordColor(wordColors.Text);
+            else
+                Coloring.SetWordColor("Nothing");
         }
 
         private void WordModeCheck_CheckedChanged(object sender, EventArgs e)

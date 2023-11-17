@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
@@ -259,7 +260,7 @@ namespace QuranKareem
             fp.Lock();
 
             // التلوين
-            if (ayahColor != AyahColor.nothing)
+            if (AyahColor[3] != 0)
             {
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
@@ -365,7 +366,6 @@ namespace QuranKareem
         }
 
         #region Colors
-        public AyahColor ayahColor = AyahColor.red;
         private void Fun(int x5, int x9, int y5, int y9)
         { // كود التلوين
             try
@@ -380,11 +380,7 @@ namespace QuranKareem
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
                             {
-                                if (ayahColor == AyahColor.blue) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, p4.G < 128 ? p4.G : 255 - p4.G, 255));
-                                else if (ayahColor == AyahColor.green) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 128, p4.B < 128 ? p4.B : 255 - p4.B));
-                                else if (ayahColor == AyahColor.darkCyan) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, p4.R < 128 ? p4.R : 255 - p4.R, 100, 100));
-                                else if (ayahColor == AyahColor.darkRed) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 128, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B));
-                                else fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255, p4.G < 128 ? p4.G : 255 - p4.G, p4.B < 128 ? p4.B : 255 - p4.B)); // غير لونها الى الأحمر
+                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, AyahColor[0], AyahColor[1], AyahColor[2]));
                             }
                         }
                     }
@@ -405,7 +401,8 @@ namespace QuranKareem
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
-                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30))) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 44, 164, 171));
+                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
+                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor[0], WordColor[1], WordColor[2]));
                         }
                     }
                 }
