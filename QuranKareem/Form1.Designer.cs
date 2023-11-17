@@ -407,6 +407,7 @@
             this.ayahColorsCheck.TabIndex = 31;
             this.ayahColorsCheck.Text = "لون الآية";
             this.ayahColorsCheck.UseVisualStyleBackColor = false;
+            this.ayahColorsCheck.CheckedChanged += new System.EventHandler(this.AyahColorsCheck_CheckedChanged);
             // 
             // SurahRepeatCheck
             // 
@@ -1118,6 +1119,7 @@
             this.wordColorsCheck.TabIndex = 86;
             this.wordColorsCheck.Text = "لون الكلمة";
             this.wordColorsCheck.UseVisualStyleBackColor = false;
+            this.wordColorsCheck.CheckedChanged += new System.EventHandler(this.WordColorsCheck_CheckedChanged);
             // 
             // wordColors
             // 
@@ -1136,7 +1138,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.searchList);
             this.Controls.Add(this.wordColorsCheck);
             this.Controls.Add(this.wordColors);
             this.Controls.Add(this.pageZoom);
@@ -1208,6 +1209,7 @@
             this.Controls.Add(this.addNewMoqrea);
             this.Controls.Add(this.srtFile);
             this.Controls.Add(this.spellingErrors);
+            this.Controls.Add(this.searchList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";

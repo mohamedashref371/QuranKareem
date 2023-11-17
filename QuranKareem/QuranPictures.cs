@@ -260,7 +260,7 @@ namespace QuranKareem
             fp.Lock();
 
             // التلوين
-            if (AyahColor[3] != 0)
+            if (AyahColor.A != 0)
             {
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
@@ -287,7 +287,7 @@ namespace QuranKareem
             WordPicture = (Bitmap)Picture.Clone();
             fp = new FastPixel(WordPicture);
             fp.Lock();
-            FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
+            if (WordColor.A != 0) FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
             CurrentWord = word;
             fp.Unlock(true);
         }
@@ -380,7 +380,7 @@ namespace QuranKareem
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
                             {
-                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, AyahColor[0], AyahColor[1], AyahColor[2]));
+                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, AyahColor.R, AyahColor.G, AyahColor.B));
                             }
                         }
                     }
@@ -402,7 +402,7 @@ namespace QuranKareem
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
-                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor[0], WordColor[1], WordColor[2]));
+                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor.R, WordColor.G, WordColor.B));
                         }
                     }
                 }

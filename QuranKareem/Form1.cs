@@ -592,26 +592,45 @@ namespace QuranKareem
             if (allow && quranTexts.SetCursor()) SetAyah();
         }
 
-        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ayahColorsCheck.Checked)
-                Coloring.SetAyahColor(ayahColors.Text);
-            else
-                Coloring.SetAyahColor("Nothing");
-        }
-        private void WordColors_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (wordColorsCheck.Checked)
-                Coloring.SetWordColor(wordColors.Text);
-            else
-                Coloring.SetWordColor("Nothing");
-        }
-
         private void WordModeCheck_CheckedChanged(object sender, EventArgs e)
         {
             quranPictures.WordMode = wordModeCheck.Checked;
             quranAudios.WordMode = wordModeCheck.Checked;
         }
+        #endregion
+
+        #region التلوين
+        private void AyahColorsCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ayahColorsCheck.Checked)
+            {
+                ayahColors.Enabled = true;
+                Coloring.SetAyahColor(ayahColors.Text);
+            }
+            else
+            {
+                Coloring.SetAyahColor("Nothing");
+                ayahColors.Enabled = false;
+            }
+        }
+
+        private void WordColorsCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (wordColorsCheck.Checked)
+            {
+                wordColors.Enabled = true;
+                Coloring.SetWordColor(wordColors.Text);
+            }
+            else
+            {
+                Coloring.SetWordColor("Nothing");
+                wordColors.Enabled = false;
+            }
+        }
+
+        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => Coloring.SetAyahColor(ayahColors.Text);
+        
+        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => Coloring.SetWordColor(wordColors.Text);
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه

@@ -277,7 +277,7 @@ namespace QuranKareem
 
             if (textType == TextType.html)
             {
-                if (AyahColor[3] != 0)
+                if (AyahColor.A != 0)
                 {
                     PageTextHTML = (start > 0 ? PageText.Substring(0, start) : "") + GetHtmlTextColor() + PageText.Substring(start, finish - start) + "</span>" + PageText.Substring(finish);
                 }
@@ -286,10 +286,10 @@ namespace QuranKareem
             else if (textType == TextType.rich)
             {
                 PageRichText.Text = OriginalPageText.ToString();
-                if (AyahColor[3] != 0)
+                if (AyahColor.A != 0)
                 {
                     PageRichText.Select(start, finish - start);
-                    PageRichText.SelectionColor = GetAyahColor();
+                    PageRichText.SelectionColor = AyahColor;
                     PageRichText.SelectionStart = start;
                 }
             }
@@ -456,7 +456,7 @@ namespace QuranKareem
         private string GetHtmlTextColor()
         {
             string s = "<span";
-            if (AyahColor[3] != 0) s += $" style=\"color: rgb({AyahColor[0]},{AyahColor[1]},{AyahColor[2]});\"";
+            if (AyahColor.A != 0) s += $" style=\"color: rgb({AyahColor.R},{AyahColor.G},{AyahColor.B});\"";
             s += ">";
             return s;
         }
