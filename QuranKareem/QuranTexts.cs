@@ -402,7 +402,8 @@ namespace QuranKareem
         {
             SearchIDs.Clear();
             if (!success || words == null || words.Trim() == "") return new string[] { };
-            if (spellingErrors) words = words.Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
+            if (spellingErrors) words = words.Replace(" ","")
+                    .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
                     .Replace("ذ", "ز").Replace("ظ", "ز")
                     .Replace("ة", "ت").Replace("ط", "ت")
                     .Replace("ث", "س").Replace("ص", "س")
@@ -416,7 +417,8 @@ namespace QuranKareem
             while (reader.Read())
             {
                 s = reader.GetString(3);
-                if (spellingErrors) s = s.Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
+                if (spellingErrors) s = s.Replace(" ", "")
+                        .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
                         .Replace("ذ", "ز").Replace("ظ", "ز")
                         .Replace("ة", "ت").Replace("ط", "ت")
                         .Replace("ث", "س").Replace("ص", "س")
