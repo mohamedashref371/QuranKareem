@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
@@ -35,11 +36,8 @@ namespace QuranKareem
         private void Form1_Load(object sender, EventArgs e)
         {
             // colors
-            ayahColors.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
-            wordColors.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
-
-            ayahColors.SelectedItem = "Red"; // اللون الأحمر
-            wordColors.SelectedItem = "LightSeaGreen";
+            ayahColors.SelectedItem = AyahColor; // اللون الأحمر
+            wordColors.SelectedItem = WordColor;
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 
@@ -605,11 +603,11 @@ namespace QuranKareem
             if (ayahColorsCheck.Checked)
             {
                 ayahColors.Enabled = true;
-                Coloring.SetAyahColor(ayahColors.Text);
+                AyahColor = (Color)ayahColors.SelectedItem;
             }
             else
             {
-                Coloring.SetAyahColor("Nothing");
+                AyahColor = Color.Empty;
                 ayahColors.Enabled = false;
             }
         }
@@ -619,18 +617,18 @@ namespace QuranKareem
             if (wordColorsCheck.Checked)
             {
                 wordColors.Enabled = true;
-                Coloring.SetWordColor(wordColors.Text);
+                WordColor = (Color)wordColors.SelectedItem;
             }
             else
             {
-                Coloring.SetWordColor("Nothing");
+                WordColor = Color.Empty;
                 wordColors.Enabled = false;
             }
         }
 
-        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => Coloring.SetAyahColor(ayahColors.Text);
+        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = (Color)ayahColors.SelectedItem;
         
-        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => Coloring.SetWordColor(wordColors.Text);
+        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = (Color)wordColors.SelectedItem;
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه

@@ -40,7 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.ayahColors = new System.Windows.Forms.ComboBox();
+            this.ayahColors = new ColorComboBox();
             this.folder = new System.Windows.Forms.FolderBrowserDialog();
             this.AyahRepeat = new System.Windows.Forms.NumericUpDown();
             this.AyahRepeatCheck = new System.Windows.Forms.CheckBox();
@@ -105,7 +105,7 @@
             this.wordModeCheck = new System.Windows.Forms.CheckBox();
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
             this.wordColorsCheck = new System.Windows.Forms.CheckBox();
-            this.wordColors = new System.Windows.Forms.ComboBox();
+            this.wordColors = new ColorComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -295,13 +295,16 @@
             // 
             // ayahColors
             // 
+            this.ayahColors.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ayahColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ayahColors.Font = new System.Drawing.Font("Tahoma", 13F);
             this.ayahColors.FormattingEnabled = true;
-            this.ayahColors.Location = new System.Drawing.Point(20, 479);
+            this.ayahColors.IntegralHeight = false;
+            this.ayahColors.Location = new System.Drawing.Point(18, 479);
+            this.ayahColors.MaxDropDownItems = 10;
             this.ayahColors.Name = "ayahColors";
             this.ayahColors.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ayahColors.Size = new System.Drawing.Size(133, 29);
+            this.ayahColors.Size = new System.Drawing.Size(143, 29);
             this.ayahColors.TabIndex = 15;
             this.ayahColors.SelectedIndexChanged += new System.EventHandler(this.AyahColors_SelectedIndexChanged);
             // 
@@ -400,7 +403,7 @@
             this.ayahColorsCheck.Checked = true;
             this.ayahColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ayahColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.ayahColorsCheck.Location = new System.Drawing.Point(169, 482);
+            this.ayahColorsCheck.Location = new System.Drawing.Point(172, 482);
             this.ayahColorsCheck.Name = "ayahColorsCheck";
             this.ayahColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.ayahColorsCheck.Size = new System.Drawing.Size(90, 26);
@@ -1112,7 +1115,7 @@
             this.wordColorsCheck.Checked = true;
             this.wordColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.wordColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.wordColorsCheck.Location = new System.Drawing.Point(158, 513);
+            this.wordColorsCheck.Location = new System.Drawing.Point(162, 513);
             this.wordColorsCheck.Name = "wordColorsCheck";
             this.wordColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wordColorsCheck.Size = new System.Drawing.Size(106, 26);
@@ -1123,13 +1126,16 @@
             // 
             // wordColors
             // 
+            this.wordColors.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.wordColors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.wordColors.Font = new System.Drawing.Font("Tahoma", 13F);
             this.wordColors.FormattingEnabled = true;
-            this.wordColors.Location = new System.Drawing.Point(20, 510);
+            this.wordColors.IntegralHeight = false;
+            this.wordColors.Location = new System.Drawing.Point(18, 510);
+            this.wordColors.MaxDropDownItems = 10;
             this.wordColors.Name = "wordColors";
             this.wordColors.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.wordColors.Size = new System.Drawing.Size(133, 29);
+            this.wordColors.Size = new System.Drawing.Size(143, 29);
             this.wordColors.TabIndex = 85;
             this.wordColors.SelectedIndexChanged += new System.EventHandler(this.WordColors_SelectedIndexChanged);
             // 
@@ -1139,8 +1145,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
             this.Controls.Add(this.searchList);
-            this.Controls.Add(this.wordColorsCheck);
-            this.Controls.Add(this.wordColors);
             this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.wordModeCheck);
@@ -1190,11 +1194,13 @@
             this.Controls.Add(this.Rate);
             this.Controls.Add(this.pause);
             this.Controls.Add(this.SurahRepeatCheck);
-            this.Controls.Add(this.ayahColorsCheck);
             this.Controls.Add(this.time5);
             this.Controls.Add(this.SurahRepeat);
             this.Controls.Add(this.AyahRepeatCheck);
             this.Controls.Add(this.AyahRepeat);
+            this.Controls.Add(this.wordColorsCheck);
+            this.Controls.Add(this.ayahColorsCheck);
+            this.Controls.Add(this.wordColors);
             this.Controls.Add(this.ayahColors);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -1245,7 +1251,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox ayahColors;
+        private ColorComboBox ayahColors;
+        private ColorComboBox wordColors;
         private System.Windows.Forms.FolderBrowserDialog folder;
         private System.Windows.Forms.NumericUpDown AyahRepeat;
         private System.Windows.Forms.CheckBox AyahRepeatCheck;
@@ -1309,7 +1316,6 @@
         private System.Windows.Forms.CheckBox wordModeCheck;
         private Guna.UI2.WinForms.Guna2Button pageZoom;
         private System.Windows.Forms.CheckBox wordColorsCheck;
-        private System.Windows.Forms.ComboBox wordColors;
     }
 }
 

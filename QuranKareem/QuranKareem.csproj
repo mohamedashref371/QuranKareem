@@ -95,6 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coloring.cs" />
+    <Compile Include="NotMyCode\ColorComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="NotMyCode\FastPixel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
