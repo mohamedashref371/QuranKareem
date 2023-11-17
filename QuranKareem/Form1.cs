@@ -14,7 +14,20 @@ namespace QuranKareem
 {
     public partial class Form1 : Form
     {
-
+        private readonly ColorComboBox ayahColors = new ColorComboBox
+        {
+            Font = new Font("Tahoma", 13F),
+            Location = new Point(18, 479),
+            Size = new Size(143, 29),
+            TabIndex = 15
+        };
+        private readonly ColorComboBox wordColors = new ColorComboBox
+        {
+            Font = new Font("Tahoma", 13F),
+            Location = new Point(18, 510),
+            Size = new Size(143, 29),
+            TabIndex = 15
+        };
         private readonly int SizeX = 1100, SizeY = 910;
 
         public Form1() { InitializeComponent(); }
@@ -35,7 +48,9 @@ namespace QuranKareem
         FormSize fs;
         private void Form1_Load(object sender, EventArgs e)
         {
-            // colors
+            Controls.Add(ayahColors); Controls.Add(wordColors);
+            ayahColors.SelectedIndexChanged += AyahColors_SelectedIndexChanged;
+            wordColors.SelectedIndexChanged += WordColors_SelectedIndexChanged;
             ayahColors.SelectedItem = AyahColor; // اللون الأحمر
             wordColors.SelectedItem = WordColor;
 
@@ -187,7 +202,7 @@ namespace QuranKareem
         }
 
         private void Minimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
-        
+
         Point quranPictureLocation;
         Size quranPicSize;
         int NumberOfTimesPictureRise = 0;
@@ -627,7 +642,7 @@ namespace QuranKareem
         }
 
         private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = (Color)ayahColors.SelectedItem;
-        
+
         private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = (Color)wordColors.SelectedItem;
         #endregion
 

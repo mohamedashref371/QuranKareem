@@ -20,6 +20,7 @@ public class ColorComboBox : ComboBox
         DrawMode = DrawMode.OwnerDrawFixed;
         DropDownStyle = ComboBoxStyle.DropDownList;
         DrawItem += ColorComboBox_DrawItem;
+        FormattingEnabled = true;
     }
 
     private void ColorComboBox_DrawItem(object sender, DrawItemEventArgs e)
