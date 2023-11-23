@@ -259,13 +259,13 @@ namespace QuranKareem
                 BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
-                quranPic.BackColor = Color.Black;
                 quranPictures.ChangeDark();
                 quranTexts.ChangeDark();
-                panel.BackColor = Color.FromArgb(0, 31, 63);
+                panel.FillColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
-                    ControlsList[i].BackColor = BackColor;
+                    if (ControlsList[i].BackColor != Color.Transparent)
+                        ControlsList[i].BackColor = BackColor;
                     ControlsList[i].ForeColor = ForeColor;
                 }
                 ShaykhDesc.BackColor = Color.Gray;
@@ -273,16 +273,16 @@ namespace QuranKareem
             else
             {
                 dark.Text = "Dark";
-                BackColor = Color.Empty; ForeColor = Color.Black;
+                BackColor = SystemColors.Window; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
-                quranPic.BackColor = Color.White;
                 quranPictures.ChangeDark();
                 quranTexts.ChangeDark();
-                panel.BackColor = Color.FromArgb(255, 224, 192);
+                panel.FillColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
-                    ControlsList[i].BackColor = SystemColors.Window;
+                    if (ControlsList[i].BackColor != Color.Transparent)
+                        ControlsList[i].BackColor = BackColor;
                     ControlsList[i].ForeColor = ForeColor;
                     if (ControlsList[i] is Button button) button.UseVisualStyleBackColor = true;
                 }
