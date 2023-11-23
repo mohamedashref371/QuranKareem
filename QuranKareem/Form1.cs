@@ -273,7 +273,7 @@ namespace QuranKareem
             else
             {
                 dark.Text = "Dark";
-                BackColor = SystemColors.Window; ForeColor = Color.Black;
+                BackColor = SystemColors.Control; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
                 quranPictures.ChangeDark();
@@ -282,7 +282,7 @@ namespace QuranKareem
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
                     if (ControlsList[i].BackColor != Color.Transparent)
-                        ControlsList[i].BackColor = BackColor;
+                        ControlsList[i].BackColor = SystemColors.Window;
                     ControlsList[i].ForeColor = ForeColor;
                     if (ControlsList[i] is Button button) button.UseVisualStyleBackColor = true;
                 }
