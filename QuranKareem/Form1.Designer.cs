@@ -45,7 +45,7 @@
             this.AyahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
-            this.panel = new System.Windows.Forms.Panel();
+            this.panel = new Guna.UI2.WinForms.Guna2Panel();
             this.ayahColorsCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
@@ -1222,7 +1222,7 @@
         private System.Windows.Forms.CheckBox AyahRepeatCheck;
         private System.Windows.Forms.NumericUpDown SurahRepeat;
         private System.Windows.Forms.Label time5;
-        private System.Windows.Forms.Panel panel;
+        private Guna.UI2.WinForms.Guna2Panel panel;
         private System.Windows.Forms.CheckBox ayahColorsCheck;
         private System.Windows.Forms.CheckBox SurahRepeatCheck;
         private System.Windows.Forms.Button pause;
