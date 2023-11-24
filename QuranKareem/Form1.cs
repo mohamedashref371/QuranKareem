@@ -652,6 +652,7 @@ namespace QuranKareem
         {
             try
             {
+                Clipboard.Clear();
                 if (normalText.Checked) Clipboard.SetText(quranTexts.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
                 else Clipboard.SetText(quranTexts.AyahText((int)Surah.Value, (int)Ayah.Value));
             }
@@ -663,6 +664,7 @@ namespace QuranKareem
         {
             try
             {
+                Clipboard.Clear();
                 Clipboard.SetText(quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
             }
             catch { }
