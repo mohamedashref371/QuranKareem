@@ -135,7 +135,7 @@ namespace QuranKareem
             return names;
         }
 
-        public void Surah(int i) { Ayah(i, 0); }
+        public void Surah(int i) => Ayah(i, 0); 
 
         public void Quarter(int i)
         {
@@ -194,8 +194,8 @@ namespace QuranKareem
             Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
         }
 
-        public void Ayah() { Ayah(SurahNumber, AyahNumber); }
-        public void Ayah(int aya) { Ayah(SurahNumber, aya); }
+        public void Ayah() => Ayah(SurahNumber, AyahNumber); 
+        public void Ayah(int aya) => Ayah(SurahNumber, aya); 
 
         public void Ayah(int sura, int aya)
         { // كما ترى .. المجهود كله عليها
