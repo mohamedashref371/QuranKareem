@@ -424,6 +424,9 @@ namespace QuranKareem
         {
             if (!added || path == null || path.Trim().Length == 0) return false;
             if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
+
+            try { path = Path.GetFullPath(path); } catch { return false; }
+
             this.path = path; success = false;
 
             CapturedAudio = false;
