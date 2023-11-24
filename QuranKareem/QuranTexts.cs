@@ -33,6 +33,9 @@ namespace QuranKareem
         public string Comment { get; private set; }
         string fontFile, fontName;
 
+        public int CurrentWord { get; private set; } = -1;
+        public bool WordMode { get; set; } = false;
+
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
         {

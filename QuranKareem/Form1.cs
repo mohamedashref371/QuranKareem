@@ -543,11 +543,18 @@ namespace QuranKareem
                 quranPic.BackgroundImage = quranPictures.WordPicture ?? quranPictures.Picture;
             }
 
-            if (isAllow && textMode) quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
-            else if (isAllow) quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
-
-            if (wordModeCheck.Checked && quranPictures.CurrentWord > 0)
-                quranAudios.WordOf(quranPictures.CurrentWord);
+            if (isAllow && textMode)
+            {
+                quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
+                if (wordModeCheck.Checked && quranTexts.CurrentWord > 0)
+                    quranAudios.WordOf(quranTexts.CurrentWord);
+            }
+            else if (isAllow)
+            {
+                quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
+                if (wordModeCheck.Checked && quranPictures.CurrentWord > 0)
+                    quranAudios.WordOf(quranPictures.CurrentWord);
+            }
 
             time5.Text = quranAudios.GetCurrentPosition();
             allow = true;
@@ -607,6 +614,7 @@ namespace QuranKareem
 
         private void WordModeCheck_CheckedChanged(object sender, EventArgs e)
         {
+            quranTexts.WordMode = wordModeCheck.Checked;
             quranPictures.WordMode = wordModeCheck.Checked;
             quranAudios.WordMode = wordModeCheck.Checked;
         }
