@@ -69,6 +69,7 @@ namespace QuranKareem
             else if (textsFiles != null && textsFiles.Length > 0)
             {
                 textMode = true; // التبديل إلى RichTextBox
+                pageZoom.Enabled = false;
                 quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranTexts.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
@@ -225,7 +226,7 @@ namespace QuranKareem
                 quranPicSize = quranPic.Size;
                 quranPictureLocation = quranPic.Location;
                 quranPic.Location = new Point(30, exitForm.Location.Y + exitForm.Size.Height + 5);
-                quranPic.Size = new Size(Width - 60, (int)(quranPic.Size.Height * (Width - 60.0) / quranPicSize.Width));
+                quranPic.Size = new Size(Width - 60, (int)(quranPictures.Height * (Width - 60.0) / quranPictures.Width));
             }
             NumberOfTimesPictureRise = 0;
             quranPic.Select();

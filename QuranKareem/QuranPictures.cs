@@ -20,7 +20,8 @@ namespace QuranKareem
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
         private int surahsCount, quartersCount, pagesCount /*,linesCount*/;
-        int width, height;
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         private string extension; // example: .png
         private Color background, textColor = Color.Empty;
         //private string linesHelp; // setXY function help
@@ -94,8 +95,8 @@ namespace QuranKareem
                 quartersCount = reader.GetInt32(4);
                 pagesCount = reader.GetInt32(5);
                 //linesCount = reader.GetInt32(6);
-                width = reader.GetInt32(6);
-                height = reader.GetInt32(7);
+                Width = reader.GetInt32(6);
+                Height = reader.GetInt32(7);
 
                 string[] clr;
                 clr = reader.GetString(8).Split(',');
@@ -316,17 +317,17 @@ namespace QuranKareem
             {
                 fp = new FastPixel(oPic);
                 fp.Lock();
-                FunWhite(0, width - 1, 0, height - 1);
+                FunWhite(0, Width - 1, 0, Height - 1);
                 fp.Unlock(true);
             }
         }
 
-        public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, width, height);
+        public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, Width, Height);
         public bool SetXY(int xMouse, int yMouse, int width, int height)
         { // مؤشر الماوس
             if (!success) return false;
-            xMouse = (int)(xMouse * (this.width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
-            yMouse = (int)(yMouse * (this.height / (decimal)height)) + 1;
+            xMouse = (int)(xMouse * (Width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
+            yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
             int word = -1; tempInt = -371;
             quran.Open();
             bool words = WordMode;
