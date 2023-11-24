@@ -38,9 +38,10 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
-        public int CurrentWord { get; private set; } = -1;
 
+        public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
+
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
         {
