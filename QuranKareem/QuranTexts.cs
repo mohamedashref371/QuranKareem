@@ -58,8 +58,6 @@ namespace QuranKareem
         public string PageTextHTML { get; private set; }
         public RichTextBox PageRichText { get; private set; } = new RichTextBox();
 
-        private readonly List<int> finishedPosition = new List<int>();
-
         private int tempInt, tempInt2;
 
         public static QuranTexts Instance { get; private set; } = new QuranTexts();
@@ -299,13 +297,17 @@ namespace QuranKareem
 
         }
 
+        //char[] characters = { 'ا', 'ى', 'ٱ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' };
+        //char[] decorations = { 'ُ', 'َ', ' ', 'ِ', 'ۡ', 'ّ', 'ٰ', ' ', '١', '٢', '٣', '٤', '٥', '٦', 'ٓ', '٧', 'ۛ', 'ٗ', 'ْ', 'ۖ', 'ٌ', 'ٞ', '٨', '٩', 'ۢ', '٠', 'ۗ', 'ۥ', 'ٖ', 'ۚ', 'ۦ', '۞', 'ۘ', 'ٍ', 'ـ', 'ٔ', 'ً', 'ۭ', 'ۧ', 'ۜ', '۠', 'ۤ', '۩', 'ٕ', '۪', '۬', 'ۨ' };
+        private readonly List<int> finishedPosition = new List<int>();
+        private readonly List<int> WordsPosition = new List<int>();
         private readonly StringBuilder OriginalPageText = new StringBuilder();
         private void PageTextAt(int i)
         {
             reader.Close();
             command.Cancel();
             OriginalPageText.Clear();
-            finishedPosition.Clear(); int lenght=0;
+            finishedPosition.Clear(); int lenght = 0;
             command.CommandText = $"SELECT text FROM ayat WHERE page={i}";
             reader = command.ExecuteReader();
             string s;
