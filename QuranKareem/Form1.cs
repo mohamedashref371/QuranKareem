@@ -41,7 +41,7 @@ namespace QuranKareem
         readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
 
         bool textMode = false;
-        string moshafText = "", moshafPic = "", moshafAudio = "", Tafseer = "";
+        string moshafText = "", moshafAudio = "", Tafseer = "";
         string[] stringArray;
 
         #region Form EventArgs
@@ -63,11 +63,21 @@ namespace QuranKareem
             try { picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */ } catch { }
 
             if (picturesFolders != null && picturesFolders.Length > 0)
-                quranPictures.QuranPicture(picturesFolders[0], (int)Surah.Value, (int)Ayah.Value);
+            {
+                for (int i = 0; i < picturesFolders.Length; i++)
+                    moshaf.Items.Add(picturesFolders[i].Split('\\').Last());
+                string s = @"pictures\TheChosenMoshaf.txt";
+                if (File.Exists(s) && (s = File.ReadAllText(s, Encoding.UTF8)).Trim() != "" && Directory.Exists($@"pictures\{s}"))
+                    moshaf.SelectedItem = s;
+                else
+                    moshaf.SelectedItem = picturesFolders[0].Split('\\').Last();
+            }
 
             // مجلد الصور غير موجود ؟
             else if (textsFiles != null && textsFiles.Length > 0)
             {
+                moshaf.SelectedIndex = 0;
+                moshaf.Enabled = false;
                 textMode = true; // التبديل إلى RichTextBox
                 pageZoom.Enabled = false;
                 quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
@@ -165,7 +175,13 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, about, latest, addNewMoqrea, splitAll, splitter });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, addNewMoqrea, splitAll, splitter });
+        }
+
+        private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            quranPictures.QuranPicture($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
+            quranPic.BackgroundImage = quranPictures.Picture;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -173,7 +189,7 @@ namespace QuranKareem
             // حفظ الإعدادات الحالية عند إغلاق البرنامج لاستعادتها لاحقاً
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
-            File.WriteAllText(save + "MoshafPictureCurrent", moshafPic);
+            if (!textMode) File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
             File.WriteAllText(save + "TafseerCurrent", Tafseer);
             File.WriteAllText(save + "Volume", volume.Value + "");
@@ -961,8 +977,7 @@ namespace QuranKareem
         }
         #endregion
 
-
-        private void Latest_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://www.mediafire.com/folder/fwzq0xlpp9oys");
+        private void Latest_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
         private void About_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317");
 

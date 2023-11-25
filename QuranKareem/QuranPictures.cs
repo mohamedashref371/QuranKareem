@@ -101,6 +101,7 @@ namespace QuranKareem
                 string[] clr;
                 clr = reader.GetString(8).Split(',');
                 if (clr.Length == 3) textColor = Color.FromArgb(Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
+                else textColor = Color.Empty;
                 clr = reader.GetString(9).Split(',');
                 if (clr.Length >= 3) background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
 
@@ -112,6 +113,7 @@ namespace QuranKareem
                 quran.Close();
                 success = true;
 
+                PageNumber = 0;
                 Ayah(sura, aya);
             }
             catch { }

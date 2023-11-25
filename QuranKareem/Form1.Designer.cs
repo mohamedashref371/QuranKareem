@@ -72,7 +72,6 @@
             this.saveRTF = new System.Windows.Forms.Button();
             this.saveRichText = new System.Windows.Forms.SaveFileDialog();
             this.rtb = new System.Windows.Forms.RichTextBox();
-            this.about = new System.Windows.Forms.Button();
             this.latest = new System.Windows.Forms.Button();
             this.stop = new System.Windows.Forms.Button();
             this.quranPic = new System.Windows.Forms.PictureBox();
@@ -104,6 +103,7 @@
             this.wordModeCheck = new System.Windows.Forms.CheckBox();
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
             this.wordColorsCheck = new System.Windows.Forms.CheckBox();
+            this.moshaf = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -670,10 +670,6 @@
             this.tafasir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tafasir.Font = new System.Drawing.Font("Tahoma", 13F);
             this.tafasir.FormattingEnabled = true;
-            this.tafasir.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3"});
             this.tafasir.Location = new System.Drawing.Point(16, 718);
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -730,23 +726,13 @@
             this.rtb.Text = "Tafseer";
             this.rtb.Visible = false;
             // 
-            // about
-            // 
-            this.about.Location = new System.Drawing.Point(78, 825);
-            this.about.Name = "about";
-            this.about.Size = new System.Drawing.Size(63, 23);
-            this.about.TabIndex = 29;
-            this.about.Text = "About";
-            this.about.UseVisualStyleBackColor = true;
-            this.about.Click += new System.EventHandler(this.About_Click);
-            // 
             // latest
             // 
-            this.latest.Location = new System.Drawing.Point(145, 825);
+            this.latest.Location = new System.Drawing.Point(136, 825);
             this.latest.Name = "latest";
-            this.latest.Size = new System.Drawing.Size(84, 23);
+            this.latest.Size = new System.Drawing.Size(49, 23);
             this.latest.TabIndex = 28;
-            this.latest.Text = "latest version";
+            this.latest.Text = "تحديث";
             this.latest.UseVisualStyleBackColor = true;
             this.latest.Click += new System.EventHandler(this.Latest_Click);
             // 
@@ -1043,7 +1029,7 @@
             this.dark.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.dark.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.dark.ForeColor = System.Drawing.Color.White;
-            this.dark.Location = new System.Drawing.Point(233, 820);
+            this.dark.Location = new System.Drawing.Point(75, 820);
             this.dark.Name = "dark";
             this.dark.Size = new System.Drawing.Size(61, 32);
             this.dark.TabIndex = 81;
@@ -1107,11 +1093,26 @@
             this.wordColorsCheck.UseVisualStyleBackColor = false;
             this.wordColorsCheck.CheckedChanged += new System.EventHandler(this.WordColorsCheck_CheckedChanged);
             // 
+            // moshaf
+            // 
+            this.moshaf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.moshaf.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.moshaf.FormattingEnabled = true;
+            this.moshaf.Items.AddRange(new object[] {
+            " * المصاحف ..."});
+            this.moshaf.Location = new System.Drawing.Point(186, 822);
+            this.moshaf.Name = "moshaf";
+            this.moshaf.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.moshaf.Size = new System.Drawing.Size(105, 29);
+            this.moshaf.TabIndex = 85;
+            this.moshaf.SelectedIndexChanged += new System.EventHandler(this.Moshaf_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.Controls.Add(this.moshaf);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.panel);
@@ -1138,7 +1139,6 @@
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volume);
             this.Controls.Add(this.latest);
-            this.Controls.Add(this.about);
             this.Controls.Add(this.rtb);
             this.Controls.Add(this.saveRTF);
             this.Controls.Add(this.tafseerCopy);
@@ -1250,7 +1250,6 @@
         private System.Windows.Forms.Button saveRTF;
         private System.Windows.Forms.SaveFileDialog saveRichText;
         private System.Windows.Forms.RichTextBox rtb;
-        private System.Windows.Forms.Button about;
         private System.Windows.Forms.Button latest;
         private System.Windows.Forms.Label label11;
         private Guna.UI2.WinForms.Guna2TrackBar volume;
@@ -1280,6 +1279,7 @@
         private System.Windows.Forms.CheckBox wordModeCheck;
         private Guna.UI2.WinForms.Guna2Button pageZoom;
         private System.Windows.Forms.CheckBox wordColorsCheck;
+        private System.Windows.Forms.ComboBox moshaf;
     }
 }
 
