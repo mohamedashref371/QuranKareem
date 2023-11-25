@@ -39,6 +39,7 @@ namespace QuranKareem
         public bool Makya_Madanya { get; private set; }
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
+        public string Comment { get; private set; }
 
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
@@ -106,6 +107,7 @@ namespace QuranKareem
                 if (clr.Length >= 3) background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
 
                 extension = reader.GetString(10);
+                Comment = reader.GetString(11);
                 //lineHeight = height / linesCount;
 
                 reader.Close();
