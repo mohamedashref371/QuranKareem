@@ -300,8 +300,8 @@ namespace QuranKareem
         //char[] characters = { 'ا', 'ى', 'ٱ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' };
         //char[] decorations = { 'ُ', 'َ', ' ', 'ِ', 'ۡ', 'ّ', 'ٰ', ' ', 'ٓ', 'ۛ', 'ٗ', 'ْ', 'ۖ', 'ٌ', 'ٞ', 'ۢ', 'ۗ', 'ۥ', 'ٖ', 'ۚ', 'ۦ', 'ۘ', 'ٍ', 'ـ', 'ٔ', 'ً', 'ۭ', 'ۧ', 'ۜ', '۠', 'ۤ', 'ٕ', '۪', '۬', 'ۨ' };
         //char[] others = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۩', '۞' };
+        //private readonly List<int> WordsPosition = new List<int>();
         private readonly List<int> finishedPosition = new List<int>();
-        private readonly List<int> WordsPosition = new List<int>();
         private readonly StringBuilder OriginalPageText = new StringBuilder();
         private void PageTextAt(int i)
         {
