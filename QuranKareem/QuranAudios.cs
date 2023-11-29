@@ -107,6 +107,7 @@ namespace QuranKareem
             catch { }
         }
 
+        #region التنقلات في المصحف
         public void Surah(int i) { Ayah(i, 0); }
 
         public void AyahPlus()
@@ -320,6 +321,7 @@ namespace QuranKareem
             mp3.settings.rate = rate;
             return hold;
         }
+        #endregion
 
         public void Pause() { timer.Stop(); wordsTimer.Stop(); mp3.URL = ""; CapturedAudio = false; }
         public void Stop() { success = false; Pause(); }

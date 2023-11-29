@@ -141,6 +141,7 @@ namespace QuranKareem
             return names;
         }
 
+        #region التنقلات في المصحف
         public void Surah(int i) => Ayah(i, 0); 
 
         public void Quarter(int i)
@@ -298,7 +299,7 @@ namespace QuranKareem
             fp.Unlock(true);
         }
 
-        private void PictureAt(int sura)
+        private void PictureAt(int sura) // Part Of Ayah Function
         { // الصورة الحالية
             string s = sura + "";
             if (s.Length == 1) s = "00" + s;
@@ -370,6 +371,7 @@ namespace QuranKareem
             if (words && tempInt != -371) WordOf(word);
             return tempInt != -371;
         }
+        #endregion
 
         #region Colors
         private void Fun(int x5, int x9, int y5, int y9)

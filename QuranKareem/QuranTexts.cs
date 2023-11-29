@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using static QuranKareem.Coloring;
@@ -110,9 +111,7 @@ namespace QuranKareem
                 fontName = reader.GetString(7);
                 Comment = reader.GetString(8);
 
-                reader.Close();
-                command.Cancel();
-                quran.Close();
+                CloseConn();
                 success = true;
             }
             catch { }
@@ -144,12 +143,11 @@ namespace QuranKareem
                 names[i] = reader.GetString(0); // عمود واحد
                 i++;
             }
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             return names;
         }
 
+        #region التنقلات في المصحف
         public void Surah(int i) => Ayah(i, 0); 
 
         public void Quarter(int i)
@@ -164,9 +162,7 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             if (!reader.Read()) return;
             tempInt = reader.GetInt32(0);
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             AyahAt(tempInt);
         }
 
@@ -182,9 +178,7 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             if (!reader.Read()) return;
             tempInt = reader.GetInt32(0);
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             AyahAt(tempInt);
         }
 
@@ -203,9 +197,7 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             reader.Read();
             tempInt = reader.GetInt32(0)/*surah*/; tempInt2 = reader.GetInt32(1)/*ayah*/;
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
         }
 
@@ -231,8 +223,7 @@ namespace QuranKareem
                 SurahNumber = sura;
                 Makya_Madanya = reader.GetBoolean(2);
                 AyatCount = reader.GetInt32(3);
-                reader.Close();
-                command.Cancel();
+                Close();
             }
             if (aya > AyatCount) aya = AyatCount;
             AyahNumber = aya;
@@ -241,8 +232,7 @@ namespace QuranKareem
             AyahStart = 0;
             if (!reader.HasRows && aya == 0)
             {
-                reader.Close();
-                command.Cancel();
+                Close();
                 command.CommandText = $"SELECT id,quarter,page FROM ayat WHERE surah={sura} AND ayah={1}";
                 reader = command.ExecuteReader();
                 AyahNumber = 1;
@@ -255,20 +245,18 @@ namespace QuranKareem
             if (PageNumber != reader.GetInt32(2))
             {
                 PageNumber = reader.GetInt32(2);
-                reader.Close();
-                command.Cancel();
+                Close();
                 command.CommandText = $"SELECT * FROM pages WHERE id={PageNumber}";
                 reader = command.ExecuteReader();
                 reader.Read();
                 pageStartId = reader.GetInt32(1);
+                Close();
                 PageTextAt(PageNumber);
             }
 
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
 
-            PageText = OriginalPageText.ToString();
+            PageText = originalPageText.ToString();
 
             // التلوين
             int k = ayahId - pageStartId;
@@ -286,42 +274,89 @@ namespace QuranKareem
             }
             else if (textType == TextType.rich)
             {
-                PageRichText.Text = OriginalPageText.ToString();
+                PageRichText.Text = originalPageText.ToString();
                 if (AyahColor.A != 0)
                 {
                     PageRichText.Select(start, finish - start);
                     PageRichText.SelectionColor = AyahColor;
                     PageRichText.SelectionStart = start;
                 }
+                PageRichText.DeselectAll();
             }
 
         }
 
-        //char[] characters = { 'ا', 'ى', 'ٱ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' };
-        //char[] decorations = { 'ُ', 'َ', ' ', 'ِ', 'ۡ', 'ّ', 'ٰ', ' ', 'ٓ', 'ۛ', 'ٗ', 'ْ', 'ۖ', 'ٌ', 'ٞ', 'ۢ', 'ۗ', 'ۥ', 'ٖ', 'ۚ', 'ۦ', 'ۘ', 'ٍ', 'ـ', 'ٔ', 'ً', 'ۭ', 'ۧ', 'ۜ', '۠', 'ۤ', 'ٕ', '۪', '۬', 'ۨ' };
-        //char[] others = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۩', '۞' };
-        //private readonly List<int> WordsPosition = new List<int>();
         private readonly List<int> finishedPosition = new List<int>();
-        private readonly StringBuilder OriginalPageText = new StringBuilder();
+        private readonly List<List<int>> wordsPosition = new List<List<int>>();
+
+        #region Part Of Ayah Function
+        private readonly StringBuilder originalPageText = new StringBuilder();
+        private readonly char[] characters  = { 'ا', 'ى', 'ٱ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' },
+                                decorations = { 'ُ', 'َ', 'ِ', 'ۡ', 'ّ', 'ٰ', 'ٓ', 'ۛ', 'ٗ', 'ْ', 'ۖ', 'ٌ', 'ٞ', 'ۢ', 'ۗ', 'ۥ', 'ٖ', 'ۚ', 'ۦ', 'ۘ', 'ٍ', 'ـ', 'ٔ', 'ً', 'ۭ', 'ۧ', 'ۜ', '۠', 'ۤ', 'ٕ', '۪', '۬', 'ۨ', ' ', ' ', '\n' },
+                                others      = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۞', '۩' };
+
         private void PageTextAt(int i)
         {
-            reader.Close();
-            command.Cancel();
-            OriginalPageText.Clear();
-            finishedPosition.Clear(); int lenght = 0;
+            originalPageText.Clear();
+            finishedPosition.Clear(); int length = 0;
+            wordsPosition.Clear();
+            string s;
+
             command.CommandText = $"SELECT text FROM ayat WHERE page={i}";
             reader = command.ExecuteReader();
-            string s;
             while (reader.Read())
             {
                 s = reader.GetString(0).Replace(Environment.NewLine, "\n");
-                OriginalPageText.Append(s);
-                lenght += s.Length;
-                finishedPosition.Add(lenght);
+                originalPageText.Append(s);
+                length += s.Length;
+                finishedPosition.Add(length);
             }
-            reader.Close();
-            command.Cancel();
+            Close();
+
+            if (WordMode) AyatWords(i);
+
+            //for (int ii = 0; ii < wordsPosition.Count - 1; ii++)
+            //    if (wordsPosition[ii] != null)
+            //        for (int jj = 0; jj < wordsPosition[ii].Count - 1; jj++)
+            //            MessageBox.Show(wordsPosition[ii][jj] + "");
         }
+
+        private void AyatWords(int page)
+        {
+            command.CommandText = $"SELECT aya.id,pure_text FROM (SELECT id FROM ayat WHERE page={page}) AS aya INNER JOIN words ON aya.id = words.ayah_id";
+            int id = pageStartId - 1; int length = 0;
+            string s;
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                if (reader.GetInt32(0) > id)
+                {
+                    for (int k = 1; k < reader.GetInt32(0) - id; k++) wordsPosition.Add(null);
+                    id = reader.GetInt32(0);
+                    if (wordsPosition.Count >= 1) length = finishedPosition[wordsPosition.Count - 1];
+                    wordsPosition.Add(new List<int>());
+                    if (originalPageText[length] == others[10]) length += 1;
+                    wordsPosition.Last().Add(length);
+                }
+                s = reader.GetString(1);
+                //مقارنة الكلمة
+                for (int j = 0; j < s.Length;)
+                {
+                    if (!decorations.Contains(originalPageText[length]) && originalPageText[length] == s[j])
+                    {
+                        length++; j++;
+                    }
+                    else length++;
+                }
+                while (length < originalPageText.Length)
+                    if (decorations.Contains(originalPageText[length])) length++;
+                    else break;
+
+                wordsPosition.Last().Add(length);
+            }
+            Close();
+        }
+        #endregion
 
         public bool SetCursor(int position = -1)
         {
@@ -337,16 +372,14 @@ namespace QuranKareem
                     reader = command.ExecuteReader();
                     reader.Read();
                     tempInt = reader.GetInt32(0); tempInt2 = reader.GetInt32(1);
-                    reader.Close();
-                    command.Cancel();
-                    quran.Close();
+                    CloseConn();
                     break;
                 }
             }
             if (tempInt != -1) Ayah(tempInt, tempInt2);
-            PageRichText.DeselectAll();
             return tempInt != -1;
         }
+        #endregion
 
         private string tempString;
         public string AyahText(int sura, int aya)
@@ -357,9 +390,7 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             reader.Read();
             tempString = reader.GetString(0);
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             return tempString.Replace(Environment.NewLine, " ").Trim();
         }
 
@@ -371,9 +402,7 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             reader.Read();
             tempString = reader.GetString(0);
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             return tempString;
         }
 
@@ -396,9 +425,7 @@ namespace QuranKareem
                 if (reader.GetInt32(0) > 0) tempString += reader.GetInt32(0);
                 lst.Add(tempString);
             }
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             return lst.ToArray();
         }
 
@@ -437,9 +464,7 @@ namespace QuranKareem
                     SearchIDs.Add(reader.GetInt32(0));
                 }
             }
-            reader.Close();
-            command.Cancel();
-            quran.Close();
+            CloseConn();
             return lst.ToArray();
         }
         public int[] SelectedSearchIndex(int i)
@@ -452,10 +477,20 @@ namespace QuranKareem
             reader.Read();
             sura_aya[0] = reader.GetInt32(0);
             sura_aya[1] = reader.GetInt32(1);
+            CloseConn();
+            return sura_aya;
+        }
+
+        private void Close()
+        {
+            reader.Close();
+            command.Cancel();
+        }
+        private void CloseConn()
+        {
             reader.Close();
             command.Cancel();
             quran.Close();
-            return sura_aya;
         }
 
         private string GetHtmlTextColor()
