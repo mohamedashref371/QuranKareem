@@ -600,10 +600,8 @@ namespace QuranKareem
         // quranAudios -> AddEventHandlerOfWord
         private void WordAudio(object sender, EventArgs e)
         {
-            if (textMode)
-            {
-
-            }
+            if (textMode) quranTexts.WordOf(quranAudios.CurrentWord);
+            
             else
             {
                 if (quranAudios.CurrentWord > 0)

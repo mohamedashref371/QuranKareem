@@ -255,7 +255,7 @@ namespace QuranKareem
             }
 
             CloseConn();
-
+            CurrentWord = -1;
             PageText = originalPageText.ToString();
 
             // التلوين
@@ -359,34 +359,43 @@ namespace QuranKareem
 
         public void WordOf(int word)
         {
-            if (textType == TextType.rich)
-                if (WordColor.A != 0)
+            try
+            {
+                if (textType == TextType.rich && word > 0 && WordColor.A != 0 && ayahId - pageStartId < wordsPosition.Count && wordsPosition[ayahId - pageStartId] != null)
                 {
                     PageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
                     PageRichText.SelectionColor = WordColor;
+                    PageRichText.DeselectAll();
                 }
-            PageRichText.DeselectAll();
+                CurrentWord = word;
+            }
+            catch { }
         }
 
         public bool SetCursor(int position = -1)
         {
             if (!success) return false;
             if (position < 0) position = PageRichText.SelectionStart;
-            tempInt = -1; tempInt2 = 0;
-            for (int i = 0; i < finishedPosition.Count; i++)
+            tempInt = -1; int i = 0;
+            while (i < finishedPosition.Count)
             {
                 if (position < finishedPosition[i])
                 {
-                    quran.Open();
-                    command.CommandText = $"SELECT surah,ayah FROM ayat WHERE id={i + pageStartId}";
-                    reader = command.ExecuteReader();
-                    reader.Read();
-                    tempInt = reader.GetInt32(0); tempInt2 = reader.GetInt32(1);
-                    CloseConn();
+                    AyahAt(i + pageStartId);
                     break;
                 }
+                i++;
             }
-            if (tempInt != -1) Ayah(tempInt, tempInt2);
+            if (tempInt != -1 && WordMode && i < wordsPosition.Count && wordsPosition[i] != null)
+            {
+                for (int j = 1; j < wordsPosition[i].Count; j++)
+                {
+                    if (position < wordsPosition[i][j])
+                    {
+                        WordOf(j); break;
+                    }
+                }
+            }
             return tempInt != -1;
         }
         #endregion
