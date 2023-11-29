@@ -283,7 +283,6 @@ namespace QuranKareem
                 }
                 PageRichText.DeselectAll();
             }
-
         }
 
         private readonly List<int> finishedPosition = new List<int>();
@@ -357,6 +356,17 @@ namespace QuranKareem
             Close();
         }
         #endregion
+
+        public void WordOf(int word)
+        {
+            if (textType == TextType.rich)
+                if (WordColor.A != 0)
+                {
+                    PageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
+                    PageRichText.SelectionColor = WordColor;
+                }
+            PageRichText.DeselectAll();
+        }
 
         public bool SetCursor(int position = -1)
         {

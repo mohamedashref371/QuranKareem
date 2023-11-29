@@ -287,18 +287,6 @@ namespace QuranKareem
             quran.Close();
         }
 
-        private readonly List<int> words = new List<int>();
-        public void WordOf(int word)
-        {
-            if (word <= 0 || word * 4 > words.Count || !WordMode) { WordPicture = null; return; }
-            WordPicture = (Bitmap)Picture.Clone();
-            fp = new FastPixel(WordPicture);
-            fp.Lock();
-            if (WordColor.A != 0) FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
-            CurrentWord = word;
-            fp.Unlock(true);
-        }
-
         private void PictureAt(int sura) // Part Of Ayah Function
         { // الصورة الحالية
             string s = sura + "";
@@ -325,6 +313,18 @@ namespace QuranKareem
                 FunWhite(0, Width - 1, 0, Height - 1);
                 fp.Unlock(true);
             }
+        }
+
+        private readonly List<int> words = new List<int>();
+        public void WordOf(int word)
+        {
+            if (word <= 0 || word * 4 > words.Count || !WordMode) { WordPicture = null; return; }
+            WordPicture = (Bitmap)Picture.Clone();
+            fp = new FastPixel(WordPicture);
+            fp.Lock();
+            if (WordColor.A != 0) FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
+            CurrentWord = word;
+            fp.Unlock(true);
         }
 
         public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, Width, Height);
@@ -380,19 +380,15 @@ namespace QuranKareem
             {
                 Color p4;
                 for (int y1 = y5; y1 <= y9; y1++)
-                {
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
-                            {
                                 fp.SetPixel(x1, y1, Color.FromArgb(p4.A, AyahColor.R, AyahColor.G, AyahColor.B));
-                            }
                         }
                     }
-                }
             }
             catch { }
         }
@@ -403,7 +399,6 @@ namespace QuranKareem
             {
                 Color p4;
                 for (int y1 = y5; y1 <= y9; y1++)
-                {
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
@@ -413,7 +408,6 @@ namespace QuranKareem
                                 fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor.R, WordColor.G, WordColor.B));
                         }
                     }
-                }
             }
             catch { }
         }
@@ -424,13 +418,11 @@ namespace QuranKareem
             {
                 Color p4;
                 for (int y1 = y5; y1 <= y9; y1++)
-                {
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
                         if (p4.A != 0) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
                     }
-                }
             }
             catch { }
         }
