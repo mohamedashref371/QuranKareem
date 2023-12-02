@@ -14,7 +14,7 @@ namespace QuranKareem
         [STAThread]
         static void Main()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += ChatGPT.CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += ChatGPTResponses.CurrentDomain_AssemblyResolve;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             try

@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coloring.cs" />
-    <Compile Include="NotMyCode\ChatGPT.cs" />
+    <Compile Include="NotMyCode\ChatGPTResponses.cs" />
     <Compile Include="NotMyCode\ColorComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
