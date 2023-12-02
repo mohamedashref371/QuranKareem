@@ -30,7 +30,7 @@ namespace QuranKareem
         };
         private readonly int SizeX = 1100, SizeY = 910;
 
-        public Form1() { InitializeComponent(); }
+        public Form1() { InitializeComponent(); } bool success = false;
         // إن شاء الله ستكون الخطوة القادمة هي تحسين واجهة البرنامج
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
@@ -176,6 +176,7 @@ namespace QuranKareem
 
             // The Controls which backcolor is not subject to the form's backcolor.
             ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter });
+            success = true;
         }
 
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
@@ -187,6 +188,7 @@ namespace QuranKareem
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (!success) return;
             // حفظ الإعدادات الحالية عند إغلاق البرنامج لاستعادتها لاحقاً
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
