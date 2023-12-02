@@ -280,19 +280,19 @@ namespace QuranKareem
             wordsTimer.Start();
         }
 
-        bool Check(int surah)
+        bool Check(int surah, int delta = 0)
         {
             if (!CaptureAudio(surah)) return false;
-            //quran.Open();
+            quran.Open();
             command.CommandText = $"SELECT duration FROM surahs WHERE id={surah}";
             reader = command.ExecuteReader();
             reader.Read();
-            if (reader.IsDBNull(0)) { /*quran.Close();*/ return false; }
+            if (reader.IsDBNull(0)) { quran.Close(); return false; }
             int i = reader.GetInt32(0);
             reader.Close();
             command.Cancel();
-            //quran.Close();
-            if (mp3.currentMedia.duration == i) return true;
+            quran.Close();
+            if (Math.Abs(mp3.currentMedia.duration - i) <= delta) return true;
             return false;
         }
 
