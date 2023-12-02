@@ -280,7 +280,7 @@ namespace QuranKareem
             wordsTimer.Start();
         }
 
-        bool Check(int surah, int delta = 0)
+        public bool Check(int surah, int delta = 0)
         {
             if (!CaptureAudio(surah)) return false;
             quran.Open();
