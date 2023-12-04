@@ -28,7 +28,10 @@ Databases are publicly readable, so you can add Al-Mashaykh in any other way you
 The current program is just an idea that can be improved and developed.
 
 Night mode feature has been added.
+************************************
 
 To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs)
 
 I would like to thank [codeproject website](https://www.codeproject.com/) for [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP).
+
+Download [SQLite3 Reader](https://github.com/pawelsalawa/sqlitestudio/releases).
