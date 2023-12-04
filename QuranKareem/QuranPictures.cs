@@ -19,13 +19,11 @@ namespace QuranKareem
         private readonly SQLiteCommand command; // SQLite Command
         private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
 
-        private int surahsCount, quartersCount, pagesCount /*,linesCount*/;
+        private int surahsCount, quartersCount, pagesCount;
         public int Width { get; private set; }
         public int Height { get; private set; }
         private string extension; // example: .png
         private Color background, textColor = Color.Empty;
-        //private string linesHelp; // setXY function help
-        private int ayahId;
         private Bitmap oPic;
         public Bitmap Picture { get; private set; }
         public Bitmap WordPicture { get; private set; }
@@ -55,7 +53,6 @@ namespace QuranKareem
             Ayah();
         }
 
-        //private int lineHeight;
         private int tempInt, tempInt2;
 
         public static QuranPictures Instance { get; private set; } = new QuranPictures();
@@ -95,7 +92,6 @@ namespace QuranKareem
                 surahsCount = reader.GetInt32(3);
                 quartersCount = reader.GetInt32(4);
                 pagesCount = reader.GetInt32(5);
-                //linesCount = reader.GetInt32(6);
                 Width = reader.GetInt32(6);
                 Height = reader.GetInt32(7);
 
@@ -108,7 +104,6 @@ namespace QuranKareem
 
                 extension = reader.GetString(10);
                 Comment = reader.GetString(11);
-                //lineHeight = height / linesCount;
 
                 reader.Close();
                 command.Cancel();
@@ -243,18 +238,12 @@ namespace QuranKareem
                 AyahStart = 1;
             }
             reader.Read();
-            ayahId = reader.GetInt32(0);
+            int ayahId = reader.GetInt32(0);
             QuarterNumber = reader.GetInt32(2); // رقم الربع 
 
             if (PageNumber != reader.GetInt32(3))
             {
                 PageNumber = reader.GetInt32(3);
-                //reader.Close();
-                //command.Cancel();
-                //command.CommandText = $"SELECT * FROM pages WHERE id={PageNumber}";
-                //reader = command.ExecuteReader();
-                //reader.Read();
-                //pageStartId = reader.GetInt32(1);
                 PictureAt(PageNumber);
             }
 
@@ -271,7 +260,7 @@ namespace QuranKareem
             {
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
-                while (reader.Read()) Fun(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
+                while (reader.Read()) ColoringAyah(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
                 reader.Close();
                 command.Cancel();
             }
@@ -310,7 +299,7 @@ namespace QuranKareem
             {
                 fp = new FastPixel(oPic);
                 fp.Lock();
-                FunWhite(0, Width - 1, 0, Height - 1);
+                ReverseColors(0, Width - 1, 0, Height - 1);
                 fp.Unlock(true);
             }
         }
@@ -322,7 +311,7 @@ namespace QuranKareem
             WordPicture = (Bitmap)Picture.Clone();
             fp = new FastPixel(WordPicture);
             fp.Lock();
-            if (WordColor.A != 0) FunWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
+            if (WordColor.A != 0) ColoringWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
             CurrentWord = word;
             fp.Unlock(true);
         }
@@ -373,8 +362,8 @@ namespace QuranKareem
         }
         #endregion
 
-        #region Colors
-        private void Fun(int x5, int x9, int y5, int y9)
+        #region Coloring
+        private void ColoringAyah(int x5, int x9, int y5, int y9)
         { // كود التلوين
             try
             {
@@ -393,7 +382,7 @@ namespace QuranKareem
             catch { }
         }
 
-        private void FunWord(int x5, int x9, int y5, int y9)
+        private void ColoringWord(int x5, int x9, int y5, int y9)
         {
             try
             {
@@ -402,7 +391,7 @@ namespace QuranKareem
                     for (int x1 = x5; x1 <= x9; x1++)
                     {
                         p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        if (p4.A != 0 && background != p4)
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
                                 fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor.R, WordColor.G, WordColor.B));
@@ -412,7 +401,7 @@ namespace QuranKareem
             catch { }
         }
 
-        private void FunWhite(int x5, int x9, int y5, int y9)
+        private void ReverseColors(int x5, int x9, int y5, int y9)
         {
             try
             {

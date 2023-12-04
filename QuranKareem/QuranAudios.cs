@@ -292,8 +292,7 @@ namespace QuranKareem
             reader.Close();
             command.Cancel();
             quran.Close();
-            if (Math.Abs(mp3.currentMedia.duration - i) <= delta) return true;
-            return false;
+            return Math.Abs(mp3.currentMedia.duration - i) <= delta;
         }
 
         bool CaptureAudio(int sura)
