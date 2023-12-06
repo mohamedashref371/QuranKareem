@@ -34,4 +34,4 @@ To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs
 
 I would like to thank [codeproject website](https://www.codeproject.com/) for [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP).
 
-Download [SQLite3 Reader](https://github.com/pawelsalawa/sqlitestudio/releases).
+Download [SQLite3 Database Reader](https://github.com/pawelsalawa/sqlitestudio/releases).

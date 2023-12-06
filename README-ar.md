@@ -18,7 +18,7 @@
  • لقد استخدمت ملفات json التي يوفرها هذا الرابط للحصول على توقيت نهاية الآيات: https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
 
 'فكرة التلاوة مع تحديد الكلمات' أُخذت من [Quran.com](https://quran.com)<br>
-بما أني اقتبست مواقيت الكلمات من موقع [Quran.com](https://quran.com)، فسوف أعتمد حسابهم لكلمات القرآن وهو 77429 كلمة.
+بما أني اقتبست مواقيت الكلمات من موقع [Quran.com](https://quran.com)، فسوف أعتمد حسابهم لكلمات القرآن وهو 77430 كلمة.
 
 يمكنك الآن إضافة أي شيخ تريده بكل سهولة وسلاسة من خلال البرنامج.<br>
 قواعد البيانات قابلة للقراءة للعامة، لذا يمكنك إضافة المشايخ بأي طريقة أخرى تفضلها.
@@ -26,7 +26,10 @@
 البرنامج الحالي مجرد فكرة قابلة للتحسين والتطوير.
 
 تم إضافة ميزة الوضع الليلي.
+************************************
 
 لتسمية ملفات السور: [هنا](https://github.com/mohamedashref371/Naming-Surahs)
 
 أحب أن أشكر [موقع codeproject](https://www.codeproject.com/) على [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP)
+
+تحميل [قارئ قواعد البيانات](https://github.com/pawelsalawa/sqlitestudio/releases).
