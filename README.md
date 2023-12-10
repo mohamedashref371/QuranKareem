@@ -8,6 +8,7 @@ To download this program with code: ([pre-release](https://github.com/mohamedash
 I did not care about designing the form or adding forms yet, and instead I used the Guna UI 2.0 library.
 
 Wanting to revive an idea from 2002 ([Quran-CD-Roaya-5](https://archive.org/download/QuranCDRoaya5/Quran-CD-Roaya-5.iso)), I built a mostly standardized SQLite database model.
+I used [Transparent Image v0.5](https://github.com/mohamedashref371/Transparent-Image) to remove the yellow background in images
 
 And to ensure myself correct data, I did the following:
 
