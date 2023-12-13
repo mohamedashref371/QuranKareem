@@ -55,7 +55,7 @@ namespace QuranKareem
 
         private int tempInt, tempInt2;
 
-        public static QuranPictures Instance { get; private set; } = new QuranPictures();
+        public static QuranPictures Instance { get; } = new QuranPictures();
 
         private QuranPictures()
         {
@@ -104,16 +104,17 @@ namespace QuranKareem
 
                 extension = reader.GetString(10);
                 Comment = reader.GetString(11);
-
-                reader.Close();
-                command.Cancel();
-                quran.Close();
                 success = true;
 
                 PageNumber = 0;
-                Ayah(sura, aya);
             }
             catch { }
+            finally
+            {
+                reader?.Close();
+                quran.Close();
+            }
+            if (success) Ayah(sura, aya);
         }
 
         public string[] GetSurahNames()
@@ -131,7 +132,6 @@ namespace QuranKareem
                 i++;
             }
             reader.Close();
-            command.Cancel();
             quran.Close();
             return names;
         }
@@ -152,7 +152,6 @@ namespace QuranKareem
             if (!reader.Read()) return;
             tempInt = reader.GetInt32(0);
             reader.Close();
-            command.Cancel();
             quran.Close();
             AyahAt(tempInt);
         }
@@ -170,7 +169,6 @@ namespace QuranKareem
             if (!reader.Read()) return;
             tempInt = reader.GetInt32(0);
             reader.Close();
-            command.Cancel();
             quran.Close();
             AyahAt(tempInt);
         }
@@ -191,7 +189,6 @@ namespace QuranKareem
             reader.Read();
             tempInt = reader.GetInt32(0)/*surah*/; tempInt2 = reader.GetInt32(1)/*ayah*/;
             reader.Close();
-            command.Cancel();
             quran.Close();
             Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
         }
@@ -271,7 +268,6 @@ namespace QuranKareem
                 reader = command.ExecuteReader();
                 while (reader.Read()) words.AddRange(new int[] { reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4) });
                 reader.Close();
-                command.Cancel();
             }
             quran.Close();
         }
@@ -354,7 +350,6 @@ namespace QuranKareem
             }
 
             reader.Close();
-            command.Cancel();
             quran.Close();
             if (tempInt != -371) Ayah(tempInt, tempInt2); // استدعاء الملك
             if (words && tempInt != -371) WordOf(word);

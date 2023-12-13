@@ -61,7 +61,7 @@ namespace QuranKareem
 
         private int tempInt, tempInt2;
 
-        public static QuranTexts Instance { get; private set; } = new QuranTexts();
+        public static QuranTexts Instance { get; } = new QuranTexts();
 
         private QuranTexts()
         {
@@ -88,7 +88,7 @@ namespace QuranKareem
         public void QuranText(string file, int sura = 1, int aya = 0)
         {
 
-            if (file == null || file.Trim().Length == 0) return;
+            if (!File.Exists(file)) return;
 
             quran.ConnectionString = $"Data Source={file}; Version=3;";
             success = false;
@@ -110,23 +110,27 @@ namespace QuranKareem
                 fontFile = reader.GetString(6);
                 fontName = reader.GetString(7);
                 Comment = reader.GetString(8);
-
-                CloseConn();
                 success = true;
             }
             catch { }
-
-            if (!added) return;
-
-            try
+            finally
             {
-                var collection = new PrivateFontCollection();
-                collection.AddFontFile(@"fonts\" + fontFile);
-                PageRichText.Font = new Font(new FontFamily(fontName, collection), 20F);
+                reader?.Close();
+                quran.Close();
             }
-            catch { }
 
-            Ayah(sura, aya);
+            if (added && success)
+            {
+                try
+                {
+                    var collection = new PrivateFontCollection();
+                    collection.AddFontFile(@"fonts\" + fontFile);
+                    PageRichText.Font = new Font(new FontFamily(fontName, collection), 20F);
+                }
+                catch { }
+
+                Ayah(sura, aya);
+            }
         }
 
         public string[] GetSurahNames()
@@ -508,7 +512,6 @@ namespace QuranKareem
         private void CloseConn()
         {
             reader.Close();
-            command.Cancel();
             quran.Close();
         }
 

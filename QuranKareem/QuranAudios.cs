@@ -53,7 +53,7 @@ namespace QuranKareem
                 catch { }
         }
 
-        public static QuranAudios Instance { get; private set; } = new QuranAudios();
+        public static QuranAudios Instance { get; } = new QuranAudios();
 
         public bool CapturedAudio = false;
 
@@ -67,10 +67,10 @@ namespace QuranKareem
 
         public void QuranAudio(string path, int sura = 1, int aya = 0)
         {
-            if (!added || path == null || path.Trim().Length == 0) return;
-            if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
+            if (!added || !Directory.Exists(path)) return;
 
             try { path = Path.GetFullPath(path); } catch { return; }
+            if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
 
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
 
@@ -97,14 +97,15 @@ namespace QuranKareem
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
-                reader.Close();
-                command.Cancel();
-                quran.Close();
                 success = true;
-
-                Ayah(sura, aya);
             }
             catch { }
+            finally
+            {
+                reader?.Close();
+                quran.Close();
+            }
+            if (success) Ayah(sura, aya);
         }
 
         #region التنقلات في المصحف
@@ -239,7 +240,6 @@ namespace QuranKareem
                     while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
                 }
                 reader.Close();
-                command.Cancel();
             }
             quran.Close();
             ok = true;
@@ -290,7 +290,6 @@ namespace QuranKareem
             if (reader.IsDBNull(0)) { quran.Close(); return false; }
             int i = reader.GetInt32(0);
             reader.Close();
-            command.Cancel();
             quran.Close();
             return Math.Abs(mp3.currentMedia.duration - i) <= delta;
         }
@@ -423,10 +422,10 @@ namespace QuranKareem
         #region إضافة شيخ جديد
         public bool NewQuranAudio(string path)
         {
-            if (!added || path == null || path.Trim().Length == 0) return false;
-            if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
+            if (!added || !Directory.Exists(path)) return false;
 
             try { path = Path.GetFullPath(path); } catch { return false; }
+            if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
 
             this.path = path; success = false;
 
@@ -456,14 +455,15 @@ namespace QuranKareem
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
-                reader.Close();
-                command.Cancel();
-                quran.Close();
                 success = true;
                 return true;
             }
             catch { return false; }
-
+            finally
+            {
+                reader?.Close();
+                quran.Close();
+            }
         }
 
         public int GetTimestamp(int sura, int aya)
@@ -476,7 +476,6 @@ namespace QuranKareem
             reader.Read();
             temp = reader.GetInt32(0);
             reader.Close();
-            command.Cancel();
             quran.Close();
             return temp;
         }
@@ -490,7 +489,6 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             while (reader.Read()) list.Add(reader.GetInt32(0));
             reader.Close();
-            command.Cancel();
             quran.Close();
             return list.ToArray();
         }
@@ -501,7 +499,6 @@ namespace QuranKareem
             quran.Open();
             command.CommandText = $"UPDATE surahs SET duration={duration} WHERE id={sura}";
             command.ExecuteNonQuery();
-            command.Cancel();
             quran.Close();
         }
 
@@ -511,7 +508,6 @@ namespace QuranKareem
             quran.Open();
             command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}";
             command.ExecuteNonQuery();
-            command.Cancel();
             quran.Close();
             if (aya == AyatCount && timestampTo != 0) SetSurah(sura, timestampTo);
         }
@@ -522,7 +518,6 @@ namespace QuranKareem
             quran.Open();
             command.CommandText = $"UPDATE description SET extension='{extension}', comment='{comment}'; VACUUM;";
             command.ExecuteNonQuery();
-            command.Cancel();
             quran.Close();
             Extension = extension; Comment = comment;
         }
@@ -538,7 +533,6 @@ namespace QuranKareem
         //    desc[0] = reader.GetString(0);
         //    desc[1] = reader.GetString(1);
         //    reader.Close();
-        //    command.Cancel();
         //    quran.Close();
         //    return desc;
         //}

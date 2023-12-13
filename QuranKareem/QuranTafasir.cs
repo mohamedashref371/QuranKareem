@@ -15,7 +15,7 @@ namespace QuranKareem
 
         public string Comment { get; private set; }
 
-        public static QuranTafasir Instance { get; private set; } = new QuranTafasir();
+        public static QuranTafasir Instance { get; } = new QuranTafasir();
 
         private QuranTafasir()
         {
@@ -40,12 +40,14 @@ namespace QuranKareem
                 if (reader.GetInt32(0) != 4 || reader.GetInt32(1) /*version*/ != 1) return;
                 Comment = reader.GetString(6);
 
-                reader.Close();
-                command.Cancel();
-                quran.Close();
                 success = true;
             }
             catch { }
+            finally
+            {
+                reader?.Close();
+                quran.Close();
+            }
         }
 
         private string tempString;
@@ -57,7 +59,6 @@ namespace QuranKareem
             reader = command.ExecuteReader();
             tempString = reader.Read() && !reader.IsDBNull(0) ? reader.GetString(0) : "";
             reader.Close();
-            command.Cancel();
             quran.Close();
             return tempString;
         }
@@ -74,7 +75,6 @@ namespace QuranKareem
                 list.Add(!reader.IsDBNull(0) ? reader.GetString(0) : "");
             }
             reader.Close();
-            command.Cancel();
             quran.Close();
             return list.ToArray();
         }

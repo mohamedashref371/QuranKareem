@@ -3,10 +3,11 @@ using System.Reflection;
 
 class ChatGPTResponses // GPT-3.5
 {
+    public static void AssemblyResolveEventHandler() => AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
     public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
     {
         // Specify the path to the folder where the DLL is located
-        string folderPath = @"libraries";
+        string folderPath = "libraries";
 
         // Construct the full path to the DLL
         string assemblyPath = System.IO.Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
