@@ -53,7 +53,7 @@ namespace QuranKareem
                 catch { }
         }
 
-        public static QuranAudios Instance { get; } = new QuranAudios();
+        public static readonly QuranAudios Instance = new QuranAudios();
 
         public bool CapturedAudio = false;
 

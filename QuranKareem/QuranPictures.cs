@@ -55,7 +55,7 @@ namespace QuranKareem
 
         private int tempInt, tempInt2;
 
-        public static QuranPictures Instance { get; } = new QuranPictures();
+        public static readonly QuranPictures Instance = new QuranPictures();
 
         private QuranPictures()
         {
