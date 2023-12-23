@@ -411,7 +411,7 @@ namespace QuranKareem
         {
             try
             {
-                string[] links = File.ReadAllText(s + "\\download links.txt").Replace("\n", "|").Split('|');
+                string[] links = File.ReadAllText(s + "\\download links.txt").Replace(Environment.NewLine, "|").Split('|');
                 string[] temp;
                 System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length > 0)
