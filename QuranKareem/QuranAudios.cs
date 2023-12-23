@@ -136,8 +136,8 @@ namespace QuranKareem
 
         }
 
-        public void Ayah() { Ayah(SurahNumber, AyahNumber); }
-        public void Ayah(int aya) { Ayah(SurahNumber, aya); }
+        public void Ayah() => Ayah(SurahNumber, AyahNumber);
+        public void Ayah(int aya) => Ayah(SurahNumber, aya);
 
         public void Ayah(int sura, int aya)
         {
@@ -282,17 +282,19 @@ namespace QuranKareem
 
         public bool Check(int delta = 0)
         {
-            if (!success) return false;
-            if (!CaptureAudio(SurahNumber)) return false;
-            quran.Open();
-            command.CommandText = $"SELECT duration FROM surahs WHERE id={SurahNumber}";
-            reader = command.ExecuteReader();
-            reader.Read();
-            if (reader.IsDBNull(0)) { quran.Close(); return false; }
-            int i = reader.GetInt32(0);
-            reader.Close();
-            quran.Close();
-            return Math.Abs(mp3.currentMedia.duration - i) <= delta;
+            if (success && CaptureAudio(SurahNumber))
+            {
+                quran.Open();
+                command.CommandText = $"SELECT duration FROM surahs WHERE id={SurahNumber}";
+                reader = command.ExecuteReader();
+                reader.Read();
+                if (reader.IsDBNull(0)) { quran.Close(); return false; }
+                int i = reader.GetInt32(0);
+                reader.Close();
+                quran.Close();
+                return Math.Abs(mp3.currentMedia.duration - i) <= delta;
+            }
+            return false;
         }
 
         bool CaptureAudio(int sura)
