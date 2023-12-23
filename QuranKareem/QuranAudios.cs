@@ -280,11 +280,12 @@ namespace QuranKareem
             wordsTimer.Start();
         }
 
-        public bool Check(int surah, int delta = 0)
+        public bool Check(int delta = 0)
         {
-            if (!CaptureAudio(surah)) return false;
+            if (!success) return false;
+            if (!CaptureAudio(SurahNumber)) return false;
             quran.Open();
-            command.CommandText = $"SELECT duration FROM surahs WHERE id={surah}";
+            command.CommandText = $"SELECT duration FROM surahs WHERE id={SurahNumber}";
             reader = command.ExecuteReader();
             reader.Read();
             if (reader.IsDBNull(0)) { quran.Close(); return false; }
