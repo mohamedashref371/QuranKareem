@@ -1,10 +1,9 @@
 ﻿# Quran Kareem v1.2
 With 43 audio Quran and 11 tafasir
 
-Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
+Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631).
 
-To download this program with code (125MB): ([pre-release](https://github.com/mohamedashref371/QuranKareem/archive/refs/heads/master.zip))<br>
-To download this program only from MediaFire (81MB): ([pre-release](https://www.mediafire.com/file/d2pdz8p5165leyb))
+To download this program with code (125MB): ([pre-release](https://github.com/mohamedashref371/QuranKareem/archive/refs/heads/master.zip)).
 
 I did not care about designing the form or adding forms yet, and instead I used the Guna UI 2.0 library.
 
