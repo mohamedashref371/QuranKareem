@@ -884,7 +884,7 @@ namespace QuranKareem
         {
             tempInt = (int)((NumericUpDown)sender).Tag;
             quranAudios.SetAyah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value * 1000));
-            if (tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
+            if (tempInt >=Ayah.Minimum && tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
                 if (Ayah.Value != tempInt + 1) Ayah.Value = tempInt + 1;
                 else Ayah_ValueChanged(sender, e);
         }
