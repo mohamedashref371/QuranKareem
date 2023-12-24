@@ -30,7 +30,8 @@ namespace QuranKareem
         };
         private readonly int SizeX = 1100, SizeY = 910;
 
-        public Form1() { InitializeComponent(); } bool success = false;
+        public Form1() { InitializeComponent(); }
+        bool success = false;
         // إن شاء الله ستكون الخطوة القادمة هي تحسين واجهة البرنامج
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
@@ -112,9 +113,9 @@ namespace QuranKareem
             if (textsFiles != null && textsFiles.Length > 0)
             {
                 tafasir.Items.Add("* التفاسير ...");
-                foreach (string file in textsFiles)
+                for (int i = 0; i < textsFiles.Length; i++)
                 {
-                    tafasir.Items.Add(file.Split('\\').Last().Replace(".db", ""));
+                    tafasir.Items.Add(textsFiles[i].Split('\\').Last().Replace(".db", ""));
                 }
                 tafasir.SelectedIndex = 0;
             }
@@ -124,9 +125,9 @@ namespace QuranKareem
             if (textsFiles != null && textsFiles.Length > 0)
             {
                 tafasir.Items.Add("* التراجم ...");
-                foreach (string file in textsFiles)
+                for (int i = 0; i < textsFiles.Length; i++)
                 {
-                    tafasir.Items.Add(file.Split('\\').Last().Replace(".db", ""));
+                    tafasir.Items.Add(textsFiles[i].Split('\\').Last().Replace(".db", ""));
                 }
                 tafasir.SelectedIndex = 0;
             }
@@ -416,14 +417,14 @@ namespace QuranKareem
                 System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length > 0)
                 {
-                    foreach (string link in links)
+                    for (int i = 0; i < links.Length; i++)
                     {
-                        if (link.Trim().Length > 0)
+                        if (links[i].Trim().Length > 0)
                         {
-                            try { temp = link.Split('/'); } catch { continue; }
+                            try { temp = links[i].Split('/'); } catch { continue; }
                             try
                             {
-                                client.DownloadFile(link, s + "\\" + temp.Last());
+                                client.DownloadFile(links[i], s + "\\" + temp.Last());
                             }
                             catch
                             {
@@ -603,7 +604,7 @@ namespace QuranKareem
         private void WordAudio(object sender, EventArgs e)
         {
             if (textMode) quranTexts.WordOf(quranAudios.CurrentWord);
-            
+
             else
             {
                 if (quranAudios.CurrentWord > 0)
@@ -803,8 +804,7 @@ namespace QuranKareem
             for (int i = 0; i < ayat.Length; i++)
             {
 
-                if (Ayah.Minimum == 0) k = i - 1;
-                else if (i == 0) k = -1;
+                if (Ayah.Minimum == 0 || i == 0) k = i - 1;
                 else k = i;
 
                 label = new Label
@@ -893,19 +893,30 @@ namespace QuranKareem
         private void Timestamp_MouseWheel(object sender, MouseEventArgs e)
         {
             ((HandledMouseEventArgs)e).Handled = true;
+            var num = (NumericUpDown)sender;
+            tempInt = (int)num.Tag;
+            if (tempInt >= Ayah.Minimum && tempInt != Ayah.Maximum)
+            {
+                decimal decml = ((NumericUpDown)panel.Controls[3 * (tempInt - (int)Ayah.Minimum) + 1]).Value + 0.5M;
+                if (decml > 0.5M || tempInt <= 1)
+                {
+                    if (num.Value < decml) num.Value = decml;
+                    if (e.Delta > 0) num.Value += 3;
+                    else if (num.Value >= decml + 3) num.Value -= 3;
+                }
+            }
         }
 
-        double temp;
         void Timestamp_record(object sender, EventArgs e)
         {
-            temp = quranAudios.Mp3CurrentPosition();
+            double temp = quranAudios.Mp3CurrentPosition();
             if (temp == 0) return;
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
         void Mp3Duration_record(object sender, EventArgs e)
         {
-            temp = quranAudios.Mp3Duration();
+            double temp = quranAudios.Mp3Duration();
             if (temp == 0) return;
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
