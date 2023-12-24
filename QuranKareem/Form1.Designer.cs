@@ -59,7 +59,6 @@
             this.Juz = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.Hizb = new System.Windows.Forms.NumericUpDown();
-            this.quranHtmlText = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.copy = new System.Windows.Forms.Button();
             this.normalText = new System.Windows.Forms.CheckBox();
             this.searchList = new System.Windows.Forms.ListBox();
@@ -585,18 +584,6 @@
             0,
             0});
             this.Hizb.ValueChanged += new System.EventHandler(this.Hizb_ValueChanged);
-            // 
-            // quranHtmlText
-            // 
-            this.quranHtmlText.BackColor = System.Drawing.Color.Transparent;
-            this.quranHtmlText.Font = new System.Drawing.Font("KFGQPC HAFS Uthmanic Script", 20F);
-            this.quranHtmlText.Location = new System.Drawing.Point(240, 5);
-            this.quranHtmlText.Name = "quranHtmlText";
-            this.quranHtmlText.Size = new System.Drawing.Size(3, 2);
-            this.quranHtmlText.TabIndex = 45;
-            this.quranHtmlText.Text = null;
-            this.quranHtmlText.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
-            this.quranHtmlText.Visible = false;
             // 
             // copy
             // 
@@ -1149,7 +1136,6 @@
             this.Controls.Add(this.search);
             this.Controls.Add(this.normalText);
             this.Controls.Add(this.copy);
-            this.Controls.Add(this.quranHtmlText);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.Hizb);
             this.Controls.Add(this.label8);
@@ -1237,7 +1223,6 @@
         private System.Windows.Forms.NumericUpDown Hizb;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown Juz;
-        private Guna.UI2.WinForms.Guna2HtmlLabel quranHtmlText;
         private System.Windows.Forms.Button copy;
         private System.Windows.Forms.CheckBox normalText;
         private System.Windows.Forms.ListBox searchList;
