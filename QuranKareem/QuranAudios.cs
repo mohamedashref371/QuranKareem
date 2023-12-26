@@ -357,13 +357,16 @@ namespace QuranKareem
         byte[] surahArray = null; int start = -1;
         public void SurahSplitter()
         {
-            if (!success || mp3.URL == "" || To <= From) return;
+            if (!success || mp3.URL == "" || To <= From || mp3.currentMedia.duration == 0) return;
             if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
             if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
-            if (surahArray.Length < 21000 || mp3.currentMedia.duration == 0) return;
 
             if (start == -1)
+            {
                 start = (int)(surahArray.Length - Convert.ToInt32(mp3.currentMedia.getItemInfo("Bitrate")) * mp3.currentMedia.duration / 8);
+                if (start < 0) start = 0;
+            }
+                
             
             double unit = (surahArray.Length - start) / (mp3.currentMedia.duration * 1000);
             byte[] ayah = new byte[(int)(unit * (To - From))];
