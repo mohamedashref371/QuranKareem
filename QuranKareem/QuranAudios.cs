@@ -79,7 +79,6 @@ namespace QuranKareem
 
             try
             {
-                quran.Close();
                 if (File.Exists(path + "000.db"))
                     quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
                 else
