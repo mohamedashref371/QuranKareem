@@ -107,7 +107,7 @@ namespace QuranKareem
         }
 
         #region التنقلات في المصحف
-        public void Surah(int i) { Ayah(i, 0); }
+        public void Surah(int i) => Ayah(i, 0);
 
         public void AyahPlus()
         {
@@ -131,7 +131,6 @@ namespace QuranKareem
                 else if (AyahNumber == AyatCount) Surah(1);
                 else Ayah(SurahNumber, AyahNumber + 1);
             }
-
         }
 
         public void Ayah() => Ayah(SurahNumber, AyahNumber);
@@ -212,7 +211,7 @@ namespace QuranKareem
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); CurrentWord = -1; idWord = 0;
-            if (WordMode && version==2)
+            if (WordMode && version == 2)
             {
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
@@ -245,7 +244,7 @@ namespace QuranKareem
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            if (success && WordMode && version == 2 && timer.Enabled && word > 0 && word <= words.Count && words[word - 1]>=0 && To - words[word - 1] > 0)
+            if (success && WordMode && version == 2 && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
             {
                 wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
@@ -320,8 +319,16 @@ namespace QuranKareem
         }
         #endregion
 
-        public void Pause() { timer.Stop(); wordsTimer.Stop(); mp3.URL = ""; CapturedAudio = false; }
-        public void Stop() { success = false; Pause(); }
+        public void Pause()
+        {
+            timer.Stop(); wordsTimer.Stop();
+            mp3.URL = ""; CapturedAudio = false;
+        }
+        public void Stop()
+        {
+            success = false;
+            Pause();
+        }
 
         double rate = 1;
         public void Rate(double i = 1.0)
@@ -342,7 +349,7 @@ namespace QuranKareem
         }
 
         void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
-        void WordsTimer_Tick(object sender, EventArgs e) { Words(); }
+        void WordsTimer_Tick(object sender, EventArgs e) => Words();
 
         public void AddEventHandlerOfAyah(EventHandler eH) => timer.Tick += eH;
         public void AddEventHandlerOfWord(EventHandler eH) => wordsTimer.Tick += eH;
@@ -366,8 +373,7 @@ namespace QuranKareem
                 start = (int)(surahArray.Length - Convert.ToInt32(mp3.currentMedia.getItemInfo("Bitrate")) * mp3.currentMedia.duration / 8);
                 if (start < 0) start = 0;
             }
-                
-            
+
             double unit = (surahArray.Length - start) / (mp3.currentMedia.duration * 1000);
             byte[] ayah = new byte[(int)(unit * (To - From))];
             Array.Copy(surahArray, (int)(unit * From) + start, ayah, 0, ayah.Length);
@@ -511,23 +517,8 @@ namespace QuranKareem
             Extension = extension; Comment = comment;
         }
 
-        //public string[] GetDescription() /* لم يعد مستعملاً */
-        //{
-        //    if (!success) return null;
-        //    string[] desc = new string[2];
-        //    quran.Open();
-        //    command.CommandText = $"SELECT extension,comment FROM description";
-        //    reader = command.ExecuteReader();
-        //    reader.Read();
-        //    desc[0] = reader.GetString(0);
-        //    desc[1] = reader.GetString(1);
-        //    reader.Close();
-        //    quran.Close();
-        //    return desc;
-        //}
-
-        public double Mp3CurrentPosition() { return mp3.Ctlcontrols.currentPosition; }
-        public double Mp3Duration() { return mp3.currentMedia != null ? mp3.currentMedia.duration : 0; }
+        public double Mp3CurrentPosition() => mp3.Ctlcontrols.currentPosition;
+        public double Mp3Duration() => mp3.currentMedia != null ? mp3.currentMedia.duration : 0;
         #endregion
     }
 }
