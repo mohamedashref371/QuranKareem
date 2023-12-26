@@ -55,8 +55,6 @@ namespace QuranKareem
 
         public static readonly QuranAudios Instance = new QuranAudios();
 
-        public bool CapturedAudio = false;
-
         private QuranAudios()
         {
             timer.Tick += Timer_Tick;
@@ -155,17 +153,14 @@ namespace QuranKareem
             quran.Open();
             if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition == 0)
             {
-                // /*if(!*/ Check(sura); /*) return;*/
                 surahArray = null; start = -1;
                 if (!CaptureAudio(sura))
                 {
                     mp3.URL = "";
                     quran.Close();
-                    CapturedAudio = false;
                     return;
                 }
 
-                CapturedAudio = true;
                 command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
                 reader.Read();
@@ -297,30 +292,31 @@ namespace QuranKareem
             return false;
         }
 
+        public bool CapturedAudio = false;
         bool CaptureAudio(int sura)
         {
             string s = sura + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += Extension;
-            bool hold = true;
+            CapturedAudio = true;
             if (File.Exists(path + s)) mp3.URL = path + s;
             else if (File.Exists(path + sura + Extension)) mp3.URL = path + sura + Extension;
             else
             {
-                hold = false;
+                CapturedAudio = false;
                 string[] filesName = Directory.GetFiles(path);
                 for (int i = 0; i < filesName.Length; i++)
                 {
                     if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0')))
                     {
                         mp3.URL = filesName[i];
-                        hold = true;
+                        CapturedAudio = true;
                     }
                 }
             }
             mp3.settings.rate = rate;
-            return hold;
+            return CapturedAudio;
         }
         #endregion
 
@@ -359,29 +355,16 @@ namespace QuranKareem
         }
 
         byte[] surahArray = null; int start = -1;
-        // ليست جيدة في بعض المقاطع الصوتية التي تحتوي على وصف وصورة في بداية الملف
         public void SurahSplitter()
         {
-            if (!success) return;
+            if (!success || mp3.URL == "" || To <= From) return;
             if (!Directory.Exists("splits")) Directory.CreateDirectory("splits");
-            if (mp3.URL == "") return;
-            if (To <= From) return;
             if (surahArray == null) surahArray = File.ReadAllBytes(mp3.URL);
             if (surahArray.Length < 21000 || mp3.currentMedia.duration == 0) return;
+
             if (start == -1)
-            {
-                start = 0;
-                int j = 0;
-                for (int i = 0; i < 20000; i++)
-                {
-                    if (surahArray[i] == 0) j += 1;
-                    else
-                    {
-                        if (j > 1000) { start = i; break; }
-                        j = 0;
-                    }
-                }
-            }
+                start = (int)(surahArray.Length - Convert.ToInt32(mp3.currentMedia.getItemInfo("Bitrate")) * mp3.currentMedia.duration / 8);
+            
             double unit = (surahArray.Length - start) / (mp3.currentMedia.duration * 1000);
             byte[] ayah = new byte[(int)(unit * (To - From))];
             Array.Copy(surahArray, (int)(unit * From) + start, ayah, 0, ayah.Length);
