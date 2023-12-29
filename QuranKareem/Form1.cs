@@ -385,7 +385,7 @@ namespace QuranKareem
                     b.Size = new Size(fs.GetNewX(243), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
                     b.Tag = audiosFolders[i];
-                    b.Click += new EventHandler(Button_Click); // اضافة تنبيه عند الضغط على الزر
+                    b.Click += Button_Click; // اضافة تنبيه عند الضغط على الزر
                 }
                 panel.Controls.Add(b);
             }
@@ -399,7 +399,7 @@ namespace QuranKareem
             quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
             time5.Text = quranAudios.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
-            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length == 2)
+            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2)
             {
                 if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {

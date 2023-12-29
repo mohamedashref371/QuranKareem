@@ -342,7 +342,7 @@ namespace QuranKareem
 
         public void Volume(int i)
         {
-            if (i < 10) i = 10;
+            if (i < 1) i = 1;
             else if (i > 100) i = 100;
             mp3.settings.volume = i;
         }
