@@ -152,7 +152,7 @@ namespace QuranKareem
                     moshafAudio = File.ReadAllText(save + "MoshafAudioCurrent");
                     quranAudios.QuranAudio(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
                     time5.Text = quranAudios.GetCurrentPosition();
-                    quranAudios.Pause(); // ثم إيقاف صوته :)
+                    quranAudios.OneTimePause(); // ثم إيقاف صوته :)
                 }
             }
             catch { }
