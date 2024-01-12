@@ -30,7 +30,7 @@ namespace QuranKareem
         };
         private readonly int SizeX = 1100, SizeY = 910;
 
-        public Form1() { InitializeComponent(); }
+        public Form1() => InitializeComponent();
         bool success = false;
         // إن شاء الله ستكون الخطوة القادمة هي تحسين واجهة البرنامج
 
@@ -168,7 +168,12 @@ namespace QuranKareem
             }
             catch { }
 
-            try { if (File.Exists(save + "Volume")) { volume.Value = Convert.ToInt32(File.ReadAllText(save + "Volume")); } } catch { }
+            try
+            {
+                if (File.Exists(save + "Volume"))
+                    volume.Value = Convert.ToInt32(File.ReadAllText(save + "Volume"));
+            }
+            catch { }
 
             // FormWindowState -> Maximized
             fs = new FormSize(SizeX, SizeY, Size.Width, Size.Height);

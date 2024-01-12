@@ -1,19 +1,21 @@
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 public class ColorComboBox : ComboBox
 {
-    public ColorComboBox()
-    {
-        SetupComboBox();
-    }
+
+    public ColorComboBox() => SetupComboBox();
 
     private void SetupComboBox()
     {
-        DataSource = typeof(Color).GetProperties()
+        List<object> data = typeof(Color).GetProperties()
             .Where(x => x.PropertyType == typeof(Color))
             .Select(x => x.GetValue(null)).ToList();
+        data.RemoveAt(0);
+
+        DataSource = data;
 
         MaxDropDownItems = 10;
         IntegralHeight = false;

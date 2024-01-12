@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Data.SQLite;
 using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;

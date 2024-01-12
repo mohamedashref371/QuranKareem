@@ -317,11 +317,6 @@ namespace QuranKareem
             Close();
 
             if (WordMode) AyatWords(i);
-
-            //for (int ii = 0; ii < wordsPosition.Count - 1; ii++)
-            //    if (wordsPosition[ii] != null)
-            //        for (int jj = 0; jj < wordsPosition[ii].Count - 1; jj++)
-            //            MessageBox.Show(wordsPosition[ii][jj] + "");
         }
 
         private void AyatWords(int page)

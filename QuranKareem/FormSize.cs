@@ -23,7 +23,8 @@ namespace QuranKareem
 
         public void SetControls(Control.ControlCollection controls)
         {
-            foreach (Control control in controls) SetControl(control);
+            for (int i = 0; i < controls.Count; i++)
+                SetControl(controls[i]);
         }
 
         public int GetNewX(int x) => Round(x * xDiv);
