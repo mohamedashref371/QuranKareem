@@ -67,6 +67,7 @@ namespace QuranKareem
             {
                 for (int i = 0; i < picturesFolders.Length; i++)
                     moshaf.Items.Add(picturesFolders[i].Split('\\').Last());
+                moshaf.Items.Add("تحميل ...");
                 string s = @"pictures\TheChosenMoshaf.txt";
                 if (File.Exists(s) && (s = File.ReadAllText(s, Encoding.UTF8)).Trim() != "" && Directory.Exists($@"pictures\{s}"))
                     moshaf.SelectedItem = s;
@@ -188,8 +189,15 @@ namespace QuranKareem
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (((string)moshaf.SelectedItem).Contains('*')) return;
-            quranPictures.QuranPicture($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
-            quranPic.BackgroundImage = quranPictures.Picture;
+            if (moshaf.SelectedIndex < moshaf.Items.Count - 1)
+            {
+                quranPictures.QuranPicture($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
+                quranPic.BackgroundImage = quranPictures.Picture;
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -436,7 +444,7 @@ namespace QuranKareem
                             }
                             catch
                             {
-                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) { return; }
+                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) return;
                             }
                         }
                     }
@@ -483,13 +491,13 @@ namespace QuranKareem
         bool allowJuz = true;
         private void Juz_ValueChanged(object sender, EventArgs e) /* فهرس بالأجزاء */
         {
-            if (!allowJuz) { return; }
+            if (!allowJuz) return;
             Quarter.Value = Juz.Value * 8 - 7; // إلقاء المسؤولية على Quarter_ValueChanged
         }
 
         private void Hizb_ValueChanged(object sender, EventArgs e) /* فهرس بالحزب */
         {
-            if (!allowJuz) { return; }
+            if (!allowJuz) return;
             Quarter.Value = Hizb.Value * 4 - 3; // إلقاء المسؤولية على Quarter_ValueChanged
         }
 
