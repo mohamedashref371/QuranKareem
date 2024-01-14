@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -185,7 +186,7 @@ namespace QuranKareem
             ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter });
             success = true;
         }
-
+        
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (((string)moshaf.SelectedItem).Contains('*')) return;
@@ -196,7 +197,7 @@ namespace QuranKareem
             }
             else
             {
-                System.Diagnostics.Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
+                Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
             }
         }
 
@@ -762,30 +763,27 @@ namespace QuranKareem
         {
             saveSRTFile.FileName = $"Surah {Surah.Value.ToString().PadLeft(3, '0')}.srt";
             if (saveSRTFile.ShowDialog() == DialogResult.OK)
-            {
                 File.WriteAllText(saveSRTFile.FileName, quranTafasir.SubRipText((int)Surah.Value, quranAudios.GetPositionsOf((int)Surah.Value)), Encoding.UTF8);
-            }
         }
         #endregion
 
         #region التعامل مع الصوت
         // تفعيل التكرار
         private void Repeat_CheckedChanged(object sender, EventArgs e)
-        {
-            quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
-        }
+            => quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
+        
 
-        private void Pause_Click(object sender, EventArgs e) { quranAudios.Pause(); } // إيقاف مؤقت للصوت
-        private void Stop_Click(object sender, EventArgs e) { quranAudios.Stop(); } // إيقاف دائم للصوت
+        private void Pause_Click(object sender, EventArgs e) => quranAudios.Pause(); // إيقاف مؤقت للصوت
+        private void Stop_Click(object sender, EventArgs e) => quranAudios.Stop(); // إيقاف دائم للصوت
 
         // سرعة الصوت
-        private void Rate_ValueChanged(object sender, EventArgs e) { quranAudios.Rate((double)Rate.Value); }
+        private void Rate_ValueChanged(object sender, EventArgs e) => quranAudios.Rate((double)Rate.Value);
 
         // مستوى إرتفاع الصوت
-        private void Volume_ValueChanged(object sender, EventArgs e) { quranAudios.Volume(volume.Value); }
+        private void Volume_ValueChanged(object sender, EventArgs e) => quranAudios.Volume(volume.Value);
 
         // حفظ الآية
-        private void Splitter_Click(object sender, EventArgs e) { quranAudios.SurahSplitter(); }
+        private void Splitter_Click(object sender, EventArgs e) => quranAudios.SurahSplitter();
 
         // تقطيع السورة لآيات
         private void SplitAll_Click(object sender, EventArgs e)
@@ -964,7 +962,7 @@ namespace QuranKareem
         }
 
         // عند التفعيل سوف ترى نهاية الآيات بدل بدايتها
-        private void EndAyatCheck_CheckedChanged(object sender, EventArgs e) { EditMoqreaSurah((int)Surah.Value); }
+        private void EndAyatCheck_CheckedChanged(object sender, EventArgs e) => EditMoqreaSurah((int)Surah.Value);
 
         private void AddShaykhInfo_Click(object sender, EventArgs e)
         {
@@ -973,7 +971,7 @@ namespace QuranKareem
         }
 
         // زر تنظيف الداتابيز من الشوائب
-        private void DescSave_Click(object sender, EventArgs e) { quranAudios.SetDescription(extension.Text, comment.Text); }
+        private void DescSave_Click(object sender, EventArgs e) => quranAudios.SetDescription(extension.Text, comment.Text);
 
         // إضافة وصف للشيخ
         private void ShaykhDesc_(object sender, EventArgs e)
@@ -1012,9 +1010,9 @@ namespace QuranKareem
         }
         #endregion
 
-        private void Latest_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://github.com/mohamedashref371/QuranKareem");
+        private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
-        private void About_Click(object sender, EventArgs e) => System.Diagnostics.Process.Start("https://facebook.com/Mohamed3713317");
+        private void About_Click(object sender, EventArgs e) => Process.Start("https://facebook.com/Mohamed3713317");
 
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e) { }
 
