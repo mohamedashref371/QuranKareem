@@ -80,7 +80,7 @@ namespace QuranKareem
                 moshaf.SelectedIndex = 0;
                 moshaf.Enabled = false;
                 textMode = true; // التبديل إلى RichTextBox
-                pageZoom.Enabled = false;
+                pageZoom.Enabled = false; // تعطيل خاصية تكبير الصفحة
                 quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranTexts.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
@@ -205,11 +205,11 @@ namespace QuranKareem
             File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
-        private void ExitForm_Click(object sender, EventArgs e) // زر إغلاق البرنامج
+        private void ExitForm_Click(object sender, EventArgs e) // زر الإغلاق
         {
-            if (zoom)
+            if (zoom) // البرنامج في وضعية الزوم
             {
-                zoom = !zoom;
+                zoom = !zoom; // الخروج من وضعية الزوم
                 for (int i = 0; i < Controls.Count; i++)
                 {
                     if ((string)Controls[i].Tag == "Visible == true")
@@ -232,8 +232,8 @@ namespace QuranKareem
 
         Point quranPictureLocation;
         Size quranPicSize;
-        int NumberOfTimesPictureRise = 0;
         bool zoom = false;
+        // تكبير صفحة القرآن المصور
         private void PageZoom_Click(object sender, EventArgs e)
         {
             if (!zoom)
@@ -258,6 +258,8 @@ namespace QuranKareem
             quranPic.Select();
         }
 
+        // تشغيل بكرة الماوس في وضعية تكبير الصفحة
+        int NumberOfTimesPictureRise = 0;
         private void QuranPic_MouseWheel(object sender, MouseEventArgs e)
         {
             if (zoom)
