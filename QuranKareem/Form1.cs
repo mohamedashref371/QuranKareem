@@ -189,15 +189,14 @@ namespace QuranKareem
         
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (((string)moshaf.SelectedItem).Contains('*')) return;
-            if (moshaf.SelectedIndex < moshaf.Items.Count - 1)
+            if (moshaf.SelectedIndex == moshaf.Items.Count - 1)
+            {
+                Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
+            }
+            else if (moshaf.SelectedIndex > 0)
             {
                 quranPictures.QuranPicture($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
                 quranPic.BackgroundImage = quranPictures.Picture;
-            }
-            else
-            {
-                Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
             }
         }
 
@@ -207,7 +206,7 @@ namespace QuranKareem
             // حفظ الإعدادات الحالية عند إغلاق البرنامج لاستعادتها لاحقاً
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
-            if (!textMode && !((string)moshaf.SelectedItem).Contains('*'))
+            if (!textMode && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
                 File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
             File.WriteAllText(save + "TafseerCurrent", Tafseer);
