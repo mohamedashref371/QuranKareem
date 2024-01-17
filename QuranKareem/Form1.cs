@@ -80,7 +80,7 @@ namespace QuranKareem
             else if (textsFiles != null && textsFiles.Length > 0)
             {
                 moshaf.SelectedIndex = 0;
-                moshaf.Enabled = false;
+                moshaf.Items.Add("تحميل ...");
                 textMode = true; // التبديل إلى RichTextBox
                 pageZoom.Enabled = false; // تعطيل خاصية تكبير الصفحة
                 quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
@@ -189,7 +189,7 @@ namespace QuranKareem
         
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (moshaf.SelectedIndex == moshaf.Items.Count - 1)
+            if (moshaf.Items.Count != 1 && moshaf.SelectedIndex == moshaf.Items.Count - 1)
             {
                 Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
             }
