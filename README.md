@@ -1,4 +1,4 @@
-﻿# Quran Kareem v1.2
+﻿# Quran Kareem v1.3
 With 43 audio Quran and 11 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631) for OS older than 10.
