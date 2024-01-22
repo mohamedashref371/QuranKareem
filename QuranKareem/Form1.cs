@@ -15,25 +15,6 @@ namespace QuranKareem
 {
     public partial class Form1 : Form
     {
-        private readonly ColorComboBox ayahColors = new ColorComboBox
-        {
-            Font = new Font("Tahoma", 13F),
-            Location = new Point(18, 479),
-            Size = new Size(143, 29),
-            TabIndex = 15
-        };
-        private readonly ColorComboBox wordColors = new ColorComboBox
-        {
-            Font = new Font("Tahoma", 13F),
-            Location = new Point(18, 510),
-            Size = new Size(143, 29),
-            TabIndex = 15
-        };
-        private readonly int SizeX = 1100, SizeY = 910;
-
-        public Form1() => InitializeComponent();
-        bool success = false;
-        // إن شاء الله ستكون الخطوة القادمة هي تحسين واجهة البرنامج
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
 
@@ -43,8 +24,31 @@ namespace QuranKareem
         readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
 
         bool textMode = false;
-        string moshafText = "", moshafAudio = "", Tafseer = "";
+        string moshafText = "", moshafAudio = "", tafseer = "";
         string[] stringArray;
+
+        #region Form
+        private readonly ColorComboBox ayahColors = new ColorComboBox
+        {
+            Font = new Font("Tahoma", 13F),
+            Location = new Point(18, 479),
+            Size = new Size(143, 29),
+            TabIndex = 15
+        };
+
+        private readonly ColorComboBox wordColors = new ColorComboBox
+        {
+            Font = new Font("Tahoma", 13F),
+            Location = new Point(18, 510),
+            Size = new Size(143, 29),
+            TabIndex = 15
+        };
+
+        private readonly int SizeX = 1100, SizeY = 910;
+
+        public Form1() => InitializeComponent();
+        bool success = false;
+        #endregion
 
         #region Form EventArgs
         FormSize fs;
@@ -164,8 +168,8 @@ namespace QuranKareem
             {
                 if (File.Exists(save + "TafseerCurrent"))
                 {
-                    Tafseer = File.ReadAllText(save + "TafseerCurrent");
-                    tafasir.SelectedItem = Tafseer;
+                    tafseer = File.ReadAllText(save + "TafseerCurrent");
+                    tafasir.SelectedItem = tafseer;
                 }
             }
             catch { }
@@ -209,7 +213,7 @@ namespace QuranKareem
             if (!textMode && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
                 File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
-            File.WriteAllText(save + "TafseerCurrent", Tafseer);
+            File.WriteAllText(save + "TafseerCurrent", tafseer);
             File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
@@ -717,10 +721,10 @@ namespace QuranKareem
         // إختيار كتاب تفسير
         private void Tafasir_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Tafseer = tafasir.Text;
-            if (!Tafseer.Contains("*"))
-                if (File.Exists(@"tafasir\" + Tafseer + ".db")) quranTafasir.QuranTafseer(@"tafasir\" + Tafseer + ".db");
-                else quranTafasir.QuranTafseer(@"translations\" + Tafseer + ".db");
+            tafseer = tafasir.Text;
+            if (!tafseer.Contains("*"))
+                if (File.Exists(@"tafasir\" + tafseer + ".db")) quranTafasir.QuranTafseer(@"tafasir\" + tafseer + ".db");
+                else quranTafasir.QuranTafseer(@"translations\" + tafseer + ".db");
         }
 
         // إنشاء تنسيق نص منسق لتفسير الآية 
