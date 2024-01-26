@@ -6,9 +6,7 @@ using System.Windows.Forms;
 public class ColorComboBox : ComboBox
 {
 
-    public ColorComboBox() => SetupComboBox();
-
-    private void SetupComboBox()
+    public ColorComboBox()
     {
         List<object> data = typeof(Color).GetProperties()
             .Where(x => x.PropertyType == typeof(Color))
