@@ -53,7 +53,7 @@ namespace QuranKareem
 
         private int tempInt, tempInt2;
 
-        public static readonly QuranPictures Instance = new QuranPictures();
+        public static readonly QuranPictures instance = new QuranPictures();
 
         private QuranPictures()
         {
@@ -270,21 +270,21 @@ namespace QuranKareem
             quran.Close();
         }
 
-        private void PictureAt(int sura) // Part Of Ayah Function
+        private void PictureAt(int page) // Part Of Ayah Function
         { // الصورة الحالية
-            string s = sura + "";
+            string s = page + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
             s += extension;
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
-            else if (File.Exists($"{path}{sura}{extension}")) oPic = new Bitmap($"{path}{sura}{extension}");
+            else if (File.Exists($"{path}{page}{extension}")) oPic = new Bitmap($"{path}{page}{extension}");
             else
             {
                 string[] filesName = Directory.GetFiles(path);
                 for (int i = 0; i < filesName.Length; i++)
                 {
-                    if (filesName[i].Split('\\').Last().Contains(sura.ToString().PadLeft(3, '0')))
+                    if (filesName[i].Split('\\').Last().Contains(page.ToString().PadLeft(3, '0')))
                         oPic = new Bitmap(filesName[i]);
                 }
             }

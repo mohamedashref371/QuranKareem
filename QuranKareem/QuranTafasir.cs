@@ -14,7 +14,7 @@ namespace QuranKareem
 
         public string Comment { get; private set; }
 
-        public static readonly QuranTafasir Instance = new QuranTafasir();
+        public static readonly QuranTafasir instance = new QuranTafasir();
 
         private QuranTafasir()
         {

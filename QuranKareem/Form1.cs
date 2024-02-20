@@ -18,10 +18,10 @@ namespace QuranKareem
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
 
-        readonly QuranTexts quranTexts = QuranTexts.Instance;
-        readonly QuranPictures quranPictures = QuranPictures.Instance;
-        readonly QuranAudios quranAudios = QuranAudios.Instance;
-        readonly QuranTafasir quranTafasir = QuranTafasir.Instance;
+        readonly QuranTexts quranTexts = QuranTexts.instance;
+        readonly QuranPictures quranPictures = QuranPictures.instance;
+        readonly QuranAudios quranAudios = QuranAudios.instance;
+        readonly QuranTafasir quranTafasir = QuranTafasir.instance;
 
         bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
