@@ -88,7 +88,7 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || (version != 1 && version != 2)) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || (version != 1 && version != 3)) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);

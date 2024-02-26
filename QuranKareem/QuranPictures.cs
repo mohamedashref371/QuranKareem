@@ -84,8 +84,8 @@ namespace QuranKareem
 
                 if (!reader.HasRows) return;
                 reader.Read();
-                /* قررت التخلي عن الإصدار الأول من الداتابيز تماماً*/
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1)/*version*/ != 2) return;
+                
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1)/*version*/ != 3) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 quartersCount = reader.GetInt32(4);
