@@ -112,7 +112,11 @@ namespace QuranKareem
                 reader?.Close();
                 quran.Close();
             }
-            if (success) Ayah(sura, aya);
+            if (success)
+            {
+                oPic = new Bitmap(Width, Height);
+                Ayah(sura, aya);
+            }
         }
 
         public string[] GetSurahNames()
