@@ -266,7 +266,7 @@ namespace QuranKareem
             fp.Unlock(true);
             if (WordMode)
             {
-                command.CommandText = $"SELECT word,min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word IS NOT NULL GROUP BY word ORDER BY word ASC";
+                command.CommandText = $"SELECT word,min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word<=599 GROUP BY word ORDER BY word ASC";
                 reader = command.ExecuteReader();
                 while (reader.Read()) words.AddRange(new int[] { reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4) });
                 reader.Close();
