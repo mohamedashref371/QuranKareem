@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace QuranKareem
 {
-    internal class QuranAudios : AbstractTransition
+    internal class QuranAudio : AbsQuranTransition
     {
         private string path; // المسار
         public string Extension { get; private set; } // example: .mp3
@@ -37,9 +37,9 @@ namespace QuranKareem
                 catch { }
         }
 
-        public static readonly QuranAudios instance = new QuranAudios();
+        public static readonly QuranAudio instance = new QuranAudio();
 
-        private QuranAudios():base()
+        private QuranAudio():base()
         {
             timer.Tick += Timer_Tick;
             wordsTimer.Tick += WordsTimer_Tick;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuranKareem
 {
-    public abstract class AbstractBase
+    public abstract class AbsQuranBase
     {
         protected bool success = false;
 
@@ -20,7 +20,7 @@ namespace QuranKareem
         public int Narration { get; protected set; }
         public string Comment { get; protected set; }
 
-        protected AbstractBase()
+        protected AbsQuranBase()
         {
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);

@@ -8,7 +8,7 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    internal class QuranPictures : AbstractVisual
+    internal class QuranPicture : AbsQuranVisual
     {
         private string path; // المسار
 
@@ -35,9 +35,9 @@ namespace QuranKareem
             Ayah();
         }
 
-        public static readonly QuranPictures instance = new QuranPictures();
+        public static readonly QuranPicture instance = new QuranPicture();
 
-        private QuranPictures():base()
+        private QuranPicture():base()
         {
         }
 

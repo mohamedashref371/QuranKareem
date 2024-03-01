@@ -4,12 +4,12 @@ using System.Data.SQLite;
 
 namespace QuranKareem
 {
-    internal class QuranTafasir : AbstractBase
+    internal class QuranTafseer : AbsQuranBase
     {
 
-        public static readonly QuranTafasir instance = new QuranTafasir();
+        public static readonly QuranTafseer instance = new QuranTafseer();
 
-        private QuranTafasir():base()
+        private QuranTafseer():base()
         {
         }
 

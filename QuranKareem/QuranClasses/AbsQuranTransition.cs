@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuranKareem
 {
-    internal abstract class AbstractTransition : AbstractBase
+    internal abstract class AbsQuranTransition : AbsQuranBase
     {
 
         protected int surahsCount;
@@ -15,7 +15,7 @@ namespace QuranKareem
         public int AyahNumber { get; protected set; }
         public int AyatCount { get; protected set; }
 
-        protected AbstractTransition() : base()
+        protected AbsQuranTransition() : base()
         {
         }
 

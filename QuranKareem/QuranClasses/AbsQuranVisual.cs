@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuranKareem
 {
-    internal abstract class AbstractVisual : AbstractTransition
+    internal abstract class AbsQuranVisual : AbsQuranTransition
     {
         protected int quartersCount, pagesCount;
         protected int tempInt, tempInt2;
@@ -16,7 +16,7 @@ namespace QuranKareem
         public bool Makya_Madanya { get; protected set; }
         public int AyahStart { get; protected set; }
 
-        protected AbstractVisual() : base()
+        protected AbsQuranVisual() : base()
         {
         }
 

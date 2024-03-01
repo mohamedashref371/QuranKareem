@@ -11,7 +11,7 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    internal class QuranTexts : AbstractVisual
+    internal class QuranText : AbsQuranVisual
     {
 
         private int pageStartId, ayahId;
@@ -46,14 +46,18 @@ namespace QuranKareem
         {
             RightToLeft = RightToLeft.Yes,
             WordWrap = false,
-            Font = new Font("Tahoma", 20F)
+            Font = new Font("Tahoma", 20F),
+            BackColor = SystemColors.Control,
+            BorderStyle = BorderStyle.None,
+            ReadOnly = true,
+            //ScrollBars = RichTextBoxScrollBars.None
         };
 
         private readonly PrivateFontCollection collection = new PrivateFontCollection();
 
-        public static readonly QuranTexts instance = new QuranTexts();
+        public static readonly QuranText instance = new QuranText();
 
-        private QuranTexts():base()
+        private QuranText() : base()
         {
             try
             {
@@ -75,6 +79,9 @@ namespace QuranKareem
                     pageRichText.Location = new Point(locX, locY);
                     pageRichText.Size = new Size(width > 0 ? width : 10, height > 0 ? height : 10);
                     textType = TextType.rich;
+                    pageRichText.SelectAll();
+                    pageRichText.SelectionAlignment = HorizontalAlignment.Center;
+                    pageRichText.DeselectAll();
                     Controls.Add(pageRichText);
                     added = true;
                 }
@@ -123,7 +130,6 @@ namespace QuranKareem
         }
 
         #region التنقلات في المصحف
-
         public override void Ayah(int sura, int aya)
         { // كما ترى .. المجهود كله عليها
             if (!success) return;
@@ -210,9 +216,9 @@ namespace QuranKareem
 
         #region Part Of Ayah Function
         private readonly StringBuilder originalPageText = new StringBuilder();
-        private readonly char[] characters  = { 'ا', 'ى', 'ٱ', 'آ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' },
+        private readonly char[] characters = { 'ا', 'ى', 'ٱ', 'آ', 'أ', 'إ', 'ء', 'ؤ', 'ئ', 'ب', 'ت', 'ة', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي' },
                                 decorations = { 'ُ', 'َ', 'ِ', 'ۡ', 'ّ', 'ٰ', 'ٓ', 'ۛ', 'ٗ', 'ْ', 'ۖ', 'ٌ', 'ٞ', 'ۢ', 'ۗ', 'ۥ', 'ٖ', 'ۚ', 'ۦ', 'ۘ', 'ٍ', 'ـ', 'ٔ', 'ً', 'ۭ', 'ۧ', 'ۜ', '۠', 'ۤ', 'ٕ', '۪', '۬', 'ۨ', ' ', ' ', '\n' },
-                                others      = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۞', '۩' };
+                                others = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۞', '۩' };
 
         private void PageTextAt(int i)
         {
@@ -369,7 +375,7 @@ namespace QuranKareem
         {
             SearchIDs.Clear();
             if (!success || words == null || words.Trim() == "") return new string[] { };
-            if (spellingErrors) words = words.Replace(" ","")
+            if (spellingErrors) words = words.Replace(" ", "")
                     .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
                     .Replace("ذ", "ز").Replace("ظ", "ز")
                     .Replace("ة", "ت").Replace("ط", "ت")
