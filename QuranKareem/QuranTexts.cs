@@ -32,7 +32,7 @@ namespace QuranKareem
         public int AyahStart { get; private set; }
         public int AyatCount { get; private set; }
         public string Comment { get; private set; }
-        string fontFile, fontName;
+        string /*fontFile,*/ fontName;
 
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
@@ -44,22 +44,29 @@ namespace QuranKareem
             IsDark = !IsDark;
             if (IsDark)
             {
-                PageRichText.ForeColor = Color.White;
-                PageRichText.BackColor = Color.Black;
+                pageRichText.ForeColor = Color.White;
+                pageRichText.BackColor = Color.Black;
             }
             else
             {
-                PageRichText.ForeColor = Color.Black;
-                PageRichText.BackColor = Color.White;
+                pageRichText.ForeColor = Color.Black;
+                pageRichText.BackColor = Color.White;
             }
             Ayah();
         }
 
         public string PageText { get; private set; }
         public string PageTextHTML { get; private set; }
-        public RichTextBox PageRichText { get; private set; } = new RichTextBox();
+
+        private readonly RichTextBox pageRichText = new RichTextBox()
+        {
+            RightToLeft = RightToLeft.Yes,
+            WordWrap = false,
+            Font = new Font("Tahoma", 20F)
+        };
 
         private int tempInt, tempInt2;
+        private readonly PrivateFontCollection collection = new PrivateFontCollection();
 
         public static readonly QuranTexts instance = new QuranTexts();
 
@@ -67,6 +74,16 @@ namespace QuranKareem
         {
             quran = new SQLiteConnection();
             command = new SQLiteCommand(quran);
+            try
+            {
+                if (Directory.Exists("fonts"))
+                {
+                    string[] fontsFiles = Directory.GetFiles("fonts");
+                    for (int i = 0; i < fontsFiles.Length; i++)
+                        collection.AddFontFile(fontsFiles[i]);
+                }
+            }
+            catch { }
         }
 
         private bool added = false;
@@ -74,12 +91,10 @@ namespace QuranKareem
         {
             if (!added) try
                 {
-                    PageRichText.Location = new Point(locX, locY);
-                    PageRichText.Size = new Size(width > 0 ? width : 10, height > 0 ? height : 10);
-                    PageRichText.RightToLeft = RightToLeft.Yes;
-                    PageRichText.WordWrap = false;
+                    pageRichText.Location = new Point(locX, locY);
+                    pageRichText.Size = new Size(width > 0 ? width : 10, height > 0 ? height : 10);
                     textType = TextType.rich;
-                    Controls.Add(PageRichText);
+                    Controls.Add(pageRichText);
                     added = true;
                 }
                 catch { }
@@ -107,7 +122,7 @@ namespace QuranKareem
                 surahsCount = reader.GetInt32(3);
                 quartersCount = reader.GetInt32(4);
                 pagesCount = reader.GetInt32(5);
-                fontFile = reader.GetString(6);
+                //fontFile = reader.GetString(6);
                 fontName = reader.GetString(7);
                 Comment = reader.GetString(8);
                 success = true;
@@ -119,16 +134,9 @@ namespace QuranKareem
                 quran.Close();
             }
 
-            if (added && success)
+            if (success)
             {
-                try
-                {
-                    var collection = new PrivateFontCollection();
-                    collection.AddFontFile(@"fonts\" + fontFile);
-                    PageRichText.Font = new Font(new FontFamily(fontName, collection), 20F);
-                }
-                catch { }
-
+                pageRichText.Font = new Font(collection.Families.FirstOrDefault(f => f.Name == fontName) ?? pageRichText.Font.FontFamily, pageRichText.Font.Size);
                 Ayah(sura, aya);
             }
         }
@@ -278,14 +286,14 @@ namespace QuranKareem
             }
             else if (textType == TextType.rich)
             {
-                PageRichText.Text = originalPageText.ToString();
+                pageRichText.Text = originalPageText.ToString();
                 if (AyahColor.A != 0)
                 {
-                    PageRichText.Select(start, finish - start);
-                    PageRichText.SelectionColor = AyahColor;
-                    PageRichText.SelectionStart = start;
+                    pageRichText.Select(start, finish - start);
+                    pageRichText.SelectionColor = AyahColor;
+                    pageRichText.SelectionStart = start;
                 }
-                PageRichText.DeselectAll();
+                pageRichText.DeselectAll();
             }
         }
 
@@ -362,9 +370,9 @@ namespace QuranKareem
             {
                 if (textType == TextType.rich && word > 0 && WordColor.A != 0 && ayahId - pageStartId < wordsPosition.Count && wordsPosition[ayahId - pageStartId] != null)
                 {
-                    PageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
-                    PageRichText.SelectionColor = WordColor;
-                    PageRichText.DeselectAll();
+                    pageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
+                    pageRichText.SelectionColor = WordColor;
+                    pageRichText.DeselectAll();
                 }
                 CurrentWord = word;
             }
@@ -374,7 +382,7 @@ namespace QuranKareem
         public bool SetCursor(int position = -1)
         {
             if (!success) return false;
-            if (position < 0) position = PageRichText.SelectionStart;
+            if (position < 0) position = pageRichText.SelectionStart;
             tempInt = -1; int i = 0;
             while (i < finishedPosition.Count)
             {
@@ -518,7 +526,7 @@ namespace QuranKareem
             return s;
         }
 
-        public void AddEventHandler(EventHandler eh) { PageRichText.Click += eh; }
+        public void AddEventHandler(EventHandler eh) { pageRichText.Click += eh; }
 
         public TextType textType = TextType.plain;
         public enum TextType
