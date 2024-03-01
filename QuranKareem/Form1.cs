@@ -64,9 +64,9 @@ namespace QuranKareem
 
             string[] textsFiles = null, picturesFolders = null;
 
-            try { textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */ } catch { }
+            if (Directory.Exists("texts")) textsFiles = Directory.GetFiles("texts"); /*البحث في مجلد المصاحف المكتوبة */
 
-            try { picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */ } catch { }
+            if (Directory.Exists("pictures")) picturesFolders = Directory.GetDirectories("pictures"); /* البحث في مجلد المصاحف المصورة */
 
             if (picturesFolders != null && picturesFolders.Length > 0)
             {
@@ -190,7 +190,7 @@ namespace QuranKareem
             ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter });
             success = true;
         }
-        
+
         private void Moshaf_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (moshaf.Items.Count != 1 && moshaf.SelectedIndex == moshaf.Items.Count - 1)
@@ -774,7 +774,7 @@ namespace QuranKareem
         // تفعيل التكرار
         private void Repeat_CheckedChanged(object sender, EventArgs e)
             => quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
-        
+
 
         private void Pause_Click(object sender, EventArgs e) => quranAudios.Pause(); // إيقاف مؤقت للصوت
         private void Stop_Click(object sender, EventArgs e) => quranAudios.Stop(); // إيقاف دائم للصوت
