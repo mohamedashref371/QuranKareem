@@ -99,7 +99,7 @@ namespace QuranKareem
             }
 
             if (textsFiles != null && textsFiles.Length > 0)
-                quranTexts.QuranText(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
+                quranTexts.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
             if (!textMode) quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
 
@@ -156,7 +156,7 @@ namespace QuranKareem
                 if (File.Exists(save + "MoshafAudioCurrent"))
                 {
                     moshafAudio = File.ReadAllText(save + "MoshafAudioCurrent");
-                    quranAudios.QuranAudio(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
+                    quranAudios.Start(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
                     time5.Text = quranAudios.GetCurrentPosition();
                     quranAudios.OneTimePause(); // ثم إيقاف صوته :)
                 }
@@ -199,7 +199,7 @@ namespace QuranKareem
             }
             else if (moshaf.SelectedIndex > 0)
             {
-                quranPictures.QuranPicture($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
+                quranPictures.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
                 quranPic.BackgroundImage = quranPictures.Picture;
             }
         }
@@ -415,7 +415,7 @@ namespace QuranKareem
         {
             string s = (string)((Guna2Button)sender).Tag;
             moshafAudio = s;
-            quranAudios.QuranAudio(s, (int)Surah.Value, (int)Ayah.Value);
+            quranAudios.Start(s, (int)Surah.Value, (int)Ayah.Value);
             time5.Text = quranAudios.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2)
@@ -723,8 +723,8 @@ namespace QuranKareem
         {
             tafseer = tafasir.Text;
             if (!tafseer.Contains("*"))
-                if (File.Exists(@"tafasir\" + tafseer + ".db")) quranTafasir.QuranTafseer(@"tafasir\" + tafseer + ".db");
-                else quranTafasir.QuranTafseer(@"translations\" + tafseer + ".db");
+                if (File.Exists(@"tafasir\" + tafseer + ".db")) quranTafasir.Start(@"tafasir\" + tafseer + ".db");
+                else quranTafasir.Start(@"translations\" + tafseer + ".db");
         }
 
         // إنشاء تنسيق نص منسق لتفسير الآية 

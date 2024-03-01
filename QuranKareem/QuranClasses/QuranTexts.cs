@@ -11,27 +11,11 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    class QuranTexts
+    internal class QuranTexts : AbstractVisual
     {
 
-        private bool success = false; // نجح استدعاء ال QuranText ? :(
-
-        private readonly SQLiteConnection quran;
-        private readonly SQLiteCommand command;
-        private SQLiteDataReader reader; // قارئ لتنفيذ ال 'select' sql
-
-        private int surahsCount, quartersCount, pagesCount;
         private int pageStartId, ayahId;
 
-        public int Narration { get; private set; }
-        public int SurahNumber { get; private set; }
-        public int QuarterNumber { get; private set; }
-        public int PageNumber { get; private set; }
-        public int AyahNumber { get; private set; }
-        public bool Makya_Madanya { get; private set; }
-        public int AyahStart { get; private set; }
-        public int AyatCount { get; private set; }
-        public string Comment { get; private set; }
         string /*fontFile,*/ fontName;
 
         public int CurrentWord { get; private set; } = -1;
@@ -65,15 +49,12 @@ namespace QuranKareem
             Font = new Font("Tahoma", 20F)
         };
 
-        private int tempInt, tempInt2;
         private readonly PrivateFontCollection collection = new PrivateFontCollection();
 
         public static readonly QuranTexts instance = new QuranTexts();
 
-        private QuranTexts()
+        private QuranTexts():base()
         {
-            quran = new SQLiteConnection();
-            command = new SQLiteCommand(quran);
             try
             {
                 if (Directory.Exists("fonts"))
@@ -100,7 +81,7 @@ namespace QuranKareem
                 catch { }
         }
 
-        public void QuranText(string file, int sura = 1, int aya = 0)
+        public override void Start(string file, int sura = 1, int aya = 0)
         {
 
             if (!File.Exists(file)) return;
@@ -141,82 +122,9 @@ namespace QuranKareem
             }
         }
 
-        public string[] GetSurahNames()
-        {
-            if (!success) return new string[] { "" };
-            string[] names = new string[surahsCount];
-            quran.Open();
-            command.CommandText = $"SELECT name FROM surahs";
-            reader = command.ExecuteReader();
-
-            int i = 0;
-            while (reader.Read())
-            {
-                names[i] = reader.GetString(0); // عمود واحد
-                i++;
-            }
-            CloseConn();
-            return names;
-        }
-
         #region التنقلات في المصحف
-        public void Surah(int i) => Ayah(i, 0); 
 
-        public void Quarter(int i)
-        {
-            if (!success) return;
-            i = Math.Abs(i);
-            if (i == 0) i = 1;
-            else if (i > quartersCount) i = quartersCount;
-
-            quran.Open();
-            command.CommandText = $"SELECT ayat_id_start FROM quarters WHERE id={i}";
-            reader = command.ExecuteReader();
-            if (!reader.Read()) return;
-            tempInt = reader.GetInt32(0);
-            CloseConn();
-            AyahAt(tempInt);
-        }
-
-        public void Page(int i)
-        {
-            if (!success) return;
-            i = Math.Abs(i);
-            if (i == 0) i = 1;
-            else if (i > pagesCount) i = pagesCount;
-
-            quran.Open();
-            command.CommandText = $"SELECT ayat_id_start FROM pages WHERE id={i}";
-            reader = command.ExecuteReader();
-            if (!reader.Read()) return;
-            tempInt = reader.GetInt32(0);
-            CloseConn();
-            AyahAt(tempInt);
-        }
-
-        public void AyahPlus()
-        {
-            if (!success) return;
-            if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
-            else if (AyahNumber == AyatCount) Surah(1);
-            else Ayah(SurahNumber, AyahNumber + 1);
-        }
-
-        private void AyahAt(int id)
-        {
-            quran.Open();
-            command.CommandText = $"SELECT surah,ayah FROM ayat WHERE id={id}";
-            reader = command.ExecuteReader();
-            reader.Read();
-            tempInt = reader.GetInt32(0)/*surah*/; tempInt2 = reader.GetInt32(1)/*ayah*/;
-            CloseConn();
-            Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
-        }
-
-        public void Ayah() => Ayah(SurahNumber, AyahNumber);
-        public void Ayah(int aya) => Ayah(SurahNumber, aya); 
-
-        public void Ayah(int sura, int aya)
+        public override void Ayah(int sura, int aya)
         { // كما ترى .. المجهود كله عليها
             if (!success) return;
             sura = Math.Abs(sura);
@@ -505,17 +413,6 @@ namespace QuranKareem
             sura_aya[1] = reader.GetInt32(1);
             CloseConn();
             return sura_aya;
-        }
-
-        private void Close()
-        {
-            reader.Close();
-            command.Cancel();
-        }
-        private void CloseConn()
-        {
-            reader.Close();
-            quran.Close();
         }
 
         private string GetHtmlTextColor()
