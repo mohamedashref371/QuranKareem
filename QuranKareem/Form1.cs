@@ -114,7 +114,7 @@ namespace QuranKareem
 
             // اضافة التفاسير
             textsFiles = null;
-            try { textsFiles = Directory.GetFiles("tafasir"); } catch { }
+            if (Directory.Exists("tafasir")) textsFiles = Directory.GetFiles("tafasir");
             tafasir.Items.Clear();
             if (textsFiles != null && textsFiles.Length > 0)
             {
@@ -127,7 +127,7 @@ namespace QuranKareem
             }
             // اضافة التراجم
             textsFiles = null;
-            try { textsFiles = Directory.GetFiles("translations"); } catch { }
+            if (Directory.Exists("translations")) textsFiles = Directory.GetFiles("translations");
             if (textsFiles != null && textsFiles.Length > 0)
             {
                 tafasir.Items.Add("* التراجم ...");
