@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms;
 using static QuranKareem.Coloring;
@@ -54,6 +55,7 @@ namespace QuranKareem
         };
 
         private readonly PrivateFontCollection collection = new PrivateFontCollection();
+        private readonly MemoryStream stream = new MemoryStream();
 
         public static readonly QuranText instance = new QuranText();
 
@@ -178,6 +180,7 @@ namespace QuranKareem
                 pageStartId = reader.GetInt32(1);
                 Close();
                 PageTextAt(PageNumber);
+                pageRichText.Text = "";
             }
 
             CloseConn();
@@ -200,7 +203,25 @@ namespace QuranKareem
             }
             else if (textType == TextType.rich)
             {
-                pageRichText.Text = originalPageText.ToString();
+                if (pageRichText.Text == "")
+                {
+                    pageRichText.Text = originalPageText.ToString();
+                    for (int i = 0; i < pageRichText.Text.Length; i++)
+                    {
+                        if (others.Contains(pageRichText.Text[i]))
+                        {
+                            pageRichText.Select(i, 1);
+                            pageRichText.SelectionColor = Color.Green;
+                        }
+                    }
+                    stream.Position = 0;
+                    pageRichText.SaveFile(stream, RichTextBoxStreamType.RichText);
+                }
+                else
+                {
+                    stream.Position = 0;
+                    pageRichText.LoadFile(stream, RichTextBoxStreamType.RichText);
+                }
                 if (AyahColor.A != 0)
                 {
                     pageRichText.Select(start, finish - start);
