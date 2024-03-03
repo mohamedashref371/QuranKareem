@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
+using System.Windows.Forms;
 
 namespace QuranKareem
 {
@@ -64,8 +65,8 @@ namespace QuranKareem
 
                 if (!reader.HasRows) return;
                 reader.Read();
-                
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || reader.GetInt32(1) < 2 || reader.GetInt32(1) > 3) return;
+                version = reader.GetInt32(1);
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version < 2 || version > 3) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 quartersCount = reader.GetInt32(4);
@@ -104,7 +105,7 @@ namespace QuranKareem
         public override void Ayah(int sura, int aya)
         { // كما ترى .. المجهود كله عليها
             if (!success) return;
-
+            
             sura = Math.Abs(sura); // تصحيح رقم السورة
             if (sura == 0) sura = 1;
             else if (sura > surahsCount) sura = surahsCount;
@@ -317,5 +318,84 @@ namespace QuranKareem
         }
         #endregion
 
+        #region lines images
+        public List<Bitmap> GetLines()
+        {
+            List<Bitmap> bitmaps = new List<Bitmap>();
+            for (int i = 1; i <= 15; i++)
+                bitmaps.Add(GetLine(i));
+            return bitmaps;
+        }
+
+        public List<List<Bitmap>> GetLinesWithWordsMarks()
+        {
+            var bitmaps = new List<List<Bitmap>>();
+            for (int i = 1; i <= 15; i++)
+                bitmaps.Add(GetLineWithWordsMarks(i));
+            return bitmaps;
+        }
+
+        public List<Bitmap> GetLineWithWordsMarks(int line)
+        {
+            var coords = new List<int>();
+            Bitmap bmap = GetLine(line, coords);
+            if (bmap == null) return null;
+            List<Bitmap> bitmaps = new List<Bitmap> { bmap };
+            var list = new List<int[]>();
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line}";
+            quran.Open();
+            reader = command.ExecuteReader();
+            while (reader.Read())
+                list.Add(new int[4] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3) });
+            CloseConn();
+            if (list.Count == 0) return bitmaps;
+            Bitmap bitmap;
+            for (int i = 0; i < list.Count; i++)
+            {
+                bitmap = (Bitmap)bmap.Clone();
+                fp = new FastPixel(bitmap);
+                fp.Lock();
+                ColoringWord(
+                    (list[i][0] - coords[0]) >= 0 ? list[i][0] - coords[0] : 0,
+                    (list[i][1] - coords[0]) < bitmap.Width ? list[i][1] - coords[0] : bitmap.Width - 1,
+                    (list[i][2] - coords[2]) >= 0 ? list[i][2] - coords[2] : 0,
+                    (list[i][3] - coords[2]) < bitmap.Height ? list[i][3] - coords[2] : bitmap.Height - 1
+                    );
+                fp.Unlock(true);
+                bitmaps.Add(bitmap);
+            }
+            return bitmaps;
+        }
+
+        public Bitmap GetLine(int line, List<int> lineCoordinates = null)
+        {
+            if (!success && version == 4) return null;
+            List<int[]> list = new List<int[]>();
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM lines JOIN ayat ON lines.ayah_id=ayat.id WHERE page={PageNumber} AND line={line}";
+            quran.Open();
+            reader = command.ExecuteReader();
+            while(reader.Read())
+                list.Add(new int[4] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3) });
+            CloseConn();
+            if (list.Count == 0) return null;
+
+            int[] final = list[0].ToArray(); // copy
+            for(int i = 1; i < list.Count; i++)
+            {
+                if (list[i][0] < final[0]) final[0] = list[i][0];
+                if (list[i][1] > final[1]) final[1] = list[i][1];
+                if (list[i][2] < final[2]) final[2] = list[i][2];
+                if (list[i][3] > final[3]) final[3] = list[i][3];
+            }
+            lineCoordinates?.AddRange(final.ToList());
+            Bitmap bitmap = new Bitmap(final[1] - final[0] + 1, final[3] - final[2] + 1);
+            Graphics gr = Graphics.FromImage(bitmap);
+            gr.Clear(Color.Empty);
+            for (int i = 0; i < list.Count; i++)
+                gr.DrawImage(oPic, new Rectangle(list[i][0] - final[0], list[i][2] - final[2], list[i][1] - list[i][0], list[i][3] - list[i][2]), new Rectangle(list[i][0], list[i][2], list[i][1] - list[i][0], list[i][3] - list[i][2]), GraphicsUnit.Pixel);
+
+            return bitmap;
+        }
+        #endregion
     }
 }

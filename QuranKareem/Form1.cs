@@ -18,10 +18,10 @@ namespace QuranKareem
 
         readonly string save = Microsoft.VisualBasic.FileIO.SpecialDirectories.AllUsersApplicationData.Replace(Application.ProductVersion, "");
 
-        readonly QuranText quranTexts = QuranText.instance;
-        readonly QuranPicture quranPictures = QuranPicture.instance;
-        readonly QuranAudio quranAudios = QuranAudio.instance;
-        readonly QuranTafseer quranTafasir = QuranTafseer.instance;
+        readonly QuranText quranText = QuranText.instance;
+        readonly QuranPicture quranPicture = QuranPicture.instance;
+        readonly QuranAudio quranAudio = QuranAudio.instance;
+        readonly QuranTafseer quranTafseer = QuranTafseer.instance;
 
         bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
@@ -87,8 +87,8 @@ namespace QuranKareem
                 moshaf.Items.Add("تحميل ...");
                 textMode = true; // التبديل إلى RichTextBox
                 pageZoom.Enabled = false; // تعطيل خاصية تكبير الصفحة
-                quranTexts.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
-                quranTexts.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
+                quranText.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
+                quranText.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
             }
 
@@ -99,18 +99,18 @@ namespace QuranKareem
             }
 
             if (textsFiles != null && textsFiles.Length > 0)
-                quranTexts.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
+                quranText.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
-            if (!textMode) quranPic.BackgroundImage = quranPictures.Picture; // اظهار الصورة التي سيعطيها لك
+            if (!textMode) quranPic.BackgroundImage = quranPicture.Picture; // اظهار الصورة التي سيعطيها لك
 
             Surahs.Items.Clear(); // إفراغ قائمة ال ComboBox
-            if (textMode) Surahs.Items.AddRange(quranTexts.GetSurahNames()); // ملأها بأسماء السور;
-            else Surahs.Items.AddRange(quranPictures.GetSurahNames());
+            if (textMode) Surahs.Items.AddRange(quranText.GetSurahNames()); // ملأها بأسماء السور;
+            else Surahs.Items.AddRange(quranPicture.GetSurahNames());
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
-            quranAudios.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
-            quranAudios.AddEventHandlerOfAyah(AyahAudio); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
-            quranAudios.AddEventHandlerOfWord(WordAudio);
+            quranAudio.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
+            quranAudio.AddEventHandlerOfAyah(AyahAudio); // اضافة تنبيه لإنتهاء الآية حين يقرأ الشيخ
+            quranAudio.AddEventHandlerOfWord(WordAudio);
 
             // اضافة التفاسير
             textsFiles = null;
@@ -156,9 +156,9 @@ namespace QuranKareem
                 if (File.Exists(save + "MoshafAudioCurrent"))
                 {
                     moshafAudio = File.ReadAllText(save + "MoshafAudioCurrent");
-                    quranAudios.Start(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
-                    time5.Text = quranAudios.GetCurrentPosition();
-                    quranAudios.OneTimePause(); // ثم إيقاف صوته :)
+                    quranAudio.Start(moshafAudio, (int)Surah.Value, (int)Ayah.Value);
+                    time5.Text = quranAudio.GetCurrentPosition();
+                    quranAudio.OneTimePause(); // ثم إيقاف صوته :)
                 }
             }
             catch { }
@@ -199,8 +199,8 @@ namespace QuranKareem
             }
             else if (moshaf.SelectedIndex > 0)
             {
-                quranPictures.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
-                quranPic.BackgroundImage = quranPictures.Picture;
+                quranPicture.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
+                quranPic.BackgroundImage = quranPicture.Picture;
             }
         }
 
@@ -264,7 +264,7 @@ namespace QuranKareem
                 quranPicSize = quranPic.Size;
                 quranPictureLocation = quranPic.Location;
                 quranPic.Location = new Point(30, exitForm.Location.Y + exitForm.Size.Height + 5);
-                quranPic.Size = new Size(Width - 60, (int)(quranPictures.Height * (Width - 60.0) / quranPictures.Width));
+                quranPic.Size = new Size(Width - 60, (int)(quranPicture.Height * (Width - 60.0) / quranPicture.Width));
             }
             NumberOfTimesPictureRise = 0;
             quranPic.Select();
@@ -300,8 +300,8 @@ namespace QuranKareem
                 BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
-                quranPictures.ChangeDark();
-                quranTexts.ChangeDark();
+                quranPicture.ChangeDark();
+                quranText.ChangeDark();
                 panel.BackColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -317,8 +317,8 @@ namespace QuranKareem
                 BackColor = SystemColors.Control; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
-                quranPictures.ChangeDark();
-                quranTexts.ChangeDark();
+                quranPicture.ChangeDark();
+                quranText.ChangeDark();
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -330,7 +330,7 @@ namespace QuranKareem
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
             }
-            if (!textMode) quranPic.BackgroundImage = quranPictures.Picture;
+            if (!textMode) quranPic.BackgroundImage = quranPicture.Picture;
         }
         #endregion
 
@@ -415,8 +415,8 @@ namespace QuranKareem
         {
             string s = (string)((Guna2Button)sender).Tag;
             moshafAudio = s;
-            quranAudios.Start(s, (int)Surah.Value, (int)Ayah.Value);
-            time5.Text = quranAudios.GetCurrentPosition();
+            quranAudio.Start(s, (int)Surah.Value, (int)Ayah.Value);
+            time5.Text = quranAudio.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2)
             {
@@ -473,19 +473,19 @@ namespace QuranKareem
 
             if (textMode)
             {
-                if (allow) quranTexts.Surah((int)Surah.Value);
-                Ayah.Minimum = quranTexts.AyahStart;
+                if (allow) quranText.Surah((int)Surah.Value);
+                Ayah.Minimum = quranText.AyahStart;
                 ayahMaximumIsChanged = true;
-                Ayah.Maximum = quranTexts.AyatCount;
+                Ayah.Maximum = quranText.AyatCount;
                 ayahMaximumIsChanged = false;
                 SetAyah();
             }
             else
             {
-                if (allow) quranPictures.Surah((int)Surah.Value); //
-                Ayah.Minimum = quranPictures.AyahStart;
+                if (allow) quranPicture.Surah((int)Surah.Value); //
+                Ayah.Minimum = quranPicture.AyahStart;
                 ayahMaximumIsChanged = true;
-                Ayah.Maximum = quranPictures.AyatCount;
+                Ayah.Maximum = quranPicture.AyatCount;
                 ayahMaximumIsChanged = false;
                 SetAyah(); //
             }
@@ -514,12 +514,12 @@ namespace QuranKareem
 
             if (textMode && allow)
             {
-                quranTexts.Quarter((int)Quarter.Value);
+                quranText.Quarter((int)Quarter.Value);
                 SetAyah();
             }
             else if (allow)
             {
-                quranPictures.Quarter((int)Quarter.Value);
+                quranPicture.Quarter((int)Quarter.Value);
                 SetAyah();
             }
         }
@@ -529,12 +529,12 @@ namespace QuranKareem
 
             if (textMode && allow)
             {
-                quranTexts.Page((int)Page.Value);
+                quranText.Page((int)Page.Value);
                 SetAyah();
             }
             else if (allow)
             {
-                quranPictures.Page((int)Page.Value);
+                quranPicture.Page((int)Page.Value);
                 SetAyah();
             }
         }
@@ -544,15 +544,15 @@ namespace QuranKareem
             allow = false;
             if (textMode)
             {
-                Surah.Value = quranTexts.SurahNumber;
-                if (Ayah.Value == quranTexts.AyahNumber) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranTexts.AyahNumber;
+                Surah.Value = quranText.SurahNumber;
+                if (Ayah.Value == quranText.AyahNumber) Ayah_ValueChanged(null, null);
+                else Ayah.Value = quranText.AyahNumber;
             }
             else
             {
-                Surah.Value = quranPictures.SurahNumber;
-                if (Ayah.Value == quranPictures.AyahNumber) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranPictures.AyahNumber;
+                Surah.Value = quranPicture.SurahNumber;
+                if (Ayah.Value == quranPicture.AyahNumber) Ayah_ValueChanged(null, null);
+                else Ayah.Value = quranPicture.AyahNumber;
             }
             allow = true;
         }
@@ -566,39 +566,39 @@ namespace QuranKareem
             {
                 if (allow)
                 {
-                    quranTexts.Ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranText.Ayah((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
-                Quarter.Value = quranTexts.QuarterNumber;
-                Page.Value = quranTexts.PageNumber;
+                Quarter.Value = quranText.QuarterNumber;
+                Page.Value = quranText.PageNumber;
             }
             else
             {
                 if (allow)
                 {
-                    quranPictures.Ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranPicture.Ayah((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
-                Quarter.Value = quranPictures.QuarterNumber;
-                Page.Value = quranPictures.PageNumber;
+                Quarter.Value = quranPicture.QuarterNumber;
+                Page.Value = quranPicture.PageNumber;
 
-                quranPic.BackgroundImage = quranPictures.WordPicture ?? quranPictures.Picture;
+                quranPic.BackgroundImage = quranPicture.WordPicture ?? quranPicture.Picture;
             }
 
             if (isAllow && textMode)
             {
-                quranAudios.Ayah(quranTexts.SurahNumber, quranTexts.AyahNumber);
-                if (wordModeCheck.Checked && quranTexts.CurrentWord > 0)
-                    quranAudios.WordOf(quranTexts.CurrentWord);
+                quranAudio.Ayah(quranText.SurahNumber, quranText.AyahNumber);
+                if (wordModeCheck.Checked && quranText.CurrentWord > 0)
+                    quranAudio.WordOf(quranText.CurrentWord);
             }
             else if (isAllow)
             {
-                quranAudios.Ayah(quranPictures.SurahNumber, quranPictures.AyahNumber);
-                if (wordModeCheck.Checked && quranPictures.CurrentWord > 0)
-                    quranAudios.WordOf(quranPictures.CurrentWord);
+                quranAudio.Ayah(quranPicture.SurahNumber, quranPicture.AyahNumber);
+                if (wordModeCheck.Checked && quranPicture.CurrentWord > 0)
+                    quranAudio.WordOf(quranPicture.CurrentWord);
             }
 
-            time5.Text = quranAudios.GetCurrentPosition();
+            time5.Text = quranAudio.GetCurrentPosition();
             allow = true;
         }
 
@@ -609,12 +609,12 @@ namespace QuranKareem
             isAllow = false;
             if (textMode && allow)
             {
-                quranTexts.Ayah(quranAudios.SurahNumber, quranAudios.AyahNumber);
+                quranText.Ayah(quranAudio.SurahNumber, quranAudio.AyahNumber);
                 SetAyah();
             }
             else if (allow)
             {
-                quranPictures.Ayah(quranAudios.SurahNumber, quranAudios.AyahNumber);
+                quranPicture.Ayah(quranAudio.SurahNumber, quranAudio.AyahNumber);
                 SetAyah();
             }
             isAllow = true;
@@ -623,23 +623,23 @@ namespace QuranKareem
         // quranAudios -> AddEventHandlerOfWord
         private void WordAudio(object sender, EventArgs e)
         {
-            if (textMode) quranTexts.WordOf(quranAudios.CurrentWord);
+            if (textMode) quranText.WordOf(quranAudio.CurrentWord);
 
             else
             {
-                if (quranAudios.CurrentWord > 0)
+                if (quranAudio.CurrentWord > 0)
                 {
-                    quranPictures.WordOf(quranAudios.CurrentWord);
-                    quranPic.BackgroundImage = quranPictures.WordPicture ?? quranPictures.Picture;
+                    quranPicture.WordOf(quranAudio.CurrentWord);
+                    quranPic.BackgroundImage = quranPicture.WordPicture ?? quranPicture.Picture;
                 }
-                else quranPic.BackgroundImage = quranPictures.Picture;
+                else quranPic.BackgroundImage = quranPicture.Picture;
             }
         }
 
         private void QuranPic_Click(object sender, EventArgs e)
         {
             if (allow
-                && quranPictures.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
+                && quranPicture.SetXY(MousePosition.X - quranPic.Location.X - Location.X,
                                     MousePosition.Y - quranPic.Location.Y - Location.Y,
                                      quranPic.Width, quranPic.Height)
                 ) SetAyah();
@@ -649,14 +649,14 @@ namespace QuranKareem
         // quranTexts -> AddEventHandler
         private void PageRichText_Click(object sender, EventArgs e)
         {
-            if (allow && quranTexts.SetCursor()) SetAyah();
+            if (allow && quranText.SetCursor()) SetAyah();
         }
 
         private void WordModeCheck_CheckedChanged(object sender, EventArgs e)
         {
-            quranTexts.WordMode = wordModeCheck.Checked;
-            quranPictures.WordMode = wordModeCheck.Checked;
-            quranAudios.WordMode = wordModeCheck.Checked;
+            quranText.WordMode = wordModeCheck.Checked;
+            quranPicture.WordMode = wordModeCheck.Checked;
+            quranAudio.WordMode = wordModeCheck.Checked;
         }
         #endregion
 
@@ -701,8 +701,8 @@ namespace QuranKareem
             try
             {
                 Clipboard.Clear();
-                if (normalText.Checked) Clipboard.SetText(quranTexts.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
-                else Clipboard.SetText(quranTexts.AyahText((int)Surah.Value, (int)Ayah.Value));
+                if (normalText.Checked) Clipboard.SetText(quranText.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
+                else Clipboard.SetText(quranText.AyahText((int)Surah.Value, (int)Ayah.Value));
             }
             catch { }
         }
@@ -713,7 +713,7 @@ namespace QuranKareem
             try
             {
                 Clipboard.Clear();
-                Clipboard.SetText(quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
+                Clipboard.SetText(quranTafseer.AyahTafseerText((int)Surah.Value, (int)Ayah.Value)); // كود النسخ
             }
             catch { }
         }
@@ -723,15 +723,15 @@ namespace QuranKareem
         {
             tafseer = tafasir.Text;
             if (!tafseer.Contains("*"))
-                if (File.Exists(@"tafasir\" + tafseer + ".db")) quranTafasir.Start(@"tafasir\" + tafseer + ".db");
-                else quranTafasir.Start(@"translations\" + tafseer + ".db");
+                if (File.Exists(@"tafasir\" + tafseer + ".db")) quranTafseer.Start(@"tafasir\" + tafseer + ".db");
+                else quranTafseer.Start(@"translations\" + tafseer + ".db");
         }
 
         // إنشاء تنسيق نص منسق لتفسير الآية 
         private void SaveRTF_Click(object sender, EventArgs e)
         {
             saveRichText.FileName = $"Tafseer Surah {Surah.Value} Ayah {Ayah.Value}";
-            rtb.Text = quranTafasir.AyahTafseerText((int)Surah.Value, (int)Ayah.Value);
+            rtb.Text = quranTafseer.AyahTafseerText((int)Surah.Value, (int)Ayah.Value);
             if (rtb.Text != "" && saveRichText.ShowDialog() == DialogResult.OK)
                 rtb.SaveFile(saveRichText.FileName);
         }
@@ -740,7 +740,7 @@ namespace QuranKareem
         private void Search_Click(object sender, EventArgs e)
         {
             searchList.Items.Clear();
-            searchList.Items.AddRange(quranTexts.Search(searchText.Text, spellingErrors.Checked));
+            searchList.Items.AddRange(quranText.Search(searchText.Text, spellingErrors.Checked));
             searchList.Visible = true;
             searchClose.Visible = true;
         }
@@ -748,7 +748,7 @@ namespace QuranKareem
         // إختيار آية من قائمة البحث
         private void SearchList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int[] sura_aya = quranTexts.SelectedSearchIndex(searchList.SelectedIndex);
+            int[] sura_aya = quranText.SelectedSearchIndex(searchList.SelectedIndex);
             if (sura_aya == null) return;
             Surah.Value = sura_aya[0];
             Ayah.Value = sura_aya[1] >= Ayah.Minimum ? sura_aya[1] : Ayah.Minimum;
@@ -766,35 +766,35 @@ namespace QuranKareem
         {
             saveSRTFile.FileName = $"Surah {Surah.Value.ToString().PadLeft(3, '0')}.srt";
             if (saveSRTFile.ShowDialog() == DialogResult.OK)
-                File.WriteAllText(saveSRTFile.FileName, quranTafasir.SubRipText((int)Surah.Value, quranAudios.GetPositionsOf((int)Surah.Value)), Encoding.UTF8);
+                File.WriteAllText(saveSRTFile.FileName, quranTafseer.SubRipText((int)Surah.Value, quranAudio.GetPositionsOf((int)Surah.Value)), Encoding.UTF8);
         }
         #endregion
 
         #region التعامل مع الصوت
         // تفعيل التكرار
         private void Repeat_CheckedChanged(object sender, EventArgs e)
-            => quranAudios.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
+            => quranAudio.Repeat(SurahRepeatCheck.Checked ? (int)SurahRepeat.Value : 1, AyahRepeatCheck.Checked ? (int)AyahRepeat.Value : 1);
 
 
-        private void Pause_Click(object sender, EventArgs e) => quranAudios.Pause(); // إيقاف مؤقت للصوت
-        private void Stop_Click(object sender, EventArgs e) => quranAudios.Stop(); // إيقاف دائم للصوت
+        private void Pause_Click(object sender, EventArgs e) => quranAudio.Pause(); // إيقاف مؤقت للصوت
+        private void Stop_Click(object sender, EventArgs e) => quranAudio.Stop(); // إيقاف دائم للصوت
 
         // سرعة الصوت
-        private void Rate_ValueChanged(object sender, EventArgs e) => quranAudios.Rate((double)Rate.Value);
+        private void Rate_ValueChanged(object sender, EventArgs e) => quranAudio.Rate((double)Rate.Value);
 
         // مستوى إرتفاع الصوت
-        private void Volume_ValueChanged(object sender, EventArgs e) => quranAudios.Volume(volume.Value);
+        private void Volume_ValueChanged(object sender, EventArgs e) => quranAudio.Volume(volume.Value);
 
         // حفظ الآية
-        private void Splitter_Click(object sender, EventArgs e) => quranAudios.SurahSplitter();
+        private void Splitter_Click(object sender, EventArgs e) => quranAudio.SurahSplitter();
 
         // تقطيع السورة لآيات
         private void SplitAll_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i <= quranAudios.AyatCount; i++)
+            for (int i = 1; i <= quranAudio.AyatCount; i++)
             {
-                quranAudios.Ayah(i);
-                quranAudios.SurahSplitter();
+                quranAudio.Ayah(i);
+                quranAudio.SurahSplitter();
             }
             Ayah_ValueChanged(null, null);
         }
@@ -805,8 +805,8 @@ namespace QuranKareem
         void EditMoqreaSurah(int sura)
         {
             panel.Controls.Clear();
-            int[] ayat = quranAudios.GetTimestamps(sura);
-            string[] ayatS = quranTexts.SurahAbstractTexts(sura, 5, endAyatCheck.Checked);
+            int[] ayat = quranAudio.GetTimestamps(sura);
+            string[] ayatS = quranText.SurahAbstractTexts(sura, 5, endAyatCheck.Checked);
             if (ayat == null) return;
 
             Label label; NumericUpDown num; Button btn;
@@ -901,7 +901,7 @@ namespace QuranKareem
         void Timestamp_ValueChanged(object sender, EventArgs e)
         {
             tempInt = (int)((NumericUpDown)sender).Tag;
-            quranAudios.SetAyah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value * 1000));
+            quranAudio.SetAyah((int)Surah.Value, tempInt, (int)(((NumericUpDown)sender).Value * 1000));
             if (tempInt >= Ayah.Minimum && tempInt != Ayah.Maximum && timestampChangeEventCheck.Checked)
                 if (Ayah.Value != tempInt + 1) Ayah.Value = tempInt + 1;
                 else Ayah_ValueChanged(sender, e);
@@ -926,14 +926,14 @@ namespace QuranKareem
 
         void Timestamp_record(object sender, EventArgs e)
         {
-            double temp = quranAudios.Mp3CurrentPosition();
+            double temp = quranAudio.Mp3CurrentPosition();
             if (temp == 0) return;
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
 
         void Mp3Duration_record(object sender, EventArgs e)
         {
-            double temp = quranAudios.Mp3Duration();
+            double temp = quranAudio.Mp3Duration();
             if (temp == 0) return;
             ((NumericUpDown)panel.Controls[(int)((Button)sender).Tag]).Value = (decimal)temp;
         }
@@ -941,7 +941,7 @@ namespace QuranKareem
         // زر تشغيل وضعية إضافة مقرئ جديد
         private void AddNewMoqrea_Click(object sender, EventArgs e)
         {
-            if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog() == DialogResult.OK && quranAudios.NewQuranAudio(folder.SelectedPath))
+            if (addNewMoqrea.Text != "إلغاء" && folder.ShowDialog() == DialogResult.OK && quranAudio.NewQuranAudio(folder.SelectedPath))
             {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
@@ -974,7 +974,7 @@ namespace QuranKareem
         }
 
         // زر تنظيف الداتابيز من الشوائب
-        private void DescSave_Click(object sender, EventArgs e) => quranAudios.SetDescription(extension.Text, comment.Text);
+        private void DescSave_Click(object sender, EventArgs e) => quranAudio.SetDescription(extension.Text, comment.Text);
 
         // إضافة وصف للشيخ
         private void ShaykhDesc_(object sender, EventArgs e)
@@ -988,10 +988,10 @@ namespace QuranKareem
                 saveRTF.Visible = false;
                 srtFile.Visible = false;
                 lExt.Visible = true;
-                extension.Text = quranAudios.Extension;
+                extension.Text = quranAudio.Extension;
                 extension.Visible = true;
                 lComment.Visible = true;
-                comment.Text = quranAudios.Comment;
+                comment.Text = quranAudio.Comment;
                 comment.Visible = true;
                 descSave.Visible = true;
             }
