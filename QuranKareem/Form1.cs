@@ -342,7 +342,7 @@ namespace QuranKareem
             bool distinct = false;
             if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "")
             {
-                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Replace(Environment.NewLine, "*").Split('*').ToList());
+                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace('\n', '*').Split('*').ToList());
                 for (int i = 0; i < audiosFolders.Count; i++)
                 {
                     stringArray = audiosFolders[i].Split('|');
@@ -432,7 +432,7 @@ namespace QuranKareem
         {
             try
             {
-                string[] links = File.ReadAllText(s + "\\download links.txt", Encoding.UTF8).Replace(Environment.NewLine, "|").Split('|');
+                string[] links = File.ReadAllText(s + "\\download links.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace('\n', '|').Split('|');
                 string[] temp;
                 System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length > 0)

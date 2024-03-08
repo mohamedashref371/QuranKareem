@@ -345,7 +345,7 @@ namespace QuranKareem
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line}";
             quran.Open();
             reader = command.ExecuteReader();
-            while (reader.Read())
+            while (reader.Read()) // مشكلة في السطور المتعددة من word في words
                 list.Add(new int[4] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3) });
             CloseConn();
             if (list.Count == 0) return bitmaps;
