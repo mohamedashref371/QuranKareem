@@ -337,7 +337,7 @@ namespace QuranKareem
 
         public List<Bitmap> GetLineWithWordsMarks(int line)
         {
-            var coords = new List<int>();
+            var coords = new int[2];
             Bitmap bmap = GetLine(line, coords);
             if (bmap == null) return null;
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
@@ -358,8 +358,8 @@ namespace QuranKareem
                 ColoringWord(
                     (list[i][0] - coords[0]) >= 0 ? list[i][0] - coords[0] : 0,
                     (list[i][1] - coords[0]) < bitmap.Width ? list[i][1] - coords[0] : bitmap.Width - 1,
-                    (list[i][2] - coords[2]) >= 0 ? list[i][2] - coords[2] : 0,
-                    (list[i][3] - coords[2]) < bitmap.Height ? list[i][3] - coords[2] : bitmap.Height - 1
+                    (list[i][2] - coords[1]) >= 0 ? list[i][2] - coords[1] : 0,
+                    (list[i][3] - coords[1]) < bitmap.Height ? list[i][3] - coords[1] : bitmap.Height - 1
                     );
                 fp.Unlock(true);
                 bitmaps.Add(bitmap);
@@ -367,7 +367,7 @@ namespace QuranKareem
             return bitmaps;
         }
 
-        public Bitmap GetLine(int line, List<int> lineCoordinates = null)
+        public Bitmap GetLine(int line, int[] lineCoordinates = null)
         {
             if (!success && version == 4) return null;
             List<int[]> list = new List<int[]>();
@@ -387,7 +387,11 @@ namespace QuranKareem
                 if (list[i][2] < final[2]) final[2] = list[i][2];
                 if (list[i][3] > final[3]) final[3] = list[i][3];
             }
-            lineCoordinates?.AddRange(final.ToList());
+            if (lineCoordinates?.Length >= 2)
+            {
+                lineCoordinates[0] = final[0];
+                lineCoordinates[1] = final[2];
+            }
             Bitmap bitmap = new Bitmap(final[1] - final[0] + 1, final[3] - final[2] + 1);
             Graphics gr = Graphics.FromImage(bitmap);
             gr.Clear(Color.Empty);
