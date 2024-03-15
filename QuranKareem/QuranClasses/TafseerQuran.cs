@@ -4,16 +4,30 @@ using System.Data.SQLite;
 
 namespace QuranKareem
 {
-    internal class QuranTafseer : AbsQuranBase
+    internal class TafseerQuran
     {
+        #region Create The Class
+        private bool success = false;
 
-        public static readonly QuranTafseer instance = new QuranTafseer();
+        private readonly SQLiteConnection quran;
+        private readonly SQLiteCommand command;
+        private SQLiteDataReader reader;
 
-        private QuranTafseer():base()
+        public static TafseerQuran Instance => new TafseerQuran();
+
+        private TafseerQuran()
         {
+            quran = new SQLiteConnection();
+            command = new SQLiteCommand(quran);
         }
+        #endregion
 
-        public override void Start(string file, int sura = 1, int aya = 0)
+        private int version;
+
+        public int Narration { get; private set; }
+        public string Comment { get; private set; }
+
+        public void Start(string file, int sura = 1, int aya = 0)
         {
             success = false;
             if (file == null || file.Trim().Length == 0) return;

@@ -110,13 +110,10 @@
     <Compile Include="FormSize.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuranClasses\QuranAudio.cs" />
-    <Compile Include="QuranClasses\AbsQuranBase.cs" />
-    <Compile Include="QuranClasses\QuranPicture.cs" />
-    <Compile Include="QuranClasses\QuranTafseer.cs" />
-    <Compile Include="QuranClasses\QuranText.cs" />
-    <Compile Include="QuranClasses\AbsQuranTransition.cs" />
-    <Compile Include="QuranClasses\AbsQuranVisual.cs" />
+    <Compile Include="QuranClasses\AudioQuran.cs" />
+    <Compile Include="QuranClasses\PictureQuran.cs" />
+    <Compile Include="QuranClasses\TafseerQuran.cs" />
+    <Compile Include="QuranClasses\TextQuran.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

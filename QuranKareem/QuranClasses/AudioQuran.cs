@@ -7,11 +7,40 @@ using System.Windows.Forms;
 
 namespace QuranKareem
 {
-    internal class QuranAudio : AbsQuranTransition
+    internal class AudioQuran
     {
+        #region Create The Class
+        private bool success = false;
+
+        private readonly SQLiteConnection quran;
+        private readonly SQLiteCommand command;
+        private SQLiteDataReader reader;
+
+        public static AudioQuran Instance => new AudioQuran();
+
+        private AudioQuran()
+        {
+            quran = new SQLiteConnection();
+            command = new SQLiteCommand(quran);
+            timer.Tick += Timer_Tick;
+            wordsTimer.Tick += WordsTimer_Tick;
+        }
+        #endregion
+
         private string path; // المسار
         public string Extension { get; private set; } // example: .mp3
         private int ayahId;
+
+        private int surahsCount;
+
+        public int SurahNumber { get; private set; }
+        public int AyahNumber { get; private set; }
+        public int AyatCount { get; private set; }
+
+        private int version;
+
+        public int Narration { get; private set; }
+        public string Comment { get; private set; }
 
         public int From { get; private set; }
         public int To { get; private set; }
@@ -37,15 +66,7 @@ namespace QuranKareem
                 catch { }
         }
 
-        public static readonly QuranAudio instance = new QuranAudio();
-
-        private QuranAudio():base()
-        {
-            timer.Tick += Timer_Tick;
-            wordsTimer.Tick += WordsTimer_Tick;
-        }
-
-        public override void Start(string path, int sura = 1, int aya = 0)
+        public void Start(string path, int sura = 1, int aya = 0)
         {
             if (!added || !Directory.Exists(path)) return;
 
@@ -89,7 +110,9 @@ namespace QuranKareem
 
         #region التنقلات في المصحف
 
-        public override void AyahPlus()
+        public void Surah(int i) => Ayah(i, 0);
+
+        public void AyahPlus()
         {
             if (!success) return;
             if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0)
@@ -113,7 +136,10 @@ namespace QuranKareem
             }
         }
 
-        public override void Ayah(int sura, int aya)
+        public void Ayah() => Ayah(SurahNumber, AyahNumber);
+        public void Ayah(int aya) => Ayah(SurahNumber, aya);
+
+        public void Ayah(int sura, int aya)
         {
             if (!timer.Enabled) ok = true;
             timer.Stop(); wordsTimer.Stop();
