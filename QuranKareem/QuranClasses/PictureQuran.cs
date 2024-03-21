@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
-using System.Windows.Forms;
+using System.Text;
 
 namespace QuranKareem
 {
@@ -27,39 +27,44 @@ namespace QuranKareem
         }
         #endregion
 
-        private string path; // المسار
+        #region Ayat Table
+        private int ayahId;
 
-        private int quartersCount, pagesCount;
-        private int tempInt, tempInt2;
-
-        private int surahsCount;
-
+        #region Surahs Table
         public int SurahNumber { get; private set; }
-        public int AyahNumber { get; private set; }
+        public bool Makya_Madanya { get; private set; }
         public int AyatCount { get; private set; }
-
-        private int version;
-
-        public int Narration { get; private set; }
+        #endregion
 
         public int QuarterNumber { get; private set; }
         public int PageNumber { get; private set; }
-        public bool Makya_Madanya { get; private set; }
-        public int AyahStart { get; private set; }
+        public int AyahNumber { get; private set; }
+        #endregion
 
+        #region Description Table
+        private int version;
+        public int Narration { get; private set; }
+        public int SurahsCount { get; private set; }
+        //public int QuartersCount { get; private set; }
+        public int PagesCount { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
-        private string extension; // example: .png
+        private Color textColor = Color.Empty, background;
+        public string Extension { get; private set; } // example: .png
         public string Comment { get; private set; }
+        #endregion
 
-        private Color background, textColor = Color.Empty;
+        private string path;
+
+        #region Bitmaps and Words
         private Bitmap oPic;
         public Bitmap Picture { get; private set; }
         public Bitmap WordPicture { get; private set; }
-        FastPixel fp;
+        private FastPixel fp;
 
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
+        #endregion
 
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
@@ -69,7 +74,7 @@ namespace QuranKareem
             PageNumber = 0;
             if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
             if (textColor != Color.Empty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
-            Ayah();
+            Set();
         }
 
         // الدالة البداية
@@ -96,11 +101,11 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version < 2 || version > 3) return;
-                Narration = reader.GetInt32(2); // العمود الثالث
-                surahsCount = reader.GetInt32(3);
-                quartersCount = reader.GetInt32(4);
-                pagesCount = reader.GetInt32(5);
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version < 2 || version > 4) return;
+                Narration = reader.GetInt32(2);
+                SurahsCount = reader.GetInt32(3);
+                //QuartersCount = reader.GetInt32(4);
+                PagesCount = reader.GetInt32(5);
                 Width = reader.GetInt32(6);
                 Height = reader.GetInt32(7);
 
@@ -111,7 +116,7 @@ namespace QuranKareem
                 clr = reader.GetString(9).Split(',');
                 if (clr.Length >= 3) background = Color.FromArgb(clr.Length > 3 ? Convert.ToInt32(clr[3]) : 255, Convert.ToInt32(clr[0]), Convert.ToInt32(clr[1]), Convert.ToInt32(clr[2]));
 
-                extension = reader.GetString(10);
+                Extension = reader.GetString(10);
                 Comment = reader.GetString(11);
                 success = true;
 
@@ -126,7 +131,7 @@ namespace QuranKareem
             if (success)
             {
                 oPic = new Bitmap(Width, Height);
-                Ayah(sura, aya);
+                Set(sura, aya);
             }
         }
 
@@ -134,7 +139,7 @@ namespace QuranKareem
         public string[] GetSurahNames()
         {
             if (!success) return new string[] { "" };
-            string[] names = new string[surahsCount];
+            string[] names = new string[SurahsCount];
             quran.Open();
             command.CommandText = $"SELECT name FROM surahs";
             reader = command.ExecuteReader();
@@ -149,116 +154,178 @@ namespace QuranKareem
             return names;
         }
 
-        public void Surah(int i) => Ayah(i, 0);
+        #region Set Ayah Method
+        private readonly StringBuilder sql = new StringBuilder();
 
-        public void Quarter(int i)
+        /// <summary>
+        /// Implementation Priority:<br/>
+        ///   1- Surah (1:114) with its Ayah (0:{AyatCount}).<br/>
+        ///   2- Ayah (0:{AyatCount}) only.
+        ///   3- next parameter (false,true).
+        ///   4- Juz (1:30) with Quarter (1:8).<br/>
+        ///   5- Juz (1:30) only.<br/>
+        ///   6- Hizb (1:60) with Quarter (1:4).<br/>
+        ///   7- Hizb (1:60) only.<br/>
+        ///   8- Quarter (1:240) only.<br/>
+        ///   9- Page (1:{PagesCount}).<br/>
+        /// </summary>
+        /// <param name="surah">Quran Surahs Count is 114.</param>
+        /// <param name="ayah">Each Surah contains Ayat.</param>
+        /// <param name="next">(next == true) => (ayah <- ayah + 1)</param>
+        /// <param name="juz">Quran Juz Count is 30 and one Juz contains 8 Quarters.</param>
+        /// <param name="hizb">Quran Hizb Count is 60 and one Hizb contains 4 Quarters.</param>
+        /// <param name="quarter">Quran Quarters Count is 240.</param>
+        /// <param name="page">Usually the 'Quran Pages Count' is 604.</param>
+        /// <returns>true if everything goes well.</returns>
+        public bool Set(int surah = 0, int ayah = -2, bool next = false, int juz = 0, int hizb = 0, int quarter = 0, int page = 0)
         {
-            if (!success) return;
-            i = Math.Abs(i);
-            if (i == 0) i = 1;
-            else if (i > quartersCount) i = quartersCount;
+            if (!success) return false;
 
-            quran.Open();
-            command.CommandText = $"SELECT ayat_id_start FROM quarters WHERE id={i}";
-            reader = command.ExecuteReader();
-            if (!reader.Read()) return;
-            tempInt = reader.GetInt32(0);
-            reader.Close(); quran.Close();
-            AyahAt(tempInt);
-        }
+            #region SQL Building
+            sql.Length = 0;
+            sql.Append("SELECT id,surah,quarter,page,ayah FROM ayat WHERE ");
 
-        public void Page(int i)
-        {
-            if (!success) return;
-            i = Math.Abs(i);
-            if (i == 0) i = 1;
-            else if (i > pagesCount) i = pagesCount;
+            #region Surah and Ayah
+            // Ayah
+            if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
+            {
+                if (ayah == AyatCount + 1)
+                {
+                    surah = SurahNumber != SurahsCount ? SurahNumber + 1 : 1;
+                    ayah = 0;
+                }
+                else if (ayah > AyatCount + 1)
+                {
+                    surah = SurahNumber;
+                    ayah = AyatCount;
+                }
+                else
+                    surah = SurahNumber;
 
-            quran.Open();
-            command.CommandText = $"SELECT ayat_id_start FROM pages WHERE id={i}";
-            reader = command.ExecuteReader();
-            if (!reader.Read()) return;
-            tempInt = reader.GetInt32(0);
-            reader.Close(); quran.Close();
-            AyahAt(tempInt);
-        }
+                if (ayah > 0)
+                    sql.Append($"surah = {surah} AND ayah = {ayah}");
+                else
+                    sql.Append($"surah = {surah} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
+            }
 
-        public void AyahPlus()
-        {
-            if (!success) return;
-            if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
-            else if (AyahNumber == AyatCount) Surah(1);
-            else Ayah(SurahNumber, AyahNumber + 1);
-        }
+            // Surah and Ayah
+            else if (surah >= 1 && surah <= SurahsCount + 1)
+            {
+                if (surah == SurahsCount + 1) surah = 1;
+                if (ayah < 0) ayah = 0;
+                if (ayah > 0)
+                    sql.Append($"surah = {surah} AND ayah = {ayah}");
+                else
+                    sql.Append($"surah = {surah} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
+            }
 
-        private void AyahAt(int id)
-        {
-            quran.Open();
-            command.CommandText = $"SELECT surah,ayah FROM ayat WHERE id={id}";
-            reader = command.ExecuteReader();
-            reader.Read();
-            tempInt = reader.GetInt32(0)/*surah*/; tempInt2 = reader.GetInt32(1)/*ayah*/;
-            reader.Close(); quran.Close();
-            Ayah(tempInt, tempInt2); // أحاول تركيز كل المجهود على دالة واحدة
-        }
+            // Ayah Plus
+            else if (next && SurahNumber > 0)
+            {
+                if (SurahNumber == SurahsCount && AyahNumber == AyatCount)
+                    sql.Append("ayah >= 0");
+                else
+                    sql.Append($"id > {ayahId} AND ayah >= 0");
+            }
+            #endregion
+            #region Juz, Hizb, Quarter and Page
+            // Juz then Quarter
+            else if (juz >= 1 && juz <= 31)
+            {
+                if (juz == 31) juz = 1;
+                if (quarter <= 0 && quarter > 8)
+                    sql.Append($"quarter = {juz * 8 - 7}");
+                else
+                    sql.Append($"quarter = {juz * 8 - 8 + quarter}");
+            }
 
-        public void Ayah() => Ayah(SurahNumber, AyahNumber);
-        public void Ayah(int aya) => Ayah(SurahNumber, aya);
+            // Hizb then Quarter
+            else if (hizb >= 1 && hizb <= 61)
+            {
+                if (hizb == 61) hizb = 1;
+                if (quarter <= 0 && quarter > 4)
+                    sql.Append($"quarter = {hizb * 4 - 3}");
+                else
+                    sql.Append($"quarter = {hizb * 4 - 4 + quarter}");
+            }
 
-        public void Ayah(int sura, int aya)
-        { // كما ترى .. المجهود كله عليها
-            if (!success) return;
+            // Quarter only
+            else if (quarter >= 1 && quarter <= 241)
+            {
+                if (quarter == 241) quarter = 1;
+                sql.Append($"quarter = {quarter}");
+            }
             
-            sura = Math.Abs(sura); // تصحيح رقم السورة
-            if (sura == 0) sura = 1;
-            else if (sura > surahsCount) sura = surahsCount;
+            // Page
+            else if (page >= 1 && page <= PagesCount + 1)
+            {
+                if (page == PagesCount + 1) page = 1;
+                sql.Append($"page = {page}");
+            }
+            #endregion
+            #region Otherwise
+            else if (SurahNumber > 0)
+            {
+                if (AyahNumber > 0)
+                    sql.Append($"surah = {SurahNumber} AND ayah = {AyahNumber}");
+                else
+                    sql.Append($"surah = {SurahNumber} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
+            }
+            else
+            {
+                sql.Append("ayah >= 0");
+            }
+            #endregion
+            sql.Append(" LIMIT 1");
+            #endregion
 
-            if (aya == -1) aya = 0;
-            else aya = Math.Abs(aya);
-
+            #region SQL Execution
             quran.Open();
-            if (sura != SurahNumber)
-            {
-                command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
-                reader = command.ExecuteReader();
-                reader.Read();
-                SurahNumber = sura;
-                Makya_Madanya = reader.GetBoolean(2);
-                AyatCount = reader.GetInt32(3);
-                reader.Close(); command.Cancel();
-            }
-            if (aya > AyatCount) aya = AyatCount;
-            AyahNumber = aya;
-
-            command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
+            command.CommandText = sql.ToString();
             reader = command.ExecuteReader();
-            AyahStart = 0;
-            if (!reader.HasRows && aya == 0)
-            { // لا يوجد بسملة
-                reader.Close();
-                command.Cancel();
-                command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
-                reader = command.ExecuteReader();
-                AyahNumber = 1;
-                AyahStart = 1;
-            }
-            reader.Read();
-            int ayahId = reader.GetInt32(0);
-            QuarterNumber = reader.GetInt32(2); // رقم الربع 
-
-            if (PageNumber != reader.GetInt32(3))
+            if (!reader.Read())
             {
-                PageNumber = reader.GetInt32(3);
-                PictureAt(PageNumber);
+                reader.Close(); quran.Close();
+                return false;
             }
+            ayahId = reader.GetInt32(0);
+            surah = reader.GetInt32(1);
+            QuarterNumber = reader.GetInt32(2);
+            page = reader.GetInt32(3);
+            AyahNumber = reader.GetInt32(4);
+            reader.Close(); quran.Close();
+            #endregion
 
-            reader.Close(); command.Cancel();
+            #region Changes in surah or page
+            if (surah != SurahNumber) SurahData(surah);
+            if (page != PageNumber) PictureAt(page);
+            #endregion
 
+            AyahData();
+
+            return true;
+        }
+
+        private void SurahData(int surah)
+        {
+            SurahNumber = surah;
+            command.CommandText = $"SELECT makya_madanya,ayat_count FROM surahs WHERE id={surah}";
+            quran.Open();
+            reader = command.ExecuteReader();
+            reader.Read();
+            Makya_Madanya = reader.GetBoolean(0);
+            AyatCount = reader.GetInt32(1);
+            reader.Close(); quran.Close();
+        }
+
+        private void AyahData()
+        {
             CurrentWord = -1; words.Clear(); WordPicture = null;
             Picture = (Bitmap)oPic.Clone();
             fp = new FastPixel(Picture);
             fp.Lock();
 
+            quran.Open();
             // التلوين
             if (AyahColor.A != 0)
             {
@@ -278,15 +345,16 @@ namespace QuranKareem
             quran.Close();
         }
 
-        private void PictureAt(int page) // Part Of Ayah Function
-        { // الصورة الحالية
+        private void PictureAt(int page) // Part Of Ayah Function // الصورة الحالية
+        {
+            PageNumber = page;
             string s = page + "";
             if (s.Length == 1) s = "00" + s;
             else if (s.Length == 2) s = "0" + s;
-            s += extension;
+            s += Extension;
 
             if (File.Exists(path + s)) oPic = new Bitmap(path + s);
-            else if (File.Exists($"{path}{page}{extension}")) oPic = new Bitmap($"{path}{page}{extension}");
+            else if (File.Exists($"{path}{page}{Extension}")) oPic = new Bitmap($"{path}{page}{Extension}");
             else
             {
                 string[] filesName = Directory.GetFiles(path);
@@ -305,6 +373,7 @@ namespace QuranKareem
                 fp.Unlock(true);
             }
         }
+        #endregion
 
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
@@ -324,7 +393,7 @@ namespace QuranKareem
             if (!success) return false;
             xMouse = (int)(xMouse * (Width / (decimal)width)); // تصحيح المؤشر إذا كان عارض الصورة ليس بنفس عرض الصورة نفسها
             yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
-            int word = -1; tempInt = -371;
+            int word = -1; int tempInt = -371, tempInt2 = 0;
             quran.Open();
             bool words = WordMode;
             if (words)
@@ -355,7 +424,7 @@ namespace QuranKareem
             }
 
             reader.Close(); quran.Close();
-            if (tempInt != -371) Ayah(tempInt, tempInt2); // استدعاء الملك
+            if (tempInt != -371) Set(tempInt, tempInt2); // استدعاء الملك
             if (words && tempInt != -371) WordOf(word);
             return tempInt != -371;
         }
@@ -472,7 +541,7 @@ namespace QuranKareem
 
         public Bitmap GetLine(int line, int[] lineCoordinates = null)
         {
-            if (!success && version == 4) return null;
+            if (!success || version != 4) return null;
             List<int[]> list = new List<int[]>();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM lines JOIN ayat ON lines.ayah_id=ayat.id WHERE page={PageNumber} AND line={line}";
             quran.Open();

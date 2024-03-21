@@ -176,11 +176,6 @@
             0,
             0,
             0});
-            this.Ayah.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.Ayah.Name = "Ayah";
             this.Ayah.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Ayah.Size = new System.Drawing.Size(95, 28);

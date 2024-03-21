@@ -482,8 +482,8 @@ namespace QuranKareem
             }
             else
             {
-                if (allow) quranPicture.Surah((int)Surah.Value); //
-                Ayah.Minimum = quranPicture.AyahStart;
+                if (allow) quranPicture.Set((int)Surah.Value); //
+                //Ayah.Minimum = quranPicture.AyahStart;
                 ayahMaximumIsChanged = true;
                 Ayah.Maximum = quranPicture.AyatCount;
                 ayahMaximumIsChanged = false;
@@ -519,7 +519,7 @@ namespace QuranKareem
             }
             else if (allow)
             {
-                quranPicture.Quarter((int)Quarter.Value);
+                quranPicture.Set(quarter: (int)Quarter.Value);
                 SetAyah();
             }
         }
@@ -534,7 +534,7 @@ namespace QuranKareem
             }
             else if (allow)
             {
-                quranPicture.Page((int)Page.Value);
+                quranPicture.Set(page: (int)Page.Value);
                 SetAyah();
             }
         }
@@ -576,7 +576,7 @@ namespace QuranKareem
             {
                 if (allow)
                 {
-                    quranPicture.Ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranPicture.Set((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
                 Quarter.Value = quranPicture.QuarterNumber;
@@ -614,7 +614,7 @@ namespace QuranKareem
             }
             else if (allow)
             {
-                quranPicture.Ayah(quranAudio.SurahNumber, quranAudio.AyahNumber);
+                quranPicture.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
                 SetAyah();
             }
             isAllow = true;
