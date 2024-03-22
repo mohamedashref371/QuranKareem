@@ -159,19 +159,20 @@ namespace QuranKareem
 
         /// <summary>
         /// Implementation Priority:<br/>
-        ///   1- Surah (1:114) with its Ayah (0:{AyatCount}).<br/>
-        ///   2- Ayah (0:{AyatCount}) only.
-        ///   3- next parameter (false,true).
-        ///   4- Juz (1:30) with Quarter (1:8).<br/>
-        ///   5- Juz (1:30) only.<br/>
-        ///   6- Hizb (1:60) with Quarter (1:4).<br/>
-        ///   7- Hizb (1:60) only.<br/>
-        ///   8- Quarter (1:240) only.<br/>
-        ///   9- Page (1:{PagesCount}).<br/>
+        ///   1- Surah (1:114), its Ayah (0:{AyatCount}).<br/>
+        ///   1- Ayah (0:{AyatCount}) only.
+        ///   2- Next parameter (false,true).
+        ///   3- Juz (1:30), Hizb (1:2), Quarter (1:4).<br/>
+        ///   3- Juz (1:30), Quarter (1:8).<br/>
+        ///   3- Juz (1:30) only.<br/>
+        ///   4- Hizb (1:60), Quarter (1:4).<br/>
+        ///   4- Hizb (1:60) only.<br/>
+        ///   5- Quarter (1:240) only.<br/>
+        ///   6- Page (1:{PagesCount}).<br/>
         /// </summary>
         /// <param name="surah">Quran Surahs Count is 114.</param>
         /// <param name="ayah">Each Surah contains Ayat.</param>
-        /// <param name="next">(next == true) => (ayah <- ayah + 1)</param>
+        /// <param name="next">Go to the next Ayah.</param>
         /// <param name="juz">Quran Juz Count is 30 and one Juz contains 8 Quarters.</param>
         /// <param name="hizb">Quran Hizb Count is 60 and one Hizb contains 4 Quarters.</param>
         /// <param name="quarter">Quran Quarters Count is 240.</param>
@@ -184,7 +185,6 @@ namespace QuranKareem
             #region SQL Building
             sql.Length = 0;
             sql.Append("SELECT id,surah,quarter,page,ayah FROM ayat WHERE ");
-
             #region Surah and Ayah
             // Ayah
             if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
@@ -229,24 +229,23 @@ namespace QuranKareem
             }
             #endregion
             #region Juz, Hizb, Quarter and Page
-            // Juz then Quarter
+            // Juz then Hizb and Quarter
             else if (juz >= 1 && juz <= 31)
             {
                 if (juz == 31) juz = 1;
-                if (quarter <= 0 && quarter > 8)
-                    sql.Append($"quarter = {juz * 8 - 7}");
-                else
-                    sql.Append($"quarter = {juz * 8 - 8 + quarter}");
+                if (quarter <= 0 || quarter > 8) quarter = 1;
+                if (hizb == 2 && quarter >= 1 && quarter <= 4) quarter += 4;
+
+                sql.Append($"quarter = {juz * 8 - 8 + quarter}");
             }
 
             // Hizb then Quarter
             else if (hizb >= 1 && hizb <= 61)
             {
                 if (hizb == 61) hizb = 1;
-                if (quarter <= 0 && quarter > 4)
-                    sql.Append($"quarter = {hizb * 4 - 3}");
-                else
-                    sql.Append($"quarter = {hizb * 4 - 4 + quarter}");
+                if (quarter <= 0 || quarter > 4) quarter = 1;
+
+                sql.Append($"quarter = {hizb * 4 - 4 + quarter}");
             }
 
             // Quarter only
