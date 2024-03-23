@@ -295,11 +295,8 @@ namespace QuranKareem
             reader.Close(); quran.Close();
             #endregion
 
-            #region Changes in surah or page
             if (surah != SurahNumber) SurahData(surah);
             if (page != PageNumber) PictureAt(page);
-            #endregion
-
             AyahData();
 
             return true;
@@ -331,18 +328,30 @@ namespace QuranKareem
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
                 while (reader.Read()) ColoringAyah(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
-                reader.Close(); command.Cancel();
+                reader.Close();
             }
             fp.Unlock(true);
             if (WordMode)
             {
-                command.CommandText = $"SELECT word,min_x,max_x,min_y,max_y FROM words WHERE ayah_id={ayahId} AND word>=1 AND word<=599 GROUP BY word ORDER BY word ASC";
+                command.CommandText = $"SELECT min_x,max_x,min_y,max_y,word FROM words WHERE ayah_id={ayahId} AND word>=1 AND word<=599 ORDER BY word";
                 reader = command.ExecuteReader();
-                while (reader.Read()) words.AddRange(new int[] { reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4) });
+                int w = 1; ints.Clear();
+                while (reader.Read()) // بفرض أن الكلمة ستبدأ برقم 1 وستكون السلسلة متصلة
+                {
+                    if (w != reader.GetInt32(4))
+                    {
+                        words.Add(ints.ToArray());
+                        ints.Clear();
+                        w = reader.GetInt32(4);
+                    }
+                    ints.Add(reader.GetInt32(0)); ints.Add(reader.GetInt32(1)); ints.Add(reader.GetInt32(2)); ints.Add(reader.GetInt32(3));
+                }
+                words.Add(ints.ToArray());
                 reader.Close();
             }
             quran.Close();
         }
+        private readonly List<int> ints = new List<int>();
 
         private void PictureAt(int page) // Part Of Ayah Function // الصورة الحالية
         {
@@ -374,14 +383,16 @@ namespace QuranKareem
         }
         #endregion
 
-        private readonly List<int> words = new List<int>();
+        private readonly List<int[]> words = new List<int[]>();
         public void WordOf(int word)
         {
-            if (word <= 0 || word * 4 > words.Count || !WordMode) { WordPicture = null; return; }
+            if (word <= 0 || word > words.Count || !WordMode) { WordPicture = null; return; }
             WordPicture = (Bitmap)Picture.Clone();
             fp = new FastPixel(WordPicture);
             fp.Lock();
-            if (WordColor.A != 0) ColoringWord(words[word * 4 - 4], words[word * 4 - 3], words[word * 4 - 2], words[word * 4 - 1]);
+            if (WordColor.A != 0)
+                for (int i = 0; i < words[word - 1].Length / 4; i++)
+                    ColoringWord(words[word - 1][i * 4], words[word - 1][i * 4 + 1], words[word - 1][i * 4 + 2], words[word - 1][i * 4 + 3]);
             CurrentWord = word;
             fp.Unlock(true);
         }
@@ -408,7 +419,7 @@ namespace QuranKareem
                 else
                 {
                     words = false;
-                    reader.Close(); command.Cancel();
+                    reader.Close();
                 }
             }
             if (!words)
@@ -512,26 +523,47 @@ namespace QuranKareem
             Bitmap bmap = GetLine(line, coords);
             if (bmap == null) return null;
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
+            if (WordColor.A == 0) return bitmaps;
             var list = new List<int[]>();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line}";
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah_id,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line} ORDER BY ayah_id,word";
             quran.Open();
             reader = command.ExecuteReader();
-            while (reader.Read()) // مشكلة في السطور المتعددة من word في words
-                list.Add(new int[4] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3) });
+
+            int a,w; ints.Clear();
+            if (!reader.Read()) return bitmaps;
+            a = reader.GetInt32(4);
+            w = reader.GetInt32(5);
+
+            do
+            {
+                if (a != reader.GetInt32(4) || w != reader.GetInt32(5))
+                {
+                    list.Add(ints.ToArray());
+                    ints.Clear();
+                    a = reader.GetInt32(4);
+                    w = reader.GetInt32(5);
+                }
+                ints.Add(reader.GetInt32(0)); ints.Add(reader.GetInt32(1)); ints.Add(reader.GetInt32(2)); ints.Add(reader.GetInt32(3));
+            } while (reader.Read());
+            list.Add(ints.ToArray());
+
             reader.Close(); quran.Close();
-            if (list.Count == 0) return bitmaps;
+
             Bitmap bitmap;
             for (int i = 0; i < list.Count; i++)
             {
                 bitmap = (Bitmap)bmap.Clone();
                 fp = new FastPixel(bitmap);
                 fp.Lock();
-                ColoringWord(
-                    (list[i][0] - coords[0]) >= 0 ? list[i][0] - coords[0] : 0,
-                    (list[i][1] - coords[0]) < bitmap.Width ? list[i][1] - coords[0] : bitmap.Width - 1,
-                    (list[i][2] - coords[1]) >= 0 ? list[i][2] - coords[1] : 0,
-                    (list[i][3] - coords[1]) < bitmap.Height ? list[i][3] - coords[1] : bitmap.Height - 1
+                for (int j = 0; j < list[i].Length / 4; j++)
+                {
+                    ColoringWord(
+                    (list[i][j * 4] - coords[0]) >= 0 ? list[i][j * 4] - coords[0] : 0,
+                    (list[i][j * 4 + 1] - coords[0]) < bitmap.Width ? list[i][j * 4 + 1] - coords[0] : bitmap.Width - 1,
+                    (list[i][j * 4 + 2] - coords[1]) >= 0 ? list[i][j * 4 + 2] - coords[1] : 0,
+                    (list[i][j * 4 + 3] - coords[1]) < bitmap.Height ? list[i][j * 4 + 3] - coords[1] : bitmap.Height - 1
                     );
+                }
                 fp.Unlock(true);
                 bitmaps.Add(bitmap);
             }
