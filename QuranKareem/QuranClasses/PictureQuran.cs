@@ -525,7 +525,7 @@ namespace QuranKareem
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
             if (WordColor.A == 0) return bitmaps;
             var list = new List<int[]>();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah_id,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line} ORDER BY ayah_id,word";
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah_id,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={PageNumber} AND line={line} AND word>=1 AND word<=599 ORDER BY ayah_id,word";
             quran.Open();
             reader = command.ExecuteReader();
 
