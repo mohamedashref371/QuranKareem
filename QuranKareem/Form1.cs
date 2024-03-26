@@ -59,6 +59,7 @@ namespace QuranKareem
             wordColors.SelectedIndexChanged += WordColors_SelectedIndexChanged;
             ayahColors.SelectedItem = AyahColor; // اللون الأحمر
             wordColors.SelectedItem = WordColor;
+            wordModeCheck.Checked = true;
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 

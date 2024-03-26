@@ -236,7 +236,7 @@ namespace QuranKareem
                 if (quarter <= 0 || quarter > 8) quarter = 1;
                 if (hizb == 2 && quarter >= 1 && quarter <= 4) quarter += 4;
 
-                sql.Append($"quarter = {juz * 8 - 8 + quarter}");
+                sql.Append($"quarter = {juz * 8 - 8 + quarter} AND ayah>=0");
             }
 
             // Hizb then Quarter
@@ -245,21 +245,21 @@ namespace QuranKareem
                 if (hizb == 61) hizb = 1;
                 if (quarter <= 0 || quarter > 4) quarter = 1;
 
-                sql.Append($"quarter = {hizb * 4 - 4 + quarter}");
+                sql.Append($"quarter = {hizb * 4 - 4 + quarter} AND ayah>=0");
             }
 
             // Quarter only
             else if (quarter >= 1 && quarter <= 241)
             {
                 if (quarter == 241) quarter = 1;
-                sql.Append($"quarter = {quarter}");
+                sql.Append($"quarter = {quarter} AND ayah>=0");
             }
             
             // Page
             else if (page >= 1 && page <= PagesCount + 1)
             {
                 if (page == PagesCount + 1) page = 1;
-                sql.Append($"page = {page}");
+                sql.Append($"page = {page} AND ayah>=0");
             }
             #endregion
             #region Otherwise
@@ -327,7 +327,7 @@ namespace QuranKareem
             {
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM parts WHERE ayah_id={ayahId}";
                 reader = command.ExecuteReader();
-                while (reader.Read()) ColoringAyah(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3));
+                while (reader.Read()) Coloring(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), AyahColor);
                 reader.Close();
             }
             fp.Unlock(true);
@@ -373,13 +373,33 @@ namespace QuranKareem
                 }
             }
 
-            if (IsDark)
+            fp = new FastPixel(oPic);
+            fp.Lock();
+            if (IsDark) ReverseColors(0, Width - 1, 0, Height - 1);
+            PageDecorations();
+            fp.Unlock(true);
+        }
+        private void PageDecorations()
+        {
+            quran.Open();
+            command.CommandText = $"SELECT word,min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE (word<=0 OR word>=600) AND page={PageNumber}";
+            reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                fp = new FastPixel(oPic);
-                fp.Lock();
-                ReverseColors(0, Width - 1, 0, Height - 1);
-                fp.Unlock(true);
+                if (reader.GetInt32(0) == 0)
+                {
+                    Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), QuarterStartColor);
+                }
+                else if (reader.GetInt32(0) == 998)
+                {
+                    Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), SajdaColor);
+                }
+                else if (reader.GetInt32(0) == 999)
+                {
+                    Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), AyahEndColor);
+                }
             }
+            reader.Close(); quran.Close();
         }
         #endregion
 
@@ -392,7 +412,7 @@ namespace QuranKareem
             fp.Lock();
             if (WordColor.A != 0)
                 for (int i = 0; i < words[word - 1].Length / 4; i++)
-                    ColoringWord(words[word - 1][i * 4], words[word - 1][i * 4 + 1], words[word - 1][i * 4 + 2], words[word - 1][i * 4 + 3]);
+                    Coloring(words[word - 1][i * 4], words[word - 1][i * 4 + 1], words[word - 1][i * 4 + 2], words[word - 1][i * 4 + 3], WordColor);
             CurrentWord = word;
             fp.Unlock(true);
         }
@@ -441,7 +461,7 @@ namespace QuranKareem
         #endregion
 
         #region Coloring
-        private void ColoringAyah(int x5, int x9, int y5, int y9)
+        private void Coloring(int x5, int x9, int y5, int y9, Color color)
         { // كود التلوين
             try
             {
@@ -453,26 +473,7 @@ namespace QuranKareem
                         if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
                         {
                             if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
-                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, AyahColor.R, AyahColor.G, AyahColor.B));
-                        }
-                    }
-            }
-            catch { }
-        }
-
-        private void ColoringWord(int x5, int x9, int y5, int y9)
-        {
-            try
-            {
-                Color p4;
-                for (int y1 = y5; y1 <= y9; y1++)
-                    for (int x1 = x5; x1 <= x9; x1++)
-                    {
-                        p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 && background != p4)
-                        {
-                            if (!Equal2Color(p4, background, 30) && (textColor == Color.Empty || Equal2Color(p4, textColor, 30)))
-                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, WordColor.R, WordColor.G, WordColor.B));
+                                fp.SetPixel(x1, y1, Color.FromArgb(p4.A, color.R, color.G, color.B));
                         }
                     }
             }
@@ -557,11 +558,12 @@ namespace QuranKareem
                 fp.Lock();
                 for (int j = 0; j < list[i].Length / 4; j++)
                 {
-                    ColoringWord(
+                    Coloring(
                     (list[i][j * 4] - coords[0]) >= 0 ? list[i][j * 4] - coords[0] : 0,
                     (list[i][j * 4 + 1] - coords[0]) < bitmap.Width ? list[i][j * 4 + 1] - coords[0] : bitmap.Width - 1,
                     (list[i][j * 4 + 2] - coords[1]) >= 0 ? list[i][j * 4 + 2] - coords[1] : 0,
-                    (list[i][j * 4 + 3] - coords[1]) < bitmap.Height ? list[i][j * 4 + 3] - coords[1] : bitmap.Height - 1
+                    (list[i][j * 4 + 3] - coords[1]) < bitmap.Height ? list[i][j * 4 + 3] - coords[1] : bitmap.Height - 1,
+                    WordColor
                     );
                 }
                 fp.Unlock(true);

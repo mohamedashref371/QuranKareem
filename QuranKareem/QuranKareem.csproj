@@ -95,7 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="QuranClasses\Coloring.cs" />
+    <Compile Include="Coloring.cs" />
     <Compile Include="NotMyCode\ChatGPTResponses.cs" />
     <Compile Include="NotMyCode\ColorComboBox.cs">
       <SubType>Component</SubType>

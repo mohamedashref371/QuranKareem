@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms;
 using static QuranKareem.Coloring;
@@ -314,7 +313,7 @@ namespace QuranKareem
                         if (others.Contains(pageRichText.Text[i]))
                         {
                             pageRichText.Select(i, 1);
-                            pageRichText.SelectionColor = Color.Green;
+                            pageRichText.SelectionColor = AyahEndColor;
                         }
                     }
                     stream.Position = 0;
