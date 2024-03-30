@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 public class ColorComboBox : ComboBox
 {
@@ -11,7 +12,6 @@ public class ColorComboBox : ComboBox
         List<object> data = typeof(Color).GetProperties()
             .Where(x => x.PropertyType == typeof(Color))
             .Select(x => x.GetValue(null)).ToList();
-        data.RemoveAt(0);
 
         DataSource = data;
 

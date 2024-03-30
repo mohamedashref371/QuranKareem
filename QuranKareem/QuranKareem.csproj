@@ -96,6 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coloring.cs" />
+    <Compile Include="DiscriminatorsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiscriminatorsForm.Designer.cs">
+      <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotMyCode\ChatGPTResponses.cs" />
     <Compile Include="NotMyCode\ColorComboBox.cs">
       <SubType>Component</SubType>
@@ -114,6 +120,9 @@
     <Compile Include="QuranClasses\PictureQuran.cs" />
     <Compile Include="QuranClasses\TafseerQuran.cs" />
     <Compile Include="QuranClasses\TextQuran.cs" />
+    <EmbeddedResource Include="DiscriminatorsForm.resx">
+      <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
