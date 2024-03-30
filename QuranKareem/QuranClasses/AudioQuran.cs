@@ -16,7 +16,7 @@ namespace QuranKareem
         private readonly SQLiteCommand command;
         private SQLiteDataReader reader;
 
-        public static AudioQuran Instance => new AudioQuran();
+        public static readonly AudioQuran Instance = new AudioQuran();
 
         private AudioQuran()
         {

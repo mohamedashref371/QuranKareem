@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.ConstrainedExecution;
 using Guna.UI2.WinForms.Suite;
+using System.Xml.Linq;
 
 namespace QuranKareem
 {
@@ -21,7 +22,7 @@ namespace QuranKareem
         private readonly SQLiteCommand command;
         private SQLiteDataReader reader;
 
-        public static PictureQuran Instance => new PictureQuran();
+        public static readonly PictureQuran Instance = new PictureQuran();
 
         private PictureQuran()
         {
@@ -69,7 +70,7 @@ namespace QuranKareem
         #region Words
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
-        private bool actualWordMode = false;
+        private bool isWordNotEmpty = false;
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
 
@@ -133,7 +134,7 @@ namespace QuranKareem
 
                 command.CommandText = $"SELECT * FROM words LIMIT 1";
                 reader = command.ExecuteReader();
-                actualWordMode = reader.HasRows && WordMode;
+                isWordNotEmpty = reader.HasRows;
             }
             catch { }
             finally
@@ -420,7 +421,7 @@ namespace QuranKareem
             }
             fp.Unlock(true);
 
-            if (actualWordMode && isWordsDiscriminatorEmpty) // ربما يتم الغاءه ان شاء الله
+            if (WordMode && isWordNotEmpty && isWordsDiscriminatorEmpty) // ربما يتم الغاءه ان شاء الله
             {
                 quran.Open();
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y,word FROM words WHERE ayah_id={ayahId} AND word>=1 AND word<=599 ORDER BY word";
@@ -473,7 +474,7 @@ namespace QuranKareem
         private readonly List<int[]> words = new List<int[]>();
         public void WordOf(int word)// سيتم تعديله ان شاء الله
         {
-            if (!actualWordMode || isWordsDiscriminatorEmpty && (word <= 0 || word > words.Count) )
+            if (!WordMode || !isWordNotEmpty || isWordsDiscriminatorEmpty && (word <= 0 || word > words.Count) )
             {
                 WordPicture = AyahPicture;
                 return;
@@ -498,7 +499,7 @@ namespace QuranKareem
             yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
             int word = -1; int tempInt = -371, tempInt2 = 0;
             quran.Open();
-            bool words = actualWordMode;
+            bool words = WordMode && isWordNotEmpty;
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
@@ -558,13 +559,15 @@ namespace QuranKareem
         private void AyahDecorations()
         {
             quran.Open();
-            command.CommandText = $"SELECT discriminator,min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.AyahColors.Keys.ToArray())}) AND ayah_id={ayahId}";
+            command.CommandText = $"SELECT discriminator,min_x,max_x,min_y,max_y FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.AyahColors.Keys.ToArray())}) AND ayah_id={ayahId}";
             reader = command.ExecuteReader();
             Color clr;
             while (reader.Read())
             {
                 clr = Discriminators.AyahColors[reader.GetInt32(0)];
-                Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), clr.Name != "AyahColor" ? clr : AyahColor);
+                clr = clr.Name != "AyahColor" ? clr : AyahColor;
+                if (!clr.IsEmpty)
+                    Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), clr);
             }
             reader.Close(); quran.Close();
         }
@@ -572,13 +575,15 @@ namespace QuranKareem
         private void WordDecorations()
         {
             quran.Open();
-            command.CommandText = $"SELECT discriminator,min_x,max_x,min_y,max_y FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
+            command.CommandText = $"SELECT discriminator,min_x,max_x,min_y,max_y FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
             reader = command.ExecuteReader();
             Color clr;
             while (reader.Read())
             {
                 clr = Discriminators.WordColors[reader.GetInt32(0)];
-                Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), clr.Name != "WordColor" ? clr : WordColor);
+                clr = clr.Name != "WordColor" ? clr : WordColor;
+                if (!clr.IsEmpty)
+                    Coloring(reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), clr);
             }
             reader.Close(); quran.Close();
         }

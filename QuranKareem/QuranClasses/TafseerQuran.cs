@@ -13,7 +13,7 @@ namespace QuranKareem
         private readonly SQLiteCommand command;
         private SQLiteDataReader reader;
 
-        public static TafseerQuran Instance => new TafseerQuran();
+        public static readonly TafseerQuran Instance = new TafseerQuran();
 
         private TafseerQuran()
         {
