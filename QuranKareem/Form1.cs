@@ -202,6 +202,22 @@ namespace QuranKareem
             else if (moshaf.SelectedIndex > 0)
             {
                 quranPicture.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
+                if (!AyahColor.IsEmpty)
+                {
+                    ayahColors.SelectedItem = AyahColor;
+                    ayahColorsCheck.Checked = true;
+                }
+                else
+                    ayahColorsCheck.Checked = false;
+
+                if (!WordColor.IsEmpty)
+                {
+                    wordColors.SelectedItem = WordColor;
+                    wordColorsCheck.Checked = true;
+                }
+                else
+                    wordColorsCheck.Checked = false;
+
                 quranPic.BackgroundImage = quranPicture.AyahPicture;
             }
         }

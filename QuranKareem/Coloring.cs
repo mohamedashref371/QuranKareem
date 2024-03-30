@@ -13,6 +13,16 @@ namespace QuranKareem
         public static Color SajdaColor = Color.DarkMagenta; // 998 // is unused
         public static Color AyahEndColor = Color.DarkGreen; // 999
 
+        public static string GetString(Color clr)
+        {
+            if (clr.IsEmpty)
+                return "Empty";
+            else if (clr.IsKnownColor)
+                return clr.Name;
+            else
+                return $"{clr.R},{clr.G},{clr.B}";
+        }
+
         public static Color GetColor(string s)
         {
             s = s.Replace(" ", "");

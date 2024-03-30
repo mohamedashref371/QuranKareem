@@ -146,10 +146,34 @@ namespace QuranKareem
                 DiscriminatorsReader();
                 GetDiscriminators();
                 PagePicture = new Bitmap(Width, Height);
+                GetInitialColors();
                 Set(sura, aya);
             }
         }
-        
+
+        private void GetInitialColors()
+        {
+            if (!success) return;
+            if (File.Exists(path + "Colors0.txt"))
+            {
+                string[] arr = File.ReadAllText(path + "Colors0.txt").Replace(" ", "").Split('*');
+                AyahColor = GetColor(arr[0]);
+                if (arr.Length > 1) WordColor = GetColor(arr[1]);
+            }
+        }
+
+        public void SetInitialColors()
+        {
+            if (!success) return;
+
+            str.Length = 0;
+            str.Append(GetString(AyahColor));
+            str.Append(" * ");
+            str.Append(GetString(WordColor));
+
+            File.WriteAllText(path + "Colors0.txt", str.ToString());
+        }
+
         private void GetDiscriminators()
         {
             Discriminators.PageColors.Clear();
