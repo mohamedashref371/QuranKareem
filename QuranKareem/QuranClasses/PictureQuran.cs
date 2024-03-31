@@ -6,10 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
 using System.Text;
-using System.Windows.Forms;
-using System.Runtime.ConstrainedExecution;
-using Guna.UI2.WinForms.Suite;
-using System.Xml.Linq;
 
 namespace QuranKareem
 {
@@ -70,7 +66,7 @@ namespace QuranKareem
         #region Words
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
-        private bool isWordNotEmpty = false;
+        private bool isWordTableNotEmpty = false;
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
 
@@ -134,7 +130,7 @@ namespace QuranKareem
 
                 command.CommandText = $"SELECT * FROM words LIMIT 1";
                 reader = command.ExecuteReader();
-                isWordNotEmpty = reader.HasRows;
+                isWordTableNotEmpty = reader.HasRows;
             }
             catch { }
             finally
@@ -421,7 +417,7 @@ namespace QuranKareem
             }
             fp.Unlock(true);
 
-            if (WordMode && isWordNotEmpty && isWordsDiscriminatorEmpty) // ربما يتم الغاءه ان شاء الله
+            if (WordMode && isWordTableNotEmpty && isWordsDiscriminatorEmpty) // ربما يتم الغاءه ان شاء الله
             {
                 quran.Open();
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y,word FROM words WHERE ayah_id={ayahId} AND word>=1 AND word<=599 ORDER BY word";
@@ -474,7 +470,7 @@ namespace QuranKareem
         private readonly List<int[]> words = new List<int[]>();
         public void WordOf(int word)// سيتم تعديله ان شاء الله
         {
-            if (!WordMode || !isWordNotEmpty || isWordsDiscriminatorEmpty && (word <= 0 || word > words.Count) )
+            if (!WordMode || !isWordTableNotEmpty || isWordsDiscriminatorEmpty && (word <= 0 || word > words.Count) )
             {
                 WordPicture = AyahPicture;
                 return;
@@ -499,7 +495,7 @@ namespace QuranKareem
             yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
             int word = -1; int tempInt = -371, tempInt2 = 0;
             quran.Open();
-            bool words = WordMode && isWordNotEmpty;
+            bool words = WordMode && isWordTableNotEmpty;
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
@@ -735,13 +731,5 @@ namespace QuranKareem
             return bitmap;
         }
         #endregion
-
-        private class Discriminators
-        {
-            public static readonly Dictionary<int, string> Descriptions = new Dictionary<int, string>();
-            public static readonly Dictionary<int, Color> PageColors = new Dictionary<int, Color>();
-            public static readonly Dictionary<int, Color> AyahColors = new Dictionary<int, Color>();
-            public static readonly Dictionary<int, Color> WordColors = new Dictionary<int, Color>();
-        }
     }
 }
