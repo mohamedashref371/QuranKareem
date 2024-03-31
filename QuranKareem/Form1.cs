@@ -316,12 +316,6 @@ namespace QuranKareem
             {
                 dark.Text = "Light";
 
-                #region Temporary
-                QuarterStartColor = Color.LightBlue;
-                SajdaColor = Color.LightPink;
-                AyahEndColor = Color.LightGreen;
-                #endregion
-
                 BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
@@ -339,12 +333,6 @@ namespace QuranKareem
             else
             {
                 dark.Text = "Dark";
-
-                #region Temporary
-                QuarterStartColor = Color.DarkBlue;
-                SajdaColor = Color.DarkMagenta;
-                AyahEndColor = Color.DarkGreen;
-                #endregion
 
                 BackColor = SystemColors.Control; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
