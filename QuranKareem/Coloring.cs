@@ -28,7 +28,7 @@ namespace QuranKareem
             s = s.Replace(" ", "");
             //if (s == "AyahColor") return AyahColor;
             //if (s == "WordColor") return WordColor;
-
+            
             if (s.Contains(","))
             {
                 string[] arr = s.Split(',');
@@ -42,7 +42,7 @@ namespace QuranKareem
                     return Color.Empty;
             }
             else if (int.TryParse(s, out int num))
-                return Color.FromArgb(num, num, num);
+                return Color.FromArgb(num);
             else
             {
                 Color clr = Color.FromName(s);

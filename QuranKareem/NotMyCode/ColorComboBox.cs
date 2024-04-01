@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
 
 public class ColorComboBox : ComboBox
 {
@@ -12,7 +12,7 @@ public class ColorComboBox : ComboBox
         List<object> data = typeof(Color).GetProperties()
             .Where(x => x.PropertyType == typeof(Color))
             .Select(x => x.GetValue(null)).ToList();
-
+        data.Add(Color.FromName("Custom..."));
         DataSource = data;
 
         MaxDropDownItems = 10;
@@ -21,6 +21,9 @@ public class ColorComboBox : ComboBox
         DropDownStyle = ComboBoxStyle.DropDownList;
         DrawItem += ColorComboBox_DrawItem;
         FormattingEnabled = true;
+
+        // Handle custom color selection
+        SelectedIndexChanged += ColorComboBox_SelectedIndexChanged;
     }
 
     private void ColorComboBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -28,23 +31,76 @@ public class ColorComboBox : ComboBox
         e.DrawBackground();
         if (e.Index >= 0)
         {
-            var text = GetItemText(Items[e.Index]);
-            var color = (Color)Items[e.Index];
+            var text = GetItemText(Items[e.Index]).Replace(";", ",");
+            if (text == "'Custom...'") // Handle custom item differently
+            {
+                e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+                TextRenderer.DrawText(e.Graphics, "Custom...", Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+            }
+            else
+            {
+                var color = (Color)Items[e.Index];
+                var rectSize = (int)(e.Bounds.Height / 1.5);
+                var rectColor = new Rectangle(e.Bounds.Left + 1, e.Bounds.Top + 1, rectSize, rectSize);
+                var rectText = Rectangle.FromLTRB(rectColor.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
 
-            var rectSize = (int)(e.Bounds.Height / 1.5);
-            var rectColor = new Rectangle(e.Bounds.Left + 1, e.Bounds.Top + 1, rectSize, rectSize);
-            var rectText = Rectangle.FromLTRB(rectColor.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
+                using (var brush = new SolidBrush(color))
+                    e.Graphics.FillRectangle(brush, rectColor);
 
-            using (var brush = new SolidBrush(color))
-                e.Graphics.FillRectangle(brush, rectColor);
-
-            e.Graphics.DrawRectangle(Pens.Black, rectColor);
-            TextRenderer.DrawText(e.Graphics, text, Font, rectText, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                e.Graphics.DrawRectangle(Pens.Black, rectColor);
+                TextRenderer.DrawText(e.Graphics, text, Font, rectText, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+            }
         }
     }
 
-    public Color SelectedColor => SelectedIndex >= 0 ? (Color)SelectedItem : Color.Empty;
+    private void ColorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (SelectedIndex >= 0 && ((Color)SelectedItem).Name == "Custom...")
+        {
+            using (ColorDialog colorDialog = new ColorDialog())
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (Items.Contains(colorDialog.Color))
+                    {
+                        SelectedItem = colorDialog.Color;
+                    }
+                    else
+                    {
+                        // Assuming DataSource is a List<object> or similar
+                        var newData = (List<object>)DataSource;
+                        newData.Insert(Items.Count - 1, colorDialog.Color);
+                        DataSource = null; // Clear the DataSource
+                        DataSource = newData; // Assign the modified data back to DataSource
+                        SelectedIndex = Items.Count - 2;
+                    }
+                }
+            }
+        }
+    }
+
+    public Color SelectedColor
+    {
+        get => SelectedIndex >= 0 && SelectedIndex != Items.Count - 1 ?  (Color)SelectedItem : Color.Empty;
+        set
+        {
+            if (Items.Contains(value))
+            {
+                SelectedItem = value;
+            }
+            else
+            {
+                // Assuming DataSource is a List<object> or similar
+                var newData = (List<object>)DataSource;
+                newData.Insert(Items.Count - 1, value);
+                DataSource = null; // Clear the DataSource
+                DataSource = newData; // Assign the modified data back to DataSource
+                SelectedIndex = Items.Count - 2; // Select "Custom..." item
+            }
+        }
+    }
 }
 
 // https://stackoverflow.com/questions/59007745/show-list-of-colors-in-combobox-color-picker
-// This class was created by ChatGPT 3.5
+// The 'Custom' item and its supplies have been added by ChatGPT-3.5,
+// I added and modified some lines.

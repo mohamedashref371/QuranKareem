@@ -58,8 +58,8 @@ namespace QuranKareem
             Controls.Add(ayahColors); Controls.Add(wordColors);
             ayahColors.SelectedIndexChanged += AyahColors_SelectedIndexChanged;
             wordColors.SelectedIndexChanged += WordColors_SelectedIndexChanged;
-            ayahColors.SelectedItem = AyahColor; // اللون الأحمر
-            wordColors.SelectedItem = WordColor;
+            ayahColors.SelectedColor = AyahColor; // اللون الأحمر
+            wordColors.SelectedColor = WordColor;
             wordModeCheck.Checked = true;
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
@@ -204,7 +204,7 @@ namespace QuranKareem
                 quranPicture.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
                 if (!AyahColor.IsEmpty)
                 {
-                    ayahColors.SelectedItem = AyahColor;
+                    ayahColors.SelectedColor = AyahColor;
                     ayahColorsCheck.Checked = true;
                 }
                 else
@@ -212,7 +212,7 @@ namespace QuranKareem
 
                 if (!WordColor.IsEmpty)
                 {
-                    wordColors.SelectedItem = WordColor;
+                    wordColors.SelectedColor = WordColor;
                     wordColorsCheck.Checked = true;
                 }
                 else
@@ -686,7 +686,7 @@ namespace QuranKareem
             if (ayahColorsCheck.Checked)
             {
                 ayahColors.Enabled = true;
-                AyahColor = (Color)ayahColors.SelectedItem;
+                AyahColor = ayahColors.SelectedColor;
             }
             else
             {
@@ -700,7 +700,7 @@ namespace QuranKareem
             if (wordColorsCheck.Checked)
             {
                 wordColors.Enabled = true;
-                WordColor = (Color)wordColors.SelectedItem;
+                WordColor = wordColors.SelectedColor;
             }
             else
             {
@@ -709,9 +709,9 @@ namespace QuranKareem
             }
         }
 
-        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = (Color)ayahColors.SelectedItem;
+        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = ayahColors.SelectedColor;
 
-        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = (Color)wordColors.SelectedItem;
+        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = wordColors.SelectedColor;
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه

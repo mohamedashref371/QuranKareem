@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-class ChatGPTResponses // GPT-3.5
+class AssemblyResolve // ChatGPT-3.5
 {
     public static void AssemblyResolveEventHandler() => AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
     public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
