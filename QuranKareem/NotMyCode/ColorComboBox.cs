@@ -14,7 +14,7 @@ public class ColorComboBox : ComboBox
             .Select(x => x.GetValue(null)).ToList();
         data.Add(Color.FromName("Custom..."));
         DataSource = data;
-
+        
         MaxDropDownItems = 10;
         IntegralHeight = false;
         DrawMode = DrawMode.OwnerDrawFixed;
@@ -33,8 +33,8 @@ public class ColorComboBox : ComboBox
         {
             //var text = GetItemText(Items[e.Index]).Replace(";", ",");
             var text = ((Color)Items[e.Index]).Name;
-            if (text == "0") text = "Empty Color";
-            if (text == "Custom..." || text == "Empty Color") // Handle custom item differently
+            if (text == "0") text = "EmptyColor";
+            if (text == "Custom..." || text == "EmptyColor") // Handle custom item differently
             {
                 e.Graphics.FillRectangle(Brushes.White, e.Bounds);
                 TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
@@ -87,11 +87,12 @@ public class ColorComboBox : ComboBox
         get => SelectedIndex >= 0 && SelectedIndex != Items.Count - 1 ?  (Color)SelectedItem : Color.Empty;
         set
         {
-            if (Items.Contains(value))
+            int index = Items.IndexOf(value);
+            if (index >= 0 && index != Items.Count - 1)
             {
                 SelectedItem = value;
             }
-            else
+            else if (Items.Count != 0)
             {
                 // Assuming DataSource is a List<object> or similar
                 var newData = (List<object>)DataSource;
