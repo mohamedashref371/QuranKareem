@@ -31,11 +31,13 @@ public class ColorComboBox : ComboBox
         e.DrawBackground();
         if (e.Index >= 0)
         {
-            var text = GetItemText(Items[e.Index]).Replace(";", ",");
-            if (text == "'Custom...'") // Handle custom item differently
+            //var text = GetItemText(Items[e.Index]).Replace(";", ",");
+            var text = ((Color)Items[e.Index]).Name;
+            if (text == "0") text = "Empty Color";
+            if (text == "Custom..." || text == "Empty Color") // Handle custom item differently
             {
                 e.Graphics.FillRectangle(Brushes.White, e.Bounds);
-                TextRenderer.DrawText(e.Graphics, "Custom...", Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
             else
             {
@@ -57,24 +59,25 @@ public class ColorComboBox : ComboBox
     {
         if (SelectedIndex >= 0 && ((Color)SelectedItem).Name == "Custom...")
         {
-            using (ColorDialog colorDialog = new ColorDialog())
+            Color clr;
+            ColorDialog colorDialog = new ColorDialog();
+            var result = colorDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+                clr = colorDialog.Color;
+            else
+                clr = Color.Empty;
+
+            if (Items.Contains(clr))
+                SelectedItem = clr;
+            else
             {
-                if (colorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (Items.Contains(colorDialog.Color))
-                    {
-                        SelectedItem = colorDialog.Color;
-                    }
-                    else
-                    {
-                        // Assuming DataSource is a List<object> or similar
-                        var newData = (List<object>)DataSource;
-                        newData.Insert(Items.Count - 1, colorDialog.Color);
-                        DataSource = null; // Clear the DataSource
-                        DataSource = newData; // Assign the modified data back to DataSource
-                        SelectedIndex = Items.Count - 2;
-                    }
-                }
+                // Assuming DataSource is a List<object> or similar
+                var newData = (List<object>)DataSource;
+                newData.Insert(Items.Count - 1, clr);
+                DataSource = null; // Clear the DataSource
+                DataSource = newData; // Assign the modified data back to DataSource
+                SelectedIndex = Items.Count - 2;
             }
         }
     }
