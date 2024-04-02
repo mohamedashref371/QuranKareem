@@ -9,6 +9,7 @@ namespace QuranKareem
         public readonly int Id;
         private readonly CheckBox lightPageCheck, lightAyahCheck, lightWordCheck, nightPageCheck, nightAyahCheck, nightWordCheck;
         private readonly ColorComboBox lightPageColorComboBox, lightAyahColorComboBox, lightWordColorComboBox, nightPageColorComboBox, nightAyahColorComboBox, nightWordColorComboBox;
+        public static readonly Size ControlSize = new Size(800, 260);
 
         #region properties
         public Color LightPageColor
@@ -102,7 +103,7 @@ namespace QuranKareem
         public DiscriminatorControl(int id, string s)
         {
             Id = id;
-            ClientSize = new Size(800, 260);
+            ClientSize = ControlSize;
 
             #region Labels
             Label word = new Label()

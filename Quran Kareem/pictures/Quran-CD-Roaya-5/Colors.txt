@@ -1,1 +1,1 @@
-1|0|0|White * 0|0|8|Blue * 1|0|8|Cyan * 2|0|1|Red * 2|0|10|Magenta * 0|0|11|Green * 1|0|11|Lime * 2|1|0|AyahColor  * 0|1|1|DarkRed * 1|1|1|OrangeRed  * 2|2|0|WordColor * 2|2|1|WordColor
+0|1|0|White * 8|0|0|Blue * 8|1|0|Cyan * 1|2|0|Red * 10|2|0|Magenta * 11|0|0|Green * 11|1|0|Lime * 0|2|1|AyahColor  * 1|0|1|DarkRed * 1|1|1|OrangeRed  * 0|2|2|WordColor * 1|2|2|WordColor

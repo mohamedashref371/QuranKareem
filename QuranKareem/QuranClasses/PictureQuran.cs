@@ -183,7 +183,7 @@ namespace QuranKareem
                 for (int i = 0; i < arr.Length; i++)
                 {
                     childs = arr[i].Split('|');
-                    if (childs.Length == 4 && (childs[0] == "0" && !IsDark || childs[0] == "1" && IsDark || childs[0] == "2") && int.TryParse(childs[1], out int condition) && int.TryParse(childs[2], out int key) && Discriminators.Descriptions.ContainsKey(key))
+                    if (childs.Length == 4 && (childs[1] == "0" && !IsDark || childs[1] == "1" && IsDark || childs[1] == "2") && int.TryParse(childs[2], out int condition) && int.TryParse(childs[0], out int key) && Discriminators.Descriptions.ContainsKey(key))
                     {
                         Color clr = GetColor(childs[3]);
                         if (!clr.IsEmpty)

@@ -127,5 +127,5 @@ public class FastPixel
     }
 }
 
-// https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP
+// from https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP
 // This code was converted from VB.net to C# by ChatGPT 3.5

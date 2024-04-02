@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-class AssemblyResolve // ChatGPT-3.5
+class AssemblyResolve // ChatGPT-3.5 Coding
 {
     public static void AssemblyResolveEventHandler() => AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
     public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -22,5 +22,4 @@ class AssemblyResolve // ChatGPT-3.5
         // Return null if the DLL is not found
         return null;
     }
-
 }

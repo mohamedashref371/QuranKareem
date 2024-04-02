@@ -95,21 +95,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coloring.cs" />
-    <Compile Include="DiscriminatorControl.cs">
+    <Compile Include="Colors\Coloring.cs" />
+    <Compile Include="Colors\Discriminator.cs" />
+    <Compile Include="Colors\DiscriminatorControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DiscriminatorsForm.cs">
+    <Compile Include="Colors\DiscriminatorsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DiscriminatorsForm.Designer.cs">
+    <Compile Include="Colors\DiscriminatorsForm.Designer.cs">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NotMyCode\AssemblyResolve.cs" />
-    <Compile Include="NotMyCode\ColorComboBox.cs">
+    <Compile Include="AssemblyResolve.cs" />
+    <Compile Include="Colors\ColorComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="NotMyCode\FastPixel.cs" />
+    <Compile Include="FastPixel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,7 +125,7 @@
     <Compile Include="QuranClasses\PictureQuran.cs" />
     <Compile Include="QuranClasses\TafseerQuran.cs" />
     <Compile Include="QuranClasses\TextQuran.cs" />
-    <EmbeddedResource Include="DiscriminatorsForm.resx">
+    <EmbeddedResource Include="Colors\DiscriminatorsForm.resx">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
