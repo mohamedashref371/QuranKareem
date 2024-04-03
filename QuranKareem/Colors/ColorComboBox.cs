@@ -38,7 +38,7 @@ public class ColorComboBox : ComboBox
             if (text == "0") text = "EmptyColor";
             if (text == "Custom..." || text == "EmptyColor") // Handle custom item differently
             {
-                e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+                e.Graphics.FillRectangle(Brushes.Transparent, e.Bounds);
                 TextRenderer.DrawText(e.Graphics, text, Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
             else
