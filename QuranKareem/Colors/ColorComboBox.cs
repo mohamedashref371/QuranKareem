@@ -44,7 +44,7 @@ public class ColorComboBox : ComboBox
             else
             {
                 var color = (Color)Items[e.Index];
-                var rectSize = (int)(e.Bounds.Height / 1.5);
+                var rectSize = (int)(e.Bounds.Height / 1.3);
                 var rectColor = new Rectangle(e.Bounds.Left + 1, e.Bounds.Top + 1, rectSize, rectSize);
                 var rectText = Rectangle.FromLTRB(rectColor.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
 
