@@ -33,8 +33,8 @@ public class ColorComboBox : ComboBox
         e.DrawBackground();
         if (e.Index >= 0)
         {
-            //var text = GetItemText(Items[e.Index]).Replace(";", ",");
-            var text = ((Color)Items[e.Index]).Name;
+            //string text = GetItemText(Items[e.Index]).Replace(";", ",");
+            string text = ((Color)Items[e.Index]).Name;
             if (text == "0") text = "EmptyColor";
             if (text == "Custom..." || text == "EmptyColor") // Handle custom item differently
             {
@@ -43,10 +43,10 @@ public class ColorComboBox : ComboBox
             }
             else
             {
-                var color = (Color)Items[e.Index];
-                var rectSize = (int)(e.Bounds.Height / 1.3);
+                Color color = (Color)Items[e.Index];
+                int rectSize = (int)(e.Bounds.Height / 1.3);
                 var rectColor = new Rectangle(e.Bounds.Left + 1, e.Bounds.Top + 1, rectSize, rectSize);
-                var rectText = Rectangle.FromLTRB(rectColor.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
+                Rectangle rectText = Rectangle.FromLTRB(rectColor.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
 
                 using (var brush = new SolidBrush(color))
                     e.Graphics.FillRectangle(brush, rectColor);
@@ -63,7 +63,7 @@ public class ColorComboBox : ComboBox
         {
             Color clr;
             ColorDialog colorDialog = new ColorDialog();
-            var result = colorDialog.ShowDialog();
+            DialogResult result = colorDialog.ShowDialog();
 
             if (result == DialogResult.OK)
                 clr = colorDialog.Color;
