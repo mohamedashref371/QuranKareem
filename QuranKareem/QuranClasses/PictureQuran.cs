@@ -168,7 +168,7 @@ namespace QuranKareem
 
             str.Length = 0;
             str.Append(GetString(AyahColor));
-            str.Append(" * ");
+            str.Append("*");
             str.Append(GetString(WordColor));
 
             File.WriteAllText(path + "Colors0.txt", str.ToString());

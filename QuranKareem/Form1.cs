@@ -202,6 +202,7 @@ namespace QuranKareem
             }
             else if (moshaf.SelectedIndex > 0)
             {
+                quranPicture.SetInitialColors();
                 quranPicture.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value);
                 if (!AyahColor.IsEmpty)
                 {
@@ -230,7 +231,10 @@ namespace QuranKareem
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
             if (!textMode && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
+            {
                 File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
+                quranPicture.SetInitialColors();
+            }
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
             File.WriteAllText(save + "TafseerCurrent", tafseer);
             File.WriteAllText(save + "Volume", volume.Value + "");
@@ -713,8 +717,14 @@ namespace QuranKareem
         private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = ayahColors.SelectedColor;
 
         private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = wordColors.SelectedColor;
-        
-        
+
+        private void Discri_Click(object sender, EventArgs e)
+        {
+            DiscriminatorsForm f = new DiscriminatorsForm(quranPicture.WordsDiscriminators);
+            f.ShowDialog();
+            quranPicture.SetDiscriminators();
+            quranPicture.ActiveDiscriminators();
+        }
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه
@@ -1035,14 +1045,6 @@ namespace QuranKareem
 
         }
         #endregion
-
-        private void Discri_Click(object sender, EventArgs e)
-        {
-            DiscriminatorsForm f = new DiscriminatorsForm(quranPicture.WordsDiscriminators);
-            f.ShowDialog();
-            quranPicture.SetDiscriminators();
-            quranPicture.ActiveDiscriminators();
-        }
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
