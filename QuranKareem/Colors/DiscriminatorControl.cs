@@ -9,7 +9,7 @@ namespace QuranKareem
         public readonly int Id;
         private readonly CheckBox lightPageCheck, lightAyahCheck, lightWordCheck, nightPageCheck, nightAyahCheck, nightWordCheck;
         private readonly ColorComboBox lightPageColorComboBox, lightAyahColorComboBox, lightWordColorComboBox, nightPageColorComboBox, nightAyahColorComboBox, nightWordColorComboBox;
-        public static readonly Size ControlSize = new Size(800, 260);
+        public static readonly Size ControlSize = new Size(771 /*800-17-12*/, 260);
 
         #region properties
         public Color LightPageColor
@@ -313,6 +313,17 @@ namespace QuranKareem
             Controls.Add(nightWordCheck);
             #endregion
 
+            #region Add Special Color
+            lightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
+            lightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
+            nightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
+            nightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
+
+            lightAyahColorComboBox.SelectedColor = Color.Transparent;
+            lightWordColorComboBox.SelectedColor = Color.Transparent;
+            nightAyahColorComboBox.SelectedColor = Color.Transparent;
+            nightWordColorComboBox.SelectedColor = Color.Transparent;
+            #endregion
         }
 
         private void CheckBoxes_CheckedChanged(object sender, EventArgs e)

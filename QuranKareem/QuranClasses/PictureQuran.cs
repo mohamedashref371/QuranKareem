@@ -70,6 +70,8 @@ namespace QuranKareem
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
 
+        public readonly List<Discriminator> WordsDiscriminators = new List<Discriminator>();
+
         public bool IsDark { get; private set; } = false;
         public void ChangeDark()
         {
@@ -78,7 +80,7 @@ namespace QuranKareem
             PageNumber = 0;
             if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
             if (!textColor.IsEmpty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
-            GetDiscriminators();
+            ActiveDiscriminators();
             Set();
         }
 
@@ -142,6 +144,7 @@ namespace QuranKareem
             {
                 DiscriminatorsReader();
                 GetDiscriminators();
+                ActiveDiscriminators();
                 PagePicture = new Bitmap(Width, Height);
                 GetInitialColors();
                 Set(sura, aya);
@@ -173,29 +176,30 @@ namespace QuranKareem
 
         private void GetDiscriminators()
         {
+            if (File.Exists(path + "Colors.txt"))
+                Discriminator.GetDiscriminators(WordsDiscriminators, File.ReadAllText(path + "Colors.txt"));
+        }
+
+        public void SetDiscriminators()
+        {
+            File.WriteAllText(path + "Colors.txt", Discriminator.GetText(WordsDiscriminators));
+        }
+
+        public void ActiveDiscriminators()
+        {
             Discriminators.PageColors.Clear();
             Discriminators.AyahColors.Clear();
             Discriminators.WordColors.Clear();
-            if (File.Exists(path + "Colors.txt"))
+            foreach (var d in WordsDiscriminators)
             {
-                string[] arr = File.ReadAllText(path + "Colors.txt").Replace(" ","").Split('*');
-                string[] childs;
-                for (int i = 0; i < arr.Length; i++)
+                if ((d.Lighting == 0 && !IsDark || d.Lighting == 1 && IsDark || d.Lighting == 2) && !d.Color.IsEmpty)
                 {
-                    childs = arr[i].Split('|');
-                    if (childs.Length == 4 && (childs[1] == "0" && !IsDark || childs[1] == "1" && IsDark || childs[1] == "2") && int.TryParse(childs[2], out int condition) && int.TryParse(childs[0], out int key) && Discriminators.Descriptions.ContainsKey(key))
-                    {
-                        Color clr = GetColor(childs[3]);
-                        if (!clr.IsEmpty)
-                        {
-                            if (condition == 0)
-                                Discriminators.PageColors[key] = clr;
-                            else if (condition == 1)
-                                Discriminators.AyahColors[key] = clr;
-                            else if (condition == 2)
-                                Discriminators.WordColors[key] = clr;
-                        }
-                    }
+                    if (d.Condition == 0)
+                        Discriminators.PageColors[d.Id] = d.Color;
+                    else if (d.Condition == 1)
+                        Discriminators.AyahColors[d.Id] = d.Color;
+                    else if (d.Condition == 2)
+                        Discriminators.WordColors[d.Id] = d.Color;
                 }
             }
             isWordsDiscriminatorEmpty = Discriminators.WordColors.Count == 0;

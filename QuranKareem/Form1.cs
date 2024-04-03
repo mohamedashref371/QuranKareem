@@ -92,6 +92,7 @@ namespace QuranKareem
                 quranText.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranText.AddEventHandler(PageRichText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
+                discri.Visible = false;
             }
 
             else
@@ -712,6 +713,8 @@ namespace QuranKareem
         private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = ayahColors.SelectedColor;
 
         private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = wordColors.SelectedColor;
+        
+        
         #endregion
 
         #region نسخ القرآن وتفسيره والبحث فيه
@@ -1032,6 +1035,14 @@ namespace QuranKareem
 
         }
         #endregion
+
+        private void Discri_Click(object sender, EventArgs e)
+        {
+            DiscriminatorsForm f = new DiscriminatorsForm(quranPicture.WordsDiscriminators);
+            f.ShowDialog();
+            quranPicture.SetDiscriminators();
+            quranPicture.ActiveDiscriminators();
+        }
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 

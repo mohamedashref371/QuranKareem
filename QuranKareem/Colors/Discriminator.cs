@@ -5,27 +5,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuranKareem
 {
-    internal class Discriminator
+    public class Discriminator
     {
         public int Id;
-        public int Light_Night_Both;
-        public int Page_Ayah_Word;
+        public int Lighting; // Light=0, Night=1, Both=2
+        public int Condition; // Page=0, Ayah=1, Word=2
         public Color Color;
 
         public Discriminator(int id, int light, int cond, Color color)
         {
             Id = id;
-            Light_Night_Both = light;
-            Page_Ayah_Word = cond;
+            Lighting = light;
+            Condition = cond;
             Color = color;
         }
 
-        public static Discriminator[] GetDiscriminators(string s)
+        public static void GetDiscriminators(List<Discriminator> list, string s)
         {
-            var list = new List<Discriminator>();
+            list.Clear();
             string[] arr = s.Replace(" ", "").Split('*');
             string[] childs;
             for (int i = 0; i < arr.Length; i++)
@@ -38,20 +39,19 @@ namespace QuranKareem
                         list.Add(new Discriminator(id, lighting, condition, clr));
                 }
             }
-            return list.ToArray();
         }
 
-        public static string GetText(Discriminator[] dis)
+        public static string GetText(List<Discriminator> list)
         {
             StringBuilder sb = new StringBuilder();
             string s;
-            for (int i = 0; i < dis?.Length; i++)
+            for (int i = 0; i < list?.Count; i++)
             {
-                s = dis[i].ToString();
+                s = list[i].ToString();
                 if (s != "")
                 {
                     sb.Append(s);
-                    if (i < dis.Length - 1) sb.Append("*");
+                    if (i < list.Count - 1) sb.Append("*");
                 }
             }
             return sb.ToString();
@@ -59,7 +59,7 @@ namespace QuranKareem
 
         public override string ToString()
         {
-            return !Color.IsEmpty ? $"{Id}|{Light_Night_Both}|{Page_Ayah_Word}|{Coloring.GetString(Color, true)}" : "";
+            return !Color.IsEmpty ? $"{Id}|{Lighting}|{Condition}|{Coloring.GetString(Color, true)}" : "";
         }
     }
 }

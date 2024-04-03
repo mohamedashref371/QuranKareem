@@ -103,6 +103,7 @@
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
             this.wordColorsCheck = new System.Windows.Forms.CheckBox();
             this.moshaf = new System.Windows.Forms.ComboBox();
+            this.discri = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -1089,13 +1090,23 @@
             this.moshaf.TabIndex = 85;
             this.moshaf.SelectedIndexChanged += new System.EventHandler(this.Moshaf_SelectedIndexChanged);
             // 
+            // discri
+            // 
+            this.discri.Location = new System.Drawing.Point(0, 500);
+            this.discri.Name = "discri";
+            this.discri.Size = new System.Drawing.Size(16, 16);
+            this.discri.TabIndex = 86;
+            this.discri.UseVisualStyleBackColor = true;
+            this.discri.Click += new System.EventHandler(this.Discri_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
-            this.Controls.Add(this.moshaf);
             this.Controls.Add(this.searchList);
+            this.Controls.Add(this.discri);
+            this.Controls.Add(this.moshaf);
             this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.wordModeCheck);
@@ -1260,6 +1271,7 @@
         private Guna.UI2.WinForms.Guna2Button pageZoom;
         private System.Windows.Forms.CheckBox wordColorsCheck;
         private System.Windows.Forms.ComboBox moshaf;
+        private System.Windows.Forms.Button discri;
     }
 }
 

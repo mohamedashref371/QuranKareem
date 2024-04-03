@@ -13,7 +13,7 @@ public class ColorComboBox : ComboBox
             .Where(x => x.PropertyType == typeof(Color))
             .Select(x => x.GetValue(null)).ToList();
         data.Add(Color.FromName("Custom..."));
-        DataSource = data;
+        Items.AddRange(data.ToArray());
         
         MaxDropDownItems = 10;
         IntegralHeight = false;
@@ -24,6 +24,8 @@ public class ColorComboBox : ComboBox
 
         // Handle custom color selection
         SelectedIndexChanged += ColorComboBox_SelectedIndexChanged;
+
+        SelectedIndex = 0;
     }
 
     private void ColorComboBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -72,11 +74,7 @@ public class ColorComboBox : ComboBox
                 SelectedItem = clr;
             else
             {
-                // Assuming DataSource is a List<object> or similar
-                var newData = (List<object>)DataSource;
-                newData.Insert(Items.Count - 1, clr);
-                DataSource = null; // Clear the DataSource
-                DataSource = newData; // Assign the modified data back to DataSource
+                Items.Insert(Items.Count - 1, clr);
                 SelectedIndex = Items.Count - 2;
             }
         }
@@ -94,17 +92,12 @@ public class ColorComboBox : ComboBox
             }
             else if (Items.Count != 0)
             {
-                // Assuming DataSource is a List<object> or similar
-                var newData = (List<object>)DataSource;
-                newData.Insert(Items.Count - 1, value);
-                DataSource = null; // Clear the DataSource
-                DataSource = newData; // Assign the modified data back to DataSource
-                SelectedIndex = Items.Count - 2; // Select "Custom..." item
+                Items.Insert(Items.Count - 1, value);
+                SelectedIndex = Items.Count - 2;
             }
         }
     }
 }
 
-// https://stackoverflow.com/questions/59007745/show-list-of-colors-in-combobox-color-picker
-// The 'Custom' item and its supplies have been added by ChatGPT-3.5,
-// I added and modified some lines.
+// Thanks https://stackoverflow.com/questions/59007745/show-list-of-colors-in-combobox-color-picker
+// and ChatGPT-3.5 for helping me set up this control.
