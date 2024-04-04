@@ -324,7 +324,7 @@ namespace QuranKareem
                 BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
-                quranPicture.ChangeDark();
+                quranPicture.DarkMode = true;
                 quranText.ChangeDark();
                 panel.BackColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
@@ -342,7 +342,7 @@ namespace QuranKareem
                 BackColor = SystemColors.Control; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
-                quranPicture.ChangeDark();
+                quranPicture.DarkMode = false;
                 quranText.ChangeDark();
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)

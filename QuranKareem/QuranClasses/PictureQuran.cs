@@ -13,6 +13,7 @@ namespace QuranKareem
     {
         #region Create The Class
         private bool success = false;
+        private string path;
 
         private readonly SQLiteConnection quran;
         private readonly SQLiteCommand command;
@@ -54,8 +55,6 @@ namespace QuranKareem
         public string Comment { get; private set; }
         #endregion
 
-        private string path;
-
         #region Bitmaps
         private Bitmap PagePicture { get; set; }
         public Bitmap AyahPicture { get; private set; }
@@ -71,18 +70,24 @@ namespace QuranKareem
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
 
-        public readonly List<Discriminator> WordsDiscriminators = new List<Discriminator>();
+        private readonly StringBuilder str = new StringBuilder();
 
-        public bool IsDark { get; private set; } = false;
-        public void ChangeDark()
+        private bool darkMode = false;
+        public bool DarkMode
         {
-            if (!success) return;
-            IsDark = !IsDark;
-            PageNumber = 0;
-            if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
-            if (!textColor.IsEmpty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
-            ActiveDiscriminators();
-            Set();
+            get => darkMode;
+            set
+            {
+                if (success && value != darkMode)
+                {
+                    darkMode = value;
+                    PageNumber = 0;
+                    if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
+                    if (!textColor.IsEmpty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
+                    ActiveDiscriminators();
+                    Set();
+                }
+            }
         }
 
         // الدالة البداية
@@ -152,74 +157,6 @@ namespace QuranKareem
             }
         }
 
-        private void GetInitialColors()
-        {
-            if (!success) return;
-            if (File.Exists(path + "Colors0.txt"))
-            {
-                string[] arr = File.ReadAllText(path + "Colors0.txt").Replace(" ", "").Split('*');
-                AyahColor = GetColor(arr[0]);
-                if (arr.Length > 1) WordColor = GetColor(arr[1]);
-            }
-        }
-
-        public void SetInitialColors()
-        {
-            if (!success) return;
-
-            str.Length = 0;
-            str.Append(GetString(AyahColor));
-            str.Append("*");
-            str.Append(GetString(WordColor));
-
-            File.WriteAllText(path + "Colors0.txt", str.ToString());
-        }
-
-        private void GetDiscriminators()
-        {
-            if (File.Exists(path + "Colors.txt"))
-                Discriminator.GetDiscriminators(WordsDiscriminators, File.ReadAllText(path + "Colors.txt"));
-        }
-
-        public void SetDiscriminators()
-        {
-            File.WriteAllText(path + "Colors.txt", Discriminator.GetText(WordsDiscriminators));
-        }
-
-        public void ActiveDiscriminators()
-        {
-            Discriminators.PageColors.Clear();
-            Discriminators.AyahColors.Clear();
-            Discriminators.WordColors.Clear();
-            foreach (var d in WordsDiscriminators)
-            {
-                if ((d.Lighting == 0 && !IsDark || d.Lighting == 1 && IsDark || d.Lighting == 2) && !d.Color.IsEmpty)
-                {
-                    if (d.Condition == 0)
-                        Discriminators.PageColors[d.Id] = d.Color;
-                    else if (d.Condition == 1)
-                        Discriminators.AyahColors[d.Id] = d.Color;
-                    else if (d.Condition == 2)
-                        Discriminators.WordColors[d.Id] = d.Color;
-                }
-            }
-            isWordsDiscriminatorEmpty = Discriminators.WordColors.Count == 0;
-        }
-
-        private void DiscriminatorsReader()
-        {
-            Discriminators.Descriptions.Clear();
-            quran.Open();
-            command.CommandText = $"SELECT id,comment FROM discriminators WHERE enabled=1";
-            reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                Discriminators.Descriptions.Add(reader.GetInt32(0), reader.GetString(1));
-            }
-            reader.Close(); quran.Close();
-        }
-
         #region التنقلات في المصحف
         public string[] GetSurahNames()
         {
@@ -239,7 +176,6 @@ namespace QuranKareem
             return names;
         }
 
-        private readonly StringBuilder str = new StringBuilder();
         #region Set Ayah Method
         /// <summary>
         /// Implementation Priority:<br/>
@@ -416,7 +352,6 @@ namespace QuranKareem
                 reader.Close(); quran.Close();
             }
         }
-        private readonly List<int> ints = new List<int>();
 
         private void PictureAt(int page) // Part Of Ayah Function // الصورة الحالية
         {
@@ -438,9 +373,9 @@ namespace QuranKareem
                 }
             }
 
-            if (Discriminators.PageColors.Count > 0)
+            if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
-            else if (IsDark && isWordTableEmpty)
+            else if (darkMode && isWordTableEmpty)
                 ReverseColors(0, Width - 1, 0, Height - 1);
         }
         #endregion
@@ -582,52 +517,6 @@ namespace QuranKareem
         }
         #endregion
 
-        #region Coloring
-        private void Coloring(int x5, int x9, int y5, int y9, Color color)
-        { // كود التلوين
-            try
-            {
-                Color p4;
-                for (int y1 = y5; y1 <= y9; y1++)
-                    for (int x1 = x5; x1 <= x9; x1++)
-                    {
-                        p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
-                        {
-                            if (!Equal2Color(p4, background, 30) && (textColor.IsEmpty || Equal2Color(p4, textColor, 30)))
-                                fp.SetPixel(x1, y1, Color.FromArgb(color.A != 0 ? p4.A : 0, color.R, color.G, color.B));
-                        }
-                    }
-            }
-            catch { }
-        }
-
-        private void ReverseColors(int x5, int x9, int y5, int y9)
-        {
-            try
-            {
-                fp = new FastPixel(PagePicture);
-                fp.Lock();
-
-                Color p4;
-                for (int y1 = y5; y1 <= y9; y1++)
-                    for (int x1 = x5; x1 <= x9; x1++)
-                    {
-                        p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
-                    }
-
-                fp.Unlock(true);
-            }
-            catch { }
-        }
-
-        private bool Equal2Color(Color clr1, Color clr2, int delta = 0)
-        {
-            return clr1.A == 255 && clr2.A == 255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
-        }
-        #endregion
-
         #region lines images
         public List<Bitmap> GetLines()
         {
@@ -645,6 +534,7 @@ namespace QuranKareem
             return bitmaps;
         }
 
+        private readonly List<int> ints = new List<int>();
         public List<Bitmap> GetLineWithWordsMarks(int line)
         {
             var coords = new int[2];
@@ -733,5 +623,125 @@ namespace QuranKareem
             return bitmap;
         }
         #endregion
+
+        #region Colors
+        private void GetInitialColors()
+        {
+            if (!success) return;
+            if (File.Exists(path + "Colors0.txt"))
+            {
+                string[] arr = File.ReadAllText(path + "Colors0.txt").Replace(" ", "").Split('*');
+                AyahColor = GetColor(arr[0]);
+                if (arr.Length > 1) WordColor = GetColor(arr[1]);
+                else WordColor = Color.Empty;
+            }
+        }
+
+        public void SetInitialColors()
+        {
+            if (!success) return;
+
+            str.Length = 0;
+            str.Append(GetString(AyahColor));
+            str.Append("*");
+            str.Append(GetString(WordColor));
+
+            File.WriteAllText(path + "Colors0.txt", str.ToString());
+        }
+
+        public readonly List<Discriminator> WordsDiscriminators = new List<Discriminator>();
+
+        private void GetDiscriminators()
+        {
+            if (File.Exists(path + "Colors.txt"))
+                Discriminator.GetDiscriminators(WordsDiscriminators, File.ReadAllText(path + "Colors.txt"));
+        }
+
+        public void SetDiscriminators()
+        {
+            File.WriteAllText(path + "Colors.txt", Discriminator.GetText(WordsDiscriminators));
+        }
+
+        public void ActiveDiscriminators()
+        {
+            Discriminators.PageColors.Clear();
+            Discriminators.AyahColors.Clear();
+            Discriminators.WordColors.Clear();
+            foreach (var d in WordsDiscriminators)
+            {
+                if ((d.Lighting == 0 && !darkMode || d.Lighting == 1 && darkMode || d.Lighting == 2) && !d.Color.IsEmpty)
+                {
+                    if (d.Condition == 0)
+                        Discriminators.PageColors[d.Id] = d.Color;
+                    else if (d.Condition == 1)
+                        Discriminators.AyahColors[d.Id] = d.Color;
+                    else if (d.Condition == 2)
+                        Discriminators.WordColors[d.Id] = d.Color;
+                }
+            }
+            isWordsDiscriminatorEmpty = Discriminators.WordColors.Count == 0;
+        }
+
+        private void DiscriminatorsReader()
+        {
+            Discriminators.Descriptions.Clear();
+            quran.Open();
+            command.CommandText = $"SELECT id,comment FROM discriminators WHERE enabled=1";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Discriminators.Descriptions.Add(reader.GetInt32(0), reader.GetString(1));
+            }
+            reader.Close(); quran.Close();
+        }
+        #endregion
+
+        #region Coloring
+        private void Coloring(int x5, int x9, int y5, int y9, Color color)
+        { // كود التلوين
+            try
+            {
+                Color p4;
+                for (int y1 = y5; y1 <= y9; y1++)
+                    for (int x1 = x5; x1 <= x9; x1++)
+                    {
+                        p4 = fp.GetPixel(x1, y1);
+                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
+                        {
+                            if (!Equal2Color(p4, background, 30) && (textColor.IsEmpty || Equal2Color(p4, textColor, 30)))
+                                fp.SetPixel(x1, y1, Color.FromArgb(color.A != 0 ? p4.A : 0, color.R, color.G, color.B));
+                        }
+                    }
+            }
+            catch { }
+        }
+
+        private void ReverseColors(int x5, int x9, int y5, int y9)
+        {
+            try
+            {
+                fp = new FastPixel(PagePicture);
+                fp.Lock();
+
+                Color p4;
+                for (int y1 = y5; y1 <= y9; y1++)
+                    for (int x1 = x5; x1 <= x9; x1++)
+                    {
+                        p4 = fp.GetPixel(x1, y1);
+                        if (p4.A != 0) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
+                    }
+
+                fp.Unlock(true);
+            }
+            catch { }
+        }
+
+        private bool Equal2Color(Color clr1, Color clr2, int delta = 0)
+        {
+            return clr1.A == 255 && clr2.A == 255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
+        }
+        #endregion
+
     }
 }
