@@ -548,7 +548,11 @@ namespace QuranKareem
             reader = command.ExecuteReader();
 
             int a,w; ints.Clear();
-            if (!reader.Read()) return bitmaps;
+            if (!reader.Read())
+            {
+                reader.Close(); quran.Close();
+                return bitmaps;
+            }
             a = reader.GetInt32(4);
             w = reader.GetInt32(5);
 
