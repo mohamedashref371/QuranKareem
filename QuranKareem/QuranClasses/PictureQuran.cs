@@ -405,7 +405,7 @@ namespace QuranKareem
             bool words = WordMode && !isWordTableEmpty;
             if (words)
             {
-                command.CommandText = $"SELECT surah,ayah,word FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM words WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as wordss on wordss.ayah_id = ayats.id";
+                command.CommandText = $"SELECT surah,ayah,word FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                 {
@@ -421,7 +421,7 @@ namespace QuranKareem
             }
             if (!words)
             {
-                command.CommandText = $"SELECT surah,ayah FROM (SELECT * FROM ayat WHERE page={PageNumber}) as ayats INNER JOIN (SELECT * FROM lines WHERE min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}) as liness on liness.ayah_id = ayats.id";
+                command.CommandText = $"SELECT surah,ayah FROM ayat JOIN words ON ayat.id = lines.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                 {
