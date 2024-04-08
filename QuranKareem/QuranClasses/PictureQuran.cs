@@ -103,9 +103,9 @@ namespace QuranKareem
             try
             {
                 if (File.Exists(path + "000.db"))
-                    quran.ConnectionString = "Data Source=" + path + "000.db;Version=3;";
+                    quran.ConnectionString = $"Data Source={path}000.db;Version=3;";
                 else
-                    quran.ConnectionString = "Data Source=" + path + "0.db;Version=3;";
+                    quran.ConnectionString = $"Data Source={path}0.db;Version=3;";
 
                 quran.Open();
                 command.CommandText = $"SELECT * FROM description";
@@ -114,7 +114,7 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version < 4 || version > 4) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version != 4) return;
                 Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 //QuartersCount = reader.GetInt32(4);
@@ -222,10 +222,7 @@ namespace QuranKareem
                 else
                     surah = SurahNumber;
 
-                if (ayah > 0)
-                    str.Append($"surah = {surah} AND ayah = {ayah}");
-                else
-                    str.Append($"surah = {surah} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
+                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
             }
 
             // Surah and Ayah
@@ -233,10 +230,7 @@ namespace QuranKareem
             {
                 if (surah == SurahsCount + 1) surah = 1;
                 if (ayah < 0) ayah = 0;
-                if (ayah > 0)
-                    str.Append($"surah = {surah} AND ayah = {ayah}");
-                else
-                    str.Append($"surah = {surah} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
+                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
             }
 
             // Ayah Plus
@@ -256,7 +250,7 @@ namespace QuranKareem
                 if (quarter <= 0 || quarter > 8) quarter = 1;
                 if (hizb == 2 && quarter >= 1 && quarter <= 4) quarter += 4;
 
-                str.Append($"quarter = {juz * 8 - 8 + quarter} AND ayah>=0");
+                str.Append($"quarter >= {juz * 8 - 8 + quarter} AND ayah >= 0");
             }
 
             // Hizb then Quarter
@@ -265,36 +259,27 @@ namespace QuranKareem
                 if (hizb == 61) hizb = 1;
                 if (quarter <= 0 || quarter > 4) quarter = 1;
 
-                str.Append($"quarter = {hizb * 4 - 4 + quarter} AND ayah>=0");
+                str.Append($"quarter >= {hizb * 4 - 4 + quarter} AND ayah >= 0");
             }
 
             // Quarter only
             else if (quarter >= 1 && quarter <= 241)
             {
                 if (quarter == 241) quarter = 1;
-                str.Append($"quarter = {quarter} AND ayah>=0");
+                str.Append($"quarter >= {quarter} AND ayah >= 0");
             }
-            
+
             // Page
             else if (page >= 1 && page <= PagesCount + 1)
             {
                 if (page == PagesCount + 1) page = 1;
-                str.Append($"page = {page} AND ayah>=0");
+                str.Append($"page >= {page} AND ayah >= 0");
             }
             #endregion
-            #region Otherwise
-            else if (SurahNumber > 0)
-            {
-                if (AyahNumber > 0)
-                    str.Append($"surah = {SurahNumber} AND ayah = {AyahNumber}");
-                else
-                    str.Append($"surah = {SurahNumber} AND (ayah = 0 OR ayah = 1) ORDER BY ayah");
-            }
             else
             {
-                str.Append("ayah >= 0");
+                str.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber} AND ayah >= 0");
             }
-            #endregion
             str.Append(" LIMIT 1");
             #endregion
 

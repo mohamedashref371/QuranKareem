@@ -391,7 +391,7 @@ namespace QuranKareem
         }
 
         // Mp3 Current Position String
-        public string GetCurrentPosition() { return GetPositionOf(CurrentPosition); }
+        public string GetCurrentPosition() => GetPositionOf(CurrentPosition);
         string s;
         public string GetPositionOf(int num)
         {
