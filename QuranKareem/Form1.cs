@@ -325,7 +325,7 @@ namespace QuranKareem
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
                 quranPicture.DarkMode = true;
-                quranText.ChangeDark();
+                quranText.DarkMode = true;
                 panel.BackColor = Color.FromArgb(0, 31, 63);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -343,7 +343,7 @@ namespace QuranKareem
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
                 quranPicture.DarkMode = false;
-                quranText.ChangeDark();
+                quranText.DarkMode = false;
                 panel.BackColor = Color.FromArgb(255, 224, 192);
                 for (int i = 0; i < ControlsList.Count; i++)
                 {
@@ -498,8 +498,8 @@ namespace QuranKareem
 
             if (textMode)
             {
-                if (allow) quranText.Surah((int)Surah.Value);
-                Ayah.Minimum = quranText.AyahStart;
+                if (allow) quranText.Set((int)Surah.Value);
+                //Ayah.Minimum = quranText.AyahStart;
                 ayahMaximumIsChanged = true;
                 Ayah.Maximum = quranText.AyatCount;
                 ayahMaximumIsChanged = false;
@@ -539,7 +539,7 @@ namespace QuranKareem
 
             if (textMode && allow)
             {
-                quranText.Quarter((int)Quarter.Value);
+                quranText.Set(quarter: (int)Quarter.Value);
                 SetAyah();
             }
             else if (allow)
@@ -554,7 +554,7 @@ namespace QuranKareem
 
             if (textMode && allow)
             {
-                quranText.Page((int)Page.Value);
+                quranText.Set(page: (int)Page.Value);
                 SetAyah();
             }
             else if (allow)
@@ -591,7 +591,7 @@ namespace QuranKareem
             {
                 if (allow)
                 {
-                    quranText.Ayah((int)Surah.Value, (int)Ayah.Value);
+                    quranText.Set((int)Surah.Value, (int)Ayah.Value);
                     allow = false;
                 }
                 Quarter.Value = quranText.QuarterNumber;
@@ -634,7 +634,7 @@ namespace QuranKareem
             isAllow = false;
             if (textMode && allow)
             {
-                quranText.Ayah(quranAudio.SurahNumber, quranAudio.AyahNumber);
+                quranText.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
                 SetAyah();
             }
             else if (allow)
