@@ -53,6 +53,7 @@ namespace QuranKareem
         private readonly Timer wordsTimer = new Timer();
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
+        private bool ActualWordMode = false;
 
         private bool added = false;
         public void AddInControls(Control.ControlCollection Controls)
@@ -92,12 +93,21 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version < 1 || version > 3) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version < 1 || version > 4) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
+                reader.Close();
                 success = true;
+
+                ActualWordMode = false;
+                if (version != 1)
+                {
+                    command.CommandText = $"SELECT * FROM words LIMIT 1";
+                    reader = command.ExecuteReader();
+                    ActualWordMode = reader.HasRows && WordMode;
+                }
             }
             catch { }
             finally
@@ -163,11 +173,11 @@ namespace QuranKareem
                     return;
                 }
 
-                command.CommandText = $"SELECT * FROM surahs WHERE id={sura}";
+                command.CommandText = $"SELECT ayat_count FROM surahs WHERE id={sura}";
                 reader = command.ExecuteReader();
                 reader.Read();
                 SurahNumber = sura;
-                AyatCount = reader.GetInt32(2);
+                AyatCount = reader.GetInt32(0);
                 reader.Close();
                 command.Cancel();
             }
@@ -214,7 +224,7 @@ namespace QuranKareem
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); CurrentWord = -1; idWord = 0;
-            if (WordMode && (version == 2 || version == 3))
+            if (ActualWordMode)
             {
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
@@ -241,13 +251,13 @@ namespace QuranKareem
             quran.Close();
             ok = true;
             timer.Start();
-            if (WordMode && (version == 2 || version == 3)) Words();
+            if (ActualWordMode) Words();
         }
 
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            if (success && WordMode && (version == 2 || version == 3) && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
+            if (success && ActualWordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
             {
                 wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
@@ -455,12 +465,21 @@ namespace QuranKareem
                 if (!reader.HasRows) return false;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0) != 3 || version < 1 || version > 3) return false;
+                if (reader.GetInt32(0) != 3 || version < 1 || version > 4) return false;
                 Narration = reader.GetInt32(2);
                 surahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
                 success = true;
+
+                ActualWordMode = false;
+                if (version != 1)
+                {
+                    command.CommandText = $"SELECT * FROM words LIMIT 1";
+                    reader = command.ExecuteReader();
+                    ActualWordMode = reader.HasRows && WordMode;
+                }
+
                 return true;
             }
             catch { return false; }
