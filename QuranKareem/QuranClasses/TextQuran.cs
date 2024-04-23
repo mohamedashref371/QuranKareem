@@ -346,7 +346,7 @@ namespace QuranKareem
             return true;
         }
 
-        public void AyahData()
+        private void AyahData()
         {
 
             CurrentWord = -1;
