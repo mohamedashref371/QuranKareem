@@ -180,8 +180,8 @@ namespace QuranKareem
         /// <summary>
         /// Implementation Priority:<br/>
         ///   1- Surah (1:114), its Ayah (0:{AyatCount}).<br/>
-        ///   1- Ayah (0:{AyatCount}) only.
-        ///   2- Next parameter (false,true).
+        ///   1- Ayah (0:{AyatCount}) only.<br/>
+        ///   2- Next parameter (false,true).<br/>
         ///   3- Juz (1:30), Hizb (1:2), Quarter (1:4).<br/>
         ///   3- Juz (1:30), Quarter (1:8).<br/>
         ///   3- Juz (1:30) only.<br/>
@@ -222,7 +222,8 @@ namespace QuranKareem
                 else
                     surah = SurahNumber;
 
-                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
+                if (ayah < 0) ayah = 0;
+                str.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Surah and Ayah
@@ -230,7 +231,7 @@ namespace QuranKareem
             {
                 if (surah == SurahsCount + 1) surah = 1;
                 if (ayah < 0) ayah = 0;
-                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
+                str.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Ayah Plus
@@ -278,7 +279,7 @@ namespace QuranKareem
             #endregion
             else
             {
-                str.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber} AND ayah >= 0");
+                str.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
             }
             str.Append(" LIMIT 1");
             #endregion

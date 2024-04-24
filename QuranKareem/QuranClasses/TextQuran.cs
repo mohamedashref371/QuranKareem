@@ -236,14 +236,14 @@ namespace QuranKareem
             return true;
         }
 
-        readonly StringBuilder str = new StringBuilder();
+        readonly StringBuilder sql = new StringBuilder();
         public bool Set(int surah = 0, int ayah = -2, bool next = false, int juz = 0, int hizb = 0, int quarter = 0, int page = 0)
         {
             if (!success) return false;
 
             #region SQL Building
-            str.Length = 0;
-            str.Append("SELECT id,surah,quarter,page,ayah FROM ayat WHERE ");
+            sql.Length = 0;
+            sql.Append("SELECT id,surah,quarter,page,ayah FROM ayat WHERE ");
             #region Surah and Ayah
             // Ayah
             if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
@@ -261,7 +261,8 @@ namespace QuranKareem
                 else
                     surah = SurahNumber;
 
-                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
+                if (ayah < 0) ayah = 0;
+                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Surah and Ayah
@@ -269,16 +270,16 @@ namespace QuranKareem
             {
                 if (surah == SurahsCount + 1) surah = 1;
                 if (ayah < 0) ayah = 0;
-                str.Append($"surah >= {surah} AND ayah >= {ayah} AND ayah >= 0");
+                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Ayah Plus
             else if (next && SurahNumber >= 1)
             {
                 if (SurahNumber == SurahsCount && AyahNumber == AyatCount)
-                    str.Append("ayah >= 0");
+                    sql.Append("ayah >= 0");
                 else
-                    str.Append($"id > {ayahId} AND ayah >= 0");
+                    sql.Append($"id > {ayahId} AND ayah >= 0");
             }
             #endregion
             #region Juz, Hizb, Quarter and Page
@@ -289,7 +290,7 @@ namespace QuranKareem
                 if (quarter <= 0 || quarter > 8) quarter = 1;
                 if (hizb == 2 && quarter >= 1 && quarter <= 4) quarter += 4;
 
-                str.Append($"quarter >= {juz * 8 - 8 + quarter} AND ayah >= 0");
+                sql.Append($"quarter >= {juz * 8 - 8 + quarter} AND ayah >= 0");
             }
 
             // Hizb then Quarter
@@ -298,33 +299,33 @@ namespace QuranKareem
                 if (hizb == 61) hizb = 1;
                 if (quarter <= 0 || quarter > 4) quarter = 1;
 
-                str.Append($"quarter >= {hizb * 4 - 4 + quarter} AND ayah >= 0");
+                sql.Append($"quarter >= {hizb * 4 - 4 + quarter} AND ayah >= 0");
             }
 
             // Quarter only
             else if (quarter >= 1 && quarter <= 241)
             {
                 if (quarter == 241) quarter = 1;
-                str.Append($"quarter >= {quarter} AND ayah >= 0");
+                sql.Append($"quarter >= {quarter} AND ayah >= 0");
             }
 
             // Page
             else if (page >= 1 && page <= PagesCount + 1)
             {
                 if (page == PagesCount + 1) page = 1;
-                str.Append($"page >= {page} AND ayah >= 0");
+                sql.Append($"page >= {page} AND ayah >= 0");
             }
             #endregion
             else
             {
-                str.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber} AND ayah >= 0");
+                sql.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
             }
-            str.Append(" LIMIT 1");
+            sql.Append(" LIMIT 1");
             #endregion
 
             #region SQL Execution
             quran.Open();
-            command.CommandText = str.ToString();
+            command.CommandText = sql.ToString();
             reader = command.ExecuteReader();
             if (!reader.Read())
             {
