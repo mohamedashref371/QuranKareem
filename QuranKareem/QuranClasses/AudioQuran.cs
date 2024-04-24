@@ -46,6 +46,30 @@ namespace QuranKareem
         public int From { get; private set; }
         public int To { get; private set; }
 
+        double rate = 1;
+        public double Rate
+        {
+            set
+            {
+                if (value > 1.5) rate = 1.5;
+                else if (value < 0.6) rate = 0.6;
+                else rate = value;
+                mp3.settings.rate = rate;
+                if (timer.Enabled && To - mp3.Ctlcontrols.currentPosition * 1000 > 0) timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition * 1000) / rate);
+                mp3.Ctlcontrols.currentPosition = mp3.Ctlcontrols.currentPosition;
+            }
+        }
+
+        public int Volume
+        {
+            set
+            {
+                if (value < 1) value = 1;
+                else if (value > 100) value = 100;
+                mp3.settings.volume = value;
+            }
+        }
+
         public int CurrentPosition { get; private set; }
 
         private readonly Timer timer = new Timer(); private bool ok = true;
@@ -400,24 +424,6 @@ namespace QuranKareem
             success = false;
             timer.Stop(); wordsTimer.Stop();
             mp3.URL = ""; CapturedAudio = false;
-        }
-
-        double rate = 1;
-        public void Rate(double i = 1.0)
-        {
-            if (i > 1.5) rate = 1.5;
-            else if (i < 0.6) rate = 0.6;
-            else rate = i;
-            mp3.settings.rate = rate;
-            if (timer.Enabled && To - mp3.Ctlcontrols.currentPosition * 1000 > 0) timer.Interval = (int)((To - mp3.Ctlcontrols.currentPosition * 1000) / rate);
-            mp3.Ctlcontrols.currentPosition = mp3.Ctlcontrols.currentPosition;
-        }
-
-        public void Volume(int i)
-        {
-            if (i < 1) i = 1;
-            else if (i > 100) i = 100;
-            mp3.settings.volume = i;
         }
 
         void Timer_Tick(object sender, EventArgs e) { ok = false; Set(next: true); }

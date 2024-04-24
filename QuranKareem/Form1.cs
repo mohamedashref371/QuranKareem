@@ -813,10 +813,10 @@ namespace QuranKareem
         private void Stop_Click(object sender, EventArgs e) => quranAudio.Stop(); // إيقاف دائم للصوت
 
         // سرعة الصوت
-        private void Rate_ValueChanged(object sender, EventArgs e) => quranAudio.Rate((double)Rate.Value);
+        private void Rate_ValueChanged(object sender, EventArgs e) => quranAudio.Rate = (double)Rate.Value;
 
         // مستوى إرتفاع الصوت
-        private void Volume_ValueChanged(object sender, EventArgs e) => quranAudio.Volume(volume.Value);
+        private void Volume_ValueChanged(object sender, EventArgs e) => quranAudio.Volume = volume.Value;
 
         // حفظ الآية
         private void Splitter_Click(object sender, EventArgs e) => quranAudio.SurahSplitter();
