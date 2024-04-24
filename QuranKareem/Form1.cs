@@ -612,13 +612,13 @@ namespace QuranKareem
 
             if (isAllow && textMode)
             {
-                quranAudio.Ayah(quranText.SurahNumber, quranText.AyahNumber);
+                quranAudio.Set(quranText.SurahNumber, quranText.AyahNumber);
                 if (wordModeCheck.Checked && quranText.CurrentWord > 0)
                     quranAudio.WordOf(quranText.CurrentWord);
             }
             else if (isAllow)
             {
-                quranAudio.Ayah(quranPicture.SurahNumber, quranPicture.AyahNumber);
+                quranAudio.Set(quranPicture.SurahNumber, quranPicture.AyahNumber);
                 if (wordModeCheck.Checked && quranPicture.CurrentWord > 0)
                     quranAudio.WordOf(quranPicture.CurrentWord);
             }
@@ -826,7 +826,7 @@ namespace QuranKareem
         {
             for (int i = 1; i <= quranAudio.AyatCount; i++)
             {
-                quranAudio.Ayah(i);
+                quranAudio.Set(ayah: i);
                 quranAudio.SurahSplitter();
             }
             Ayah_ValueChanged(null, null);

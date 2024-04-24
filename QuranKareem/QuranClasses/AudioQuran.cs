@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace QuranKareem
@@ -31,7 +32,7 @@ namespace QuranKareem
         public string Extension { get; private set; } // example: .mp3
         private int ayahId;
 
-        private int surahsCount;
+        public int SurahsCount { get; private set; }
 
         public int SurahNumber { get; private set; }
         public int AyahNumber { get; private set; }
@@ -53,7 +54,7 @@ namespace QuranKareem
         private readonly Timer wordsTimer = new Timer();
         public int CurrentWord { get; private set; } = -1;
         public bool WordMode { get; set; } = false;
-        private bool ActualWordMode = false;
+        private bool isWordTableEmpty = true;
 
         private bool added = false;
         public void AddInControls(Control.ControlCollection Controls)
@@ -95,19 +96,20 @@ namespace QuranKareem
                 version = reader.GetInt32(1);
                 if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version < 1 || version > 4) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
-                surahsCount = reader.GetInt32(3);
+                SurahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
                 reader.Close();
-                success = true;
 
-                ActualWordMode = false;
+                isWordTableEmpty = true;
                 if (version != 1)
                 {
                     command.CommandText = $"SELECT * FROM words LIMIT 1";
                     reader = command.ExecuteReader();
-                    ActualWordMode = reader.HasRows && WordMode;
+                    isWordTableEmpty = !reader.HasRows;
                 }
+
+                success = true;
             }
             catch { }
             finally
@@ -115,101 +117,151 @@ namespace QuranKareem
                 reader?.Close();
                 quran.Close();
             }
-            if (success) Ayah(sura, aya);
+            if (success) Set(sura, aya);
         }
 
         #region التنقلات في المصحف
 
-        public void Surah(int i) => Ayah(i, 0);
-
-        public void AyahPlus()
-        {
-            if (!success) return;
-            if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0)
-            {
-                AyahRepeatCounter += 1;
-                ok = true;
-                Ayah(SurahNumber, AyahNumber);
-            }
-            else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
-            {
-                SurahRepeatCounter += 1;
-                ok = true;
-                Ayah(SurahNumber, 0);
-            }
-            else
-            {
-                AyahRepeatCounter = 0;
-                if (AyahNumber == AyatCount && SurahNumber < surahsCount) Ayah(SurahNumber + 1, 0);
-                else if (AyahNumber == AyatCount) Surah(1);
-                else Ayah(SurahNumber, AyahNumber + 1);
-            }
-        }
-
-        public void Ayah() => Ayah(SurahNumber, AyahNumber);
-        public void Ayah(int aya) => Ayah(SurahNumber, aya);
-
-        public void Ayah(int sura, int aya)
+        readonly StringBuilder sql = new StringBuilder();
+        /// <summary>
+        /// Implementation Priority:<br/>
+        ///   - Surah (1:114), its Ayah (0:{AyatCount}).<br/>
+        ///   - Ayah (0:{AyatCount}) only.<br/>
+        ///   - Next parameter (false,true).<br/>
+        /// </summary>
+        /// <param name="surah">Quran Surahs Count is 114.</param>
+        /// <param name="ayah">Each Surah contains Ayat.</param>
+        /// <param name="next">Go to the next Ayah.</param>
+        /// <returns>true if everything goes well.</returns>
+        public bool Set(int surah = 0, int ayah = -2, bool next = false)
         {
             if (!timer.Enabled) ok = true;
             timer.Stop(); wordsTimer.Stop();
-            if (!success) return;
+            if (!success) return false;
 
-            sura = Math.Abs(sura);
-            if (sura == 0) sura = 1;
-            else if (sura > surahsCount) sura = surahsCount;
+            #region SQL Building
+            sql.Length = 0;
+            sql.Append("SELECT id,surah,ayah,timestamp_to FROM ayat WHERE ");
+            #region Surah and Ayah
+            // Ayah
+            if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
+            {
+                if (ayah == AyatCount + 1)
+                {
+                    surah = SurahNumber != SurahsCount ? SurahNumber + 1 : 1;
+                    ayah = 0;
+                }
+                else if (ayah > AyatCount + 1)
+                {
+                    surah = SurahNumber;
+                    ayah = AyatCount;
+                }
+                else
+                    surah = SurahNumber;
 
-            if (aya == -1) aya = 0;
-            else aya = Math.Abs(aya);
+                if (ayah < 0) ayah = 0;
+                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
+            }
 
+            // Surah and Ayah
+            else if (surah >= 1 && surah <= SurahsCount + 1)
+            {
+                if (surah == SurahsCount + 1) surah = 1;
+                if (ayah < 0) ayah = 0;
+                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
+            }
+
+            // Ayah Plus
+            else if (next && SurahNumber >= 1)
+            {
+                if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0)
+                {
+                    AyahRepeatCounter += 1;
+                    ok = true;
+                    sql.Append($"id = {ayahId}");
+                }
+                else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
+                {
+                    SurahRepeatCounter += 1;
+                    AyahRepeatCounter = 0;
+                    ok = true;
+                    sql.Append($"surah = {SurahNumber} AND ayah >= 0");
+                }
+                else
+                {
+                    AyahRepeatCounter = 0;
+                    if (SurahNumber == SurahsCount && AyahNumber == AyatCount)
+                        sql.Append("ayah >= 0");
+                    else
+                        sql.Append($"id > {ayahId} AND ayah >= 0");
+                }
+            }
+            #endregion
+            else
+            {
+                sql.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
+            }
+            sql.Append(" LIMIT 1");
+            #endregion
+
+            #region SQL Execution
             quran.Open();
-            if (sura != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition == 0)
+            command.CommandText = sql.ToString();
+            reader = command.ExecuteReader();
+            if (!reader.Read())
+            {
+                reader.Close(); quran.Close();
+                return false;
+            }
+            int id = reader.GetInt32(0);
+            surah = reader.GetInt32(1);
+            ayah = reader.GetInt32(2);
+            To = reader.GetInt32(3);
+            reader.Close(); quran.Close();
+            #endregion
+
+            if (surah != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition == 0)
             {
                 surahArray = null; start = -1;
-                if (!CaptureAudio(sura))
+                if (!CaptureAudio(surah))
                 {
                     mp3.URL = "";
-                    quran.Close();
-                    return;
+                    return false;
                 }
-
-                command.CommandText = $"SELECT ayat_count FROM surahs WHERE id={sura}";
-                reader = command.ExecuteReader();
-                reader.Read();
-                SurahNumber = sura;
-                AyatCount = reader.GetInt32(0);
-                reader.Close();
-                command.Cancel();
+                SurahData(surah);
             }
+            ayahId = id;
+            AyahNumber = ayah;
 
-            if (aya > AyatCount) aya = AyatCount;
+            AyahData();
+            return true;
+        }
 
-            command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={aya}";
+        private void SurahData(int surah)
+        {
+            SurahNumber = surah;
+            SurahRepeatCounter = 0;
+            command.CommandText = $"SELECT ayat_count FROM surahs WHERE id={surah}";
+            quran.Open();
             reader = command.ExecuteReader();
-            if (!reader.HasRows && aya == 0)
-            {
-                reader.Close();
-                command.Cancel();
-                command.CommandText = $"SELECT * FROM ayat WHERE surah={sura} AND ayah={1}";
-                reader = command.ExecuteReader();
-                aya = 1;
-            }
-            reader.Read();
-            To = reader.GetInt32(3);
+            if (reader.Read())
+                AyatCount = reader.GetInt32(0);
+            reader.Close(); quran.Close();
+        }
 
-            ayahId = reader.GetInt32(0);
-            reader.Close();
-            command.Cancel();
+        private void AyahData()
+        {
+            quran.Open();
+
             command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
             reader = command.ExecuteReader();
             reader.Read();
             From = Math.Abs(reader.GetInt32(3));
             reader.Close();
             command.Cancel();
-            AyahNumber = aya;
             CurrentPosition = From;
 
-            if (To <= 0 && aya > 0)
+            if (To <= 0 && AyahNumber > 0)
             {
                 quran.Close();
                 if (ok && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
@@ -224,7 +276,7 @@ namespace QuranKareem
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); CurrentWord = -1; idWord = 0;
-            if (ActualWordMode)
+            if (WordMode && !isWordTableEmpty)
             {
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
@@ -251,13 +303,13 @@ namespace QuranKareem
             quran.Close();
             ok = true;
             timer.Start();
-            if (ActualWordMode) Words();
+            if (WordMode && !isWordTableEmpty) Words();
         }
 
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            if (success && ActualWordMode && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
+            if (success && WordMode && !isWordTableEmpty && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
             {
                 wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
@@ -368,7 +420,7 @@ namespace QuranKareem
             mp3.settings.volume = i;
         }
 
-        void Timer_Tick(object sender, EventArgs e) { ok = false; AyahPlus(); }
+        void Timer_Tick(object sender, EventArgs e) { ok = false; Set(next: true); }
         void WordsTimer_Tick(object sender, EventArgs e) => Words();
 
         public void AddEventHandlerOfAyah(EventHandler eH) => timer.Tick += eH;
@@ -467,19 +519,19 @@ namespace QuranKareem
                 version = reader.GetInt32(1);
                 if (reader.GetInt32(0) != 3 || version < 1 || version > 4) return false;
                 Narration = reader.GetInt32(2);
-                surahsCount = reader.GetInt32(3);
+                SurahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
-                success = true;
 
-                ActualWordMode = false;
+                isWordTableEmpty = true;
                 if (version != 1)
                 {
                     command.CommandText = $"SELECT * FROM words LIMIT 1";
                     reader = command.ExecuteReader();
-                    ActualWordMode = reader.HasRows && WordMode;
+                    isWordTableEmpty = !reader.HasRows;
                 }
 
+                success = true;
                 return true;
             }
             catch { return false; }
