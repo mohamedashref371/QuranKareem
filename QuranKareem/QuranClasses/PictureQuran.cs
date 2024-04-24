@@ -408,7 +408,7 @@ namespace QuranKareem
             }
             if (!words)
             {
-                command.CommandText = $"SELECT surah,ayah FROM ayat JOIN words ON ayat.id = lines.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
+                command.CommandText = $"SELECT surah,ayah FROM ayat JOIN lines ON ayat.id = lines.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                 {
@@ -644,12 +644,12 @@ namespace QuranKareem
 
         private void GetDiscriminators()
         {
-            if (File.Exists(path + "Colors.txt"))
-                Discriminator.GetDiscriminators(WordsDiscriminators, File.ReadAllText(path + "Colors.txt"));
+            Discriminator.GetDiscriminators(WordsDiscriminators, File.Exists(path + "Colors.txt") ? File.ReadAllText(path + "Colors.txt") : "");
         }
 
         public void SetDiscriminators()
         {
+            if (!success) return;
             File.WriteAllText(path + "Colors.txt", Discriminator.GetText(WordsDiscriminators));
         }
 
