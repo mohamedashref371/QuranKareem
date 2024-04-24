@@ -64,7 +64,7 @@ namespace QuranKareem
         string /*fontFile,*/ fontName;
 
         public int CurrentWord { get; private set; } = -1;
-        private bool ActualWordMode = false;
+        private bool isWordTableEmpty = true;
         public bool WordMode { get; set; } = false;
 
         private bool darkMode = false;
@@ -151,6 +151,13 @@ namespace QuranKareem
                 //fontFile = reader.GetString(6);
                 fontName = reader.GetString(7);
                 Comment = reader.GetString(8);
+                reader.Close();
+
+                PageNumber = 0;
+
+                command.CommandText = $"SELECT * FROM words LIMIT 1";
+                reader = command.ExecuteReader();
+                isWordTableEmpty = !reader.HasRows;
 
                 success = true;
             }
@@ -439,7 +446,7 @@ namespace QuranKareem
             reader.Close(); quran.Close();
             pageRichText.Text = "";
 
-            if (WordMode) AyatWords(i);
+            if (WordMode && !isWordTableEmpty) AyatWords(i);
         }
 
         private void AyatWords(int page)
@@ -509,7 +516,7 @@ namespace QuranKareem
                 }
                 i++;
             }
-            if (successful && WordMode && i < wordsPosition.Count)
+            if (successful && WordMode && !isWordTableEmpty && i < wordsPosition.Count)
             {
                 for (int j = 1; j < wordsPosition[i]?.Count; j++)
                 {

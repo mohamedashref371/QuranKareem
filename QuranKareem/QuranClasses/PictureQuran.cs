@@ -132,13 +132,14 @@ namespace QuranKareem
                 Extension = reader.GetString(10);
                 Comment = reader.GetString(11);
                 reader.Close();
-                success = true;
 
                 PageNumber = 0;
 
                 command.CommandText = $"SELECT * FROM words LIMIT 1";
                 reader = command.ExecuteReader();
                 isWordTableEmpty = !reader.HasRows;
+
+                success = true;
             }
             catch { }
             finally
