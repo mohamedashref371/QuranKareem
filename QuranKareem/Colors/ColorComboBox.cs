@@ -62,14 +62,16 @@ public class ColorComboBox : ComboBox
         if (SelectedIndex >= 0 && ((Color)SelectedItem).Name == "Custom...")
         {
             Color clr;
-            ColorDialog colorDialog = new ColorDialog();
-            DialogResult result = colorDialog.ShowDialog();
+            using (ColorDialog colorDialog = new ColorDialog())
+            {
+                DialogResult result = colorDialog.ShowDialog();
 
-            if (result == DialogResult.OK)
-                clr = colorDialog.Color;
-            else
-                clr = Color.Empty;
-
+                if (result == DialogResult.OK)
+                    clr = colorDialog.Color;
+                else
+                    clr = Color.Empty;
+            }
+            
             if (Items.Contains(clr))
                 SelectedItem = clr;
             else
