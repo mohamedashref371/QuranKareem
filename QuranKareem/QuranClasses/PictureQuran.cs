@@ -650,14 +650,14 @@ namespace QuranKareem
                     line = reader.GetInt32(1);
                 }
                 reader.Close(); quran.Close();
-
-                b1 = new Bitmap(width, height);
-                gr = Graphics.FromImage(b1);
-                gr.Clear(Color.Empty);
-
-                gr.DrawImage(GetLineWithWordsMarks(page, pagePic, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
-
-                b1.Save($"{pth}{i}{Extension}");
+                if (page > 0)
+                {
+                    b1 = new Bitmap(width, height);
+                    gr = Graphics.FromImage(b1);
+                    gr.Clear(Color.Empty);
+                    gr.DrawImage(GetLineWithWordsMarks(page, pagePic, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
+                    b1.Save($"{pth}{i}{Extension}");
+                }
             }
         }
         #endregion
