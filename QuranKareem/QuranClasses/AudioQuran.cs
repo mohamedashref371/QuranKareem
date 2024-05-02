@@ -458,6 +458,48 @@ namespace QuranKareem
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
+        public List<int> SplitSurahToWords()
+        {
+            if (!success || isWordTableEmpty || mp3.URL == "") return null;
+            if (mp3.currentMedia.duration == 0)
+            {
+                mp3.Ctlcontrols.play();
+                System.Threading.Thread.Sleep(100);
+            }
+
+            if (mp3.currentMedia.duration == 0) return null;
+
+            byte[] surahArray = File.ReadAllBytes(mp3.URL);
+            int unit = Convert.ToInt32(mp3.currentMedia.getItemInfo("Bitrate")) / 8000;
+            int start = (int)(surahArray.Length - unit * mp3.currentMedia.duration * 1000);
+            if (start < 0) start = 0;
+
+            string pth = $"splits\\S{SurahNumber.ToString().PadLeft(3, '0')}\\audio\\";
+            Directory.CreateDirectory(pth);
+            var list = new List<int>();
+            int i = 0; int from = 0, to;
+
+            command.CommandText = $"SELECT ayah,word,words.timestamp_to FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} ORDER BY words.timestamp_to";
+            quran.Open();
+            reader = command.ExecuteReader();
+            byte[] word;
+            while (reader.Read())
+            {
+                list.Add(reader.GetInt32(0));
+                list.Add(reader.GetInt32(1));
+                to = reader.GetInt32(2);
+
+                word = new byte[unit * (to - from)];
+                Array.Copy(surahArray, start + unit * from, word, 0, word.Length);
+                File.WriteAllBytes($"{pth}{i}{Extension}", word);
+
+                from = to;
+                i++;
+            }
+            reader.Close(); quran.Close();
+            return list;
+        }
+
         // Mp3 Current Position String
         public string GetCurrentPosition() => GetPositionOf(CurrentPosition);
         string s;

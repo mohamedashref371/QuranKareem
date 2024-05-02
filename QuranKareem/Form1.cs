@@ -1053,20 +1053,31 @@ namespace QuranKareem
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e)
         {
             // test
-            try
-            {
-                var folder2 = new FolderBrowserDialog { ShowNewFolderButton = true };
-                if (folder2.ShowDialog() == DialogResult.OK)
-                {
-                    string s = $"{folder2.SelectedPath}\\{Page.Value}";
-                    if (!Directory.Exists(s)) { Directory.CreateDirectory(s); }
-                    var bitmap = quranPicture.GetLinesWithWordsMarks();
-                    for (int i = 0; i < bitmap.Count; i++)
-                        for (int j = 0; j < bitmap[i]?.Count; j++)
-                            bitmap[i][j].Save($"{s}\\{i.ToString().PadLeft(3,'0')}_{j.ToString().PadLeft(3, '0')}.png", ImageFormat.Png);
-                }
-            }
-            catch {}
+
+            #region Audio.SplitSurahToWords & Picture.GetAyatInLinesWithWordsMarks - Test
+            quranPicture.GetAyatInLinesWithWordsMarks(
+                quranAudio.SplitSurahToWords(),
+                1920, 1080,
+                256, 885, 1421, 181
+                );
+            #endregion
+
+            #region Picture.GetLinesWithWordsMarks - Test
+            //try
+            //{
+            //    var folder2 = new FolderBrowserDialog { ShowNewFolderButton = true };
+            //    if (folder2.ShowDialog() == DialogResult.OK)
+            //    {
+            //        string s = $"{folder2.SelectedPath}\\{Page.Value}";
+            //        if (!Directory.Exists(s)) { Directory.CreateDirectory(s); }
+            //        var bitmap = quranPicture.GetLinesWithWordsMarks();
+            //        for (int i = 0; i < bitmap.Count; i++)
+            //            for (int j = 0; j < bitmap[i]?.Count; j++)
+            //                bitmap[i][j].Save($"{s}\\{i.ToString().PadLeft(3, '0')}_{j.ToString().PadLeft(3, '0')}.png", ImageFormat.Png);
+            //    }
+            //}
+            //catch { }
+            #endregion
         }
 
     }
