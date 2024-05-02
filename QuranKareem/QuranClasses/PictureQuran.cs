@@ -532,7 +532,7 @@ namespace QuranKareem
         }
 
         private readonly List<int> ints = new List<int>();
-        private List<Bitmap> GetLineWithWordsMarks(int page, Bitmap pagePic, int line = -1 , int ayah = -1, int word = -1)
+        private List<Bitmap> GetLineWithWordsMarks(int page, Bitmap pagePic, int line = -1 , int ayah = -1, int word = -2)
         {
             var coords = new int[2];
             Bitmap bmap = GetLine(page, pagePic, line, coords);
@@ -540,7 +540,7 @@ namespace QuranKareem
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
             if (WordColor.IsEmpty || isWordsDiscriminatorEmpty) return bitmaps;
             var list = new List<int[]>();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={page} AND line={line} AND " + (word == -1 ? "word>=1 AND word<=599 ORDER BY ayah_id,word" : $"ayah={ayah} AND word={word}");
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={page} AND line={line} AND " + (word == -2 ? "word>=1 AND word<=599 ORDER BY ayah_id,word" : $"ayah={ayah} AND word={word}");
             quran.Open();
             reader = command.ExecuteReader();
 
@@ -625,7 +625,6 @@ namespace QuranKareem
             return bitmap;
         }
 
-        KeyValuePair<int, Bitmap> pair;
         public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght)
         {
             if (!success || ayahword == null) return;

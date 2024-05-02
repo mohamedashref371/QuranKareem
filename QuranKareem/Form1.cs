@@ -1060,6 +1060,7 @@ namespace QuranKareem
                 1920, 1080,
                 256, 885, 1421, 181
                 );
+            Process.Start($"splits\\S{Surah.Value.ToString().PadLeft(3, '0')}");
             #endregion
 
             #region Picture.GetLinesWithWordsMarks - Test

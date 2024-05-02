@@ -468,35 +468,52 @@ namespace QuranKareem
             }
 
             if (mp3.currentMedia.duration == 0) return null;
+            double duration = mp3.currentMedia.duration * 1000;
 
             byte[] surahArray = File.ReadAllBytes(mp3.URL);
             int unit = Convert.ToInt32(mp3.currentMedia.getItemInfo("Bitrate")) / 8000;
-            int start = (int)(surahArray.Length - unit * mp3.currentMedia.duration * 1000);
+            int start = (int)(surahArray.Length - unit * duration);
             if (start < 0) start = 0;
 
             string pth = $"splits\\S{SurahNumber.ToString().PadLeft(3, '0')}\\audio\\";
             Directory.CreateDirectory(pth);
             var list = new List<int>();
-            int i = 0; int from = 0, to;
+            int i = 0; int from, to = 0;
 
-            command.CommandText = $"SELECT ayah,word,words.timestamp_to FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} ORDER BY words.timestamp_to";
+            command.CommandText = $"SELECT ayah,word,timestamp_from,words.timestamp_to FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} ORDER BY words.timestamp_from";
             quran.Open();
             reader = command.ExecuteReader();
             byte[] word;
             while (reader.Read())
             {
+                if (reader.GetInt32(2) > to)
+                {
+                    list.Add(reader.GetInt32(0));
+                    list.Add(-1);
+                    word = new byte[unit * (reader.GetInt32(2) - to)];
+                    Array.Copy(surahArray, start + unit * to, word, 0, word.Length);
+                    File.WriteAllBytes($"{pth}{i}{Extension}", word);
+                    i++;
+                }
                 list.Add(reader.GetInt32(0));
                 list.Add(reader.GetInt32(1));
-                to = reader.GetInt32(2);
+                from = reader.GetInt32(2);
+                to = reader.GetInt32(3);
 
                 word = new byte[unit * (to - from)];
                 Array.Copy(surahArray, start + unit * from, word, 0, word.Length);
                 File.WriteAllBytes($"{pth}{i}{Extension}", word);
-
-                from = to;
                 i++;
             }
             reader.Close(); quran.Close();
+            if (duration > to)
+            {
+                word = new byte[(int)(unit * (duration - to))];
+                Array.Copy(surahArray, start + unit * to, word, 0, word.Length);
+                File.WriteAllBytes($"{pth}{i}{Extension}", word);
+                list.Add(-1);
+                list.Add(-1);
+            }
             return list;
         }
 
