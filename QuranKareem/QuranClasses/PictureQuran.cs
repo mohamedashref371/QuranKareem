@@ -632,7 +632,7 @@ namespace QuranKareem
             string pth = $"splits\\S{SurahNumber.ToString().PadLeft(3, '0')}\\picture\\";
             Directory.CreateDirectory(pth);
             
-            int page = 0, line;
+            int page = 0, line=0;
             Bitmap pagePic = null, b1;
             Graphics gr;
             for (int i = 0; i < ayahword.Count / 2; i++)
@@ -640,21 +640,22 @@ namespace QuranKareem
                 quran.Open();
                 command.CommandText = $"SELECT page,line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
                 reader = command.ExecuteReader();
-                reader.Read();
-                if (page != reader.GetInt32(0))
+                if (reader.Read())
                 {
-                    page = reader.GetInt32(0);
-                    pagePic = CatchPicture(page);
+                    if (page != reader.GetInt32(0))
+                    {
+                        page = reader.GetInt32(0);
+                        pagePic = CatchPicture(page);
+                    }
+                    line = reader.GetInt32(1);
                 }
-                line = reader.GetInt32(1);
-                reader.Close(); command.Cancel();
-                quran.Close();
+                reader.Close(); quran.Close();
 
                 b1 = new Bitmap(width, height);
                 gr = Graphics.FromImage(b1);
                 gr.Clear(Color.Empty);
 
-                gr.DrawImage(GetLineWithWordsMarks(page, pagePic, line, ayahword[i * 2], ayahword[i * 2 + 1])[1], locx, locy, linWdth, linHght);
+                gr.DrawImage(GetLineWithWordsMarks(page, pagePic, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
 
                 b1.Save($"{pth}{i}{Extension}");
             }
