@@ -104,7 +104,7 @@ namespace QuranKareem
             if (textsFiles != null && textsFiles.Length > 0)
                 quranText.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
-            if (!textMode) quranPic.BackgroundImage = quranPicture.AyahPicture; // اظهار الصورة التي سيعطيها لك
+            if (!textMode) quranPic.BackgroundImage = quranPicture.WordPicture; // اظهار الصورة التي سيعطيها لك
 
             Surahs.Items.Clear(); // إفراغ قائمة ال ComboBox
             if (textMode) Surahs.Items.AddRange(quranText.GetSurahNames()); // ملأها بأسماء السور;
@@ -220,7 +220,7 @@ namespace QuranKareem
                 else
                     wordColorsCheck.Checked = false;
 
-                quranPic.BackgroundImage = quranPicture.AyahPicture;
+                quranPic.BackgroundImage = quranPicture.WordPicture;
             }
         }
 
@@ -355,7 +355,7 @@ namespace QuranKareem
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
             }
-            if (!textMode) quranPic.BackgroundImage = quranPicture.AyahPicture;
+            if (!textMode) quranPic.BackgroundImage = quranPicture.WordPicture;
         }
         #endregion
 
@@ -607,7 +607,7 @@ namespace QuranKareem
                 Quarter.Value = quranPicture.QuarterNumber;
                 Page.Value = quranPicture.PageNumber;
 
-                quranPic.BackgroundImage = quranPicture.WordPicture ?? quranPicture.AyahPicture;
+                quranPic.BackgroundImage = quranPicture.WordPicture;
             }
 
             if (isAllow && textMode)
@@ -653,11 +653,9 @@ namespace QuranKareem
             else
             {
                 if (quranAudio.CurrentWord > 0)
-                {
                     quranPicture.WordOf(quranAudio.CurrentWord);
-                    quranPic.BackgroundImage = quranPicture.WordPicture ?? quranPicture.AyahPicture;
-                }
-                else quranPic.BackgroundImage = quranPicture.AyahPicture;
+
+                quranPic.BackgroundImage = quranPicture.WordPicture;
             }
         }
 

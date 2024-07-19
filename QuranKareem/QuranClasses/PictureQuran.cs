@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
 using System.Text;
-using static System.Windows.Forms.LinkLabel;
-using System.Web.UI;
-using System.Web;
 
 namespace QuranKareem
 {
@@ -59,8 +56,8 @@ namespace QuranKareem
         #endregion
 
         #region Bitmaps
-        private Bitmap PagePicture { get; set; }
-        public Bitmap AyahPicture { get; private set; }
+        private Bitmap pagePicture;
+        private Bitmap ayahPicture;
         public Bitmap WordPicture { get; private set; }
         private FastPixel fp;
         #endregion
@@ -155,7 +152,7 @@ namespace QuranKareem
                 DiscriminatorsReader();
                 GetDiscriminators();
                 ActiveDiscriminators();
-                PagePicture = new Bitmap(Width, Height);
+                pagePicture = new Bitmap(Width, Height);
                 GetInitialColors();
                 Set(sura, aya);
             }
@@ -327,8 +324,8 @@ namespace QuranKareem
         private void AyahData()
         {
             CurrentWord = -1;
-            AyahPicture = (Bitmap)PagePicture.Clone();
-            WordPicture = AyahPicture;
+            ayahPicture = (Bitmap)pagePicture.Clone();
+            WordPicture = ayahPicture;
             
             AyahDecorations(Discriminators.AyahColors.Count > 0 || !isWordTableEmpty);
             
@@ -347,7 +344,7 @@ namespace QuranKareem
         {
             PageNumber = page;
 
-            PagePicture = CatchPicture(page);
+            pagePicture = CatchPicture(page);
 
             if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
@@ -373,7 +370,7 @@ namespace QuranKareem
                         return new Bitmap(filesName[i]);
                 }
             }
-            return PagePicture;
+            return pagePicture;
         }
         #endregion
 
@@ -381,13 +378,13 @@ namespace QuranKareem
         {
             if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > WordsCount)
             {
-                WordPicture = AyahPicture;
+                WordPicture = ayahPicture;
                 CurrentWord = -1;
                 return;
             }
             CurrentWord = word;
 
-            WordPicture = (Bitmap)AyahPicture.Clone();
+            WordPicture = (Bitmap)ayahPicture.Clone();
             WordDecorations();
         }
 
@@ -446,7 +443,7 @@ namespace QuranKareem
 
         private void PageDecorations()
         {
-            fp = new FastPixel(PagePicture);
+            fp = new FastPixel(pagePicture);
             fp.Lock();
 
             quran.Open();
@@ -462,7 +459,7 @@ namespace QuranKareem
 
         private void AyahDecorations(bool discri = true)
         {
-            fp = new FastPixel(AyahPicture);
+            fp = new FastPixel(ayahPicture);
             fp.Lock();
 
             quran.Open();
@@ -519,7 +516,7 @@ namespace QuranKareem
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLine(PageNumber, PagePicture, i));
+                bitmaps.Add(GetLine(PageNumber, pagePicture, i));
             return bitmaps;
         }
 
@@ -527,7 +524,7 @@ namespace QuranKareem
         {
             var bitmaps = new List<List<Bitmap>>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLineWithWordsMarks(PageNumber, PagePicture, i));
+                bitmaps.Add(GetLineWithWordsMarks(PageNumber, pagePicture, i));
             return bitmaps;
         }
 
@@ -758,7 +755,7 @@ namespace QuranKareem
         {
             try
             {
-                fp = new FastPixel(PagePicture);
+                fp = new FastPixel(pagePicture);
                 fp.Lock();
 
                 Color p4;
