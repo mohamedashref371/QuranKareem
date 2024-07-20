@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
 using System.Text;
+using TheArtOfDevHtmlRenderer.Adapters.Entities;
 
 namespace QuranKareem
 {
@@ -59,7 +60,7 @@ namespace QuranKareem
         private Bitmap pagePicture;
         private Bitmap ayahPicture;
         public Bitmap WordPicture { get; private set; }
-        private FastPixel fp;
+        private SharpPixel sp;
         #endregion
 
         #region Words
@@ -99,7 +100,7 @@ namespace QuranKareem
 
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
             this.path = path; success = false;
-
+            
             try
             {
                 if (File.Exists(path + "000.db"))
@@ -349,7 +350,14 @@ namespace QuranKareem
             if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
             else if (darkMode && isWordTableEmpty)
-                ReverseColors(0, Width - 1, 0, Height - 1);
+            {
+                sp = new SharpPixel(pagePicture);
+                sp.Lock();
+
+                sp.ReverseColors();
+
+                sp.Unlock(true);
+            }
         }
 
         private Bitmap CatchPicture(int page)
@@ -443,24 +451,24 @@ namespace QuranKareem
 
         private void PageDecorations()
         {
-            fp = new FastPixel(pagePicture);
-            fp.Lock();
+            sp = new SharpPixel(pagePicture);
+            sp.Lock();
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.PageColors.Keys.ToArray())}) AND page={PageNumber}";
             reader = command.ExecuteReader();
 
             while (reader.Read())
-                Coloring(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), Discriminators.PageColors[reader.GetInt32(4)]);
+                sp.Clear(Discriminators.PageColors[reader.GetInt32(4)], reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
 
             reader.Close(); quran.Close();
-            fp.Unlock(true);
+            sp.Unlock(true);
         }
 
         private void AyahDecorations(bool discri = true)
         {
-            fp = new FastPixel(ayahPicture);
-            fp.Lock();
+            sp = new SharpPixel(ayahPicture);
+            sp.Lock();
 
             quran.Open();
             if (discri)
@@ -481,17 +489,17 @@ namespace QuranKareem
                     clr = AyahColor;
 
                 if (!clr.IsEmpty)
-                    Coloring(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), clr);
+                    sp.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
             }
 
             reader.Close(); quran.Close();
-            fp.Unlock(true);
+            sp.Unlock(true);
         }
 
         private void WordDecorations()
         {
-            fp = new FastPixel(WordPicture);
-            fp.Lock();
+            sp = new SharpPixel(WordPicture);
+            sp.Lock();
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
@@ -503,11 +511,11 @@ namespace QuranKareem
                 clr = Discriminators.WordColors[reader.GetInt32(4)];
                 clr = clr.Name != "WordColor" ? clr : WordColor;
                 if (!clr.IsEmpty)
-                    Coloring(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), clr);
+                    sp.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
             }
             
             reader.Close(); quran.Close();
-            fp.Unlock(true);
+            sp.Unlock(true);
         }
         #endregion
 
@@ -571,19 +579,18 @@ namespace QuranKareem
 
             for (int i = 0; i < list.Count; i++)
             {
-                fp = new FastPixel(bitmaps[i + 1]);
-                fp.Lock();
+                sp = new SharpPixel(bitmaps[i + 1]);
+                sp.Lock();
                 for (int j = 0; j < list[i].Length / 4; j++)
                 {
-                    Coloring(
+                    sp.Clear(WordColor,
                         (list[i][j * 4] - coords[0]) >= 0 ? list[i][j * 4] - coords[0] : 0,
-                        (list[i][j * 4 + 1] - coords[0]) < bmap.Width ? list[i][j * 4 + 1] - coords[0] : bmap.Width - 1,
                         (list[i][j * 4 + 2] - coords[1]) >= 0 ? list[i][j * 4 + 2] - coords[1] : 0,
+                        (list[i][j * 4 + 1] - coords[0]) < bmap.Width ? list[i][j * 4 + 1] - coords[0] : bmap.Width - 1,
                         (list[i][j * 4 + 3] - coords[1]) < bmap.Height ? list[i][j * 4 + 3] - coords[1] : bmap.Height - 1,
-                        WordColor
-                    );
+                        textColor, 30, false, true);
                 }
-                fp.Unlock(true);
+                sp.Unlock(true);
             }
             return bitmaps;
         }
@@ -728,52 +735,6 @@ namespace QuranKareem
                 Discriminators.Descriptions.Add(reader.GetInt32(0), reader.GetString(1));
             }
             reader.Close(); quran.Close();
-        }
-        #endregion
-
-        #region Coloring
-        private void Coloring(int x5, int x9, int y5, int y9, Color color)
-        { // كود التلوين
-            try
-            {
-                Color p4;
-                for (int y1 = y5; y1 <= y9; y1++)
-                    for (int x1 = x5; x1 <= x9; x1++)
-                    {
-                        p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0 /*البكسل ليس شفافا*/ && background != p4 /*البكسل ليس الخلفية*/)
-                        {
-                            if (!Equal2Color(p4, background, 30) && (textColor.IsEmpty || Equal2Color(p4, textColor, 30)))
-                                fp.SetPixel(x1, y1, Color.FromArgb(color.A != 0 ? p4.A : 0, color.R, color.G, color.B));
-                        }
-                    }
-            }
-            catch { }
-        }
-
-        private void ReverseColors(int x5, int x9, int y5, int y9)
-        {
-            try
-            {
-                fp = new FastPixel(pagePicture);
-                fp.Lock();
-
-                Color p4;
-                for (int y1 = y5; y1 <= y9; y1++)
-                    for (int x1 = x5; x1 <= x9; x1++)
-                    {
-                        p4 = fp.GetPixel(x1, y1);
-                        if (p4.A != 0) fp.SetPixel(x1, y1, Color.FromArgb(p4.A, 255 - p4.R, 255 - p4.G, 255 - p4.B));
-                    }
-
-                fp.Unlock(true);
-            }
-            catch { }
-        }
-
-        private bool Equal2Color(Color clr1, Color clr2, int delta = 0)
-        {
-            return clr1.A == 255 && clr2.A == 255 && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
         }
         #endregion
 
