@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
 using System.Text;
-using TheArtOfDevHtmlRenderer.Adapters.Entities;
 
 namespace QuranKareem
 {
@@ -57,8 +56,8 @@ namespace QuranKareem
         #endregion
 
         #region Bitmaps
+        private SharpPixel spPagePicture;
         private Bitmap pagePicture;
-        private Bitmap ayahPicture;
         public Bitmap WordPicture { get; private set; }
         private SharpPixel sp;
         #endregion
@@ -325,11 +324,10 @@ namespace QuranKareem
         private void AyahData()
         {
             CurrentWord = -1;
-            ayahPicture = (Bitmap)pagePicture.Clone();
-            WordPicture = ayahPicture;
-            
+
             AyahDecorations(Discriminators.AyahColors.Count > 0 || !isWordTableEmpty);
-            
+            WordPicture = (Bitmap)pagePicture.Clone();
+
             if (WordMode && !isWordTableEmpty)
             {
                 quran.Open();
@@ -346,17 +344,15 @@ namespace QuranKareem
             PageNumber = page;
 
             pagePicture = CatchPicture(page);
+            spPagePicture = new SharpPixel(pagePicture, true);
 
             if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
             else if (darkMode && isWordTableEmpty)
             {
-                sp = new SharpPixel(pagePicture);
-                sp.Lock();
-
-                sp.ReverseColors();
-
-                sp.Unlock(true);
+                spPagePicture.Lock();
+                spPagePicture.ReverseColors();
+                spPagePicture.Unlock(true, true);
             }
         }
 
@@ -386,13 +382,13 @@ namespace QuranKareem
         {
             if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > WordsCount)
             {
-                WordPicture = ayahPicture;
+                WordPicture = pagePicture;
                 CurrentWord = -1;
                 return;
             }
             CurrentWord = word;
 
-            WordPicture = (Bitmap)ayahPicture.Clone();
+            WordPicture = (Bitmap)pagePicture.Clone();
             WordDecorations();
         }
 
@@ -451,24 +447,23 @@ namespace QuranKareem
 
         private void PageDecorations()
         {
-            sp = new SharpPixel(pagePicture);
-            sp.Lock();
+            spPagePicture.Lock();
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.PageColors.Keys.ToArray())}) AND page={PageNumber}";
             reader = command.ExecuteReader();
 
             while (reader.Read())
-                sp.Clear(Discriminators.PageColors[reader.GetInt32(4)], reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
+                spPagePicture.Clear(Discriminators.PageColors[reader.GetInt32(4)], reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
 
             reader.Close(); quran.Close();
-            sp.Unlock(true);
+            spPagePicture.Unlock(true, true);
         }
 
         private void AyahDecorations(bool discri = true)
         {
-            sp = new SharpPixel(ayahPicture);
-            sp.Lock();
+            spPagePicture.Lock();
+            spPagePicture.SetOriginal();
 
             quran.Open();
             if (discri)
@@ -489,11 +484,11 @@ namespace QuranKareem
                     clr = AyahColor;
 
                 if (!clr.IsEmpty)
-                    sp.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
+                    spPagePicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
             }
 
             reader.Close(); quran.Close();
-            sp.Unlock(true);
+            spPagePicture.Unlock(true);
         }
 
         private void WordDecorations()

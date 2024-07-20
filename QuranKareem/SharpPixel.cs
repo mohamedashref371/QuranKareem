@@ -95,6 +95,7 @@ public class SharpPixel
         if (withOriginal == 2 && boundaries[1] >= 0)
         {
             Array.Copy(rgbValuesCopy, boundaries[0], rgbValues, boundaries[0], boundaries[1] - boundaries[0]);
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, boundaries[0], IntPtr.Add(bmpPtr, boundaries[0]), boundaries[1] - boundaries[0]);
             Reset();
         }
     }
@@ -131,7 +132,7 @@ public class SharpPixel
         bool alpha = IsAlphaBitmap && withAlpha;
         bool skip = IsAlphaBitmap && skip0alpha;
         int index = (y0 * Width + x0) * plus;
-        int finish = (y1 * Width + x1) * plus;
+        int finish = (y1 * Width + x1) * plus + 1;
         byte Alpha = color.A, Red = color.R, Green = color.G, Blue = color.B;
         byte RedM = Modifiedcolor.R, GreenM = Modifiedcolor.G, BlueM = Modifiedcolor.B;
 
