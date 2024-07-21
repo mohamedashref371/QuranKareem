@@ -56,10 +56,8 @@ namespace QuranKareem
         #endregion
 
         #region Bitmaps
-        private SharpPixel spPagePicture;
-        private Bitmap pagePicture;
-        public Bitmap WordPicture { get; private set; }
-        private SharpPixel sp;
+        private SharpPixelQK spPagePicture;
+        public Bitmap PagePicture { get; private set; }
         #endregion
 
         #region Words
@@ -152,7 +150,7 @@ namespace QuranKareem
                 DiscriminatorsReader();
                 GetDiscriminators();
                 ActiveDiscriminators();
-                pagePicture = new Bitmap(Width, Height);
+                PagePicture = new Bitmap(Width, Height);
                 GetInitialColors();
                 Set(sura, aya);
             }
@@ -326,7 +324,6 @@ namespace QuranKareem
             CurrentWord = -1;
 
             AyahDecorations(Discriminators.AyahColors.Count > 0 || !isWordTableEmpty);
-            WordPicture = (Bitmap)pagePicture.Clone();
 
             if (WordMode && !isWordTableEmpty)
             {
@@ -343,8 +340,8 @@ namespace QuranKareem
         {
             PageNumber = page;
 
-            pagePicture = CatchPicture(page);
-            spPagePicture = new SharpPixel(pagePicture, true);
+            PagePicture = CatchPicture(page);
+            spPagePicture = new SharpPixelQK(PagePicture, true);
 
             if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
@@ -374,7 +371,7 @@ namespace QuranKareem
                         return new Bitmap(filesName[i]);
                 }
             }
-            return pagePicture;
+            return PagePicture;
         }
         #endregion
 
@@ -382,13 +379,10 @@ namespace QuranKareem
         {
             if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > WordsCount)
             {
-                WordPicture = pagePicture;
                 CurrentWord = -1;
                 return;
             }
             CurrentWord = word;
-
-            WordPicture = (Bitmap)pagePicture.Clone();
             WordDecorations();
         }
 
@@ -493,8 +487,8 @@ namespace QuranKareem
 
         private void WordDecorations()
         {
-            sp = new SharpPixel(WordPicture);
-            sp.Lock();
+            spPagePicture.Lock();
+            spPagePicture.SetOriginal(true);
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
@@ -506,11 +500,11 @@ namespace QuranKareem
                 clr = Discriminators.WordColors[reader.GetInt32(4)];
                 clr = clr.Name != "WordColor" ? clr : WordColor;
                 if (!clr.IsEmpty)
-                    sp.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
+                    spPagePicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
             }
             
             reader.Close(); quran.Close();
-            sp.Unlock(true);
+            spPagePicture.Unlock(true);
         }
         #endregion
 
@@ -519,7 +513,7 @@ namespace QuranKareem
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLine(PageNumber, pagePicture, i));
+                bitmaps.Add(GetLine(PageNumber, PagePicture, i));
             return bitmaps;
         }
 
@@ -527,7 +521,7 @@ namespace QuranKareem
         {
             var bitmaps = new List<List<Bitmap>>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLineWithWordsMarks(PageNumber, pagePicture, i));
+                bitmaps.Add(GetLineWithWordsMarks(PageNumber, PagePicture, i));
             return bitmaps;
         }
 
@@ -572,9 +566,10 @@ namespace QuranKareem
 
             reader.Close(); quran.Close();
 
+            SharpPixelQK sp;
             for (int i = 0; i < list.Count; i++)
             {
-                sp = new SharpPixel(bitmaps[i + 1]);
+                sp = new SharpPixelQK(bitmaps[i + 1]);
                 sp.Lock();
                 for (int j = 0; j < list[i].Length / 4; j++)
                 {
@@ -624,6 +619,7 @@ namespace QuranKareem
             return bitmap;
         }
 
+#warning 
         public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght)
         {
             if (!success || ayahword == null) return;

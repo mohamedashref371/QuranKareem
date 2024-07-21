@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-public class SharpPixel
+public class SharpPixelQK
 {
     private readonly byte[] rgbValues;
     private BitmapData bmpData;
@@ -11,14 +11,15 @@ public class SharpPixel
 
     private int withOriginal = 0;
     private byte[] rgbValuesCopy;
-    private readonly int[] boundaries = new int[2];
-
+    private byte[] rgbValuesCopy2;
+    private readonly int[] boundaries = new int[4];
+    
     public int Width { get; }
     public int Height { get; }
     public bool IsAlphaBitmap { get; }
     public Bitmap Bitmap { get; }
 
-    public SharpPixel(Bitmap bitmap, bool withOriginal = false)
+    public SharpPixelQK(Bitmap bitmap, bool withOriginal = false)
     {
         if ((bitmap.PixelFormat & PixelFormat.Indexed) != 0) throw new Exception("Cannot lock an Indexed image.");
 
@@ -50,6 +51,7 @@ public class SharpPixel
         if (withOriginal == 1)
         {
             rgbValuesCopy = (byte[])rgbValues.Clone();
+            rgbValuesCopy2 = new byte[rgbValues.Length];
             withOriginal = 2;
         }
 
@@ -60,6 +62,13 @@ public class SharpPixel
     {
         boundaries[0] = int.MaxValue;
         boundaries[1] = int.MinValue;
+        Reset2();
+    }
+
+    private void Reset2()
+    {
+        boundaries[2] = int.MaxValue;
+        boundaries[3] = int.MinValue;
     }
 
     public void Unlock(bool setPixels, bool setAsOriginal = false)
@@ -88,11 +97,17 @@ public class SharpPixel
         }
     }
 
-    public void SetOriginal()
+    public void SetOriginal(bool UndoCleraOnly = false)
     {
         if (!locked) throw new Exception("Bitmap not locked.");
 
-        if (withOriginal == 2 && boundaries[1] >= 0)
+        if (UndoCleraOnly && boundaries[3] >= 0)
+        {
+            Array.Copy(rgbValuesCopy2, boundaries[2], rgbValues, boundaries[2], boundaries[3] - boundaries[2]);
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, boundaries[2], IntPtr.Add(bmpPtr, boundaries[2]), boundaries[3] - boundaries[2]);
+            Reset2();
+        }
+        else if (!UndoCleraOnly && withOriginal == 2 && boundaries[1] >= 0)
         {
             Array.Copy(rgbValuesCopy, boundaries[0], rgbValues, boundaries[0], boundaries[1] - boundaries[0]);
             System.Runtime.InteropServices.Marshal.Copy(rgbValues, boundaries[0], IntPtr.Add(bmpPtr, boundaries[0]), boundaries[1] - boundaries[0]);
@@ -100,31 +115,7 @@ public class SharpPixel
         }
     }
 
-    public void Clear(Color color, bool withAlpha = true, bool skip0alpha = false)
-    {
-        if (!locked) throw new Exception("Bitmap not locked.");
-
-        int plus = IsAlphaBitmap ? 4 : 3;
-        bool alpha = IsAlphaBitmap && withAlpha;
-        bool skip = IsAlphaBitmap && skip0alpha;
-        byte Alpha = color.A, Red = color.R, Green = color.G, Blue = color.B;
-
-        for (int index = 0; index < rgbValues.Length; index += plus)
-        {
-            if (!skip || rgbValues[index + 3] > 0)
-            {
-                rgbValues[index] = Blue;
-                rgbValues[index + 1] = Green;
-                rgbValues[index + 2] = Red;
-                if (alpha) rgbValues[index + 3] = Alpha;
-            }
-        }
-
-        boundaries[0] = 0;
-        boundaries[1] = rgbValues.Length;
-    }
-
-    public void Clear(Color color, int x0, int y0, int x1, int y1, Color Modifiedcolor, int delta = 0, bool withAlpha = true, bool skip0alpha = false)
+    public void Clear(Color color, int x0, int y0, int x1, int y1, Color Modifiedcolor, int delta = 0, bool withAlpha = true, bool skip0alpha = false, bool copy = false)
     {
         if (!locked) throw new Exception("Bitmap not locked.");
 
@@ -136,8 +127,26 @@ public class SharpPixel
         byte Alpha = color.A, Red = color.R, Green = color.G, Blue = color.B;
         byte RedM = Modifiedcolor.R, GreenM = Modifiedcolor.G, BlueM = Modifiedcolor.B;
 
+        if (copy)
+        {
+            if (boundaries[3] < 0)
+                Array.Copy(rgbValues, index, rgbValuesCopy2, index, finish - index);
+            else
+            {
+                if (index < boundaries[2])
+                    Array.Copy(rgbValues, index, rgbValuesCopy2, index, boundaries[2] - index - 1);
+                if (finish > boundaries[3])
+                    Array.Copy(rgbValues, boundaries[3], rgbValuesCopy2, boundaries[3], finish - boundaries[3]);
+            }
+            if (index < boundaries[2])
+                boundaries[2] = index;
+            if (finish > boundaries[3])
+                boundaries[3] = finish;
+        }
+        else
+            Reset2();
+        
         int val;
-
         for (int j = y0; j <= y1; j++)
         {
             for (int i = x0; i <= x1; i++)
@@ -178,49 +187,6 @@ public class SharpPixel
         boundaries[0] = 0;
         boundaries[1] = rgbValues.Length;
     }
-
-    public void SetPixel(Point location, Color color) => SetPixel(location.X, location.Y, color);
-
-    public void SetPixel(int x, int y, Color color)
-    {
-        if (!locked) throw new Exception("Bitmap not locked.");
-
-        int plus = IsAlphaBitmap ? 4 : 3;
-        int index = (y * Width + x) * plus;
-
-        rgbValues[index] = color.B;
-        rgbValues[index + 1] = color.G;
-        rgbValues[index + 2] = color.R;
-        if (IsAlphaBitmap) rgbValues[index + 3] = color.A;
-
-        if (index < boundaries[0])
-            boundaries[0] = index;
-        if (index + plus > boundaries[1])
-            boundaries[1] = index + plus;
-    }
-
-    public Color GetPixel(Point location) => GetPixel(location.X, location.Y);
-
-    public Color GetPixel(int x, int y)
-    {
-        if (!locked) throw new Exception("Bitmap not locked.");
-
-        int index = (y * Width + x) * (IsAlphaBitmap ? 4 : 3);
-
-        return Color.FromArgb(
-            alpha: IsAlphaBitmap ? rgbValues[index + 3] : 255,
-            red: rgbValues[index + 2],
-            green: rgbValues[index + 1],
-            blue: rgbValues[index]
-            );
-    }
-
-    public static bool Equal2Color(Color clr1, Color clr2, int delta = 0)
-            => clr1.A == clr2.A && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
-
-    public static bool Equal2AlphaColor(Color clr1, Color clr2, int delta = 0)
-            => Math.Abs(clr1.A - clr2.A) <= delta && Math.Abs(clr1.R - clr2.R) <= delta && Math.Abs(clr1.G - clr2.G) <= delta && Math.Abs(clr1.B - clr2.B) <= delta;
 }
 
-// from https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP
-// Then I converted FastPixel to SharpPixel for more speed
+// I took the logic from https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP
