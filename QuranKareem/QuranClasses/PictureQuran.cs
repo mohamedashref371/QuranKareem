@@ -58,6 +58,8 @@ namespace QuranKareem
         #region Bitmaps
         private SharpPixelQK spPagePicture;
         public Bitmap PagePicture { get; private set; }
+        private Bitmap pagePictureT;
+
         #endregion
 
         #region Words
@@ -351,6 +353,7 @@ namespace QuranKareem
                 spPagePicture.ReverseColors();
                 spPagePicture.Unlock(true, true);
             }
+            pagePictureT = (Bitmap)PagePicture.Clone();
         }
 
         private Bitmap CatchPicture(int page)
@@ -513,7 +516,7 @@ namespace QuranKareem
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLine(PageNumber, PagePicture, i));
+                bitmaps.Add(GetLine(PageNumber, pagePictureT, i));
             return bitmaps;
         }
 
@@ -521,7 +524,7 @@ namespace QuranKareem
         {
             var bitmaps = new List<List<Bitmap>>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLineWithWordsMarks(PageNumber, PagePicture, i));
+                bitmaps.Add(GetLineWithWordsMarks(PageNumber, pagePictureT, i));
             return bitmaps;
         }
 
@@ -619,39 +622,46 @@ namespace QuranKareem
             return bitmap;
         }
 
-#warning 
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght)
+        public int[] GetStartAndEndOfPage()
         {
-            if (!success || ayahword == null) return;
-            string pth = $"splits\\S{SurahNumber.ToString().PadLeft(3, '0')}\\picture\\";
-            Directory.CreateDirectory(pth);
-            
-            int page = 0, line=0;
-            Bitmap pagePic = null, b1;
+            command.CommandText = $"SELECT MIN(ayah), MAX(ayah) FROM ayat WHERE page = {PageNumber}";
+            int[] ints = new int[2];
+            quran.Open();
+            reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                ints[0] = reader.GetInt32(0);
+                ints[1] = reader.GetInt32(1);
+            }
+            reader.Close();
+            quran.Close();
+            return ints;
+        }
+        
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths)
+        {
+            if (!success || ayahword == null || paths == null) return;
+
+            Directory.CreateDirectory($"{path}\\images\\");
+            paths.Clear();
+            int line = 0;
+            Bitmap b1;
             Graphics gr;
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 quran.Open();
-                command.CommandText = $"SELECT page,line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
+                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND page={PageNumber} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
                 reader = command.ExecuteReader();
                 if (reader.Read())
-                {
-                    if (page != reader.GetInt32(0))
-                    {
-                        page = reader.GetInt32(0);
-                        pagePic = CatchPicture(page);
-                    }
-                    line = reader.GetInt32(1);
-                }
+                    line = reader.GetInt32(0);
+
                 reader.Close(); quran.Close();
-                if (page > 0)
-                {
-                    b1 = new Bitmap(width, height);
-                    gr = Graphics.FromImage(b1);
-                    gr.Clear(Color.Empty);
-                    gr.DrawImage(GetLineWithWordsMarks(page, pagePic, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
-                    b1.Save($"{pth}{i}{Extension}");
-                }
+                b1 = new Bitmap(width, height);
+                gr = Graphics.FromImage(b1);
+                gr.Clear(Color.Empty);
+                gr.DrawImage(GetLineWithWordsMarks(PageNumber, pagePictureT, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
+                b1.Save($"{path}\\images\\{i}{Extension}");
+                paths.Add($"images\\{i}{Extension}");
             }
         }
         #endregion

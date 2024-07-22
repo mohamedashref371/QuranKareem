@@ -125,6 +125,7 @@
     <Compile Include="QuranClasses\PictureQuran.cs" />
     <Compile Include="QuranClasses\TafseerQuran.cs" />
     <Compile Include="QuranClasses\TextQuran.cs" />
+    <Compile Include="VidiotXmlBuilder.cs" />
     <EmbeddedResource Include="Colors\DiscriminatorsForm.resx">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
     </EmbeddedResource>
