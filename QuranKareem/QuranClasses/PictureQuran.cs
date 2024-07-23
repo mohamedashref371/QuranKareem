@@ -642,7 +642,7 @@ namespace QuranKareem
         {
             if (!success || ayahword == null || paths == null) return;
 
-            Directory.CreateDirectory($"{path}\\images\\");
+            Directory.CreateDirectory($"{path}\\img\\");
             paths.Clear();
             int line = 0;
             Bitmap b1;
@@ -660,8 +660,8 @@ namespace QuranKareem
                 gr = Graphics.FromImage(b1);
                 gr.Clear(Color.Empty);
                 gr.DrawImage(GetLineWithWordsMarks(PageNumber, pagePictureT, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
-                b1.Save($"{path}\\images\\{i}{Extension}");
-                paths.Add($"images\\{i}{Extension}");
+                b1.Save($"{path}\\img\\{i}{Extension}");
+                paths.Add($"img\\{i}{Extension}");
             }
         }
         #endregion

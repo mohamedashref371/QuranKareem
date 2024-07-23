@@ -1052,37 +1052,8 @@ namespace QuranKareem
 
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e)
         {
-            // test
 
             new VideoEditorForm().Show();
-
-            #region Audio.WordsList & Picture.GetAyatInLinesWithWordsMarks - Test
-            List<int> surahayah = new List<int>();
-            string path = "videos\\" + DateTime.Now.Ticks.ToString();
-            int[] minmax = quranPicture.GetStartAndEndOfPage();
-            float[] minmax2 = quranAudio.WordsList(minmax[0], minmax[1], out string mp3Url, surahayah, VidiotXmlBuilder.AudioTimestamps);
-            
-            VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
-            VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
-
-            VidiotXmlBuilder.AudioPath = mp3Url;
-            //VidiotXmlBuilder.VideoPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template i.mp4";
-            //VidiotXmlBuilder.OutputPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template ii.mp4";
-
-            VidiotXmlBuilder.VideoWidth = 1920;
-            VidiotXmlBuilder.VideoHeight = 1080;
-            VidiotXmlBuilder.FrameRate = 25;
-
-            quranPicture.GetAyatInLinesWithWordsMarks(
-                surahayah,
-                1920, 1080,
-                256, 885, 1421, 181,
-                path,
-                VidiotXmlBuilder.ImagesPaths
-                );
-
-            File.WriteAllText(path + "\\QuranKareem.vid", VidiotXmlBuilder.Build());
-            #endregion
 
             #region Picture.GetLinesWithWordsMarks - Test
             //try

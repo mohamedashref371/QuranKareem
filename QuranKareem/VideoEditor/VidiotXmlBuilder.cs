@@ -12,15 +12,15 @@ namespace QuranKareem
         private static int object_id;
         private static int obj_id_x, obj_id_y, obj_id_z;
         private static readonly StringBuilder sb = new StringBuilder();
-        private static int frameNum = 24;
+        private static int frameNum = 25;
         private static int frameDiv = 1;
         private static readonly string dataTime = "2023-10-07T06:00:00";
         private static readonly string name = Application.ProductName + Application.ProductVersion;
         private static int vOffset, aOffset, length;
 
-        public static int VideoWidth { get; set; } = 1280;
-        public static int VideoHeight { get; set; } = 720;
-        public static float FrameRate { get; set; } = 24;
+        public static int VideoWidth { get; set; } = 1920;
+        public static int VideoHeight { get; set; } = 1080;
+        public static float FrameRate { get; set; } = 25;
         public static int AudioChannels { get; set; } = 2;
         public static int AudioSampleRate { get; set; } = 44100;
         public static int AudioBitRate { get; set; } = 128000;
@@ -29,7 +29,7 @@ namespace QuranKareem
         public static string VideoPath
         {
             get => videoPath;
-            set { if (value != null) videoPath = value; }
+            set { if (value != null && value != "") videoPath = value; }
         }
 
         public static float VideoOffsetInSecond { get; set; } = 0;
@@ -38,20 +38,20 @@ namespace QuranKareem
         public static string AudioPath
         {
             get => audioPath;
-            set { if (value != null) audioPath = value; }
+            set { if (value != null && value != "") audioPath = value; }
         }
 
         public static float AudioOffsetInSecond { get; set; } = 0;
         public static float LengthInSecond { get; set; } = 1000;
 
-        public static List<string> ImagesPaths { get; private set; } = new List<string>();
-        public static List<float> AudioTimestamps { get; private set; } = new List<float>();
+        public static readonly List<string> ImagesPaths = new List<string>();
+        public static readonly List<float> AudioTimestamps = new List<float>();
 
         private static string outputPath = "Output.mp4";
         public static string OutputPath
         {
             get => outputPath;
-            set { if (value != null) outputPath = value; }
+            set { if (value != null && value != "") outputPath = value; }
         }
 
         public static string Build()
