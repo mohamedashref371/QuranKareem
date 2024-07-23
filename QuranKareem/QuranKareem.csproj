@@ -125,7 +125,13 @@
     <Compile Include="QuranClasses\PictureQuran.cs" />
     <Compile Include="QuranClasses\TafseerQuran.cs" />
     <Compile Include="QuranClasses\TextQuran.cs" />
-    <Compile Include="VidiotXmlBuilder.cs" />
+    <Compile Include="VideoEditor\VideoEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VideoEditor\VideoEditorForm.Designer.cs">
+      <DependentUpon>VideoEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VideoEditor\VidiotXmlBuilder.cs" />
     <EmbeddedResource Include="Colors\DiscriminatorsForm.resx">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,6 +148,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="VideoEditor\VideoEditorForm.resx">
+      <DependentUpon>VideoEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

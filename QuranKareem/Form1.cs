@@ -1054,7 +1054,9 @@ namespace QuranKareem
         {
             // test
 
-            #region Audio.SplitSurahToWords & Picture.GetAyatInLinesWithWordsMarks - Test
+            new VideoEditorForm().Show();
+
+            #region Audio.WordsList & Picture.GetAyatInLinesWithWordsMarks - Test
             List<int> surahayah = new List<int>();
             string path = "videos\\" + DateTime.Now.Ticks.ToString();
             int[] minmax = quranPicture.GetStartAndEndOfPage();
@@ -1064,8 +1066,8 @@ namespace QuranKareem
             VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
 
             VidiotXmlBuilder.AudioPath = mp3Url;
-            VidiotXmlBuilder.VideoPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template i.mp4";
-            VidiotXmlBuilder.OutputPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template ii.mp4";
+            //VidiotXmlBuilder.VideoPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template i.mp4";
+            //VidiotXmlBuilder.OutputPath = "C:\\Users\\Mohamed\\Desktop\\vidiot i\\Template ii.mp4";
 
             VidiotXmlBuilder.VideoWidth = 1920;
             VidiotXmlBuilder.VideoHeight = 1080;
