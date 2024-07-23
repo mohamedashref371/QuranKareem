@@ -86,9 +86,7 @@ namespace QuranKareem
                 (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
-                bitmap,
-                surah,
-                page
+                bitmap, surah, page
                 );
 
             File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());

@@ -651,7 +651,7 @@ namespace QuranKareem
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 quran.Open();
-                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={surah} AND page={page} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
+                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={surah} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                     line = reader.GetInt32(0);
