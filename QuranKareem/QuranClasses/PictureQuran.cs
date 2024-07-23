@@ -56,9 +56,9 @@ namespace QuranKareem
         #endregion
 
         #region Bitmaps
-        private SharpPixelQK spPagePicture;
+        private SharpPixelQK spQuranPicture;
+        public Bitmap CurrentPicture { get; private set; }
         public Bitmap PagePicture { get; private set; }
-
         #endregion
 
         #region Words
@@ -151,7 +151,8 @@ namespace QuranKareem
                 DiscriminatorsReader();
                 GetDiscriminators();
                 ActiveDiscriminators();
-                PagePicture = new Bitmap(Width, Height);
+                CurrentPicture = new Bitmap(Width, Height);
+                PagePicture = CurrentPicture;
                 GetInitialColors();
                 Set(sura, aya);
             }
@@ -341,17 +342,19 @@ namespace QuranKareem
         {
             PageNumber = page;
 
-            PagePicture = CatchPicture(page);
-            spPagePicture = new SharpPixelQK(PagePicture, true);
+            CurrentPicture = CatchPicture(page);
+            spQuranPicture = new SharpPixelQK(CurrentPicture, true);
 
             if (Discriminators.PageColors.Count > 0 && !isWordTableEmpty)
                 PageDecorations();
             else if (darkMode && isWordTableEmpty)
             {
-                spPagePicture.Lock();
-                spPagePicture.ReverseColors();
-                spPagePicture.Unlock(true, true);
+                spQuranPicture.Lock();
+                spQuranPicture.ReverseColors();
+                spQuranPicture.Unlock(true, true);
             }
+
+            PagePicture = (Bitmap)CurrentPicture.Clone();
         }
 
         private Bitmap CatchPicture(int page)
@@ -372,7 +375,7 @@ namespace QuranKareem
                         return new Bitmap(filesName[i]);
                 }
             }
-            return PagePicture;
+            return CurrentPicture;
         }
         #endregion
 
@@ -442,23 +445,23 @@ namespace QuranKareem
 
         private void PageDecorations()
         {
-            spPagePicture.Lock();
+            spQuranPicture.Lock();
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.PageColors.Keys.ToArray())}) AND page={PageNumber}";
             reader = command.ExecuteReader();
 
             while (reader.Read())
-                spPagePicture.Clear(Discriminators.PageColors[reader.GetInt32(4)], reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
+                spQuranPicture.Clear(Discriminators.PageColors[reader.GetInt32(4)], reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
 
             reader.Close(); quran.Close();
-            spPagePicture.Unlock(true, true);
+            spQuranPicture.Unlock(true, true);
         }
 
         private void AyahDecorations(bool discri = true)
         {
-            spPagePicture.Lock();
-            spPagePicture.SetOriginal();
+            spQuranPicture.Lock();
+            spQuranPicture.SetOriginal();
 
             quran.Open();
             if (discri)
@@ -479,17 +482,17 @@ namespace QuranKareem
                     clr = AyahColor;
 
                 if (!clr.IsEmpty)
-                    spPagePicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
+                    spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
             }
 
             reader.Close(); quran.Close();
-            spPagePicture.Unlock(true);
+            spQuranPicture.Unlock(true);
         }
 
         private void WordDecorations()
         {
-            spPagePicture.Lock();
-            spPagePicture.SetOriginal(true);
+            spQuranPicture.Lock();
+            spQuranPicture.SetOriginal(true);
 
             quran.Open();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
@@ -501,11 +504,11 @@ namespace QuranKareem
                 clr = Discriminators.WordColors[reader.GetInt32(4)];
                 clr = clr.Name != "WordColor" ? clr : WordColor;
                 if (!clr.IsEmpty)
-                    spPagePicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
+                    spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
             }
             
             reader.Close(); quran.Close();
-            spPagePicture.Unlock(true);
+            spQuranPicture.Unlock(true);
         }
         #endregion
 
@@ -636,7 +639,7 @@ namespace QuranKareem
             return ints;
         }
         
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, Bitmap pageClone, int page)
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, Bitmap pageClone, int surah, int page)
         {
             if (!success || ayahword == null || paths == null) return;
 
@@ -648,7 +651,7 @@ namespace QuranKareem
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 quran.Open();
-                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND page={page} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
+                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={surah} AND page={page} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                     line = reader.GetInt32(0);

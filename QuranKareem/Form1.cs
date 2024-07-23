@@ -104,7 +104,7 @@ namespace QuranKareem
             if (textsFiles != null && textsFiles.Length > 0)
                 quranText.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
-            if (!textMode) quranPic.BackgroundImage = quranPicture.PagePicture; // اظهار الصورة التي سيعطيها لك
+            if (!textMode) quranPic.BackgroundImage = quranPicture.CurrentPicture; // اظهار الصورة التي سيعطيها لك
 
             Surahs.Items.Clear(); // إفراغ قائمة ال ComboBox
             if (textMode) Surahs.Items.AddRange(quranText.GetSurahNames()); // ملأها بأسماء السور;
@@ -220,7 +220,7 @@ namespace QuranKareem
                 else
                     wordColorsCheck.Checked = false;
 
-                quranPic.BackgroundImage = quranPicture.PagePicture;
+                quranPic.BackgroundImage = quranPicture.CurrentPicture;
             }
         }
 
@@ -355,7 +355,7 @@ namespace QuranKareem
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
             }
-            if (!textMode) quranPic.BackgroundImage = quranPicture.PagePicture;
+            if (!textMode) quranPic.BackgroundImage = quranPicture.CurrentPicture;
         }
         #endregion
 
@@ -608,7 +608,7 @@ namespace QuranKareem
                 Page.Value = quranPicture.PageNumber;
 
                 quranPic.BackgroundImage = null;
-                quranPic.BackgroundImage = quranPicture.PagePicture;
+                quranPic.BackgroundImage = quranPicture.CurrentPicture;
             }
 
             if (isAllow && textMode)
@@ -657,7 +657,7 @@ namespace QuranKareem
                     quranPicture.WordOf(quranAudio.CurrentWord);
 
                 quranPic.BackgroundImage = null;
-                quranPic.BackgroundImage = quranPicture.PagePicture;
+                quranPic.BackgroundImage = quranPicture.CurrentPicture;
             }
         }
 
