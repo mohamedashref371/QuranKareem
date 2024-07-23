@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -219,29 +218,34 @@ namespace QuranKareem
             {
                 sb.Append("<item><px class_id_reference=\"28\" object_id=\"_")
                   .Append(object_id++)
-                  .Append("\"><ClipInterval><Clip><mLink><ptr><px class_id=\"-1\"></px></ptr></mLink></Clip><mSource><px class_id_reference=\"45\" object_id=\"_")
-                  .Append(object_id++)
-                  .Append("\"><mPath><filename><string>")
-                  .Append(ImagesPaths[i])
-                  .Append("</string></filename></mPath><mOffset>0</mOffset></px></mSource><mSpeed><numerator>1</numerator><denominator>1</denominator></mSpeed><mOffset>13823850</mOffset><mLength>")
-                  .Append(Math.Round(AudioTimestamps[i] * FrameRate)) // length 
-                  .Append("</mLength><mKeyFrames><count>0</count><item_version>0</item_version></mKeyFrames><mDefaultKeyFrame><px class_id_reference=\"41\" object_id=\"_")
-                  .Append(object_id++)
-                  .Append("\"><mInputSize><x>")
-                  .Append(VideoWidth)
-                  .Append("</x><y>")
-                  .Append(VideoHeight)
-                  .Append("</y></mInputSize><mOpacity>255</mOpacity><mScaling>")
-                  .Append("1")
-                  .Append("</mScaling><mScalingFactor><numerator>")
-                  .Append("1")
-                  .Append("</numerator><denominator>")
-                  .Append("1")
-                  .Append("</denominator></mScalingFactor><mRotation><numerator>0</numerator><denominator>1</denominator></mRotation><mFlipHorizontal>0</mFlipHorizontal><mAlignment>3</mAlignment><mPosition><x>")
-                  .Append("0")
-                  .Append("</x><y>")
-                  .Append("0")
-                  .Append("</y></mPosition><mCropTop>0</mCropTop><mCropBottom>0</mCropBottom><mCropLeft>0</mCropLeft><mCropRight>0</mCropRight></px></mDefaultKeyFrame><mSyncOffset>0</mSyncOffset></ClipInterval><IVideo></IVideo></px></item>");
+                  .Append("\"><ClipInterval><Clip><mLink><ptr><px class_id=\"-1\"></px></ptr></mLink></Clip><mSource><px ");
+                if (i == 0)
+                    sb.Append("class_id=\"45\" class_name=\"model::VideoSourceImage\" tracking_level=\"1\" version=\"2\"");
+                else
+                    sb.Append("class_id_reference=\"45\"");
+                sb.Append(" object_id=\"_")
+                .Append(object_id++)
+                .Append("\"><mPath><filename><string>")
+                .Append(ImagesPaths[i])
+                .Append("</string></filename></mPath><mOffset>0</mOffset></px></mSource><mSpeed><numerator>1</numerator><denominator>1</denominator></mSpeed><mOffset>13823850</mOffset><mLength>")
+                .Append(Math.Round(AudioTimestamps[i] * FrameRate)) // length 
+                .Append("</mLength><mKeyFrames><count>0</count><item_version>0</item_version></mKeyFrames><mDefaultKeyFrame><px class_id_reference=\"41\" object_id=\"_")
+                .Append(object_id++)
+                .Append("\"><mInputSize><x>")
+                .Append(VideoWidth)
+                .Append("</x><y>")
+                .Append(VideoHeight)
+                .Append("</y></mInputSize><mOpacity>255</mOpacity><mScaling>")
+                .Append("1")
+                .Append("</mScaling><mScalingFactor><numerator>")
+                .Append("1")
+                .Append("</numerator><denominator>")
+                .Append("1")
+                .Append("</denominator></mScalingFactor><mRotation><numerator>0</numerator><denominator>1</denominator></mRotation><mFlipHorizontal>0</mFlipHorizontal><mAlignment>3</mAlignment><mPosition><x>")
+                .Append("0")
+                .Append("</x><y>")
+                .Append("0")
+                .Append("</y></mPosition><mCropTop>0</mCropTop><mCropBottom>0</mCropBottom><mCropLeft>0</mCropLeft><mCropRight>0</mCropRight></px></mDefaultKeyFrame><mSyncOffset>0</mSyncOffset></ClipInterval><IVideo></IVideo></px></item>");
             }
 
             sb.Append("</mClips><mHeight>53</mHeight></Track><IVideo></IVideo></px></item></mVideoTracks>");
