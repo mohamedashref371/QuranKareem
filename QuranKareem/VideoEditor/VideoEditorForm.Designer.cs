@@ -51,12 +51,14 @@
             this.generate = new System.Windows.Forms.Button();
             this.locY = new System.Windows.Forms.NumericUpDown();
             this.locX = new System.Windows.Forms.NumericUpDown();
-            this.widthHeight = new System.Windows.Forms.Label();
-            this.locationLabel = new System.Windows.Forms.Label();
+            this.lineWidthLabel = new System.Windows.Forms.Label();
             this.lineHeight = new System.Windows.Forms.NumericUpDown();
             this.lineWidth = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.xLabel = new System.Windows.Forms.Label();
+            this.yLabel = new System.Windows.Forms.Label();
+            this.videoQualityLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lineHeightLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.videoWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameRate)).BeginInit();
@@ -170,13 +172,14 @@
             // 
             // videoWidthLabel
             // 
+            this.videoWidthLabel.AutoSize = true;
             this.videoWidthLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoWidthLabel.Location = new System.Drawing.Point(604, 229);
+            this.videoWidthLabel.Location = new System.Drawing.Point(93, 242);
             this.videoWidthLabel.Name = "videoWidthLabel";
-            this.videoWidthLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.videoWidthLabel.Size = new System.Drawing.Size(168, 23);
+            this.videoWidthLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.videoWidthLabel.Size = new System.Drawing.Size(66, 23);
             this.videoWidthLabel.TabIndex = 9;
-            this.videoWidthLabel.Text = "عرض الفيديو:";
+            this.videoWidthLabel.Text = "Width:";
             this.videoWidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // videoWidth
@@ -187,7 +190,7 @@
             0,
             0,
             0});
-            this.videoWidth.Location = new System.Drawing.Point(445, 227);
+            this.videoWidth.Location = new System.Drawing.Point(184, 239);
             this.videoWidth.Maximum = new decimal(new int[] {
             7680,
             0,
@@ -212,7 +215,7 @@
             // videoHeight
             // 
             this.videoHeight.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoHeight.Location = new System.Drawing.Point(54, 227);
+            this.videoHeight.Location = new System.Drawing.Point(570, 239);
             this.videoHeight.Maximum = new decimal(new int[] {
             4320,
             0,
@@ -236,19 +239,20 @@
             // 
             // videoHeightLabel
             // 
+            this.videoHeightLabel.AutoSize = true;
             this.videoHeightLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoHeightLabel.Location = new System.Drawing.Point(202, 229);
+            this.videoHeightLabel.Location = new System.Drawing.Point(480, 242);
             this.videoHeightLabel.Name = "videoHeightLabel";
-            this.videoHeightLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.videoHeightLabel.Size = new System.Drawing.Size(168, 23);
+            this.videoHeightLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.videoHeightLabel.Size = new System.Drawing.Size(72, 23);
             this.videoHeightLabel.TabIndex = 11;
-            this.videoHeightLabel.Text = "إرتفاع الفيديو:";
+            this.videoHeightLabel.Text = "Height:";
             this.videoHeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frameRate
             // 
             this.frameRate.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.frameRate.Location = new System.Drawing.Point(445, 276);
+            this.frameRate.Location = new System.Drawing.Point(442, 298);
             this.frameRate.Maximum = new decimal(new int[] {
             60,
             0,
@@ -272,11 +276,12 @@
             // 
             // frameRateLabel
             // 
+            this.frameRateLabel.AutoSize = true;
             this.frameRateLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.frameRateLabel.Location = new System.Drawing.Point(604, 278);
+            this.frameRateLabel.Location = new System.Drawing.Point(578, 300);
             this.frameRateLabel.Name = "frameRateLabel";
             this.frameRateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.frameRateLabel.Size = new System.Drawing.Size(168, 23);
+            this.frameRateLabel.Size = new System.Drawing.Size(157, 23);
             this.frameRateLabel.TabIndex = 13;
             this.frameRateLabel.Text = "عدد الإطارات\\ثانية:";
             this.frameRateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -289,9 +294,9 @@
             0,
             0,
             0});
-            this.audioBitRate.Location = new System.Drawing.Point(54, 276);
+            this.audioBitRate.Location = new System.Drawing.Point(92, 298);
             this.audioBitRate.Maximum = new decimal(new int[] {
-            256000,
+            320000,
             0,
             0,
             0});
@@ -313,11 +318,12 @@
             // 
             // audioBitRateLabel
             // 
+            this.audioBitRateLabel.AutoSize = true;
             this.audioBitRateLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.audioBitRateLabel.Location = new System.Drawing.Point(202, 280);
+            this.audioBitRateLabel.Location = new System.Drawing.Point(220, 302);
             this.audioBitRateLabel.Name = "audioBitRateLabel";
             this.audioBitRateLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.audioBitRateLabel.Size = new System.Drawing.Size(168, 23);
+            this.audioBitRateLabel.Size = new System.Drawing.Size(110, 23);
             this.audioBitRateLabel.TabIndex = 15;
             this.audioBitRateLabel.Text = "جودة الصوت:";
             this.audioBitRateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -359,15 +365,15 @@
             // locY
             // 
             this.locY.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.locY.Location = new System.Drawing.Point(54, 346);
+            this.locY.Location = new System.Drawing.Point(182, 397);
             this.locY.Maximum = new decimal(new int[] {
-            1080,
+            4000,
             0,
             0,
             0});
             this.locY.Name = "locY";
             this.locY.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.locY.Size = new System.Drawing.Size(120, 30);
+            this.locY.Size = new System.Drawing.Size(86, 30);
             this.locY.TabIndex = 23;
             this.locY.Value = new decimal(new int[] {
             885,
@@ -383,15 +389,15 @@
             0,
             0,
             0});
-            this.locX.Location = new System.Drawing.Point(445, 351);
+            this.locX.Location = new System.Drawing.Point(43, 397);
             this.locX.Maximum = new decimal(new int[] {
-            1920,
+            4000,
             0,
             0,
             0});
             this.locX.Name = "locX";
             this.locX.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.locX.Size = new System.Drawing.Size(120, 30);
+            this.locX.Size = new System.Drawing.Size(88, 30);
             this.locX.TabIndex = 21;
             this.locX.Value = new decimal(new int[] {
             256,
@@ -399,33 +405,22 @@
             0,
             0});
             // 
-            // widthHeight
+            // lineWidthLabel
             // 
-            this.widthHeight.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.widthHeight.Location = new System.Drawing.Point(101, 403);
-            this.widthHeight.Name = "widthHeight";
-            this.widthHeight.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.widthHeight.Size = new System.Drawing.Size(687, 23);
-            this.widthHeight.TabIndex = 28;
-            this.widthHeight.Text = "العرض =                                                    ،                  الإ" +
-    "رتفاع =                                       ،";
-            this.widthHeight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // locationLabel
-            // 
-            this.locationLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.locationLabel.Location = new System.Drawing.Point(337, 353);
-            this.locationLabel.Name = "locationLabel";
-            this.locationLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.locationLabel.Size = new System.Drawing.Size(451, 23);
-            this.locationLabel.TabIndex = 22;
-            this.locationLabel.Text = "نقطة بداية سطر القرآن =                             ،";
-            this.locationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lineWidthLabel.AutoSize = true;
+            this.lineWidthLabel.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.lineWidthLabel.Location = new System.Drawing.Point(312, 401);
+            this.lineWidthLabel.Name = "lineWidthLabel";
+            this.lineWidthLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lineWidthLabel.Size = new System.Drawing.Size(106, 23);
+            this.lineWidthLabel.TabIndex = 28;
+            this.lineWidthLabel.Text = "Line Width:";
+            this.lineWidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lineHeight
             // 
             this.lineHeight.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lineHeight.Location = new System.Drawing.Point(54, 400);
+            this.lineHeight.Location = new System.Drawing.Point(688, 397);
             this.lineHeight.Maximum = new decimal(new int[] {
             4320,
             0,
@@ -438,7 +433,7 @@
             0});
             this.lineHeight.Name = "lineHeight";
             this.lineHeight.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lineHeight.Size = new System.Drawing.Size(120, 30);
+            this.lineHeight.Size = new System.Drawing.Size(87, 30);
             this.lineHeight.TabIndex = 30;
             this.lineHeight.Value = new decimal(new int[] {
             181,
@@ -454,7 +449,7 @@
             0,
             0,
             0});
-            this.lineWidth.Location = new System.Drawing.Point(445, 400);
+            this.lineWidth.Location = new System.Drawing.Point(432, 397);
             this.lineWidth.Maximum = new decimal(new int[] {
             7680,
             0,
@@ -467,7 +462,7 @@
             0});
             this.lineWidth.Name = "lineWidth";
             this.lineWidth.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lineWidth.Size = new System.Drawing.Size(120, 30);
+            this.lineWidth.Size = new System.Drawing.Size(100, 30);
             this.lineWidth.TabIndex = 29;
             this.lineWidth.Value = new decimal(new int[] {
             1421,
@@ -475,36 +470,75 @@
             0,
             0});
             // 
-            // label2
+            // xLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label2.Location = new System.Drawing.Point(421, 357);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(18, 19);
-            this.label2.TabIndex = 31;
-            this.label2.Text = "X";
+            this.xLabel.AutoSize = true;
+            this.xLabel.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.xLabel.Location = new System.Drawing.Point(8, 403);
+            this.xLabel.Name = "xLabel";
+            this.xLabel.Size = new System.Drawing.Size(29, 19);
+            this.xLabel.TabIndex = 31;
+            this.xLabel.Text = "X: ";
             // 
-            // label1
+            // yLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label1.Location = new System.Drawing.Point(180, 351);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 19);
-            this.label1.TabIndex = 32;
-            this.label1.Text = "Y";
+            this.yLabel.AutoSize = true;
+            this.yLabel.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.yLabel.Location = new System.Drawing.Point(146, 403);
+            this.yLabel.Name = "yLabel";
+            this.yLabel.Size = new System.Drawing.Size(30, 19);
+            this.yLabel.TabIndex = 32;
+            this.yLabel.Text = "Y: ";
+            // 
+            // videoQualityLabel
+            // 
+            this.videoQualityLabel.AutoSize = true;
+            this.videoQualityLabel.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.videoQualityLabel.Location = new System.Drawing.Point(318, 209);
+            this.videoQualityLabel.Name = "videoQualityLabel";
+            this.videoQualityLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.videoQualityLabel.Size = new System.Drawing.Size(155, 23);
+            this.videoQualityLabel.TabIndex = 33;
+            this.videoQualityLabel.Text = "جودة قالب الفيديو:";
+            this.videoQualityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label3.Location = new System.Drawing.Point(251, 362);
+            this.label3.Name = "label3";
+            this.label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label3.Size = new System.Drawing.Size(295, 23);
+            this.label3.TabIndex = 34;
+            this.label3.Text = "مكان وحجم سطر القرآن في القالب:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lineHeightLabel
+            // 
+            this.lineHeightLabel.AutoSize = true;
+            this.lineHeightLabel.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.lineHeightLabel.Location = new System.Drawing.Point(568, 401);
+            this.lineHeightLabel.Name = "lineHeightLabel";
+            this.lineHeightLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lineHeightLabel.Size = new System.Drawing.Size(106, 23);
+            this.lineHeightLabel.TabIndex = 35;
+            this.lineHeightLabel.Text = "Line Width:";
+            this.lineHeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // VideoEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lineHeightLabel);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.videoQualityLabel);
+            this.Controls.Add(this.yLabel);
+            this.Controls.Add(this.xLabel);
             this.Controls.Add(this.lineHeight);
             this.Controls.Add(this.lineWidth);
-            this.Controls.Add(this.widthHeight);
+            this.Controls.Add(this.lineWidthLabel);
             this.Controls.Add(this.locY);
             this.Controls.Add(this.locX);
             this.Controls.Add(this.generate);
@@ -526,7 +560,6 @@
             this.Controls.Add(this.vidiotLink);
             this.Controls.Add(this.vidiotRadio);
             this.Controls.Add(this.videoNameLabel);
-            this.Controls.Add(this.locationLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "VideoEditorForm";
@@ -570,11 +603,13 @@
         private System.Windows.Forms.Button generate;
         private System.Windows.Forms.NumericUpDown locY;
         private System.Windows.Forms.NumericUpDown locX;
-        private System.Windows.Forms.Label widthHeight;
-        private System.Windows.Forms.Label locationLabel;
+        private System.Windows.Forms.Label lineWidthLabel;
         private System.Windows.Forms.NumericUpDown lineHeight;
         private System.Windows.Forms.NumericUpDown lineWidth;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label xLabel;
+        private System.Windows.Forms.Label yLabel;
+        private System.Windows.Forms.Label videoQualityLabel;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lineHeightLabel;
     }
 }
