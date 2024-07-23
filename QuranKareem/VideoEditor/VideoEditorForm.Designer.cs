@@ -97,18 +97,18 @@
             // videoPathLabel
             // 
             this.videoPathLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoPathLabel.Location = new System.Drawing.Point(620, 113);
+            this.videoPathLabel.Location = new System.Drawing.Point(608, 113);
             this.videoPathLabel.Name = "videoPathLabel";
             this.videoPathLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.videoPathLabel.Size = new System.Drawing.Size(168, 23);
+            this.videoPathLabel.Size = new System.Drawing.Size(180, 23);
             this.videoPathLabel.TabIndex = 3;
-            this.videoPathLabel.Text = "مسار الفيديو:";
+            this.videoPathLabel.Text = "مسار الفيديو القالب:";
             this.videoPathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "VideoInput";
-            this.openFileDialog.Filter = "*.mp4|Video Files";
+            this.openFileDialog.Filter = "Video Files|*.mp4";
             // 
             // videoNameLabel
             // 
@@ -123,7 +123,7 @@
             // videoPath
             // 
             this.videoPath.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoPath.Location = new System.Drawing.Point(501, 106);
+            this.videoPath.Location = new System.Drawing.Point(498, 106);
             this.videoPath.Name = "videoPath";
             this.videoPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.videoPath.Size = new System.Drawing.Size(104, 36);
@@ -135,7 +135,7 @@
             // videoOutputPath
             // 
             this.videoOutputPath.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoOutputPath.Location = new System.Drawing.Point(501, 160);
+            this.videoOutputPath.Location = new System.Drawing.Point(498, 160);
             this.videoOutputPath.Name = "videoOutputPath";
             this.videoOutputPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.videoOutputPath.Size = new System.Drawing.Size(104, 36);
@@ -147,10 +147,10 @@
             // videoOutputPathLabel
             // 
             this.videoOutputPathLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoOutputPathLabel.Location = new System.Drawing.Point(620, 167);
+            this.videoOutputPathLabel.Location = new System.Drawing.Point(608, 167);
             this.videoOutputPathLabel.Name = "videoOutputPathLabel";
             this.videoOutputPathLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.videoOutputPathLabel.Size = new System.Drawing.Size(168, 23);
+            this.videoOutputPathLabel.Size = new System.Drawing.Size(180, 23);
             this.videoOutputPathLabel.TabIndex = 6;
             this.videoOutputPathLabel.Text = "مسار إخراج الفيديو:";
             this.videoOutputPathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -168,7 +168,7 @@
             // saveFileDialog
             // 
             this.saveFileDialog.FileName = "VideoOutput";
-            this.saveFileDialog.Filter = ".mp4|Video Files";
+            this.saveFileDialog.Filter = "Video Files|*.mp4";
             // 
             // videoWidthLabel
             // 
@@ -494,12 +494,12 @@
             // 
             this.videoQualityLabel.AutoSize = true;
             this.videoQualityLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.videoQualityLabel.Location = new System.Drawing.Point(318, 209);
+            this.videoQualityLabel.Location = new System.Drawing.Point(313, 209);
             this.videoQualityLabel.Name = "videoQualityLabel";
             this.videoQualityLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.videoQualityLabel.Size = new System.Drawing.Size(155, 23);
+            this.videoQualityLabel.Size = new System.Drawing.Size(167, 23);
             this.videoQualityLabel.TabIndex = 33;
-            this.videoQualityLabel.Text = "جودة قالب الفيديو:";
+            this.videoQualityLabel.Text = "جودة الفيديو القالب:";
             this.videoQualityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3

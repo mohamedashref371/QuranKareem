@@ -32,10 +32,22 @@ namespace QuranKareem
         }
 
         private readonly List<int> surahayah = new List<int>();
+        private Bitmap bitmap;
+        private int page;
         private void VideoEditorForm_Load(object sender, EventArgs e)
         {
             int[] minmax = PictureQuran.Instance.GetStartAndEndOfPage();
             float[] minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out string mp3Url, surahayah, VidiotXmlBuilder.AudioTimestamps);
+
+            if (minmax2 == null)
+            {
+                MessageBox.Show("لم نستطع إمساك سورة.");
+                Close();
+                return;
+            }
+
+            page = PictureQuran.Instance.PageNumber;
+            bitmap = (Bitmap)PictureQuran.Instance.PagePicture.Clone();
 
             VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
             VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
@@ -72,7 +84,9 @@ namespace QuranKareem
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
                 (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
                 path,
-                VidiotXmlBuilder.ImagesPaths
+                VidiotXmlBuilder.ImagesPaths,
+                bitmap,
+                page
                 );
 
             File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());

@@ -1053,7 +1053,7 @@ namespace QuranKareem
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e)
         {
 
-            new VideoEditorForm().Show();
+            new VideoEditorForm().ShowDialog();
 
             #region Picture.GetLinesWithWordsMarks - Test
             //try

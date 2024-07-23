@@ -58,7 +58,6 @@ namespace QuranKareem
         #region Bitmaps
         private SharpPixelQK spPagePicture;
         public Bitmap PagePicture { get; private set; }
-        private Bitmap pagePictureT;
 
         #endregion
 
@@ -353,7 +352,6 @@ namespace QuranKareem
                 spPagePicture.ReverseColors();
                 spPagePicture.Unlock(true, true);
             }
-            pagePictureT = (Bitmap)PagePicture.Clone();
         }
 
         private Bitmap CatchPicture(int page)
@@ -516,7 +514,7 @@ namespace QuranKareem
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLine(PageNumber, pagePictureT, i));
+                bitmaps.Add(GetLine(PageNumber, PagePicture, i));
             return bitmaps;
         }
 
@@ -524,7 +522,7 @@ namespace QuranKareem
         {
             var bitmaps = new List<List<Bitmap>>();
             for (int i = 1; i <= 15; i++)
-                bitmaps.Add(GetLineWithWordsMarks(PageNumber, pagePictureT, i));
+                bitmaps.Add(GetLineWithWordsMarks(PageNumber, PagePicture, i));
             return bitmaps;
         }
 
@@ -638,7 +636,7 @@ namespace QuranKareem
             return ints;
         }
         
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths)
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, Bitmap pageClone, int page)
         {
             if (!success || ayahword == null || paths == null) return;
 
@@ -650,7 +648,7 @@ namespace QuranKareem
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 quran.Open();
-                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND page={PageNumber} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
+                command.CommandText = $"SELECT line FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND page={page} AND ayah = {ayahword[i * 2]} AND word = {ayahword[i * 2 + 1]} LIMIT 1";
                 reader = command.ExecuteReader();
                 if (reader.Read())
                     line = reader.GetInt32(0);
@@ -659,7 +657,7 @@ namespace QuranKareem
                 b1 = new Bitmap(width, height);
                 gr = Graphics.FromImage(b1);
                 gr.Clear(Color.Empty);
-                gr.DrawImage(GetLineWithWordsMarks(PageNumber, pagePictureT, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
+                gr.DrawImage(GetLineWithWordsMarks(page, pageClone, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
                 b1.Save($"{path}\\img\\{i}{Extension}");
                 paths.Add($"img\\{i}{Extension}");
             }
