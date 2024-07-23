@@ -107,7 +107,7 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "VideoInput";
+            this.openFileDialog.FileName = "VideoInput.mp4";
             this.openFileDialog.Filter = "Video Files|*.mp4";
             // 
             // videoNameLabel
@@ -167,7 +167,7 @@
             // 
             // saveFileDialog
             // 
-            this.saveFileDialog.FileName = "VideoOutput";
+            this.saveFileDialog.FileName = "VideoOutput.mp4";
             this.saveFileDialog.Filter = "Video Files|*.mp4";
             // 
             // videoWidthLabel
