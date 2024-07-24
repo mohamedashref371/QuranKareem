@@ -642,10 +642,11 @@ namespace QuranKareem
 #warning very slow
         public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, Bitmap pageClone, int surah, int page)
         {
-            if (!success || ayahword == null || paths == null) return;
+            paths.Clear();
+            if (!success || isWordTableEmpty || ayahword == null || paths == null) return;
 
             Directory.CreateDirectory($"{path}\\img\\");
-            paths.Clear();
+            
             int line = 0;
             Bitmap b1;
             Graphics gr;

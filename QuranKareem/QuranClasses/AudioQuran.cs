@@ -461,11 +461,10 @@ namespace QuranKareem
         public float[] WordsList(int ayahStart, int ayahEnd, out string mp3Url, List<int> surahayah, List<float> timestamps)
         {
             mp3Url = mp3.URL;
-
-            if (!success || isWordTableEmpty || mp3.URL == "" || surahayah == null || timestamps == null) return null;
-
             surahayah.Clear();
             timestamps.Clear();
+
+            if (!success || isWordTableEmpty || mp3.URL == "" || surahayah == null || timestamps == null) return null;
 
             int tStart = 0, tEnd = 0, to ;
 

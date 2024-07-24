@@ -42,7 +42,7 @@ namespace QuranKareem
 
             if (minmax2 == null)
             {
-                MessageBox.Show("لم نستطع إمساك سورة.");
+                MessageBox.Show("لم نستطع إمساك سورة أو غير متوفر تحديد الكلمات لهذا الشيخ.");
                 Close();
                 return;
             }
@@ -94,9 +94,13 @@ namespace QuranKareem
                 VidiotXmlBuilder.ImagesPaths,
                 bitmap, surah, page
                 );
-
-            File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());
-            Process.Start(path);
+            if (VidiotXmlBuilder.ImagesPaths.Count != 0)
+            {
+                File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());
+                Process.Start(path);
+            }
+            else
+                MessageBox.Show("هناك خطأ، يحتمل أن المصحف لا يدعم تحديد الكلمات");
         }
     }
 }
