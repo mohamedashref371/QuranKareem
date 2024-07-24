@@ -288,6 +288,7 @@
             // 
             // audioBitRate
             // 
+            this.audioBitRate.BackColor = System.Drawing.Color.White;
             this.audioBitRate.Font = new System.Drawing.Font("Tahoma", 14F);
             this.audioBitRate.Increment = new decimal(new int[] {
             32000,
@@ -301,11 +302,12 @@
             0,
             0});
             this.audioBitRate.Minimum = new decimal(new int[] {
-            96000,
+            64000,
             0,
             0,
             0});
             this.audioBitRate.Name = "audioBitRate";
+            this.audioBitRate.ReadOnly = true;
             this.audioBitRate.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.audioBitRate.Size = new System.Drawing.Size(120, 30);
             this.audioBitRate.TabIndex = 16;
@@ -384,11 +386,6 @@
             // locX
             // 
             this.locX.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.locX.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
             this.locX.Location = new System.Drawing.Point(43, 397);
             this.locX.Maximum = new decimal(new int[] {
             4000,
@@ -444,11 +441,6 @@
             // lineWidth
             // 
             this.lineWidth.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.lineWidth.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
             this.lineWidth.Location = new System.Drawing.Point(432, 397);
             this.lineWidth.Maximum = new decimal(new int[] {
             7680,

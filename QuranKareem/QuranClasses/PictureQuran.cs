@@ -98,7 +98,7 @@ namespace QuranKareem
 
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
             this.path = path; success = false;
-            
+
             try
             {
                 if (File.Exists(path + "000.db"))
@@ -506,7 +506,7 @@ namespace QuranKareem
                 if (!clr.IsEmpty)
                     spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
             }
-            
+
             reader.Close(); quran.Close();
             spQuranPicture.Unlock(true);
         }
@@ -530,7 +530,7 @@ namespace QuranKareem
         }
 
         private readonly List<int> ints = new List<int>();
-        private List<Bitmap> GetLineWithWordsMarks(int page, Bitmap pagePic, int line = -1 , int ayah = -1, int word = -2)
+        private List<Bitmap> GetLineWithWordsMarks(int page, Bitmap pagePic, int line = -1, int ayah = -1, int word = -2)
         {
             var coords = new int[2];
             Bitmap bmap = GetLine(page, pagePic, line, coords);
@@ -542,7 +542,7 @@ namespace QuranKareem
             quran.Open();
             reader = command.ExecuteReader();
 
-            int a,w; ints.Clear();
+            int a, w; ints.Clear();
             if (!reader.Read())
             {
                 reader.Close(); quran.Close();
@@ -596,13 +596,13 @@ namespace QuranKareem
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM lines JOIN ayat ON lines.ayah_id=ayat.id WHERE page={page} AND line={line}";
             quran.Open();
             reader = command.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
                 list.Add(new int[4] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3) });
             reader.Close(); quran.Close();
             if (list.Count == 0) return null;
 
             int[] final = list[0].ToArray(); // copy
-            for(int i = 1; i < list.Count; i++)
+            for (int i = 1; i < list.Count; i++)
             {
                 if (list[i][0] < final[0]) final[0] = list[i][0];
                 if (list[i][1] > final[1]) final[1] = list[i][1];
@@ -625,7 +625,7 @@ namespace QuranKareem
 
         public int[] GetStartAndEndOfPage()
         {
-            command.CommandText = $"SELECT MIN(ayah), MAX(ayah) FROM ayat WHERE page = {PageNumber}";
+            command.CommandText = $"SELECT MIN(ayah), MAX(ayah) FROM ayat WHERE surah={SurahNumber} AND page = {PageNumber}";
             int[] ints = new int[2];
             quran.Open();
             reader = command.ExecuteReader();
@@ -638,7 +638,8 @@ namespace QuranKareem
             quran.Close();
             return ints;
         }
-        
+
+#warning very slow
         public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, Bitmap pageClone, int surah, int page)
         {
             if (!success || ayahword == null || paths == null) return;
