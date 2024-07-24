@@ -60,7 +60,7 @@ namespace QuranKareem
             VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
             VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
             
-            audioLength.Text = AudioQuran.Instance.GetPositionOf((int)((minmax2[1] - minmax[0]) * 1000));
+            audioLength.Text = AudioQuran.Instance.GetPositionOf((int)((minmax2[1] - minmax2[0]) * 1000));
         }
 
         private void VideoWidth_ValueChanged(object sender, EventArgs e)
