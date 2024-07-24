@@ -513,9 +513,9 @@
             this.lineHeightLabel.Location = new System.Drawing.Point(568, 401);
             this.lineHeightLabel.Name = "lineHeightLabel";
             this.lineHeightLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lineHeightLabel.Size = new System.Drawing.Size(106, 23);
+            this.lineHeightLabel.Size = new System.Drawing.Size(112, 23);
             this.lineHeightLabel.TabIndex = 35;
-            this.lineHeightLabel.Text = "Line Width:";
+            this.lineHeightLabel.Text = "Line Height:";
             this.lineHeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // VideoEditorForm
