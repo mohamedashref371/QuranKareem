@@ -251,6 +251,7 @@
             // 
             // frameRate
             // 
+            this.frameRate.DecimalPlaces = 2;
             this.frameRate.Font = new System.Drawing.Font("Tahoma", 14F);
             this.frameRate.Location = new System.Drawing.Point(442, 298);
             this.frameRate.Maximum = new decimal(new int[] {
