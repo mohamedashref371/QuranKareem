@@ -22,13 +22,19 @@ namespace QuranKareem
         private void VideoPath_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
                 VidiotXmlBuilder.VideoPath = openFileDialog.FileName;
+                videoNameLabel.Text = openFileDialog.FileName;
+            }
         }
 
         private void VideoOutputPath_Click(object sender, EventArgs e)
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
                 VidiotXmlBuilder.OutputPath = saveFileDialog.FileName;
+                videoOutputNameLabel.Text = saveFileDialog.FileName;
+            }
         }
 
         private readonly List<int> surahayah = new List<int>();
