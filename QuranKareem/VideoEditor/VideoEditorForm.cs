@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuranKareem
@@ -81,6 +76,11 @@ namespace QuranKareem
         private void AudioBitRate_ValueChanged(object sender, EventArgs e)
         {
             VidiotXmlBuilder.AudioBitRate = (int)audioBitRate.Value;
+        }
+
+        private void VidiotLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://sourceforge.net/projects/vidiot");
         }
 
         private void Generate_Click(object sender, EventArgs e)

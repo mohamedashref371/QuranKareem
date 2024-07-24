@@ -93,6 +93,7 @@
             this.vidiotLink.TabIndex = 2;
             this.vidiotLink.TabStop = true;
             this.vidiotLink.Text = "https://sourceforge.net/projects/vidiot";
+            this.vidiotLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.VidiotLink_LinkClicked);
             // 
             // videoPathLabel
             // 
