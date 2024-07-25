@@ -67,11 +67,11 @@ namespace QuranKareem
             return tempString;
         }
 
-        string[] SurahTafseerText(int sura)
+        string[] SurahTafseerText(int sura, int ayahStart = -1, int ayahEnd = 287)
         {
             if (!success) return null;
             quran.Open();
-            command.CommandText = $"SELECT text FROM ayat WHERE surah={sura}";
+            command.CommandText = $"SELECT text FROM ayat WHERE surah={sura} AND ayah>={ayahStart} AND ayah<={ayahEnd}";
             reader = command.ExecuteReader();
             List<string> list = new List<string>();
             while (reader.Read())
@@ -84,10 +84,10 @@ namespace QuranKareem
         }
 
         readonly string n = Environment.NewLine;
-        public string SubRipText(int surah, string[] timestamps)
+        public string SubRipText(string[] timestamps, int surah, int ayahStart = -1, int ayahEnd = 287)
         {
             if (!success) return "";
-            string[] tafseer = SurahTafseerText(surah);
+            string[] tafseer = SurahTafseerText(surah, ayahStart, ayahEnd);
             if (timestamps == null || tafseer.Length != timestamps.Length) return "";
 
             string s = $"0{n}00:00:00.000 --> {timestamps[0]}{n}{tafseer[0]}{n}{n}";

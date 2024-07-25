@@ -104,6 +104,7 @@
             this.wordColorsCheck = new System.Windows.Forms.CheckBox();
             this.moshaf = new System.Windows.Forms.ComboBox();
             this.discri = new System.Windows.Forms.Button();
+            this.pageSrtCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -1099,11 +1100,23 @@
             this.discri.UseVisualStyleBackColor = true;
             this.discri.Click += new System.EventHandler(this.Discri_Click);
             // 
+            // pageSrtCheck
+            // 
+            this.pageSrtCheck.AutoSize = true;
+            this.pageSrtCheck.Location = new System.Drawing.Point(18, 672);
+            this.pageSrtCheck.Name = "pageSrtCheck";
+            this.pageSrtCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.pageSrtCheck.Size = new System.Drawing.Size(93, 17);
+            this.pageSrtCheck.TabIndex = 87;
+            this.pageSrtCheck.Text = "للصفحة الحالية";
+            this.pageSrtCheck.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1100, 910);
+            this.ClientSize = new System.Drawing.Size(1044, 788);
+            this.Controls.Add(this.pageSrtCheck);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.discri);
             this.Controls.Add(this.moshaf);
@@ -1272,6 +1285,7 @@
         private System.Windows.Forms.CheckBox wordColorsCheck;
         private System.Windows.Forms.ComboBox moshaf;
         private System.Windows.Forms.Button discri;
+        private System.Windows.Forms.CheckBox pageSrtCheck;
     }
 }
 

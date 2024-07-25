@@ -530,10 +530,10 @@ namespace QuranKareem
             return s;
         }
 
-        public string[] GetPositionsOf(int surah)
+        public string[] GetPositionsOf(int surah, int ayahStart = -1, int ayahEnd = 287)
         {
             if (!success) return null;
-            int[] timestampsT = GetTimestamps(surah);
+            int[] timestampsT = GetTimestamps(surah, ayahStart, ayahEnd);
             string[] timestamps = new string[timestampsT.Length];
 
             for (int i = 0; i < timestamps.Length; i++)
@@ -614,14 +614,20 @@ namespace QuranKareem
             return temp;
         }
 
-        public int[] GetTimestamps(int sura)
+        public int[] GetTimestamps(int sura, int ayahStart = -1, int ayahEnd = 287)
         {
             if (!success) return null;
+            int shift = 0;
             List<int> list = new List<int>();
             quran.Open();
-            command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura}";
+            command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura} AND ayah>={ayahStart - 1} AND ayah<={ayahEnd}";
             reader = command.ExecuteReader();
-            while (reader.Read()) list.Add(reader.GetInt32(0));
+            if (ayahStart >= 0)
+            {
+                if (reader.Read())
+                    shift = reader.GetInt32(0);
+            }
+            while (reader.Read()) list.Add(reader.GetInt32(0) - shift);
             reader.Close();
             quran.Close();
             return list.ToArray();
