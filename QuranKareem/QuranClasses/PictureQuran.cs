@@ -330,10 +330,12 @@ namespace QuranKareem
             if (WordMode && !isWordTableEmpty)
             {
                 quran.Open();
-                command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} AND word<=599 ORDER BY word DESC";
+                command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} AND word<=599 ORDER BY word DESC LIMIT 1";
                 reader = command.ExecuteReader();
-                reader.Read();
-                WordsCount = reader.GetInt32(0);
+                if (reader.Read())
+                    WordsCount = reader.GetInt32(0);
+                else
+                    WordsCount = 0;
                 reader.Close(); quran.Close();
             }
         }
