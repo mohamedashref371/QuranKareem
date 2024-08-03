@@ -198,7 +198,7 @@ namespace QuranKareem
         {
             if (moshaf.Items.Count != 1 && moshaf.SelectedIndex == moshaf.Items.Count - 1)
             {
-                Process.Start("https://www.mediafire.com/folder/e5247bt5d2vfk");
+                Process.Start("https://github.com/mohamedashref371/QuranKareem/tree/master/Quran%20Kareem/pictures");
             }
             else if (moshaf.SelectedIndex > 0)
             {
