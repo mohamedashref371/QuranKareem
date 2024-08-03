@@ -4,7 +4,6 @@
 متطلبات تشغيل البرنامج: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
 
 لتحميل هذا البرنامج مع الكود (١٢٥مب): ([إصدار تجريبي](https://github.com/mohamedashref371/QuranKareem/archive/refs/heads/master.zip))<br>
-تصفح هذا المستودع: [Quran Kareem Resources](https://www.mediafire.com/folder/w5gcahn1z9pdx)
 
 لم أهتم بتصميم واجهة البرنامج أو إضافة نوافذ متعددة بعد، وبدلاً من ذلك استخدمت مكتبة Guna UI 2.0.
 
