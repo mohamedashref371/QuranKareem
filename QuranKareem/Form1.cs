@@ -254,6 +254,7 @@ namespace QuranKareem
                     }
                 }
                 exitForm.TabStop = true;
+                minimize.TabStop = true;
                 quranPic.Size = quranPicSize;
                 quranPic.Location = quranPictureLocation;
             }
@@ -283,6 +284,7 @@ namespace QuranKareem
                     }
                 }
                 exitForm.Visible = true; exitForm.TabStop = false;
+                minimize.Visible = true; minimize.TabStop = false;
                 quranPic.Visible = true;
                 quranPicSize = quranPic.Size;
                 quranPictureLocation = quranPic.Location;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static QuranKareem.Coloring;
 using System.Text;
+using System.Runtime.ConstrainedExecution;
 
 namespace QuranKareem
 {
@@ -63,7 +64,7 @@ namespace QuranKareem
 
         #region Words
         public int CurrentWord { get; private set; } = -1;
-        public int WordsCount { get; private set; } = 0;
+        private int wordsCount = 0;
         public bool WordMode { get; set; } = false;
         private bool isWordTableEmpty = true;
         private bool isWordsDiscriminatorEmpty = false;
@@ -94,7 +95,7 @@ namespace QuranKareem
         {
 
             if (path == null || path.Trim().Length == 0) return;
-            if (path.Substring(path.Length - 1) != "\\") { path += "\\"; }
+            if (path.Substring(path.Length - 1) != "\\") path += "\\";
 
             if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
             this.path = path; success = false;
@@ -333,9 +334,9 @@ namespace QuranKareem
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} AND word<=599 ORDER BY word DESC LIMIT 1";
                 reader = command.ExecuteReader();
                 if (reader.Read())
-                    WordsCount = reader.GetInt32(0);
+                    wordsCount = reader.GetInt32(0);
                 else
-                    WordsCount = 0;
+                    wordsCount = 0;
                 reader.Close(); quran.Close();
             }
         }
@@ -383,7 +384,7 @@ namespace QuranKareem
 
         public void WordOf(int word)// سيتم تعديله ان شاء الله
         {
-            if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > WordsCount)
+            if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
             {
                 CurrentWord = -1;
                 return;
@@ -540,7 +541,7 @@ namespace QuranKareem
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
             if (WordColor.IsEmpty || isWordsDiscriminatorEmpty) return bitmaps;
             var list = new List<int[]>();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah,word FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={page} AND line={line} AND " + (word == -2 ? "word>=1 AND word<=599 ORDER BY ayah_id,word" : $"ayah={ayah} AND word={word}");
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah,word,discriminator FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={page} AND line={line} AND " + (word == -2 ? "word>=1 AND word<=599 ORDER BY ayah_id,word" : $"ayah={ayah} AND word={word}");
             quran.Open();
             reader = command.ExecuteReader();
 
@@ -564,7 +565,7 @@ namespace QuranKareem
                     a = reader.GetInt32(4);
                     w = reader.GetInt32(5);
                 }
-                ints.Add(reader.GetInt32(0)); ints.Add(reader.GetInt32(1)); ints.Add(reader.GetInt32(2)); ints.Add(reader.GetInt32(3));
+                ints.Add(reader.GetInt32(0)); ints.Add(reader.GetInt32(1)); ints.Add(reader.GetInt32(2)); ints.Add(reader.GetInt32(3)); ints.Add(reader.GetInt32(6));
             } while (reader.Read());
             bitmaps.Add((Bitmap)bmap.Clone());
             bitmaps.Last().Tag = $"{a},{w}";
@@ -573,17 +574,20 @@ namespace QuranKareem
             reader.Close(); quran.Close();
 
             SharpPixelQK sp;
+            Color clr;
             for (int i = 0; i < list.Count; i++)
             {
                 sp = new SharpPixelQK(bitmaps[i + 1]);
                 sp.Lock();
-                for (int j = 0; j < list[i].Length / 4; j++)
+                for (int j = 0; j < list[i].Length / 5; j++)
                 {
-                    sp.Clear(WordColor,
-                        (list[i][j * 4] - coords[0]) >= 0 ? list[i][j * 4] - coords[0] : 0,
-                        (list[i][j * 4 + 2] - coords[1]) >= 0 ? list[i][j * 4 + 2] - coords[1] : 0,
-                        (list[i][j * 4 + 1] - coords[0]) < bmap.Width ? list[i][j * 4 + 1] - coords[0] : bmap.Width - 1,
-                        (list[i][j * 4 + 3] - coords[1]) < bmap.Height ? list[i][j * 4 + 3] - coords[1] : bmap.Height - 1,
+                    clr = Discriminators.WordColors[list[i][j * 5 + 4]];
+                    clr = clr.Name != "WordColor" && !clr.IsEmpty ? clr : WordColor;
+                    sp.Clear(clr,
+                        (list[i][j * 5] - coords[0]) >= 0 ? list[i][j * 5] - coords[0] : 0,
+                        (list[i][j * 5 + 2] - coords[1]) >= 0 ? list[i][j * 5 + 2] - coords[1] : 0,
+                        (list[i][j * 5 + 1] - coords[0]) < bmap.Width ? list[i][j * 5 + 1] - coords[0] : bmap.Width - 1,
+                        (list[i][j * 5 + 3] - coords[1]) < bmap.Height ? list[i][j * 5 + 3] - coords[1] : bmap.Height - 1,
                         textColor, 30, false, true);
                 }
                 sp.Unlock(true);
