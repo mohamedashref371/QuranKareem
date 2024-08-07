@@ -60,7 +60,6 @@ namespace QuranKareem
             wordColors.SelectedIndexChanged += WordColors_SelectedIndexChanged;
             ayahColors.SelectedColor = AyahColor; // اللون الأحمر
             wordColors.SelectedColor = WordColor;
-            wordModeCheck.Checked = true;
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 
@@ -616,13 +615,13 @@ namespace QuranKareem
             if (isAllow && textMode)
             {
                 quranAudio.Set(quranText.SurahNumber, quranText.AyahNumber);
-                if (wordModeCheck.Checked && quranText.CurrentWord > 0)
+                if (quranText.CurrentWord > 0)
                     quranAudio.WordOf(quranText.CurrentWord);
             }
             else if (isAllow)
             {
                 quranAudio.Set(quranPicture.SurahNumber, quranPicture.AyahNumber);
-                if (wordModeCheck.Checked && quranPicture.CurrentWord > 0)
+                if (quranPicture.CurrentWord > 0)
                     quranAudio.WordOf(quranPicture.CurrentWord);
             }
 
@@ -678,13 +677,6 @@ namespace QuranKareem
         {
             if (allow && quranText.SetCursor()) SetAyah();
         }
-
-        private void WordModeCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            quranText.WordMode = wordModeCheck.Checked;
-            quranPicture.WordMode = wordModeCheck.Checked;
-            quranAudio.WordMode = wordModeCheck.Checked;
-        }
         #endregion
 
         #region التلوين
@@ -722,10 +714,8 @@ namespace QuranKareem
 
         private void Discri_Click(object sender, EventArgs e)
         {
-            DiscriminatorsForm f = new DiscriminatorsForm(quranPicture.WordsDiscriminators);
-            f.ShowDialog();
-            quranPicture.SetDiscriminators();
-            quranPicture.ActiveDiscriminators();
+            if (new DiscriminatorsForm().ShowDialog() == DialogResult.Yes)
+                quranPicture.SetDiscriminators();
         }
         #endregion
 
@@ -989,7 +979,6 @@ namespace QuranKareem
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
                 splitter.Visible = false; splitAll.Visible = false;
-                wordModeCheck.Visible = false;
                 timestampChangeEventCheck.Visible = true;
                 endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
@@ -1002,7 +991,6 @@ namespace QuranKareem
                 timestampChangeEventCheck.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
-                wordModeCheck.Visible = true;
                 splitter.Visible = true; splitAll.Visible = true;
             }
         }

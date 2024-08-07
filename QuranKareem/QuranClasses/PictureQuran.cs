@@ -65,7 +65,6 @@ namespace QuranKareem
         #region Words
         public int CurrentWord { get; private set; } = -1;
         private int wordsCount = 0;
-        public bool WordMode { get; set; } = false;
         private bool isWordTableEmpty = true;
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
@@ -84,7 +83,7 @@ namespace QuranKareem
                     PageNumber = 0;
                     if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
                     if (!textColor.IsEmpty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
-                    ActiveDiscriminators();
+                    isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
                     Set();
                 }
             }
@@ -150,8 +149,8 @@ namespace QuranKareem
             if (success)
             {
                 DiscriminatorsReader();
-                GetDiscriminators();
-                ActiveDiscriminators();
+                Discriminators.GetDiscriminators(path + "Colors.txt");
+                isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
                 CurrentPicture = new Bitmap(Width, Height);
                 PagePicture = CurrentPicture;
                 GetInitialColors();
@@ -328,7 +327,7 @@ namespace QuranKareem
 
             AyahDecorations(Discriminators.AyahColors.Count > 0 || !isWordTableEmpty);
 
-            if (WordMode && !isWordTableEmpty)
+            if (!isWordTableEmpty)
             {
                 quran.Open();
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} AND word<=599 ORDER BY word DESC LIMIT 1";
@@ -384,7 +383,7 @@ namespace QuranKareem
 
         public void WordOf(int word)// سيتم تعديله ان شاء الله
         {
-            if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
+            if (isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
             {
                 CurrentWord = -1;
                 return;
@@ -401,7 +400,7 @@ namespace QuranKareem
             yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
             int word = -1; int tempInt = -371, tempInt2 = 0;
             quran.Open();
-            bool words = WordMode && !isWordTableEmpty;
+            bool words = !isWordTableEmpty;
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
@@ -437,21 +436,12 @@ namespace QuranKareem
         #endregion
 
         #region Discriminators Methods
-        private string GetKeysAsString(int[] keys)
-        {
-            str.Length = 0;
-            if (keys.Length > 0) str.Append(keys[0].ToString());
-            for (int i = 1; i < keys.Length; i++)
-                str.Append(',').Append(keys[i].ToString());
-            return str.ToString();
-        }
-
         private void PageDecorations()
         {
             spQuranPicture.Lock();
 
             quran.Open();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({GetKeysAsString(Discriminators.PageColors.Keys.ToArray())}) AND page={PageNumber}";
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words JOIN ayat ON words.ayah_id = ayat.id WHERE discriminator IN ({Discriminators.GetPageKeysAsString()}) AND page={PageNumber}";
             reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -468,7 +458,7 @@ namespace QuranKareem
 
             quran.Open();
             if (discri)
-                command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.AyahColors.Keys.ToArray())}) AND ayah_id={ayahId}";
+                command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({Discriminators.GetAyahKeysAsString()}) AND ayah_id={ayahId}";
             else
                 command.CommandText = $"SELECT min_x,max_x,min_y,max_y FROM lines WHERE ayah_id={ayahId}";
             reader = command.ExecuteReader();
@@ -498,7 +488,7 @@ namespace QuranKareem
             spQuranPicture.SetOriginal(true);
 
             quran.Open();
-            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({GetKeysAsString(Discriminators.WordColors.Keys.ToArray())}) AND ayah_id={ayahId} AND word={CurrentWord}";
+            command.CommandText = $"SELECT min_x,max_x,min_y,max_y,discriminator FROM words WHERE discriminator IN ({Discriminators.GetWordKeysAsString()}) AND ayah_id={ayahId} AND word={CurrentWord}";
             reader = command.ExecuteReader();
 
             Color clr;
@@ -700,37 +690,11 @@ namespace QuranKareem
             File.WriteAllText(path + "Colors0.txt", str.ToString());
         }
 
-        public readonly List<Discriminator> WordsDiscriminators = new List<Discriminator>();
-
-        private void GetDiscriminators()
-        {
-            Discriminator.GetDiscriminators(WordsDiscriminators, File.Exists(path + "Colors.txt") ? File.ReadAllText(path + "Colors.txt") : "");
-        }
-
         public void SetDiscriminators()
         {
             if (!success) return;
-            File.WriteAllText(path + "Colors.txt", Discriminator.GetText(WordsDiscriminators));
-        }
-
-        public void ActiveDiscriminators()
-        {
-            Discriminators.PageColors.Clear();
-            Discriminators.AyahColors.Clear();
-            Discriminators.WordColors.Clear();
-            foreach (var d in WordsDiscriminators)
-            {
-                if ((d.Lighting == 0 && !darkMode || d.Lighting == 1 && darkMode || d.Lighting == 2) && !d.Color.IsEmpty)
-                {
-                    if (d.Condition == 0)
-                        Discriminators.PageColors[d.Id] = d.Color;
-                    else if (d.Condition == 1)
-                        Discriminators.AyahColors[d.Id] = d.Color;
-                    else if (d.Condition == 2)
-                        Discriminators.WordColors[d.Id] = d.Color;
-                }
-            }
-            isWordsDiscriminatorEmpty = Discriminators.WordColors.Count == 0;
+            Discriminators.SetDiscriminators(path + "Colors.txt");
+            Discriminators.ActiveDiscriminators(darkMode);
         }
 
         private void DiscriminatorsReader()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Devices;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +13,8 @@ namespace QuranKareem
 {
     public partial class DiscriminatorsForm : Form
     {
-        private List<Discriminator> list;
-        public DiscriminatorsForm(List<Discriminator> lst)
+        public DiscriminatorsForm()
         {
-            if (lst == null) { Close(); return; }
-            list = lst;
             InitializeComponent();
         }
 
@@ -36,7 +34,7 @@ namespace QuranKareem
                 {
                     for (int j = 0; j <= 2; j++)
                     {
-                        dis = list.FirstOrDefault(x => x.Id == desc.Key && (x.Lighting == i || x.Lighting == 2) && x.Condition == j);
+                        dis = Discriminators.WordsDiscriminators.FirstOrDefault(x => x.Id == desc.Key && (x.Lighting == i || x.Lighting == 2) && x.Condition == j);
                         if (dis != null)
                         {
                             if (i == 0 && j == 0) d.LightPageColor = dis.Color;
@@ -58,25 +56,38 @@ namespace QuranKareem
             {
                 e.Cancel = true;
             }
+            
             else if (result == DialogResult.Yes)
             {
-                list.Clear();
-                foreach (DiscriminatorControl d in panel.Controls)
-                {
-                    if (d.LightPageColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 0, 0, d.LightPageColor));
-                    if (d.LightAyahColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 0, 1, d.LightAyahColor));
-                    if (d.LightWordColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 0, 2, d.LightWordColor));
-                    if (d.NightPageColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 1, 0, d.NightPageColor));
-                    if (d.NightAyahColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 1, 1, d.NightAyahColor));
-                    if (d.NightWordColor != Color.Empty)
-                        list.Add(new Discriminator(d.Id, 1, 2, d.NightWordColor));
-                }
+                AddIn(Discriminators.WordsDiscriminators);
+                DialogResult = DialogResult.Yes;
+            }
+
+            else
+            {
+                DialogResult = DialogResult.No;
             }
         }
+
+        private void AddIn(List<Discriminator> list)
+        {
+            list.Clear();
+            foreach (DiscriminatorControl d in panel.Controls)
+            {
+                if (d.LightPageColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 0, 0, d.LightPageColor));
+                if (d.LightAyahColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 0, 1, d.LightAyahColor));
+                if (d.LightWordColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 0, 2, d.LightWordColor));
+                if (d.NightPageColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 1, 0, d.NightPageColor));
+                if (d.NightAyahColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 1, 1, d.NightAyahColor));
+                if (d.NightWordColor != Color.Empty)
+                    list.Add(new Discriminator(d.Id, 1, 2, d.NightWordColor));
+            }
+        }
+
     }
 }

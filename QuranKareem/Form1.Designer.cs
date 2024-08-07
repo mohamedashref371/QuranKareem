@@ -99,7 +99,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.dark = new Guna.UI2.WinForms.Guna2Button();
             this.spellingErrors = new System.Windows.Forms.CheckBox();
-            this.wordModeCheck = new System.Windows.Forms.CheckBox();
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
             this.wordColorsCheck = new System.Windows.Forms.CheckBox();
             this.moshaf = new System.Windows.Forms.ComboBox();
@@ -1031,19 +1030,6 @@
             this.spellingErrors.Text = "مع أخطاء إملائية";
             this.spellingErrors.UseVisualStyleBackColor = true;
             // 
-            // wordModeCheck
-            // 
-            this.wordModeCheck.AutoSize = true;
-            this.wordModeCheck.BackColor = System.Drawing.Color.Transparent;
-            this.wordModeCheck.Location = new System.Drawing.Point(834, 28);
-            this.wordModeCheck.Name = "wordModeCheck";
-            this.wordModeCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wordModeCheck.Size = new System.Drawing.Size(164, 17);
-            this.wordModeCheck.TabIndex = 83;
-            this.wordModeCheck.Text = "خاصية التحديد بالكلمة إن أمكن";
-            this.wordModeCheck.UseVisualStyleBackColor = false;
-            this.wordModeCheck.CheckedChanged += new System.EventHandler(this.WordModeCheck_CheckedChanged);
-            // 
             // pageZoom
             // 
             this.pageZoom.BorderRadius = 16;
@@ -1122,7 +1108,6 @@
             this.Controls.Add(this.moshaf);
             this.Controls.Add(this.pageZoom);
             this.Controls.Add(this.panel);
-            this.Controls.Add(this.wordModeCheck);
             this.Controls.Add(this.dark);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label12);
@@ -1280,7 +1265,6 @@
         private System.Windows.Forms.Label label17;
         private Guna.UI2.WinForms.Guna2Button dark;
         private System.Windows.Forms.CheckBox spellingErrors;
-        private System.Windows.Forms.CheckBox wordModeCheck;
         private Guna.UI2.WinForms.Guna2Button pageZoom;
         private System.Windows.Forms.CheckBox wordColorsCheck;
         private System.Windows.Forms.ComboBox moshaf;
