@@ -367,7 +367,6 @@ namespace QuranKareem
 
             fPage = CatchFontFile(page);
             
-            pageRichText.Font = null;
             pageRichText.Font = new Font(fPage, fontSizeRes, GraphicsUnit.Pixel);
             Font fBsml = new Font(bsml, fontSizeRes, GraphicsUnit.Pixel);
             
@@ -419,36 +418,48 @@ namespace QuranKareem
         private FontFamily CatchFontFile(int page)
         {
             string s = page.ToString().PadLeft(3, '0');
-            PrivateFontCollection collection = new PrivateFontCollection();
+            FontFamily ff;
 
-            if (File.Exists($"{path}{s}{Extension}")) collection.AddFontFile($"{path}{s}{Extension}");
-            else if (File.Exists($"{path}{page}{Extension}")) collection.AddFontFile($"{path}{page}{Extension}");
-            else
+            using (var collection = new PrivateFontCollection())
             {
-                string[] filesName = Directory.GetFiles(path);
-                string name;
-                for (int i = 0; i < filesName.Length; i++)
+                string filePath = $"{path}{s}{Extension}";
+
+                if (File.Exists(filePath))
+                    collection.AddFontFile(filePath);
+                else
                 {
-                    name = filesName[i].Split('\\').Last();
-                    if (name.Contains(s) && name.EndsWith(Extension, StringComparison.OrdinalIgnoreCase))
+                    filePath = $"{path}{page}{Extension}";
+
+                    if (File.Exists(filePath))
+                        collection.AddFontFile(filePath);
+                    else
                     {
-                        collection.AddFontFile(filesName[i]);
-                        break;
+                        string[] filesName = Directory.GetFiles(path, $"*{Extension}");
+
+                        foreach (string file in filesName)
+                        {
+                            string name = Path.GetFileName(file);
+
+                            if (name.Contains(s))
+                            {
+                                collection.AddFontFile(file);
+                                break;
+                            }
+                        }
                     }
                 }
+
+                if (collection.Families.Length != 0)
+                    ff = collection.Families[0];
+                else if (fPage != null)
+                    ff = fPage;
+                else
+                    ff = new FontFamily("Tahoma");
             }
 
-            FontFamily ff;
-            if (collection.Families.Length != 0)
-                ff = collection.Families[0];
-            else if (fPage != null)
-                ff = fPage;
-            else
-                ff = new FontFamily("Tahoma");
-
-            collection.Dispose();
             return ff;
         }
+
 
         private int ayahIdIndex = 0;
         private void AyahData()
