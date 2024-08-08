@@ -34,6 +34,9 @@ namespace QuranKareem
                         WordColors[d.Id] = d.Color;
                 }
             }
+            PageColorsKeys = PageColors.Keys.ToArray();
+            AyahColorsKeys = AyahColors.Keys.ToArray();
+            WordColorsKeys = WordColors.Keys.ToArray();
             return WordColors.Count != 0;
         }
 
@@ -44,13 +47,13 @@ namespace QuranKareem
             => File.WriteAllText(file, Discriminator.GetText(WordsDiscriminators));
 
         public static string GetPageKeysAsString()
-            => GetKeysAsString(PageColors.Keys.ToArray());
+            => GetKeysAsString(PageColorsKeys);
 
         public static string GetAyahKeysAsString()
-            => GetKeysAsString(AyahColors.Keys.ToArray());
+            => GetKeysAsString(AyahColorsKeys);
 
         public static string GetWordKeysAsString()
-            => GetKeysAsString(WordColors.Keys.ToArray());
+            => GetKeysAsString(WordColorsKeys);
 
         public static StringBuilder sb = new StringBuilder();
         private static string GetKeysAsString(int[] keys)
@@ -60,6 +63,18 @@ namespace QuranKareem
             for (int i = 1; i < keys.Length; i++)
                 sb.Append(',').Append(keys[i].ToString());
             return sb.ToString();
+        }
+
+        private static int[] PageColorsKeys, AyahColorsKeys, WordColorsKeys;
+        public static bool KeyExists(int level, int key)
+        {
+            if (level == 0)
+                return PageColorsKeys.Contains(key);
+            if (level == 1)
+                return AyahColorsKeys.Contains(key);
+            if (level == 2)
+                return WordColorsKeys.Contains(key);
+            return false;
         }
     }
 }

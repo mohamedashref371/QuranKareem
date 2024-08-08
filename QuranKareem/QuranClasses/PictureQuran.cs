@@ -495,7 +495,7 @@ namespace QuranKareem
             while (reader.Read())
             {
                 clr = Discriminators.WordColors[reader.GetInt32(4)];
-                clr = clr.Name != "WordColor" ? clr : WordColor;
+                if (clr.Name == "WordColor") clr = WordColor;
                 if (!clr.IsEmpty)
                     spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
             }
