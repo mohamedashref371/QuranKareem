@@ -37,14 +37,15 @@ namespace QuranKareem
         public int AyahNumber { get; private set; }
         public int CurrentWord { get; private set; } = -1;
 
-        private int wordsCount  = 0;
-        private int glyphsCount = 0;
+        private int wordsCount;
+        private int glyphsCount;
         private int ayahId;
 
         private bool isWordsDiscriminatorEmpty = false;
 
         private int width;
         private float fontSize;
+        private float fontSizeRes;
 
         private FontFamily bsml, fPage;
 
@@ -60,6 +61,8 @@ namespace QuranKareem
             BackColor = SystemColors.Control,
             BorderStyle = BorderStyle.None,
             ReadOnly = true,
+            Cursor = Cursors.Hand,
+            TabStop = false,
             //ScrollBars = RichTextBoxScrollBars.None
         };
 
@@ -88,20 +91,24 @@ namespace QuranKareem
             }
         }
 
-        private bool added = false;
-        public void AddRichTextBoxInControls(Control.ControlCollection Controls, int locX, int locY, int width, int height)
+        public void AddRichTextBoxInControls(Control.ControlCollection Controls, int locX, int locY, int width, int height, EventHandler eh)
         {
-            if (!added) try
+            try
+            {
+                pageRichText.Location = new Point(locX, locY);
+                pageRichText.Size = new Size(width, height);
+                fontSizeRes = (width / (this.width * 1f)) * fontSize;
+                pageRichText.SelectAll();
+                pageRichText.SelectionAlignment = HorizontalAlignment.Center;
+                pageRichText.DeselectAll();
+                if (!Controls.Contains(pageRichText))
                 {
-                    pageRichText.Location = new Point(locX, locY);
-                    pageRichText.Size = new Size(width, height);
-                    pageRichText.SelectAll();
-                    pageRichText.SelectionAlignment = HorizontalAlignment.Center;
-                    pageRichText.DeselectAll();
+                    pageRichText.Click += eh;
                     Controls.Add(pageRichText);
-                    added = true;
                 }
-                catch { }
+                pageRichText.Visible = true;
+            }
+            catch { }
         }
 
         private TrueTypeFontQuran()
@@ -110,12 +117,12 @@ namespace QuranKareem
             command = new SQLiteCommand(quran);
         }
 
-        public void Start(string path, int sura = 1, int aya = 0)
+        public bool Start(string path, int sura = 1, int aya = 0)
         {
-            if (path == null || path.Trim().Length == 0) return;
+            if (path == null || path.Trim().Length == 0) return false;
             if (path.Substring(path.Length - 1) != "\\") path += "\\";
 
-            if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
+            if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return false;
             this.path = path; success = false;
 
             try
@@ -129,14 +136,15 @@ namespace QuranKareem
                 command.CommandText = $"SELECT * FROM description";
                 reader = command.ExecuteReader();
 
-                if (!reader.HasRows) return;
+                if (!reader.HasRows) return false;
                 reader.Read();
-                if (reader.GetInt32(0) != 5 || reader.GetInt32(1) != 1) return;
+                if (reader.GetInt32(0) != 5 || reader.GetInt32(1) != 1) return false;
                 Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 PagesCount = reader.GetInt32(5);
                 width = reader.GetInt32(6);
                 fontSize = reader.GetFloat(7);
+                fontSizeRes = fontSize;
                 Extension = reader.GetString(8);
                 Comment = reader.GetString(9);
                 reader.Close();
@@ -162,6 +170,7 @@ namespace QuranKareem
                 GetInitialColors();
                 Set(sura, aya);
             }
+            return success;
         }
 
         private void BsmlNotFound()
@@ -357,10 +366,11 @@ namespace QuranKareem
             pageWords.Clear();
 
             fPage = CatchFontFile(page);
-
-            pageRichText.Font = new Font(fPage, fontSize, GraphicsUnit.Pixel);
-            Font fBsml = new Font(bsml, fontSize, GraphicsUnit.Pixel);
-
+            
+            pageRichText.Font = null;
+            pageRichText.Font = new Font(fPage, fontSizeRes, GraphicsUnit.Pixel);
+            Font fBsml = new Font(bsml, fontSizeRes, GraphicsUnit.Pixel);
+            
             command.CommandText = $"SELECT ayah_id,ayah,line,word,discriminator,text FROM ayat JOIN words ON words.ayah_id = ayat.id WHERE page = {page}";
             int line = 1, index;
             string s; Color clr;
@@ -373,6 +383,7 @@ namespace QuranKareem
                 index = pageRichText.Text.Length;
                 if (line != reader.GetInt32(2))
                 {
+                    line = reader.GetInt32(2);
                     s = "\n";
                     pageWords.Add(null);
                 }
@@ -391,7 +402,7 @@ namespace QuranKareem
                     clr = Discriminators.PageColors[discri];
                     if (!clr.IsEmpty)
                     {
-                        pageRichText.Select(index, s.Length);
+                        pageRichText.Select(index + s.Length - 1, 1);
                         pageRichText.SelectionColor = clr;
                         pageRichText.DeselectAll();
                     }
@@ -399,6 +410,9 @@ namespace QuranKareem
             }
             pageWords.Add(null);
             reader.Close(); quran.Close();
+            pageRichText.SelectAll();
+            pageRichText.SelectionAlignment = HorizontalAlignment.Center;
+            pageRichText.DeselectAll();
             pageRtf = pageRichText.Rtf;
         }
 
@@ -441,7 +455,7 @@ namespace QuranKareem
         {
             pageRichText.Rtf = pageRtf;
             CurrentWord = -1;
-            int index = pageWords.FindIndex(arr => arr[0] == ayahId);
+            int index = pageWords.FindIndex(arr => arr?[0] == ayahId);
             ayahIdIndex = index;
             Color clr;
             for (; index < pageWords.Count; index++)
@@ -468,9 +482,9 @@ namespace QuranKareem
         {
             pageRichText.Rtf = ayahRtf;
             CurrentWord = -1;
-            if (isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
+            if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
-                int index = pageWords.FindIndex(ayahIdIndex, arr => arr[1] == word);
+                int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
                 if (index == -1) return false;
                 CurrentWord = word;
                 Color clr;
@@ -507,8 +521,10 @@ namespace QuranKareem
             if (!AyahAt(current[0]))
                 return false;
 
-            return WordOf(current[1]);
+            WordOf(current[1]);
+            return true;
         }
+
 
         #region Colors
         private void GetInitialColors()

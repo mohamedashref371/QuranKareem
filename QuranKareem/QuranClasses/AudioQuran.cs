@@ -348,7 +348,7 @@ namespace QuranKareem
             wordsTimer.Stop();
             CurrentWord = -1;
             wordsTimer.Interval = 100;
-            int num = (int)(mp3.Ctlcontrols.currentPosition * 1000);
+            int num = (int)(mp3.Ctlcontrols.currentPosition * 1000); // Error At Program Closing
             for (int i = idWord; i < FullWords.Count / 3; i++)
             {
                 if (num >= FullWords[i * 3 + 1] && num <= FullWords[i * 3 + 2])

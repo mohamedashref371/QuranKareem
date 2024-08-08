@@ -90,13 +90,13 @@ namespace QuranKareem
         }
 
         // الدالة البداية
-        public void Start(string path, int sura = 1, int aya = 0)
+        public bool Start(string path, int sura = 1, int aya = 0)
         {
 
-            if (path == null || path.Trim().Length == 0) return;
+            if (path == null || path.Trim().Length == 0) return false;
             if (path.Substring(path.Length - 1) != "\\") path += "\\";
 
-            if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return;
+            if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db")) return false;
             this.path = path; success = false;
 
             try
@@ -110,10 +110,10 @@ namespace QuranKareem
                 command.CommandText = $"SELECT * FROM description";
                 reader = command.ExecuteReader();
 
-                if (!reader.HasRows) return;
+                if (!reader.HasRows) return false;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version != 4) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 2 || version != 4) return false;
                 Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 //QuartersCount = reader.GetInt32(4);
@@ -156,6 +156,7 @@ namespace QuranKareem
                 GetInitialColors();
                 Set(sura, aya);
             }
+            return success;
         }
 
         #region التنقلات في المصحف
