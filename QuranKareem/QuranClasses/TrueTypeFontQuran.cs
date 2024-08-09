@@ -47,17 +47,18 @@ namespace QuranKareem
         private float fontSize;
         private float fontSizeRes;
 
-        private FontFamily bsml, fPage;
+        private PrivateFontCollection bsml, fPage;
+
+        private string pageRtf, ayahRtf;
+        private readonly MemoryStream pStream = new MemoryStream(), aStream = new MemoryStream();
 
         public static readonly TrueTypeFontQuran Instance = new TrueTypeFontQuran();
 
-        private string pageRtf, ayahRtf;
-
-        private readonly RichTextBox pageRichText = new RichTextBox()
+        public readonly RichTextBox PageRichText = new RichTextBox()
         {
             RightToLeft = RightToLeft.Yes,
             WordWrap = false,
-            Font = new Font("Tahoma", 20F),
+            //Font = new Font("Tahoma", 20F),
             BackColor = SystemColors.Control,
             BorderStyle = BorderStyle.None,
             ReadOnly = true,
@@ -77,38 +78,27 @@ namespace QuranKareem
                     darkMode = value;
                     if (value)
                     {
-                        pageRichText.ForeColor = Color.White;
-                        pageRichText.BackColor = Color.Black;
+                        PageRichText.ForeColor = Color.White;
+                        PageRichText.BackColor = Color.Black;
                     }
                     else
                     {
-                        pageRichText.ForeColor = Color.Black;
-                        pageRichText.BackColor = Color.White;
+                        PageRichText.ForeColor = Color.Black;
+                        PageRichText.BackColor = Color.White;
                     }
                     PageNumber = 0;
+                    isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
                     Set(SurahNumber, AyahNumber);
                 }
             }
         }
 
-        public void AddRichTextBoxInControls(Control.ControlCollection Controls, int locX, int locY, int width, int height, EventHandler eh)
+        public void SetWidth(object sender, EventArgs e)
         {
-            try
-            {
-                pageRichText.Location = new Point(locX, locY);
-                pageRichText.Size = new Size(width, height);
-                fontSizeRes = (width / (this.width * 1f)) * fontSize;
-                pageRichText.SelectAll();
-                pageRichText.SelectionAlignment = HorizontalAlignment.Center;
-                pageRichText.DeselectAll();
-                if (!Controls.Contains(pageRichText))
-                {
-                    pageRichText.Click += eh;
-                    Controls.Add(pageRichText);
-                }
-                pageRichText.Visible = true;
-            }
-            catch { }
+            fontSizeRes = (PageRichText.Width / (width * 1f)) * fontSize;
+            PageRichText.SelectAll();
+            PageRichText.SelectionAlignment = HorizontalAlignment.Center;
+            PageRichText.DeselectAll();
         }
 
         private TrueTypeFontQuran()
@@ -162,8 +152,7 @@ namespace QuranKareem
             
             if (success)
             {
-                bsml = CatchFontFile(0);
-                if (bsml.Name == "Tahoma") BsmlNotFound();
+                CatchFontFile(0, ref bsml);
                 DiscriminatorsReader();
                 Discriminators.GetDiscriminators(path + "Colors.txt");
                 isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
@@ -171,27 +160,6 @@ namespace QuranKareem
                 Set(sura, aya);
             }
             return success;
-        }
-
-        private void BsmlNotFound()
-        {
-            PrivateFontCollection collection = new PrivateFontCollection();
-            string[] filesName = Directory.GetFiles(path);
-            string name;
-            for (int i = 0; i < filesName.Length; i++)
-            {
-                name = filesName[i].Split('\\').Last();
-                if (name.IndexOf("bsml", StringComparison.OrdinalIgnoreCase) >= 0 && name.EndsWith(Extension, StringComparison.OrdinalIgnoreCase))
-                {
-                    collection.AddFontFile(filesName[i]);
-                    break;
-                }
-            }
-
-            if (collection.Families.Length != 0)
-                bsml = collection.Families[0];
-
-            collection.Dispose();
         }
 
         public string[] GetSurahNames()
@@ -362,13 +330,13 @@ namespace QuranKareem
         private void PageData(int page)
         {
             PageNumber = page;
-            pageRichText.Text = "";
+            PageRichText.Text = "";
             pageWords.Clear();
 
-            fPage = CatchFontFile(page);
+            CatchFontFile(page, ref fPage);
             
-            pageRichText.Font = new Font(fPage, fontSizeRes, GraphicsUnit.Pixel);
-            Font fBsml = new Font(bsml, fontSizeRes, GraphicsUnit.Pixel);
+            PageRichText.Font = new Font(fPage.Families[0], fontSizeRes, GraphicsUnit.Pixel);
+            Font fBsml = new Font(bsml.Families[0], fontSizeRes, GraphicsUnit.Pixel);
             
             command.CommandText = $"SELECT ayah_id,ayah,line,word,discriminator,text FROM ayat JOIN words ON words.ayah_id = ayat.id WHERE page = {page}";
             int line = 1, index;
@@ -379,7 +347,7 @@ namespace QuranKareem
             while (reader.Read())
             {
                 s = "";
-                index = pageRichText.Text.Length;
+                index = PageRichText.Text.Length;
                 if (line != reader.GetInt32(2))
                 {
                     line = reader.GetInt32(2);
@@ -389,82 +357,80 @@ namespace QuranKareem
                 discri = reader.GetInt32(4);
                 pageWords.Add(new int[3] { reader.GetInt32(0), reader.GetInt32(3), discri });
                 s += reader.GetString(5);
-                pageRichText.AppendText(s);
+                PageRichText.AppendText(s);
                 if (reader.GetInt32(1) <= 0)
                 {
-                    pageRichText.Select(index, s.Length);
-                    pageRichText.SelectionFont = fBsml;
-                    pageRichText.DeselectAll();
+                    PageRichText.Select(index, s.Length);
+                    PageRichText.SelectionFont = fBsml;
+                    PageRichText.DeselectAll();
                 }
                 if (Discriminators.KeyExists(0, discri))
                 {
                     clr = Discriminators.PageColors[discri];
                     if (!clr.IsEmpty)
                     {
-                        pageRichText.Select(index + s.Length - 1, 1);
-                        pageRichText.SelectionColor = clr;
-                        pageRichText.DeselectAll();
+                        PageRichText.Select(index + s.Length - 1, 1);
+                        PageRichText.SelectionColor = clr;
+                        PageRichText.DeselectAll();
                     }
                 }
             }
             pageWords.Add(null);
             reader.Close(); quran.Close();
-            pageRichText.SelectAll();
-            pageRichText.SelectionAlignment = HorizontalAlignment.Center;
-            pageRichText.DeselectAll();
-            pageRtf = pageRichText.Rtf;
+            PageRichText.SelectAll();
+            PageRichText.SelectionAlignment = HorizontalAlignment.Center;
+            PageRichText.DeselectAll();
+
+            pageRtf = PageRichText.Rtf;
+            //pStream.Position = 0;
+            //pageRichText.SaveFile(pStream, RichTextBoxStreamType.RichText);
         }
 
-        private FontFamily CatchFontFile(int page)
+        private bool CatchFontFile(int page, ref PrivateFontCollection coll)
         {
             string s = page.ToString().PadLeft(3, '0');
-            FontFamily ff;
 
-            using (var collection = new PrivateFontCollection())
+            coll?.Dispose();
+            coll = new PrivateFontCollection();
+
+            string filePath = $"{path}{s}{Extension}";
+
+            if (File.Exists(filePath))
+                coll.AddFontFile(filePath);
+            else
             {
-                string filePath = $"{path}{s}{Extension}";
+                filePath = $"{path}{page}{Extension}";
 
                 if (File.Exists(filePath))
-                    collection.AddFontFile(filePath);
+                    coll.AddFontFile(filePath);
                 else
                 {
-                    filePath = $"{path}{page}{Extension}";
+                    string[] filesName = Directory.GetFiles(path, $"*{Extension}");
 
-                    if (File.Exists(filePath))
-                        collection.AddFontFile(filePath);
-                    else
+                    foreach (string file in filesName)
                     {
-                        string[] filesName = Directory.GetFiles(path, $"*{Extension}");
+                        string name = Path.GetFileName(file);
 
-                        foreach (string file in filesName)
+                        if (name.Contains(s) || page == 0 && name.IndexOf("bsml", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            string name = Path.GetFileName(file);
-
-                            if (name.Contains(s))
-                            {
-                                collection.AddFontFile(file);
-                                break;
-                            }
+                            coll.AddFontFile(file);
+                            break;
                         }
                     }
                 }
-
-                if (collection.Families.Length != 0)
-                    ff = collection.Families[0];
-                else if (fPage != null)
-                    ff = fPage;
-                else
-                    ff = new FontFamily("Tahoma");
             }
 
-            return ff;
+            return coll.Families.Length != 0;
         }
 
 
         private int ayahIdIndex = 0;
         private void AyahData()
         {
-            pageRichText.Rtf = pageRtf;
+            PageRichText.Rtf = pageRtf;
+            //pStream.Position = 0;
+            //pageRichText.LoadFile(pStream, RichTextBoxStreamType.RichText);
+
             CurrentWord = -1;
             int index = pageWords.FindIndex(arr => arr?[0] == ayahId);
             ayahIdIndex = index;
@@ -481,17 +447,23 @@ namespace QuranKareem
                 if (clr.Name == "AyahColor") clr = AyahColor;
                 if (!clr.IsEmpty)
                 {
-                    pageRichText.Select(index, 1);
-                    pageRichText.SelectionColor = clr;
-                    pageRichText.DeselectAll();
+                    PageRichText.Select(index, 1);
+                    PageRichText.SelectionColor = clr;
+                    PageRichText.DeselectAll();
                 }
             }
-            ayahRtf = pageRichText.Rtf;
+
+            ayahRtf = PageRichText.Rtf;
+            //aStream.Position = 0;
+            //pageRichText.SaveFile(aStream, RichTextBoxStreamType.RichText);
         }
 
         public bool WordOf(int word)
         {
-            pageRichText.Rtf = ayahRtf;
+            PageRichText.Rtf = ayahRtf;
+            //aStream.Position = 0;
+            //pageRichText.LoadFile(aStream, RichTextBoxStreamType.RichText);
+
             CurrentWord = -1;
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
@@ -512,9 +484,9 @@ namespace QuranKareem
                     if (clr.Name == "WordColor") clr = WordColor;
                     if (!clr.IsEmpty)
                     {
-                        pageRichText.Select(index, 1);
-                        pageRichText.SelectionColor = clr;
-                        pageRichText.DeselectAll();
+                        PageRichText.Select(index, 1);
+                        PageRichText.SelectionColor = clr;
+                        PageRichText.DeselectAll();
                     }
                 }
                 return true;
@@ -525,7 +497,7 @@ namespace QuranKareem
         public bool SetCursor(int position = -1)
         {
             if (!success) return false;
-            if (position < 0) position = pageRichText.SelectionStart;
+            if (position < 0) position = PageRichText.SelectionStart;
             if (position > pageWords.Count) return false;
 
             int[] current = pageWords[position] ?? pageWords[position - 1];
