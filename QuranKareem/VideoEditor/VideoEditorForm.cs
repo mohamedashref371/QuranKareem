@@ -10,10 +10,17 @@ namespace QuranKareem
     public partial class VideoEditorForm : Form
     {
         private int quranClass;
+        private static int width = 1920, height = 1080, x = 256, y = 588, lWidth = 1720, lHeight = 200;
+        private static float frames = 25f;
+
         public VideoEditorForm(int quranClass)
         {
             InitializeComponent();
             this.quranClass = quranClass;
+            videoWidth.Value = width; videoHeight.Value = height;
+            frameRate.Value = (decimal)frames;
+            locX.Value = x; locY.Value = y;
+            lineWidth.Value = lWidth; lineHeight.Value = lHeight;
         }
 
         private void VideoPath_Click(object sender, EventArgs e)
@@ -74,17 +81,20 @@ namespace QuranKareem
 
         private void VideoWidth_ValueChanged(object sender, EventArgs e)
         {
-            VidiotXmlBuilder.VideoWidth = (int)videoWidth.Value;
+            width = (int)videoWidth.Value;
+            VidiotXmlBuilder.VideoWidth = width;
         }
 
         private void VideoHeight_ValueChanged(object sender, EventArgs e)
         {
-            VidiotXmlBuilder.VideoHeight = (int)videoHeight.Value;
+            height = (int)videoHeight.Value;
+            VidiotXmlBuilder.VideoHeight = height;
         }
 
         private void FrameRate_ValueChanged(object sender, EventArgs e)
         {
-            VidiotXmlBuilder.FrameRate = (int)frameRate.Value;
+            frames = (float)frameRate.Value;
+            VidiotXmlBuilder.FrameRate = frames;
         }
 
         private void AudioBitRate_ValueChanged(object sender, EventArgs e)
@@ -97,6 +107,11 @@ namespace QuranKareem
             Process.Start("https://sourceforge.net/projects/vidiot");
         }
 
+        private void LineHeightAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            lineHeight.Enabled = !lineHeightAuto.Checked;
+        }
+
         private void Generate_Click(object sender, EventArgs e)
         {
             string path = "videos\\" + DateTime.Now.Ticks.ToString();
@@ -105,7 +120,7 @@ namespace QuranKareem
                 TrueTypeFontQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
-                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
+                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value, lineHeightAuto.Checked,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
                 surah, page
@@ -116,7 +131,7 @@ namespace QuranKareem
                 PictureQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
-                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
+                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value, lineHeightAuto.Checked,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
                 bitmap, surah, page
@@ -130,6 +145,26 @@ namespace QuranKareem
             }
             else
                 MessageBox.Show("هناك خطأ، يحتمل أن المصحف لا يدعم تحديد الكلمات");
+        }
+
+        private void LocX_ValueChanged(object sender, EventArgs e)
+        {
+            x = (int)locX.Value;
+        }
+
+        private void LocY_ValueChanged(object sender, EventArgs e)
+        {
+            y = (int)locY.Value;
+        }
+
+        private void LineWidth_ValueChanged(object sender, EventArgs e)
+        {
+            lWidth = (int)lineWidth.Value;
+        }
+
+        private void LineHeight_ValueChanged(object sender, EventArgs e)
+        {
+            lHeight = (int)lineHeight.Value;
         }
     }
 }

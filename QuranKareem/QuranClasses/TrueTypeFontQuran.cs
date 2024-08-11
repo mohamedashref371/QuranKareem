@@ -580,7 +580,7 @@ namespace QuranKareem
         }
 
 #warning very slow
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, string path, List<string> paths, int surah, int page)
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, bool autoHeight, string path, List<string> paths, int surah, int page)
         {
             paths.Clear();
             if (!success || ayahword == null || paths == null) return;
@@ -598,21 +598,19 @@ namespace QuranKareem
             Font f = new Font(fontPage.Families[0], linWdth / (this.width * 1f) * fontSize, GraphicsUnit.Pixel);
 
             int lineIdx = 0;
-            Bitmap b1;
+            Bitmap bmp, bmp0;
             Graphics gr;
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 if (ayahword[i * 2 + 1] >= 0)
                     lineIdx = GetIndexLineAtAyahWord(lines, ayahword[i * 2], ayahword[i * 2 + 1]);
 
-                b1 = new Bitmap(width, height);
-                gr = Graphics.FromImage(b1);
+                bmp = new Bitmap(width, height);
+                gr = Graphics.FromImage(bmp);
                 gr.Clear(Color.Transparent);
-                gr.DrawImage(
-                    DrawText(string.Concat(texts[lineIdx]), f,
-                        GetLineColorsAtAyahWord(lines[lineIdx], pColors[lineIdx], wColors[lineIdx], ayahword[i * 2], ayahword[i * 2 + 1]))
-                    , locx, locy, linWdth, linHght);
-                b1.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                bmp0 = DrawText(string.Concat(texts[lineIdx]), f, GetLineColorsAtAyahWord(lines[lineIdx], pColors[lineIdx], wColors[lineIdx], ayahword[i * 2], ayahword[i * 2 + 1]));
+                gr.DrawImage(bmp0, locx, locy, linWdth, autoHeight ? (int)(1.0 * bmp0.Height / bmp0.Width * linWdth) : linHght);
+                bmp.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
                 paths.Add($"img\\{i}.png");
             }
         }

@@ -59,6 +59,7 @@
             this.videoQualityLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lineHeightLabel = new System.Windows.Forms.Label();
+            this.lineHeightAuto = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.videoWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameRate)).BeginInit();
@@ -384,6 +385,7 @@
             0,
             0,
             0});
+            this.locY.ValueChanged += new System.EventHandler(this.LocY_ValueChanged);
             // 
             // locX
             // 
@@ -403,6 +405,7 @@
             0,
             0,
             0});
+            this.locX.ValueChanged += new System.EventHandler(this.LocX_ValueChanged);
             // 
             // lineWidthLabel
             // 
@@ -439,6 +442,7 @@
             0,
             0,
             0});
+            this.lineHeight.ValueChanged += new System.EventHandler(this.LineHeight_ValueChanged);
             // 
             // lineWidth
             // 
@@ -463,6 +467,7 @@
             0,
             0,
             0});
+            this.lineWidth.ValueChanged += new System.EventHandler(this.LineWidth_ValueChanged);
             // 
             // xLabel
             // 
@@ -520,11 +525,24 @@
             this.lineHeightLabel.Text = "Line Height:";
             this.lineHeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // lineHeightAuto
+            // 
+            this.lineHeightAuto.AutoSize = true;
+            this.lineHeightAuto.Location = new System.Drawing.Point(688, 374);
+            this.lineHeightAuto.Name = "lineHeightAuto";
+            this.lineHeightAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lineHeightAuto.Size = new System.Drawing.Size(87, 17);
+            this.lineHeightAuto.TabIndex = 36;
+            this.lineHeightAuto.Text = "حسبة تلقائية";
+            this.lineHeightAuto.UseVisualStyleBackColor = true;
+            this.lineHeightAuto.CheckedChanged += new System.EventHandler(this.LineHeightAuto_CheckedChanged);
+            // 
             // VideoEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.lineHeightAuto);
             this.Controls.Add(this.lineHeightLabel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.videoQualityLabel);
@@ -605,5 +623,6 @@
         private System.Windows.Forms.Label videoQualityLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lineHeightLabel;
+        private System.Windows.Forms.CheckBox lineHeightAuto;
     }
 }

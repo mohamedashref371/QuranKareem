@@ -15,6 +15,11 @@ namespace QuranKareem
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            string errorMessage = "حدث خطأ غير متوقع، سيتم إغلاق البرنامج";
+            Application.ThreadException += (sender, e) => MessageBox.Show(errorMessage);
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => MessageBox.Show(errorMessage);
+
             try
             {
                 System.Threading.Mutex mutex = new System.Threading.Mutex(true, Application.ProductName + Application.CompanyName, out bool createdNew);
@@ -25,7 +30,7 @@ namespace QuranKareem
                 }
                 else MessageBox.Show("هناك نسخة من البرنامج مفتوحة");
             }
-            catch { MessageBox.Show("حدث خطأ غير متوقع، سيتم إغلاق البرنامج"); }
+            catch { MessageBox.Show(errorMessage); }
         }
     }
 }
