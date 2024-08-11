@@ -457,13 +457,13 @@ namespace QuranKareem
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
-        public float[] WordsList(int ayahStart, int ayahEnd, out string mp3Url, List<int> surahayah, List<float> timestamps)
+        public float[] WordsList(int ayahStart, int ayahEnd, out string mp3Url, List<int> ayahword, List<float> timestamps)
         {
             mp3Url = mp3.URL;
-            surahayah.Clear();
+            ayahword.Clear();
             timestamps.Clear();
 
-            if (!success || isWordTableEmpty || mp3.URL == "" || surahayah == null || timestamps == null) return null;
+            if (!success || isWordTableEmpty || mp3.URL == "" || ayahword == null || timestamps == null) return null;
 
             int tStart = 0, tEnd = 0, to ;
 
@@ -487,12 +487,12 @@ namespace QuranKareem
             {
                 if (reader.GetInt32(2) > to)
                 {
-                    surahayah.Add(reader.GetInt32(0));
-                    surahayah.Add(-1);
+                    ayahword.Add(reader.GetInt32(0));
+                    ayahword.Add(-1);
                     timestamps.Add((reader.GetInt32(2) - to) / 1000f);
                 }
-                surahayah.Add(reader.GetInt32(0));
-                surahayah.Add(reader.GetInt32(1));
+                ayahword.Add(reader.GetInt32(0));
+                ayahword.Add(reader.GetInt32(1));
                 to = reader.GetInt32(3);
                 timestamps.Add((to - reader.GetInt32(2)) / 1000f);
             }
@@ -500,8 +500,8 @@ namespace QuranKareem
 
             if (tEnd - to > 0)
             {
-                surahayah.Add(-1);
-                surahayah.Add(-1);
+                ayahword.Add(-1);
+                ayahword.Add(-1);
                 timestamps.Add((tEnd - to) / 1000f);
             }
             return new float[2] { tStart / 1000f, tEnd / 1000f };

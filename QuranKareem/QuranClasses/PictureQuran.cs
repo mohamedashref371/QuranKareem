@@ -660,8 +660,8 @@ namespace QuranKareem
                 gr = Graphics.FromImage(b1);
                 gr.Clear(Color.Empty);
                 gr.DrawImage(GetLineWithWordsMarks(page, pageClone, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last(), locx, locy, linWdth, linHght);
-                b1.Save($"{path}\\img\\{i}{Extension}");
-                paths.Add($"img\\{i}{Extension}");
+                b1.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
+                paths.Add($"img\\{i}.png");
             }
         }
         #endregion
