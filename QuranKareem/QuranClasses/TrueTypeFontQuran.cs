@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Data.SqlTypes;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static QuranKareem.Coloring;
-using static System.Windows.Forms.LinkLabel;
 
 namespace QuranKareem
 {
@@ -54,7 +50,6 @@ namespace QuranKareem
         private PrivateFontCollection bsml, fPage;
 
         private string pageRtf, ayahRtf;
-        private readonly MemoryStream pStream = new MemoryStream(), aStream = new MemoryStream();
 
         public static readonly TrueTypeFontQuran Instance = new TrueTypeFontQuran();
 
@@ -388,8 +383,6 @@ namespace QuranKareem
             PageRichText.DeselectAll();
 
             pageRtf = PageRichText.Rtf;
-            //pStream.Position = 0;
-            //pageRichText.SaveFile(pStream, RichTextBoxStreamType.RichText);
         }
 
         private bool CatchFontFile(int page, ref PrivateFontCollection coll)
@@ -429,13 +422,10 @@ namespace QuranKareem
             return coll.Families.Length != 0;
         }
 
-
         private int ayahIdIndex = 0;
         private void AyahData()
         {
             PageRichText.Rtf = pageRtf;
-            //pStream.Position = 0;
-            //pageRichText.LoadFile(pStream, RichTextBoxStreamType.RichText);
 
             CurrentWord = -1;
             int index = pageWords.FindIndex(arr => arr?[0] == ayahId);
@@ -460,15 +450,11 @@ namespace QuranKareem
             }
 
             ayahRtf = PageRichText.Rtf;
-            //aStream.Position = 0;
-            //pageRichText.SaveFile(aStream, RichTextBoxStreamType.RichText);
         }
 
         public bool WordOf(int word)
         {
             PageRichText.Rtf = ayahRtf;
-            //aStream.Position = 0;
-            //pageRichText.LoadFile(aStream, RichTextBoxStreamType.RichText);
 
             CurrentWord = -1;
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
@@ -513,7 +499,6 @@ namespace QuranKareem
             WordOf(current[1]);
             return true;
         }
-
 
         #region Colors
         private void GetInitialColors()
@@ -595,7 +580,18 @@ namespace QuranKareem
 
             PrivateFontCollection fontPage = null;
             CatchFontFile(page, ref fontPage);
-            Font f = new Font(fontPage.Families[0], linWdth / (this.width * 1f) * fontSize, GraphicsUnit.Pixel);
+
+            #region خطوة إضافية
+            Font f = new Font(fontPage.Families[0], 50, GraphicsUnit.Pixel);
+            var tempLines = texts.Select(list => string.Concat(list)).Select(list => string.Join("\n", list));
+            Bitmap imgT = new Bitmap(1, 1);
+            Graphics drawingT = Graphics.FromImage(imgT);
+            SizeF textSize = drawingT.MeasureString(tempLines.First(), f);
+            imgT.Dispose();
+            drawingT.Dispose();
+            #endregion
+
+            f = new Font(fontPage.Families[0], linWdth / textSize.Width * 50, GraphicsUnit.Pixel);
 
             int lineIdx = 0;
             Bitmap bmp, bmp0;
@@ -692,13 +688,10 @@ namespace QuranKareem
 
         public Bitmap DrawText(string text, Font font, Color[] colors = null)
         {
-            Image imgT = new Bitmap(1, 1);
+            Bitmap imgT = new Bitmap(1, 1);
             Graphics drawingT = Graphics.FromImage(imgT);
 
-            StringFormat sf = new StringFormat
-            {
-                Trimming = StringTrimming.Character,
-            };
+            StringFormat sf = new StringFormat { Trimming = StringTrimming.Character };
 
             SizeF textSize = drawingT.MeasureString(text, font);
 

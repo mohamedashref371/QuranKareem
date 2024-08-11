@@ -10,7 +10,7 @@ namespace QuranKareem
     public partial class VideoEditorForm : Form
     {
         private int quranClass;
-        private static int width = 1920, height = 1080, x = 256, y = 588, lWidth = 1720, lHeight = 200;
+        private static int width = 1920, height = 1080, x = 100, y = 588, lWidth = 1720, lHeight = 200;
         private static float frames = 25f;
 
         public VideoEditorForm(int quranClass)
