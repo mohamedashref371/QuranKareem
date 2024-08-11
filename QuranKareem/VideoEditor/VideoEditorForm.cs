@@ -9,9 +9,11 @@ namespace QuranKareem
 {
     public partial class VideoEditorForm : Form
     {
-        public VideoEditorForm()
+        private int quranClass;
+        public VideoEditorForm(int quranClass)
         {
             InitializeComponent();
+            this.quranClass = quranClass;
         }
 
         private void VideoPath_Click(object sender, EventArgs e)
@@ -32,13 +34,18 @@ namespace QuranKareem
             }
         }
 
-        private readonly List<int> surahayah = new List<int>();
+        private readonly List<int> ayahword = new List<int>();
         private Bitmap bitmap;
         private int surah, page;
         private void VideoEditorForm_Load(object sender, EventArgs e)
         {
-            int[] minmax = PictureQuran.Instance.GetStartAndEndOfPage();
-            float[] minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out string mp3Url, surahayah, VidiotXmlBuilder.AudioTimestamps);
+            int[] minmax;
+            if (quranClass == 2)
+                minmax = TrueTypeFontQuran.Instance.GetStartAndEndOfPage();
+            else
+                minmax = PictureQuran.Instance.GetStartAndEndOfPage();
+            
+            float[] minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out string mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
 
             if (minmax2 == null)
             {
@@ -46,10 +53,17 @@ namespace QuranKareem
                 Close();
                 return;
             }
-
-            surah = PictureQuran.Instance.SurahNumber;
-            page = PictureQuran.Instance.PageNumber;
-            bitmap = (Bitmap)PictureQuran.Instance.PagePicture.Clone();
+            if (quranClass == 2)
+            {
+                surah = TrueTypeFontQuran.Instance.SurahNumber;
+                page = TrueTypeFontQuran.Instance.PageNumber;
+            }
+            else
+            {
+                surah = PictureQuran.Instance.SurahNumber;
+                page = PictureQuran.Instance.PageNumber;
+                bitmap = (Bitmap)PictureQuran.Instance.PagePicture.Clone();
+            }
 
             VidiotXmlBuilder.AudioPath = mp3Url;
             VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
@@ -86,14 +100,29 @@ namespace QuranKareem
         private void Generate_Click(object sender, EventArgs e)
         {
             string path = "videos\\" + DateTime.Now.Ticks.ToString();
-            PictureQuran.Instance.GetAyatInLinesWithWordsMarks(
-                surahayah,
+            if (quranClass == 2)
+            {
+                TrueTypeFontQuran.Instance.GetAyatInLinesWithWordsMarks(
+                ayahword,
+                VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
+                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
+                path,
+                VidiotXmlBuilder.ImagesPaths,
+                surah, page
+                );
+            }
+            else
+            {
+                PictureQuran.Instance.GetAyatInLinesWithWordsMarks(
+                ayahword,
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
                 (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
                 bitmap, surah, page
                 );
+            }
+                
             if (VidiotXmlBuilder.ImagesPaths.Count != 0)
             {
                 File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());

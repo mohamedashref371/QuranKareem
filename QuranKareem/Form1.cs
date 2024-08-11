@@ -250,10 +250,10 @@ namespace QuranKareem
                     {
                         quranTtf.PageRichText.Click += PageFontQuranText_Click;
                         quranTtf.PageRichText.MouseWheel += QuranPic_MouseWheel;
-                        quranTtf.PageRichText.SizeChanged += quranTtf.SetWidth;
                         Controls.Add(quranTtf.PageRichText);
                     }
                     quranTtf.PageRichText.Size = new Size(quranPic.Width, quranPic.Height);
+                    quranTtf.SetWidth();
                     quranTtf.PageRichText.Visible = true;
                 }
             }
@@ -297,6 +297,7 @@ namespace QuranKareem
                 {
                     quranTtf.PageRichText.Location = new Point(quranPictureLocation.X, quranPictureLocation.Y);
                     quranTtf.PageRichText.Size = new Size(quranPicSize.Width, quranPicSize.Height);
+                    quranTtf.SetWidth();
                 }
                 else
                 {
@@ -338,6 +339,7 @@ namespace QuranKareem
                     quranTtf.PageRichText.Visible = true;
                     quranTtf.PageRichText.Location = new Point(30, exitForm.Location.Y + exitForm.Size.Height + 5);
                     quranTtf.PageRichText.Size = new Size(Width - 60, (int)(quranTtf.PageRichText.Height * (Width - 60.0) / quranTtf.PageRichText.Width));
+                    quranTtf.SetWidth();
                 }
                 else
                 {
@@ -1104,6 +1106,7 @@ namespace QuranKareem
                 moshafAudio = folder.SelectedPath;
                 splitter.Visible = false; splitAll.Visible = false;
                 timestampChangeEventCheck.Visible = true;
+                videoEditor.Visible = true;
                 endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
@@ -1113,6 +1116,7 @@ namespace QuranKareem
                 AddMashaykhButtons();
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
                 timestampChangeEventCheck.Visible = false;
+                videoEditor.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
                 splitter.Visible = true; splitAll.Visible = true;
@@ -1168,15 +1172,17 @@ namespace QuranKareem
         }
         #endregion
 
+        private void videoEditor_Click(object sender, EventArgs e)
+        {
+            new VideoEditorForm(qPicture).ShowDialog();
+        }
+
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
         private void About_Click(object sender, EventArgs e) => Process.Start("https://facebook.com/Mohamed3713317");
 
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e)
         {
-
-            new VideoEditorForm().ShowDialog();
-
             #region Picture.GetLinesWithWordsMarks - Test
             //try
             //{

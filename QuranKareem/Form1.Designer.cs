@@ -104,6 +104,7 @@
             this.moshaf = new System.Windows.Forms.ComboBox();
             this.discri = new System.Windows.Forms.Button();
             this.pageSrtCheck = new System.Windows.Forms.CheckBox();
+            this.videoEditor = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -1097,11 +1098,22 @@
             this.pageSrtCheck.Text = "للصفحة الحالية";
             this.pageSrtCheck.UseVisualStyleBackColor = true;
             // 
+            // videoEditor
+            // 
+            this.videoEditor.Location = new System.Drawing.Point(865, 24);
+            this.videoEditor.Name = "videoEditor";
+            this.videoEditor.Size = new System.Drawing.Size(108, 22);
+            this.videoEditor.TabIndex = 88;
+            this.videoEditor.Text = "Quran Template";
+            this.videoEditor.UseVisualStyleBackColor = true;
+            this.videoEditor.Click += new System.EventHandler(this.videoEditor_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 788);
+            this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.pageSrtCheck);
             this.Controls.Add(this.searchList);
             this.Controls.Add(this.discri);
@@ -1270,6 +1282,7 @@
         private System.Windows.Forms.ComboBox moshaf;
         private System.Windows.Forms.Button discri;
         private System.Windows.Forms.CheckBox pageSrtCheck;
+        private System.Windows.Forms.Button videoEditor;
     }
 }
 
