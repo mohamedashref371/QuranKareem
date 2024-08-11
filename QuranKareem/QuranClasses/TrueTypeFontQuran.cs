@@ -49,7 +49,7 @@ namespace QuranKareem
 
         private PrivateFontCollection bsml, fPage;
 
-        private string pageRtf, ayahRtf;
+        private int prevAyah, prevWord;
 
         public static readonly TrueTypeFontQuran Instance = new TrueTypeFontQuran();
 
@@ -63,6 +63,7 @@ namespace QuranKareem
             ReadOnly = true,
             Cursor = Cursors.Hand,
             TabStop = false,
+            ForeColor = Color.Black,
             //ScrollBars = RichTextBoxScrollBars.None
         };
 
@@ -375,6 +376,9 @@ namespace QuranKareem
                         PageRichText.DeselectAll();
                     }
                 }
+                PageRichText.Select(PageRichText.TextLength, 0);
+                PageRichText.SelectionFont = PageRichText.Font;
+                PageRichText.SelectionColor = PageRichText.ForeColor;
             }
             pageWords.Add(null);
             reader.Close(); quran.Close();
@@ -382,7 +386,7 @@ namespace QuranKareem
             PageRichText.SelectionAlignment = HorizontalAlignment.Center;
             PageRichText.DeselectAll();
 
-            pageRtf = PageRichText.Rtf;
+            prevAyah = -1; prevWord = -1;
         }
 
         private bool CatchFontFile(int page, ref PrivateFontCollection coll)
@@ -425,8 +429,9 @@ namespace QuranKareem
         private int ayahIdIndex = 0;
         private void AyahData()
         {
-            PageRichText.Rtf = pageRtf;
+            if (prevAyah >= 0) PrevAyah(prevAyah);
 
+            prevWord = -1;
             CurrentWord = -1;
             int index = pageWords.FindIndex(arr => arr?[0] == ayahId);
             ayahIdIndex = index;
@@ -449,14 +454,35 @@ namespace QuranKareem
                 }
             }
 
-            ayahRtf = PageRichText.Rtf;
+            prevAyah = ayahId;
+        }
+
+        private void PrevAyah(int ayahId)
+        {
+            int index = ayahIdIndex;
+            Color clr = Color.Empty;
+            for (; index < pageWords.Count; index++)
+            {
+                if (pageWords[index] == null)
+                    continue;
+                else if (pageWords[index][0] != ayahId)
+                    break;
+                else if (Discriminators.KeyExists(0, pageWords[index][2]))
+                    clr = Discriminators.PageColors[pageWords[index][2]];
+
+                if (clr.IsEmpty) clr = PageRichText.ForeColor;
+
+                PageRichText.Select(index, 1);
+                PageRichText.SelectionColor = clr;
+                PageRichText.DeselectAll();
+            }
         }
 
         public bool WordOf(int word)
         {
-            PageRichText.Rtf = ayahRtf;
-
-            CurrentWord = -1;
+            if (prevWord >= 0) PrevWord(prevWord);
+            
+            CurrentWord = -1; prevWord = -1;
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
                 int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
@@ -479,11 +505,38 @@ namespace QuranKareem
                         PageRichText.Select(index, 1);
                         PageRichText.SelectionColor = clr;
                         PageRichText.DeselectAll();
+                        prevWord = word;
                     }
                 }
                 return true;
             }
             return false;
+        }
+
+        private void PrevWord(int word)
+        {
+            if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
+            {
+                int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
+                if (index == -1) return;
+
+                Color clr = Color.Empty;
+                for (; index < pageWords.Count; index++)
+                {
+                    if (pageWords[index] == null)
+                        continue;
+                    else if (pageWords[index][0] != ayahId || pageWords[index][1] != word)
+                        break;
+                    else if (Discriminators.KeyExists(0, pageWords[index][2]))
+                        clr = Discriminators.PageColors[pageWords[index][2]];
+                    
+                    if (clr.IsEmpty) clr = PageRichText.ForeColor;
+
+                    PageRichText.Select(index, 1);
+                    PageRichText.SelectionColor = clr;
+                    PageRichText.DeselectAll();
+                }
+            }
         }
 
         public bool SetCursor(int position = -1)
@@ -609,6 +662,7 @@ namespace QuranKareem
                 bmp.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
                 paths.Add($"img\\{i}.png");
             }
+            fontPage.Dispose();
         }
 
         private Color[] GetLineColorsAtAyahWord(List<int> line, List<Color> pClrs, List<Color> wClrs, int ayah, int word)
