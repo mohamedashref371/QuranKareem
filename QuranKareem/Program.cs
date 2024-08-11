@@ -16,9 +16,14 @@ namespace QuranKareem
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string errorMessage = "حدث خطأ غير متوقع، سيتم إغلاق البرنامج";
-            Application.ThreadException += (sender, e) => MessageBox.Show(errorMessage);
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => MessageBox.Show(errorMessage);
+            Application.ThreadException += (sender, e) =>
+                LogError(e.Exception.Message, e.Exception.StackTrace);
+            
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                LogError(ex.Message, ex.StackTrace);
+            };
 
             try
             {
@@ -30,7 +35,19 @@ namespace QuranKareem
                 }
                 else MessageBox.Show("هناك نسخة من البرنامج مفتوحة");
             }
-            catch { MessageBox.Show(errorMessage); }
+            catch (Exception ex)
+            {
+                LogError(ex.Message, ex.StackTrace);
+                MessageBox.Show("حدث خطأ غير متوقع، سيتم إغلاق البرنامج");
+            }
+        }
+
+        private static void LogError(string msg, string stack)
+        {
+            if (!System.IO.File.Exists("Errors.txt"))
+                System.IO.File.CreateText("Errors.txt");
+
+            System.IO.File.AppendAllText("Errors.txt", $"{DateTime.Now}\n{msg}\n{stack}\n------------------\n\n");
         }
     }
 }
