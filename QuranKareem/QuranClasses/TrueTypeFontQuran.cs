@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using static QuranKareem.Coloring;
@@ -426,7 +427,7 @@ namespace QuranKareem
             return coll.Families.Length != 0;
         }
 
-        private int ayahIdIndex = 0;
+        private int ayahIdIndex, wordIndex = 0;
         private void AyahData()
         {
             if (prevAyah >= 0) PrevAyah(prevAyah);
@@ -486,6 +487,7 @@ namespace QuranKareem
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
                 int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
+                wordIndex = index;
                 if (index == -1) return false;
                 CurrentWord = word;
                 Color clr;
@@ -517,7 +519,7 @@ namespace QuranKareem
         {
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
-                int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
+                int index = wordIndex;
                 if (index == -1) return;
 
                 Color clr = Color.Empty;
@@ -527,9 +529,12 @@ namespace QuranKareem
                         continue;
                     else if (pageWords[index][0] != ayahId || pageWords[index][1] != word)
                         break;
+                    else if (Discriminators.KeyExists(1, pageWords[index][2]))
+                        clr = Discriminators.AyahColors[pageWords[index][2]];
                     else if (Discriminators.KeyExists(0, pageWords[index][2]))
                         clr = Discriminators.PageColors[pageWords[index][2]];
-                    
+
+                    if (clr.Name == "AyahColor") clr = AyahColor;
                     if (clr.IsEmpty) clr = PageRichText.ForeColor;
 
                     PageRichText.Select(index, 1);
