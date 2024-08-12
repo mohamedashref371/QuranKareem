@@ -60,6 +60,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lineHeightLabel = new System.Windows.Forms.Label();
             this.lineHeightAuto = new System.Windows.Forms.CheckBox();
+            this.yEditCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.videoWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameRate)).BeginInit();
@@ -537,6 +538,20 @@
             this.lineHeightAuto.UseVisualStyleBackColor = true;
             this.lineHeightAuto.CheckedChanged += new System.EventHandler(this.LineHeightAuto_CheckedChanged);
             // 
+            // yEditCheck
+            // 
+            this.yEditCheck.AutoSize = true;
+            this.yEditCheck.Location = new System.Drawing.Point(650, 429);
+            this.yEditCheck.Name = "yEditCheck";
+            this.yEditCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.yEditCheck.Size = new System.Drawing.Size(148, 30);
+            this.yEditCheck.TabIndex = 37;
+            this.yEditCheck.Text = "تعديل قيمة ال  Y\r\nحسب قيمة الإرتفاع الناتجة";
+            this.yEditCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.yEditCheck.UseVisualStyleBackColor = true;
+            this.yEditCheck.Visible = false;
+            this.yEditCheck.CheckedChanged += new System.EventHandler(this.YEditCheck_CheckedChanged);
+            // 
             // VideoEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -572,6 +587,7 @@
             this.Controls.Add(this.vidiotLink);
             this.Controls.Add(this.vidiotRadio);
             this.Controls.Add(this.videoNameLabel);
+            this.Controls.Add(this.yEditCheck);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "VideoEditorForm";
@@ -624,5 +640,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lineHeightLabel;
         private System.Windows.Forms.CheckBox lineHeightAuto;
+        private System.Windows.Forms.CheckBox yEditCheck;
     }
 }

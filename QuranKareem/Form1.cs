@@ -1181,25 +1181,7 @@ namespace QuranKareem
 
         private void About_Click(object sender, EventArgs e) => Process.Start("https://facebook.com/Mohamed3713317");
 
-        private void Guna2HtmlLabel1_Click(object sender, EventArgs e)
-        {
-            #region Picture.GetLinesWithWordsMarks - Test
-            //try
-            //{
-            //    var folder2 = new FolderBrowserDialog { ShowNewFolderButton = true };
-            //    if (folder2.ShowDialog() == DialogResult.OK)
-            //    {
-            //        string s = $"{folder2.SelectedPath}\\{Page.Value}";
-            //        if (!Directory.Exists(s)) { Directory.CreateDirectory(s); }
-            //        var bitmap = quranPicture.GetLinesWithWordsMarks();
-            //        for (int i = 0; i < bitmap.Count; i++)
-            //            for (int j = 0; j < bitmap[i]?.Count; j++)
-            //                bitmap[i][j].Save($"{s}\\{i.ToString().PadLeft(3, '0')}_{j.ToString().PadLeft(3, '0')}.png", ImageFormat.Png);
-            //    }
-            //}
-            //catch { }
-            #endregion
-        }
+        private void Guna2HtmlLabel1_Click(object sender, EventArgs e) { }
 
     }
 }

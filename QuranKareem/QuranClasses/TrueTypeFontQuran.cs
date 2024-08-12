@@ -124,7 +124,7 @@ namespace QuranKareem
                     quran.ConnectionString = $"Data Source={path}000.db;Version=3;";
                 else
                     quran.ConnectionString = $"Data Source={path}0.db;Version=3;";
-                
+
                 quran.Open();
                 command.CommandText = $"SELECT * FROM description";
                 reader = command.ExecuteReader();
@@ -152,7 +152,7 @@ namespace QuranKareem
                 reader?.Close();
                 quran.Close();
             }
-            
+
             if (success)
             {
                 CatchFontFile(0, ref bsml);
@@ -165,6 +165,7 @@ namespace QuranKareem
             return success;
         }
 
+        #region التنقلات في المصحف
         public string[] GetSurahNames()
         {
             if (!success) return new string[] { "" };
@@ -175,7 +176,7 @@ namespace QuranKareem
 
             while (reader.Read())
                 names[reader.GetInt32(0) - 1] = reader.GetString(1);
-           
+
             reader.Close(); quran.Close();
             return names;
         }
@@ -337,10 +338,10 @@ namespace QuranKareem
             pageWords.Clear();
 
             CatchFontFile(page, ref fPage);
-            
+
             PageRichText.Font = new Font(fPage.Families[0], fontSizeRes, GraphicsUnit.Pixel);
             Font fBsml = new Font(bsml.Families[0], fontSizeRes, GraphicsUnit.Pixel);
-            
+
             command.CommandText = $"SELECT ayah_id,ayah,line,word,discriminator,text FROM ayat JOIN words ON words.ayah_id = ayat.id WHERE page = {page}";
             int line = 1, index;
             string s; Color clr;
@@ -482,7 +483,7 @@ namespace QuranKareem
         public bool WordOf(int word)
         {
             if (prevWord >= 0) PrevWord(prevWord);
-            
+
             CurrentWord = -1; prevWord = -1;
             if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
@@ -557,6 +558,7 @@ namespace QuranKareem
             WordOf(current[1]);
             return true;
         }
+        #endregion
 
         #region Colors
         private void GetInitialColors()
@@ -623,7 +625,7 @@ namespace QuranKareem
         }
 
 #warning very slow
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, bool autoHeight, string path, List<string> paths, int surah, int page)
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, bool autoHeight, bool yEdit, string path, List<string> paths, int surah, int page)
         {
             paths.Clear();
             if (!success || ayahword == null || paths == null) return;
@@ -653,7 +655,7 @@ namespace QuranKareem
 
             int lineIdx = 0;
             Bitmap bmp, bmp0;
-            Graphics gr;
+            Graphics gr; int h;
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 if (ayahword[i * 2 + 1] >= 0)
@@ -663,7 +665,13 @@ namespace QuranKareem
                 gr = Graphics.FromImage(bmp);
                 gr.Clear(Color.Transparent);
                 bmp0 = DrawText(string.Concat(texts[lineIdx]), f, GetLineColorsAtAyahWord(lines[lineIdx], pColors[lineIdx], wColors[lineIdx], ayahword[i * 2], ayahword[i * 2 + 1]));
-                gr.DrawImage(bmp0, locx, locy, linWdth, autoHeight ? (int)(1.0 * bmp0.Height / bmp0.Width * linWdth) : linHght);
+                if (autoHeight)
+                {
+                    h = (int)(1f * bmp0.Height / bmp0.Width * linWdth);
+                    if (yEdit) locy -= h - linHght;
+                    linHght = h;
+                }
+                gr.DrawImage(bmp0, locx, locy, linWdth, linHght);
                 bmp.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
                 paths.Add($"img\\{i}.png");
             }

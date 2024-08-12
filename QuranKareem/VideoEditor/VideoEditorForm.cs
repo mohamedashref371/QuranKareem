@@ -107,9 +107,18 @@ namespace QuranKareem
             Process.Start("https://sourceforge.net/projects/vidiot");
         }
 
+        private void YEditCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (yEditCheck.Visible)
+                lineHeight.Enabled = yEditCheck.Checked;
+        }
+
         private void LineHeightAuto_CheckedChanged(object sender, EventArgs e)
         {
             lineHeight.Enabled = !lineHeightAuto.Checked;
+            yEditCheck.Visible = lineHeightAuto.Checked;
+            if (!yEditCheck.Visible)
+                yEditCheck.Checked = false;
         }
 
         private void Generate_Click(object sender, EventArgs e)
@@ -120,7 +129,8 @@ namespace QuranKareem
                 TrueTypeFontQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
-                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value, lineHeightAuto.Checked,
+                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
+                lineHeightAuto.Checked, yEditCheck.Checked,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
                 surah, page
@@ -131,7 +141,8 @@ namespace QuranKareem
                 PictureQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
                 VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
-                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value, lineHeightAuto.Checked,
+                (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
+                lineHeightAuto.Checked, yEditCheck.Checked,
                 path,
                 VidiotXmlBuilder.ImagesPaths,
                 bitmap, surah, page

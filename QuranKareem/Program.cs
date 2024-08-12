@@ -28,7 +28,7 @@ namespace QuranKareem
             try
             {
                 System.Threading.Mutex mutex = new System.Threading.Mutex(true, Application.ProductName + Application.CompanyName, out bool createdNew);
-                if (createdNew /* لمنع فتح نسختين من البرنامج */)
+                if (createdNew)
                 {
                     Application.Run(new Form1());
                     mutex.ReleaseMutex();

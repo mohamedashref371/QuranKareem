@@ -637,7 +637,7 @@ namespace QuranKareem
         }
 
 #warning very slow
-        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, bool autoHeight, string path, List<string> paths, Bitmap pageClone, int surah, int page)
+        public void GetAyatInLinesWithWordsMarks(List<int> ayahword, int width, int height, int locx, int locy, int linWdth, int linHght, bool autoHeight, bool yEdit, string path, List<string> paths, Bitmap pageClone, int surah, int page)
         {
             paths.Clear();
             if (!success || isWordTableEmpty || ayahword == null || paths == null) return;
@@ -646,7 +646,7 @@ namespace QuranKareem
             
             int line = 0;
             Bitmap bmp, bmp0;
-            Graphics gr;
+            Graphics gr; int h;
             for (int i = 0; i < ayahword.Count / 2; i++)
             {
                 quran.Open();
@@ -660,7 +660,13 @@ namespace QuranKareem
                 gr = Graphics.FromImage(bmp);
                 gr.Clear(Color.Empty);
                 bmp0 = GetLineWithWordsMarks(page, pageClone, line, ayahword[i * 2], ayahword[i * 2 + 1]).Last();
-                gr.DrawImage(bmp0, locx, locy, linWdth, autoHeight ? (int)(1.0 * bmp0.Height / bmp0.Width * linWdth) : linHght);
+                if (autoHeight)
+                {
+                    h = (int)(1f * bmp0.Height / bmp0.Width * linWdth);
+                    if (yEdit) locy -= h - linHght;
+                    linHght = h;
+                }
+                gr.DrawImage(bmp0, locx, locy, linWdth, linHght);
                 bmp.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
                 paths.Add($"img\\{i}.png");
             }
