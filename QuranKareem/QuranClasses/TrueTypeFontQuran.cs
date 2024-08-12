@@ -668,7 +668,7 @@ namespace QuranKareem
                 if (autoHeight)
                 {
                     h = (int)(1f * bmp0.Height / bmp0.Width * linWdth);
-                    if (yEdit) locy -= h - linHght;
+                    if (yEdit) locy -= (h - linHght) / 2;
                     linHght = h;
                 }
                 gr.DrawImage(bmp0, locx, locy, linWdth, linHght);
