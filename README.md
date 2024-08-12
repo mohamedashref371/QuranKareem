@@ -1,4 +1,4 @@
-﻿# Quran Kareem v1.3
+﻿# Quran Kareem v1.4
 With 43 audio Quran and 11 tafasir
 
 Requirements to run the program: [.NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631) for OS older than 10.
@@ -12,7 +12,7 @@ I used [Transparent Image v0.5](https://github.com/mohamedashref371/Transparent-
 
 And to ensure myself correct data, I did the following:
 
-- I used [UthmanicHafs_v2-1](https://fonts.qurancomplex.gov.sa/wp02/حفص) from [King Fahd Glorious Qur'an Printing Complex](https://qurancomplex.gov.sa/) to get the written Qur’an and convert it to [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).
+- I used [UthmanicHafs_v22](https://fonts.qurancomplex.gov.sa/wp02/حفص) from [King Fahd Glorious Qur'an Printing Complex](https://qurancomplex.gov.sa/) to get the written Qur’an and convert it to [sqlite database](https://github.com/mohamedashref371/QuranKareem/blob/master/data/texts/حفص%20عن%20عاصم.db).
 
 - I extracted At-tafasir with some modifications from [KSU Ayat v1.4](https://quran.ksu.edu.sa/ayat/) and [Tanzil.net](https://tanzil.net/) to my database model.
 
@@ -35,4 +35,4 @@ To Naming Audio Surahs: [here](https://github.com/mohamedashref371/Naming-Surahs
 
 I would like to thank [codeproject website](https://www.codeproject.com/) for [FastPixel Class](https://www.codeproject.com/Articles/15192/FastPixel-A-much-faster-alternative-to-Bitmap-SetP).
 
-Download [SQLite3 Database Reader](https://github.com/pawelsalawa/sqlitestudio/releases).
+Download [SQLite3 Database Reader](https://github.com/pawelsalawa/sqlitestudio/releases) if you want to open it.
