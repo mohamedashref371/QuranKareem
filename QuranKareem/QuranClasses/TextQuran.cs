@@ -609,7 +609,7 @@ namespace QuranKareem
             return s.Replace(" ", "")
                     .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
                     .Replace("ذ", "ز").Replace("ظ", "ز")
-                    .Replace("ة", "").Replace("ط", "ت")
+                    .Replace("ة", "").Replace("ه", "").Replace("ط", "ت")
                     .Replace("ث", "س").Replace("ص", "س")
                     .Replace("ض", "د")
                     .Replace("ق", "ك")
