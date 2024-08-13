@@ -604,16 +604,21 @@ namespace QuranKareem
             return lst.ToArray();
         }
 
-        public string SpellingErrors(string s)
+        public string SpellingErrors(string s, bool taaMarbota = true)
         {
-            return s.Replace(" ", "")
+            s = s.Replace(" ", "")
                     .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
-                    .Replace("ذ", "ز").Replace("ظ", "ز")
-                    .Replace("ة", "").Replace("ه", "").Replace("ط", "ت")
-                    .Replace("ث", "س").Replace("ص", "س")
-                    .Replace("ض", "د")
-                    .Replace("ق", "ك")
-                    ;
+                    .Replace("ذ", "ز").Replace("ظ", "ز");
+            if (taaMarbota)
+                s = s.Replace("ة", "ت");
+            else
+                s = s.Replace("ة", "").Replace("ه", "");
+            s = s.Replace("ط", "ت")
+                .Replace("ث", "س").Replace("ص", "س")
+                .Replace("ض", "د")
+                .Replace("ق", "ك")
+                ;
+            return s;
         }
 
         public int[] SelectedSearchIndex(int i)
