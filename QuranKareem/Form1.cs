@@ -189,7 +189,7 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions });
             success = true;
         }
 
@@ -1105,8 +1105,9 @@ namespace QuranKareem
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
                 splitter.Visible = false; splitAll.Visible = false;
+                videoEditor.Visible = false;
+                youtubeCaptions.Visible = false;
                 timestampChangeEventCheck.Visible = true;
-                videoEditor.Visible = true;
                 endAyatCheck.Visible = true;
                 ShaykhDesc.Enabled = true; addShaykhInfo.Enabled = true;
                 EditMoqreaSurah((int)Surah.Value);
@@ -1116,10 +1117,11 @@ namespace QuranKareem
                 AddMashaykhButtons();
                 addNewMoqrea.Text = "إضافة شيخ جديد"; stop.Enabled = true;
                 timestampChangeEventCheck.Visible = false;
-                videoEditor.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
                 splitter.Visible = true; splitAll.Visible = true;
+                videoEditor.Visible = true;
+                youtubeCaptions.Visible = true;
             }
         }
 
