@@ -27,6 +27,8 @@ namespace QuranKareem
             audioBitRate.Value = audioRate;
             lineHeightAuto.Checked = autoCheck;
             yEditCheck.Checked = yCheck;
+            if (yCheck)
+                lineHeight.Enabled = true;
         }
 
         private void VideoPath_Click(object sender, EventArgs e)
