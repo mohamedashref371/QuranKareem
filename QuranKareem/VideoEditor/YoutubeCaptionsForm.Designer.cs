@@ -34,7 +34,7 @@
             this.saveTextDialog = new System.Windows.Forms.SaveFileDialog();
             this.openVttDialog = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
-            this.vidiotLink = new System.Windows.Forms.LinkLabel();
+            this.youtubeLink = new System.Windows.Forms.LinkLabel();
             this.openMp3Dialog = new System.Windows.Forms.OpenFileDialog();
             this.mp3Path = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,6 +43,15 @@
             this.textPath = new System.Windows.Forms.Button();
             this.openTextDialog = new System.Windows.Forms.OpenFileDialog();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.arrow1 = new System.Windows.Forms.Label();
+            this.arrow2 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.arrow4 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.arrow3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // vttPath
@@ -72,7 +81,7 @@
             // txtNameLabel
             // 
             this.txtNameLabel.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.txtNameLabel.Location = new System.Drawing.Point(12, 149);
+            this.txtNameLabel.Location = new System.Drawing.Point(12, 180);
             this.txtNameLabel.Name = "txtNameLabel";
             this.txtNameLabel.Size = new System.Drawing.Size(444, 36);
             this.txtNameLabel.TabIndex = 7;
@@ -102,16 +111,16 @@
     "فحة الحالية وينتهي بنهايتها";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // vidiotLink
+            // youtubeLink
             // 
-            this.vidiotLink.AutoSize = true;
-            this.vidiotLink.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vidiotLink.Location = new System.Drawing.Point(12, 9);
-            this.vidiotLink.Name = "vidiotLink";
-            this.vidiotLink.Size = new System.Drawing.Size(391, 23);
-            this.vidiotLink.TabIndex = 10;
-            this.vidiotLink.TabStop = true;
-            this.vidiotLink.Text = "https://studio.youtube.com/video/translations";
+            this.youtubeLink.AutoSize = true;
+            this.youtubeLink.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.youtubeLink.Location = new System.Drawing.Point(40, 14);
+            this.youtubeLink.Name = "youtubeLink";
+            this.youtubeLink.Size = new System.Drawing.Size(238, 23);
+            this.youtubeLink.TabIndex = 10;
+            this.youtubeLink.TabStop = true;
+            this.youtubeLink.Text = "https://studio.youtube.com";
             // 
             // openMp3Dialog
             // 
@@ -192,18 +201,135 @@
             this.label3.Text = "لدي ملف مستخرج\r\nمسبقا بالفعل :";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label4.Location = new System.Drawing.Point(328, 14);
+            this.label4.Name = "label4";
+            this.label4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label4.Size = new System.Drawing.Size(157, 23);
+            this.label4.TabIndex = 92;
+            this.label4.Text = "اختر قسم الترجمة";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // arrow1
+            // 
+            this.arrow1.AutoSize = true;
+            this.arrow1.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.arrow1.Location = new System.Drawing.Point(284, 14);
+            this.arrow1.Name = "arrow1";
+            this.arrow1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.arrow1.Size = new System.Drawing.Size(38, 23);
+            this.arrow1.TabIndex = 93;
+            this.arrow1.Text = "-->";
+            this.arrow1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // arrow2
+            // 
+            this.arrow2.AutoSize = true;
+            this.arrow2.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.arrow2.Location = new System.Drawing.Point(491, 14);
+            this.arrow2.Name = "arrow2";
+            this.arrow2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.arrow2.Size = new System.Drawing.Size(38, 23);
+            this.arrow2.TabIndex = 95;
+            this.arrow2.Text = "-->";
+            this.arrow2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label7.Location = new System.Drawing.Point(535, 14);
+            this.label7.Name = "label7";
+            this.label7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label7.Size = new System.Drawing.Size(191, 23);
+            this.label7.TabIndex = 94;
+            this.label7.Text = "اختر فيديو القرآن الكريم";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label8.Location = new System.Drawing.Point(392, 52);
+            this.label8.Name = "label8";
+            this.label8.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label8.Size = new System.Drawing.Size(186, 23);
+            this.label8.TabIndex = 96;
+            this.label8.Text = "العربية (ترجمة تلقائية)";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // arrow4
+            // 
+            this.arrow4.AutoSize = true;
+            this.arrow4.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.arrow4.Location = new System.Drawing.Point(306, 52);
+            this.arrow4.Name = "arrow4";
+            this.arrow4.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.arrow4.Size = new System.Drawing.Size(38, 23);
+            this.arrow4.TabIndex = 97;
+            this.arrow4.Text = "-->";
+            this.arrow4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label10.Location = new System.Drawing.Point(185, 52);
+            this.label10.Name = "label10";
+            this.label10.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label10.Size = new System.Drawing.Size(82, 23);
+            this.label10.TabIndex = 98;
+            this.label10.Text = "تنزيل .vtt";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // arrow3
+            // 
+            this.arrow3.AutoSize = true;
+            this.arrow3.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.arrow3.Location = new System.Drawing.Point(611, 52);
+            this.arrow3.Name = "arrow3";
+            this.arrow3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.arrow3.Size = new System.Drawing.Size(38, 23);
+            this.arrow3.TabIndex = 99;
+            this.arrow3.Text = "-->";
+            this.arrow3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label5.Location = new System.Drawing.Point(218, 127);
+            this.label5.Name = "label5";
+            this.label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label5.Size = new System.Drawing.Size(228, 23);
+            this.label5.TabIndex = 100;
+            this.label5.Text = "لاستخراج ملف captions.txt";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // YoutubeCaptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.arrow3);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.arrow4);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.arrow2);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.arrow1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textPath);
             this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.mp3NameLabel);
             this.Controls.Add(this.mp3Path);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.vidiotLink);
+            this.Controls.Add(this.youtubeLink);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.vttPath);
             this.Controls.Add(this.vttPathLabel);
@@ -225,7 +351,7 @@
         private System.Windows.Forms.SaveFileDialog saveTextDialog;
         private System.Windows.Forms.OpenFileDialog openVttDialog;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.LinkLabel vidiotLink;
+        private System.Windows.Forms.LinkLabel youtubeLink;
         private System.Windows.Forms.OpenFileDialog openMp3Dialog;
         private System.Windows.Forms.Button mp3Path;
         private System.Windows.Forms.Label label2;
@@ -234,5 +360,14 @@
         private System.Windows.Forms.Button textPath;
         private System.Windows.Forms.OpenFileDialog openTextDialog;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label arrow1;
+        private System.Windows.Forms.Label arrow2;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label arrow4;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label arrow3;
+        private System.Windows.Forms.Label label5;
     }
 }
