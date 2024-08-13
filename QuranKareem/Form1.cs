@@ -1172,9 +1172,14 @@ namespace QuranKareem
         }
         #endregion
 
-        private void videoEditor_Click(object sender, EventArgs e)
+        private void VideoEditor_Click(object sender, EventArgs e)
         {
             new VideoEditorForm(qPicture).ShowDialog();
+        }
+
+        private void YoutubeCaptions_Click(object sender, EventArgs e)
+        {
+            new YoutubeCaptionsForm(qPicture).ShowDialog();
         }
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");

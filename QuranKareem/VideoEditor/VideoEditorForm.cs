@@ -10,17 +10,23 @@ namespace QuranKareem
     public partial class VideoEditorForm : Form
     {
         private int quranClass;
-        private static int width = 1920, height = 1080, x = 100, y = 588, lWidth = 1720, lHeight = 200;
+        private bool captions;
+        private static int width = 1920, height = 1080, x = 100, y = 588, lWidth = 1720, lHeight = 200, audioRate = 128000;
         private static float frames = 25f;
+        bool autoCheck, yCheck;
 
-        public VideoEditorForm(int quranClass)
+        public VideoEditorForm(int quranClass, bool captions = false)
         {
             InitializeComponent();
             this.quranClass = quranClass;
+            this.captions = captions;
             videoWidth.Value = width; videoHeight.Value = height;
             frameRate.Value = (decimal)frames;
             locX.Value = x; locY.Value = y;
             lineWidth.Value = lWidth; lineHeight.Value = lHeight;
+            audioBitRate.Value = audioRate;
+            lineHeightAuto.Checked = autoCheck;
+            yEditCheck.Checked = yCheck;
         }
 
         private void VideoPath_Click(object sender, EventArgs e)
@@ -47,31 +53,46 @@ namespace QuranKareem
         private void VideoEditorForm_Load(object sender, EventArgs e)
         {
             int[] minmax;
-            if (quranClass == 2)
-                minmax = TrueTypeFontQuran.Instance.GetStartAndEndOfPage();
-            else
-                minmax = PictureQuran.Instance.GetStartAndEndOfPage();
-            
-            float[] minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out string mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
-
-            if (minmax2 == null)
-            {
-                MessageBox.Show("لم نستطع إمساك سورة أو غير متوفر تحديد الكلمات لهذا الشيخ.");
-                Close();
-                return;
-            }
-            if (quranClass == 2)
-            {
-                surah = TrueTypeFontQuran.Instance.SurahNumber;
-                page = TrueTypeFontQuran.Instance.PageNumber;
-            }
-            else
+            if (quranClass == 1)
             {
                 surah = PictureQuran.Instance.SurahNumber;
                 page = PictureQuran.Instance.PageNumber;
                 bitmap = (Bitmap)PictureQuran.Instance.PagePicture.Clone();
+                minmax = PictureQuran.Instance.GetStartAndEndOfPage();
+            }
+            else if(quranClass == 2)
+            {
+                surah = TrueTypeFontQuran.Instance.SurahNumber;
+                page = TrueTypeFontQuran.Instance.PageNumber;
+                minmax = TrueTypeFontQuran.Instance.GetStartAndEndOfPage();
+            }
+            else
+            {
+                MessageBox.Show("لم أجد مصاحف مصورة.");
+                Close();
+                return;
             }
 
+            float[] minmax2;
+            string mp3Url;
+            
+            if (captions)
+            {
+                YoutubeCaptions.Surah = surah;
+                minmax2 = YoutubeCaptions.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
+            }
+            else
+            {
+                minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
+            }
+
+            if (minmax2 == null)
+            {
+                MessageBox.Show("لم أستطع إمساك سورة صوتية أو غير متوفر تحديد الكلمات لهذا الشيخ.");
+                Close();
+                return;
+            }
+            
             VidiotXmlBuilder.AudioPath = mp3Url;
             VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
             VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
@@ -99,7 +120,8 @@ namespace QuranKareem
 
         private void AudioBitRate_ValueChanged(object sender, EventArgs e)
         {
-            VidiotXmlBuilder.AudioBitRate = (int)audioBitRate.Value;
+            audioRate = (int)audioBitRate.Value;
+            VidiotXmlBuilder.AudioBitRate = audioRate;
         }
 
         private void VidiotLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -111,6 +133,7 @@ namespace QuranKareem
         {
             if (yEditCheck.Visible)
                 lineHeight.Enabled = yEditCheck.Checked;
+            yCheck = yEditCheck.Checked;
         }
 
         private void LineHeightAuto_CheckedChanged(object sender, EventArgs e)
@@ -119,6 +142,7 @@ namespace QuranKareem
             yEditCheck.Visible = lineHeightAuto.Checked;
             if (!yEditCheck.Visible)
                 yEditCheck.Checked = false;
+            autoCheck = lineHeightAuto.Checked;
         }
 
         private void Generate_Click(object sender, EventArgs e)
@@ -155,7 +179,7 @@ namespace QuranKareem
                 Process.Start(path);
             }
             else
-                MessageBox.Show("هناك خطأ، يحتمل أن المصحف لا يدعم تحديد الكلمات");
+                MessageBox.Show("هناك خطأ، يحتمل أن المصحف المصور لا يدعم تحديد الكلمات");
         }
 
         private void LocX_ValueChanged(object sender, EventArgs e)

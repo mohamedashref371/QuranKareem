@@ -133,6 +133,13 @@
       <DependentUpon>VideoEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="VideoEditor\VidiotXmlBuilder.cs" />
+    <Compile Include="VideoEditor\YoutubeCaptions.cs" />
+    <Compile Include="VideoEditor\YoutubeCaptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VideoEditor\YoutubeCaptionsForm.Designer.cs">
+      <DependentUpon>YoutubeCaptionsForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Colors\DiscriminatorsForm.resx">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -151,6 +158,9 @@
     </Compile>
     <EmbeddedResource Include="VideoEditor\VideoEditorForm.resx">
       <DependentUpon>VideoEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VideoEditor\YoutubeCaptionsForm.resx">
+      <DependentUpon>YoutubeCaptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

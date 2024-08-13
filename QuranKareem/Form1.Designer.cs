@@ -105,6 +105,7 @@
             this.discri = new System.Windows.Forms.Button();
             this.pageSrtCheck = new System.Windows.Forms.CheckBox();
             this.videoEditor = new System.Windows.Forms.Button();
+            this.youtubeCaptions = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -901,9 +902,9 @@
             // 
             // splitAll
             // 
-            this.splitAll.Location = new System.Drawing.Point(829, 3);
+            this.splitAll.Location = new System.Drawing.Point(923, 24);
             this.splitAll.Name = "splitAll";
-            this.splitAll.Size = new System.Drawing.Size(92, 22);
+            this.splitAll.Size = new System.Drawing.Size(83, 22);
             this.splitAll.TabIndex = 35;
             this.splitAll.Text = "تقطيع السورة";
             this.splitAll.UseVisualStyleBackColor = true;
@@ -1100,19 +1101,30 @@
             // 
             // videoEditor
             // 
-            this.videoEditor.Location = new System.Drawing.Point(865, 24);
+            this.videoEditor.Location = new System.Drawing.Point(824, 24);
             this.videoEditor.Name = "videoEditor";
-            this.videoEditor.Size = new System.Drawing.Size(108, 22);
+            this.videoEditor.Size = new System.Drawing.Size(100, 22);
             this.videoEditor.TabIndex = 88;
             this.videoEditor.Text = "Quran Template";
             this.videoEditor.UseVisualStyleBackColor = true;
-            this.videoEditor.Click += new System.EventHandler(this.videoEditor_Click);
+            this.videoEditor.Click += new System.EventHandler(this.VideoEditor_Click);
+            // 
+            // youtubeCaptions
+            // 
+            this.youtubeCaptions.Location = new System.Drawing.Point(824, 3);
+            this.youtubeCaptions.Name = "youtubeCaptions";
+            this.youtubeCaptions.Size = new System.Drawing.Size(100, 22);
+            this.youtubeCaptions.TabIndex = 89;
+            this.youtubeCaptions.Text = "Youtube Captions";
+            this.youtubeCaptions.UseVisualStyleBackColor = true;
+            this.youtubeCaptions.Click += new System.EventHandler(this.YoutubeCaptions_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 788);
+            this.Controls.Add(this.youtubeCaptions);
             this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.pageSrtCheck);
             this.Controls.Add(this.searchList);
@@ -1283,6 +1295,7 @@
         private System.Windows.Forms.Button discri;
         private System.Windows.Forms.CheckBox pageSrtCheck;
         private System.Windows.Forms.Button videoEditor;
+        private System.Windows.Forms.Button youtubeCaptions;
     }
 }
 
