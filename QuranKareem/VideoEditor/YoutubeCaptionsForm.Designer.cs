@@ -31,8 +31,8 @@
             this.vttPath = new System.Windows.Forms.Button();
             this.vttPathLabel = new System.Windows.Forms.Label();
             this.txtNameLabel = new System.Windows.Forms.Label();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveTextDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openVttDialog = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.vidiotLink = new System.Windows.Forms.LinkLabel();
             this.openMp3Dialog = new System.Windows.Forms.OpenFileDialog();
@@ -40,12 +40,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.mp3NameLabel = new System.Windows.Forms.Label();
             this.videoEditor = new System.Windows.Forms.Button();
+            this.textPath = new System.Windows.Forms.Button();
+            this.openTextDialog = new System.Windows.Forms.OpenFileDialog();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // vttPath
             // 
             this.vttPath.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vttPath.Location = new System.Drawing.Point(202, 120);
+            this.vttPath.Location = new System.Drawing.Point(462, 120);
             this.vttPath.Name = "vttPath";
             this.vttPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.vttPath.Size = new System.Drawing.Size(104, 36);
@@ -58,7 +61,7 @@
             // 
             this.vttPathLabel.AutoSize = true;
             this.vttPathLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vttPathLabel.Location = new System.Drawing.Point(414, 127);
+            this.vttPathLabel.Location = new System.Drawing.Point(593, 127);
             this.vttPathLabel.Name = "vttPathLabel";
             this.vttPathLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.vttPathLabel.Size = new System.Drawing.Size(195, 23);
@@ -69,28 +72,28 @@
             // txtNameLabel
             // 
             this.txtNameLabel.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.txtNameLabel.Location = new System.Drawing.Point(12, 170);
+            this.txtNameLabel.Location = new System.Drawing.Point(12, 149);
             this.txtNameLabel.Name = "txtNameLabel";
-            this.txtNameLabel.Size = new System.Drawing.Size(776, 36);
+            this.txtNameLabel.Size = new System.Drawing.Size(444, 36);
             this.txtNameLabel.TabIndex = 7;
             this.txtNameLabel.Text = "captions.txt";
             this.txtNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // saveFileDialog
+            // saveTextDialog
             // 
-            this.saveFileDialog.FileName = "captions.txt";
-            this.saveFileDialog.Filter = "TEXT Files|*.txt";
+            this.saveTextDialog.FileName = "captions.txt";
+            this.saveTextDialog.Filter = "TEXT Files|*.txt";
             // 
-            // openFileDialog
+            // openVttDialog
             // 
-            this.openFileDialog.FileName = "captions.vtt";
-            this.openFileDialog.Filter = "VTT Files|*.vtt";
+            this.openVttDialog.FileName = "captions.vtt";
+            this.openVttDialog.Filter = "VTT Files|*.vtt";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.label1.Location = new System.Drawing.Point(218, 243);
+            this.label1.Location = new System.Drawing.Point(218, 244);
             this.label1.Name = "label1";
             this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label1.Size = new System.Drawing.Size(364, 69);
@@ -160,11 +163,42 @@
             this.videoEditor.UseVisualStyleBackColor = true;
             this.videoEditor.Click += new System.EventHandler(this.VideoEditor_Click);
             // 
+            // textPath
+            // 
+            this.textPath.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.textPath.Location = new System.Drawing.Point(462, 181);
+            this.textPath.Name = "textPath";
+            this.textPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.textPath.Size = new System.Drawing.Size(104, 36);
+            this.textPath.TabIndex = 90;
+            this.textPath.Text = "إختيار ...";
+            this.textPath.UseVisualStyleBackColor = true;
+            this.textPath.Click += new System.EventHandler(this.TextPath_Click);
+            // 
+            // openTextDialog
+            // 
+            this.openTextDialog.FileName = "captions.txt";
+            this.openTextDialog.Filter = "TEXT Files|*.txt";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.label3.Location = new System.Drawing.Point(619, 172);
+            this.label3.Name = "label3";
+            this.label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label3.Size = new System.Drawing.Size(158, 46);
+            this.label3.TabIndex = 91;
+            this.label3.Text = "لدي ملف مستخرج\r\nمسبقا بالفعل :";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // YoutubeCaptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textPath);
             this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.mp3NameLabel);
             this.Controls.Add(this.mp3Path);
@@ -188,8 +222,8 @@
         private System.Windows.Forms.Button vttPath;
         private System.Windows.Forms.Label vttPathLabel;
         private System.Windows.Forms.Label txtNameLabel;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveTextDialog;
+        private System.Windows.Forms.OpenFileDialog openVttDialog;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel vidiotLink;
         private System.Windows.Forms.OpenFileDialog openMp3Dialog;
@@ -197,5 +231,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label mp3NameLabel;
         private System.Windows.Forms.Button videoEditor;
+        private System.Windows.Forms.Button textPath;
+        private System.Windows.Forms.OpenFileDialog openTextDialog;
+        private System.Windows.Forms.Label label3;
     }
 }

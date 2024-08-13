@@ -124,9 +124,22 @@ namespace QuranKareem
 
             int ayah = 0, l = 0, word = 1;
             string[] line;
+            int time = 0, timeNextFrom;
             while (l < lines.Count)
             {
                 line = lines[l].Split('|');
+
+                if (l != 0)
+                {
+                    timeNextFrom = int.Parse(line[0]);
+                    if (timeNextFrom - time > 1)
+                    {
+                        ayahword.Add(ayah + ayahStart);
+                        ayahword.Add(-1);
+                        timestamps.Add((timeNextFrom - time) / 1000f);
+                    }
+                }
+                time = int.Parse(line[1]);
 
                 if (word == 0)
                 {

@@ -14,13 +14,22 @@ namespace QuranKareem
 
         private void VttPath_Click(object sender, EventArgs e)
         {
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openVttDialog.ShowDialog() == DialogResult.OK)
             {
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                if (saveTextDialog.ShowDialog() == DialogResult.OK)
                 {
-                    YoutubeCaptions.SetCaptionsVTT(openFileDialog.FileName, saveFileDialog.FileName);
-                    txtNameLabel.Text = saveFileDialog.FileName;
+                    YoutubeCaptions.SetCaptionsVTT(openVttDialog.FileName, saveTextDialog.FileName);
+                    txtNameLabel.Text = saveTextDialog.FileName;
                 }
+            }
+        }
+
+        private void TextPath_Click(object sender, EventArgs e)
+        {
+            if (openTextDialog.ShowDialog() == DialogResult.OK)
+            {
+                txtNameLabel.Text = openTextDialog.FileName;
+                YoutubeCaptions.TextPath = txtNameLabel.Text;
             }
         }
 
@@ -38,5 +47,6 @@ namespace QuranKareem
             if (!string.IsNullOrWhiteSpace(YoutubeCaptions.TextPath))
                 new VideoEditorForm(quranClass, true).ShowDialog();
         }
+
     }
 }
