@@ -583,13 +583,7 @@ namespace QuranKareem
         {
             SearchIDs.Clear();
             if (!success || words == null || words.Trim() == "") return new string[] { };
-            if (spellingErrors) words = words.Replace(" ", "")
-                    .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
-                    .Replace("ذ", "ز").Replace("ظ", "ز")
-                    .Replace("ة", "ت").Replace("ط", "ت")
-                    .Replace("ث", "س").Replace("ص", "س")
-                    .Replace("ض", "د")
-                    .Replace("ق", "ك");
+            if (spellingErrors) words = SpellingErrors(words);
             lst.Clear();
             quran.Open();
             command.CommandText = "SELECT id,surah,ayah,abstract_text FROM ayat";
@@ -598,13 +592,7 @@ namespace QuranKareem
             while (reader.Read())
             {
                 s = reader.GetString(3);
-                if (spellingErrors) s = s.Replace(" ", "")
-                        .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
-                        .Replace("ذ", "ز").Replace("ظ", "ز")
-                        .Replace("ة", "ت").Replace("ط", "ت")
-                        .Replace("ث", "س").Replace("ص", "س")
-                        .Replace("ض", "د")
-                        .Replace("ق", "ك");
+                if (spellingErrors) s = SpellingErrors(s);
                 if (s.Contains(words))
                 {
                     s = reader.GetString(3);
@@ -615,6 +603,18 @@ namespace QuranKareem
             reader.Close(); quran.Close();
             return lst.ToArray();
         }
+
+        public string SpellingErrors(string s)
+        {
+            return s.Replace(" ", "")
+                    .Replace("ى", "ا").Replace("أ", "ا").Replace("إ", "ا").Replace("آ", "ا").Replace("ئ", "ا").Replace("ء", "ا").Replace("ؤ", "ا")
+                    .Replace("ذ", "ز").Replace("ظ", "ز")
+                    .Replace("ة", "ت").Replace("ط", "ت")
+                    .Replace("ث", "س").Replace("ص", "س")
+                    .Replace("ض", "د")
+                    .Replace("ق", "ك");
+        }
+
         public int[] SelectedSearchIndex(int i)
         {
             if (!success || SearchIDs.Count == 0 || i < 0 || i >= SearchIDs.Count) return null;
@@ -627,6 +627,20 @@ namespace QuranKareem
             sura_aya[1] = reader.GetInt32(1);
             reader.Close(); quran.Close();
             return sura_aya;
+        }
+
+        public List<string[]> SelectAbstractWords(int surah, int ayahStart = 0, int ayahEnd = 287)
+        {
+            List<string[]> list = new List<string[]>();
+            command.CommandText = $"SELECT abstract_text FROM ayat WHERE surah={surah} AND ayah>={ayahStart} AND ayah<={ayahEnd}";
+            quran.Open();
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(reader.GetString(0).Split(' '));
+            }
+            reader.Close(); quran.Close();
+            return list;
         }
 
         private string GetHtmlTextColor()
