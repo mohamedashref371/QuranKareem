@@ -13,7 +13,7 @@ namespace QuranKareem
         private bool captions;
         private static int width = 1920, height = 1080, x = 100, y = 588, lWidth = 1720, lHeight = 200, audioRate = 128000;
         private static float frames = 25f;
-        bool autoCheck, yCheck;
+        private static bool autoCheck, yCheck;
 
         public VideoEditorForm(int quranClass, bool captions = false)
         {
