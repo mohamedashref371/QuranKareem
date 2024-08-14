@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using TheArtOfDevHtmlRenderer.Adapters;
 using static QuranKareem.Coloring;
 
 namespace QuranKareem
@@ -44,13 +45,11 @@ namespace QuranKareem
 
         private bool isWordsDiscriminatorEmpty = false;
 
-        private int width;
-        private float fontSize;
-        private float fontSizeRes;
-
         private PrivateFontCollection bsml, fPage;
 
         private int prevAyah, prevWord;
+
+        private float[] pagesSizeUnits; 
 
         public static readonly TrueTypeFontQuran Instance = new TrueTypeFontQuran();
 
@@ -65,7 +64,7 @@ namespace QuranKareem
             Cursor = Cursors.Hand,
             TabStop = false,
             ForeColor = Color.Black,
-            //ScrollBars = RichTextBoxScrollBars.None
+            ScrollBars = RichTextBoxScrollBars.None
         };
 
         private bool darkMode = false;
@@ -96,13 +95,13 @@ namespace QuranKareem
 
         public void SetWidth()
         {
-            fontSizeRes = PageRichText.Width / (width * 1f) * fontSize;
             PageRichText.SelectAll();
             PageRichText.SelectionAlignment = HorizontalAlignment.Center;
             PageRichText.DeselectAll();
             PageNumber = 0;
             Set(SurahNumber, AyahNumber);
         }
+
 
         private TrueTypeFontQuran()
         {
@@ -131,15 +130,12 @@ namespace QuranKareem
 
                 if (!reader.HasRows) return false;
                 reader.Read();
-                if (reader.GetInt32(0) != 5 || reader.GetInt32(1) != 1) return false;
+                if (reader.GetInt32(0) != 5 || reader.GetInt32(1) != 2) return false;
                 Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 PagesCount = reader.GetInt32(5);
-                width = reader.GetInt32(6);
-                fontSize = reader.GetFloat(7);
-                fontSizeRes = fontSize;
-                Extension = reader.GetString(8);
-                Comment = reader.GetString(9);
+                Extension = reader.GetString(6);
+                Comment = reader.GetString(7);
                 reader.Close();
 
                 PageNumber = 0;
@@ -155,6 +151,8 @@ namespace QuranKareem
 
             if (success)
             {
+                pagesSizeUnits = new float[PagesCount];
+                SetPagesSizeUnits();
                 CatchFontFile(0, ref bsml);
                 DiscriminatorsReader();
                 Discriminators.GetDiscriminators(path + "Colors.txt");
@@ -163,6 +161,19 @@ namespace QuranKareem
                 Set(sura, aya);
             }
             return success;
+        }
+
+        private void SetPagesSizeUnits()
+        {
+            command.CommandText = $"SELECT * FROM pages";
+            quran.Open();
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                pagesSizeUnits[reader.GetInt32(0) - 1] = reader.GetInt32(1) / 1000f;
+            }
+            reader.Close();
+            quran.Close();
         }
 
         #region التنقلات في المصحف
@@ -339,8 +350,8 @@ namespace QuranKareem
 
             CatchFontFile(page, ref fPage);
 
-            PageRichText.Font = new Font(fPage.Families[0], fontSizeRes, GraphicsUnit.Pixel);
-            Font fBsml = new Font(bsml.Families[0], fontSizeRes, GraphicsUnit.Pixel);
+            PageRichText.Font = new Font(fPage.Families[0], PageRichText.Width / pagesSizeUnits[PageNumber - 1], GraphicsUnit.Pixel);
+            Font fBsml = new Font(bsml.Families[0], PageRichText.Width / pagesSizeUnits[PageNumber - 1], GraphicsUnit.Pixel);
 
             command.CommandText = $"SELECT ayah_id,ayah,line,word,discriminator,text FROM ayat JOIN words ON words.ayah_id = ayat.id WHERE page = {page}";
             int line = 1, index;
@@ -641,17 +652,7 @@ namespace QuranKareem
             PrivateFontCollection fontPage = null;
             CatchFontFile(page, ref fontPage);
 
-            #region خطوة إضافية
-            Font f = new Font(fontPage.Families[0], 50, GraphicsUnit.Pixel);
-            var tempLines = texts.Select(list => string.Concat(list)).Select(list => string.Join("\n", list));
-            Bitmap imgT = new Bitmap(1, 1);
-            Graphics drawingT = Graphics.FromImage(imgT);
-            SizeF textSize = drawingT.MeasureString(tempLines.First(), f);
-            imgT.Dispose();
-            drawingT.Dispose();
-            #endregion
-
-            f = new Font(fontPage.Families[0], linWdth / textSize.Width * 50, GraphicsUnit.Pixel);
+            Font f = new Font(fontPage.Families[0], linWdth / pagesSizeUnits[page - 1], GraphicsUnit.Pixel);
 
             int lineIdx = 0;
             Bitmap bmp, bmp0;
