@@ -124,22 +124,24 @@ namespace QuranKareem
 
             int ayah = 0, l = 0, word = 1;
             string[] line;
-            int time = 0, timeNextFrom;
+            int time = 0, timeCurrent;
             while (l < lines.Count)
             {
                 line = lines[l].Split('|');
 
                 if (l != 0)
                 {
-                    timeNextFrom = int.Parse(line[0]);
-                    if (timeNextFrom - time > 1)
+                    timeCurrent = int.Parse(line[0]);
+                    if (timeCurrent - time > 1)
                     {
                         ayahword.Add(ayah + ayahStart);
                         ayahword.Add(-1);
-                        timestamps.Add((timeNextFrom - time) / 1000f);
+                        timestamps.Add((timeCurrent - time) / 1000f);
+                        time = int.Parse(line[0]);
                     }
                 }
-                time = int.Parse(line[1]);
+                else
+                    time = int.Parse(line[0]);
 
                 if (word == 0)
                 {
@@ -168,6 +170,7 @@ namespace QuranKareem
                     ayahword.Add(ayah + ayahStart);
                     ayahword.Add(word);
                     timestamps.Add((int.Parse(line[1]) - int.Parse(line[0])) / 1000f);
+                    time = int.Parse(line[1]);
                     if (word == list[ayah].Length) word = 0;
                     else word++;
                 }
@@ -183,6 +186,7 @@ namespace QuranKareem
                             ayahword.Add(ayah + ayahStart);
                             ayahword.Add(word);
                             timestamps.Add((int.Parse(line[1]) - int.Parse(line[0])) / 1000f);
+                            time = int.Parse(line[1]);
                             word++;
                             break;
                         }
