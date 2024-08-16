@@ -621,7 +621,7 @@ namespace QuranKareem
         #region lines images
         public int[] GetStartAndEndOfPage()
         {
-            command.CommandText = $"SELECT MIN(ayah), MAX(ayah) FROM ayat WHERE surah={SurahNumber} AND page = {PageNumber}";
+            command.CommandText = $"SELECT MIN(ayah), MAX(ayah) FROM ayat WHERE surah={SurahNumber} AND page = {PageNumber} AND ayah >= 1";
             int[] ints = new int[2];
             quran.Open();
             reader = command.ExecuteReader();
