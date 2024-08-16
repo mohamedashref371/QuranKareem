@@ -134,9 +134,16 @@ namespace QuranKareem
                     timeCurrent = int.Parse(line[0]);
                     if (timeCurrent - time > 1)
                     {
-                        ayahword.Add(ayah + ayahStart);
-                        ayahword.Add(-1);
-                        timestamps.Add((timeCurrent - time) / 1000f);
+                        if (timeCurrent - time <= 12)
+                        {
+                            timestamps[timestamps.Count - 1] += (timeCurrent - time) / 1000f;
+                        }
+                        else
+                        {
+                            ayahword.Add(ayah + ayahStart);
+                            ayahword.Add(-1);
+                            timestamps.Add((timeCurrent - time) / 1000f);
+                        }
                         time = int.Parse(line[0]);
                     }
                 }

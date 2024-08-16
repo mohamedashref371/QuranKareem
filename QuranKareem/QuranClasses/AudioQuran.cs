@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace QuranKareem
 {
@@ -487,9 +488,16 @@ namespace QuranKareem
             {
                 if (reader.GetInt32(2) > to)
                 {
-                    ayahword.Add(reader.GetInt32(0));
-                    ayahword.Add(-1);
-                    timestamps.Add((reader.GetInt32(2) - to) / 1000f);
+                    if (reader.GetInt32(2) - to <= 12)
+                    {
+                        timestamps[timestamps.Count - 1] += (reader.GetInt32(2) - to) / 1000f;
+                    }
+                    else
+                    {
+                        ayahword.Add(reader.GetInt32(0));
+                        ayahword.Add(-1);
+                        timestamps.Add((reader.GetInt32(2) - to) / 1000f);
+                    }
                 }
                 ayahword.Add(reader.GetInt32(0));
                 ayahword.Add(reader.GetInt32(1));
