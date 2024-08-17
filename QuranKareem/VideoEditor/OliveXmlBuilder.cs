@@ -33,7 +33,8 @@ namespace QuranKareem
 
         public static void AddMedia()
         {
-            sb.Append($"<media><footage id=\"1\" folder=\"0\" name=\"QuranTemplate\" url=\"{VideoPath}\"></footage><footage id=\"2\" folder=\"0\" name=\"QuranAudio\" url=\"{AudioPath}\"></footage>");
+            sb.Append($"<media><footage id=\"1\" folder=\"0\" name=\"QuranTemplate\" url=\"{VideoPath}\"></footage>");
+            sb.Append($"<footage id=\"2\" folder=\"0\" name=\"QuranAudio\" url=\"{AudioPath}\"></footage>");
 
             for (int i = 0; i < ImagesPaths.Count; i++)
             {
