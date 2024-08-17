@@ -10,11 +10,11 @@ namespace QuranKareem
     {
         private static readonly StringBuilder sb = new StringBuilder();
 
-        private static string VideoColor = "r=\"128\" g=\"128\" b=\"192\"";
-        private static string AudioColor = "r=\"128\" g=\"192\" b=\"128\"";
+        private static readonly string VideoColor = "r=\"128\" g=\"128\" b=\"192\"";
+        private static readonly string AudioColor = "r=\"128\" g=\"192\" b=\"128\"";
 
-        private static string ImageColor = "r=\"192\" g=\"160\" b=\"128\"";
-        private static string ImageColor2 = "r=\"192\" g=\"128\" b=\"128\"";
+        private static readonly string ImageColor = "r=\"192\" g=\"160\" b=\"128\"";
+        private static readonly string ImageColor2 = "r=\"192\" g=\"128\" b=\"128\"";
 
         public static string Build()
         {
