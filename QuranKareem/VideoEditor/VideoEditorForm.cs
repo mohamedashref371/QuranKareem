@@ -81,7 +81,16 @@ namespace QuranKareem
             if (captions)
             {
                 YoutubeCaptions.Surah = surah;
-                minmax2 = YoutubeCaptions.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VideoXMLProperties.AudioTimestamps);
+                try
+                {
+                    minmax2 = YoutubeCaptions.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VideoXMLProperties.AudioTimestamps);
+                }
+                catch
+                {
+                    MessageBox.Show("حاول ان توفق بين الصفحة الحالية وملف الـ كابشن الناتج");
+                    Close();
+                    return;
+                }
             }
             else
             {
