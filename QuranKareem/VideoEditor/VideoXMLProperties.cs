@@ -9,7 +9,7 @@ namespace QuranKareem
 {
     internal static class VideoXMLProperties
     {
-        public static readonly string ProjectName = Application.ProductName + Application.ProductVersion;
+        public static readonly string ProjectName = Application.ProductName +" v" + Application.ProductVersion;
 
         public static int VideoWidth { get; set; } = 1920;
         public static int VideoHeight { get; set; } = 1080;
