@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
+using static QuranKareem.VideoXMLProperties;
 
 namespace QuranKareem
 {
@@ -11,47 +11,10 @@ namespace QuranKareem
         private static int object_id;
         private static int obj_id_x, obj_id_y, obj_id_z;
         private static readonly StringBuilder sb = new StringBuilder();
-        private static int frameNum = 25;
+        private static int frameNum = 30;
         private static int frameDiv = 1;
         private static readonly string dataTime = "2023-10-07T06:00:00";
-        private static readonly string name = Application.ProductName + Application.ProductVersion;
         private static int vOffset, aOffset, length;
-
-        public static int VideoWidth { get; set; } = 1920;
-        public static int VideoHeight { get; set; } = 1080;
-        public static float FrameRate { get; set; } = 25;
-        public static int AudioChannels { get; set; } = 2;
-        public static int AudioSampleRate { get; set; } = 44100;
-        public static int AudioBitRate { get; set; } = 128000;
-
-        private static string videoPath = "Video.mp4";
-        public static string VideoPath
-        {
-            get => videoPath;
-            set { if (value != null && value != "") videoPath = value; }
-        }
-
-        public static float VideoOffsetInSecond { get; set; } = 0;
-
-        private static string audioPath = "Audio.mp4";
-        public static string AudioPath
-        {
-            get => audioPath;
-            set { if (value != null && value != "") audioPath = value; }
-        }
-
-        public static float AudioOffsetInSecond { get; set; } = 0;
-        public static float LengthInSecond { get; set; } = 1000;
-
-        public static readonly List<string> ImagesPaths = new List<string>();
-        public static readonly List<float> AudioTimestamps = new List<float>();
-
-        private static string outputPath = "Output.mp4";
-        public static string OutputPath
-        {
-            get => outputPath;
-            set { if (value != null && value != "") outputPath = value; }
-        }
 
         public static string Build()
         {
@@ -109,7 +72,7 @@ namespace QuranKareem
         private static void AddAudioFile()
         {
             sb.Append("<item class_id=\"8\" tracking_level=\"0\" version=\"0\"><first class_id=\"9\" tracking_level=\"0\" version=\"2\"><filename class_id=\"10\" tracking_level=\"0\" version=\"0\"><string>")
-              .Append(audioPath)
+              .Append(AudioPath)
               .Append("</string></filename></first><second class_id=\"11\" tracking_level=\"0\" version=\"1\"><px class_id=\"12\" tracking_level=\"1\" version=\"4\" object_id=\"_3\"><LastModified class_id=\"13\" tracking_level=\"0\" version=\"0\"><datetime><string>")
               .Append(dataTime)
               .Append("</string></datetime></LastModified><Length class_id=\"14\" tracking_level=\"0\" version=\"1\"><initialized>0</initialized></Length><FrameRate class_id=\"15\" tracking_level=\"0\" version=\"1\"><initialized>0</initialized></FrameRate><Peaks class_id=\"16\" tracking_level=\"0\" version=\"1\"><px class_id=\"17\" tracking_level=\"1\" version=\"2\" object_id=\"_4\"><nPeaks>0</nPeaks><peaks></peaks></px></Peaks></px></second></item>");
@@ -136,7 +99,7 @@ namespace QuranKareem
         private static void AddVideoFile()
         {
             sb.Append("<item><first><filename><string>")
-              .Append(videoPath)
+              .Append(VideoPath)
               .Append("</string></filename></first><second><px class_id_reference=\"12\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><LastModified><datetime><string>")
@@ -156,7 +119,7 @@ namespace QuranKareem
             sb.Append("<mSequences class_id=\"18\" tracking_level=\"0\" version=\"0\"><count>1</count><item_version>1</item_version><item class_id=\"19\" tracking_level=\"0\" version=\"1\"><px class_id=\"20\" tracking_level=\"1\" version=\"4\" object_id=\"_")
               .Append(obj_id_x)
               .Append("\"><IAudio class_id=\"21\" tracking_level=\"0\" version=\"1\"></IAudio><mName><string>")
-              .Append(name)
+              .Append(ProjectName)
               .Append("</string></mName><mVideoTracks class_id=\"22\" tracking_level=\"0\" version=\"0\"><count>2</count><item_version>1</item_version>");
         }
 
@@ -179,7 +142,7 @@ namespace QuranKareem
               .Append("\"></px></ptr></mLink></Clip><mSource class_id=\"33\" tracking_level=\"0\" version=\"1\"><px class_id=\"34\" class_name=\"model::AudioSourceAvcodec\" tracking_level=\"1\" version=\"1\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><mPath><filename><string>")
-              .Append(videoPath)
+              .Append(VideoPath)
               .Append("</string></filename></mPath><mPreferredStreamIndex class_id=\"35\" tracking_level=\"0\" version=\"1\"><initialized>0</initialized></mPreferredStreamIndex></px></mSource><mSpeed><numerator>1</numerator><denominator>1</denominator></mSpeed><mOffset>")
               .Append(vOffset)
               .Append("</mOffset><mLength>")
@@ -189,7 +152,7 @@ namespace QuranKareem
               .Append("\"><mVolume>0</mVolume><mBalance>0</mBalance></px></mDefaultKeyFrame><mSyncOffset>0</mSyncOffset></ClipInterval><IAudio></IAudio></px></ptr></mLink></Clip><mSource><px class_id=\"40\" class_name=\"model::VideoSourceMovie\" tracking_level=\"1\" version=\"1\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><mPath><filename><string>")
-              .Append(videoPath)
+              .Append(VideoPath)
               .Append("</string></filename></mPath><mFrameRate><initialized>0</initialized></mFrameRate><mPreferredStreamIndex><initialized>0</initialized></mPreferredStreamIndex></px></mSource><mSpeed><numerator>1</numerator><denominator>1</denominator></mSpeed><mOffset>")
               .Append(vOffset)
               .Append("</mOffset><mLength>")
@@ -267,7 +230,7 @@ namespace QuranKareem
               .Append("\"><ClipInterval><Clip><mLink><ptr><px class_id=\"-1\"></px></ptr></mLink></Clip><mSource><px class_id_reference=\"34\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><mPath><filename><string>")
-              .Append(audioPath)
+              .Append(AudioPath)
               .Append("</string></filename></mPath><mPreferredStreamIndex><initialized>0</initialized></mPreferredStreamIndex></px></mSource><mSpeed><numerator>1</numerator><denominator>1</denominator></mSpeed><mOffset>")
               .Append(aOffset)
               .Append("</mOffset><mLength>")

@@ -12,7 +12,7 @@ namespace QuranKareem
         private int quranClass;
         private bool captions;
         private static int width = 1920, height = 1080, x = 100, y = 588, lWidth = 1720, lHeight = 200, audioRate = 128000;
-        private static float frames = 25f;
+        private static float frames = 30f;
         private static bool autoCheck, yCheck;
 
         public VideoEditorForm(int quranClass, bool captions = false)
@@ -35,7 +35,7 @@ namespace QuranKareem
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                VidiotXmlBuilder.VideoPath = openFileDialog.FileName;
+                VideoXMLProperties.VideoPath = openFileDialog.FileName;
                 videoNameLabel.Text = openFileDialog.FileName;
             }
         }
@@ -44,7 +44,7 @@ namespace QuranKareem
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                VidiotXmlBuilder.OutputPath = saveFileDialog.FileName;
+                VideoXMLProperties.OutputPath = saveFileDialog.FileName;
                 videoOutputNameLabel.Text = saveFileDialog.FileName;
             }
         }
@@ -81,11 +81,11 @@ namespace QuranKareem
             if (captions)
             {
                 YoutubeCaptions.Surah = surah;
-                minmax2 = YoutubeCaptions.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
+                minmax2 = YoutubeCaptions.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VideoXMLProperties.AudioTimestamps);
             }
             else
             {
-                minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VidiotXmlBuilder.AudioTimestamps);
+                minmax2 = AudioQuran.Instance.WordsList(minmax[0], minmax[1], out mp3Url, ayahword, VideoXMLProperties.AudioTimestamps);
             }
 
             if (minmax2 == null)
@@ -94,10 +94,10 @@ namespace QuranKareem
                 Close();
                 return;
             }
-            
-            VidiotXmlBuilder.AudioPath = mp3Url;
-            VidiotXmlBuilder.AudioOffsetInSecond = minmax2[0];
-            VidiotXmlBuilder.LengthInSecond = minmax2[1] - minmax2[0];
+
+            VideoXMLProperties.AudioPath = mp3Url;
+            VideoXMLProperties.AudioOffsetInSecond = minmax2[0];
+            VideoXMLProperties.LengthInSecond = minmax2[1] - minmax2[0];
             
             audioLength.Text = AudioQuran.Instance.GetPositionOf((int)((minmax2[1] - minmax2[0]) * 1000));
         }
@@ -105,25 +105,30 @@ namespace QuranKareem
         private void VideoWidth_ValueChanged(object sender, EventArgs e)
         {
             width = (int)videoWidth.Value;
-            VidiotXmlBuilder.VideoWidth = width;
+            VideoXMLProperties.VideoWidth = width;
         }
 
         private void VideoHeight_ValueChanged(object sender, EventArgs e)
         {
             height = (int)videoHeight.Value;
-            VidiotXmlBuilder.VideoHeight = height;
+            VideoXMLProperties.VideoHeight = height;
         }
 
         private void FrameRate_ValueChanged(object sender, EventArgs e)
         {
             frames = (float)frameRate.Value;
-            VidiotXmlBuilder.FrameRate = frames;
+            VideoXMLProperties.FrameRate = frames;
         }
 
         private void AudioBitRate_ValueChanged(object sender, EventArgs e)
         {
             audioRate = (int)audioBitRate.Value;
-            VidiotXmlBuilder.AudioBitRate = audioRate;
+            VideoXMLProperties.AudioBitRate = audioRate;
+        }
+
+        private void OliveLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://olivevideoeditor.org/download");
         }
 
         private void VidiotLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -154,11 +159,11 @@ namespace QuranKareem
             {
                 TrueTypeFontQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
-                VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
+                VideoXMLProperties.VideoWidth, VideoXMLProperties.VideoHeight,
                 (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
                 lineHeightAuto.Checked, yEditCheck.Checked,
                 path,
-                VidiotXmlBuilder.ImagesPaths,
+                VideoXMLProperties.ImagesPaths,
                 surah, page
                 );
             }
@@ -166,18 +171,21 @@ namespace QuranKareem
             {
                 PictureQuran.Instance.GetAyatInLinesWithWordsMarks(
                 ayahword,
-                VidiotXmlBuilder.VideoWidth, VidiotXmlBuilder.VideoHeight,
+                VideoXMLProperties.VideoWidth, VideoXMLProperties.VideoHeight,
                 (int)locX.Value, (int)locY.Value, (int)lineWidth.Value, (int)lineHeight.Value,
                 lineHeightAuto.Checked, yEditCheck.Checked,
                 path,
-                VidiotXmlBuilder.ImagesPaths,
+                VideoXMLProperties.ImagesPaths,
                 bitmap, surah, page
                 );
             }
                 
-            if (VidiotXmlBuilder.ImagesPaths.Count != 0)
+            if (VideoXMLProperties.ImagesPaths.Count != 0)
             {
-                File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());
+                if (vidiotRadio.Checked)
+                    File.WriteAllText(path + $"\\QuranKareem.vid", VidiotXmlBuilder.Build());
+                else if (oliveRadio.Checked)
+                    File.WriteAllText(path + $"\\QuranKareem.ove", OliveXmlBuilder.Build());
                 Process.Start(path);
             }
             else

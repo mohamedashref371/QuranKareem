@@ -61,6 +61,8 @@
             this.lineHeightLabel = new System.Windows.Forms.Label();
             this.lineHeightAuto = new System.Windows.Forms.CheckBox();
             this.yEditCheck = new System.Windows.Forms.CheckBox();
+            this.oliveLink = new System.Windows.Forms.LinkLabel();
+            this.oliveRadio = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.videoWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameRate)).BeginInit();
@@ -74,14 +76,12 @@
             // vidiotRadio
             // 
             this.vidiotRadio.AutoSize = true;
-            this.vidiotRadio.Checked = true;
             this.vidiotRadio.Font = new System.Drawing.Font("Tahoma", 16F);
             this.vidiotRadio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(45)))), ((int)(((byte)(200)))));
             this.vidiotRadio.Location = new System.Drawing.Point(12, 12);
             this.vidiotRadio.Name = "vidiotRadio";
             this.vidiotRadio.Size = new System.Drawing.Size(164, 31);
             this.vidiotRadio.TabIndex = 1;
-            this.vidiotRadio.TabStop = true;
             this.vidiotRadio.Text = "Vidiot v0.3.39";
             this.vidiotRadio.UseVisualStyleBackColor = true;
             // 
@@ -89,7 +89,7 @@
             // 
             this.vidiotLink.AutoSize = true;
             this.vidiotLink.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vidiotLink.Location = new System.Drawing.Point(25, 50);
+            this.vidiotLink.Location = new System.Drawing.Point(191, 16);
             this.vidiotLink.Name = "vidiotLink";
             this.vidiotLink.Size = new System.Drawing.Size(329, 23);
             this.vidiotLink.TabIndex = 2;
@@ -272,7 +272,7 @@
             this.frameRate.Size = new System.Drawing.Size(120, 30);
             this.frameRate.TabIndex = 14;
             this.frameRate.Value = new decimal(new int[] {
-            25,
+            30,
             0,
             0,
             0});
@@ -552,11 +552,38 @@
             this.yEditCheck.Visible = false;
             this.yEditCheck.CheckedChanged += new System.EventHandler(this.YEditCheck_CheckedChanged);
             // 
+            // oliveLink
+            // 
+            this.oliveLink.AutoSize = true;
+            this.oliveLink.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.oliveLink.Location = new System.Drawing.Point(191, 53);
+            this.oliveLink.Name = "oliveLink";
+            this.oliveLink.Size = new System.Drawing.Size(311, 23);
+            this.oliveLink.TabIndex = 39;
+            this.oliveLink.TabStop = true;
+            this.oliveLink.Text = "https://github.com/olive-editor/olive";
+            this.oliveLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OliveLink_LinkClicked);
+            // 
+            // oliveRadio
+            // 
+            this.oliveRadio.AutoSize = true;
+            this.oliveRadio.Checked = true;
+            this.oliveRadio.Font = new System.Drawing.Font("Tahoma", 16F);
+            this.oliveRadio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(45)))), ((int)(((byte)(200)))));
+            this.oliveRadio.Location = new System.Drawing.Point(12, 49);
+            this.oliveRadio.Name = "oliveRadio";
+            this.oliveRadio.Size = new System.Drawing.Size(117, 31);
+            this.oliveRadio.TabIndex = 38;
+            this.oliveRadio.Text = "Olive 0.1";
+            this.oliveRadio.UseVisualStyleBackColor = true;
+            // 
             // VideoEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.oliveLink);
+            this.Controls.Add(this.oliveRadio);
             this.Controls.Add(this.lineHeightAuto);
             this.Controls.Add(this.lineHeightLabel);
             this.Controls.Add(this.label3);
@@ -641,5 +668,7 @@
         private System.Windows.Forms.Label lineHeightLabel;
         private System.Windows.Forms.CheckBox lineHeightAuto;
         private System.Windows.Forms.CheckBox yEditCheck;
+        private System.Windows.Forms.LinkLabel oliveLink;
+        private System.Windows.Forms.RadioButton oliveRadio;
     }
 }

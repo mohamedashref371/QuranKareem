@@ -126,12 +126,14 @@
     <Compile Include="QuranClasses\PictureQuran.cs" />
     <Compile Include="QuranClasses\TafseerQuran.cs" />
     <Compile Include="QuranClasses\TextQuran.cs" />
+    <Compile Include="VideoEditor\OliveXmlBuilder.cs" />
     <Compile Include="VideoEditor\VideoEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="VideoEditor\VideoEditorForm.Designer.cs">
       <DependentUpon>VideoEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="VideoEditor\VideoXMLProperties.cs" />
     <Compile Include="VideoEditor\VidiotXmlBuilder.cs" />
     <Compile Include="VideoEditor\YoutubeCaptions.cs" />
     <Compile Include="VideoEditor\YoutubeCaptionsForm.cs">
