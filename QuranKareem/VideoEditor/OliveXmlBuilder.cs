@@ -20,7 +20,7 @@ namespace QuranKareem
         {
             sb.Clear();
 
-            sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><project>");
+            sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><project><version>190219</version>");
 
             AddMedia();
 

@@ -137,7 +137,17 @@ namespace QuranKareem
 
         private void OliveLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://olivevideoeditor.org/download");
+            Process.Start("https://github.com/olive-editor/olive");
+        }
+
+        private void OliveLink32_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://www.olivevideoeditor.org/dl/Olive-1e3cf53-Windows-i686.exe");
+        }
+
+        private void OliveLink64_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://www.olivevideoeditor.org/dl/Olive-1e3cf53-Windows-x86_64.exe");
         }
 
         private void VidiotLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

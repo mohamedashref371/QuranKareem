@@ -63,6 +63,8 @@
             this.yEditCheck = new System.Windows.Forms.CheckBox();
             this.oliveLink = new System.Windows.Forms.LinkLabel();
             this.oliveRadio = new System.Windows.Forms.RadioButton();
+            this.oliveLink64 = new System.Windows.Forms.LinkLabel();
+            this.oliveLink32 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.videoWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.frameRate)).BeginInit();
@@ -574,14 +576,41 @@
             this.oliveRadio.Name = "oliveRadio";
             this.oliveRadio.Size = new System.Drawing.Size(117, 31);
             this.oliveRadio.TabIndex = 38;
+            this.oliveRadio.TabStop = true;
             this.oliveRadio.Text = "Olive 0.1";
             this.oliveRadio.UseVisualStyleBackColor = true;
+            // 
+            // oliveLink64
+            // 
+            this.oliveLink64.AutoSize = true;
+            this.oliveLink64.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.oliveLink64.Location = new System.Drawing.Point(570, 53);
+            this.oliveLink64.Name = "oliveLink64";
+            this.oliveLink64.Size = new System.Drawing.Size(39, 23);
+            this.oliveLink64.TabIndex = 40;
+            this.oliveLink64.TabStop = true;
+            this.oliveLink64.Text = "x64";
+            this.oliveLink64.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OliveLink64_LinkClicked);
+            // 
+            // oliveLink32
+            // 
+            this.oliveLink32.AutoSize = true;
+            this.oliveLink32.Font = new System.Drawing.Font("Tahoma", 14F);
+            this.oliveLink32.Location = new System.Drawing.Point(521, 53);
+            this.oliveLink32.Name = "oliveLink32";
+            this.oliveLink32.Size = new System.Drawing.Size(39, 23);
+            this.oliveLink32.TabIndex = 41;
+            this.oliveLink32.TabStop = true;
+            this.oliveLink32.Text = "x32";
+            this.oliveLink32.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OliveLink32_LinkClicked);
             // 
             // VideoEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.oliveLink32);
+            this.Controls.Add(this.oliveLink64);
             this.Controls.Add(this.oliveLink);
             this.Controls.Add(this.oliveRadio);
             this.Controls.Add(this.lineHeightAuto);
@@ -670,5 +699,7 @@
         private System.Windows.Forms.CheckBox yEditCheck;
         private System.Windows.Forms.LinkLabel oliveLink;
         private System.Windows.Forms.RadioButton oliveRadio;
+        private System.Windows.Forms.LinkLabel oliveLink64;
+        private System.Windows.Forms.LinkLabel oliveLink32;
     }
 }
