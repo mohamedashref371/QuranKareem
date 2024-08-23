@@ -33,10 +33,10 @@ namespace QuranKareem
             if (s.Contains(","))
             {
                 string[] arr = s.Split(',');
-                if (arr.Length == 3  && int.TryParse(arr[0], out int n1) && int.TryParse(arr[1], out int n2) && int.TryParse(arr[2], out int n3))
+                if (arr.Length == 3  && byte.TryParse(arr[0], out byte n1) && byte.TryParse(arr[1], out byte n2) && byte.TryParse(arr[2], out byte n3))
                     return Color.FromArgb(n1, n2, n3);
                 
-                else if (arr.Length == 4 && int.TryParse(arr[0], out int m1) && int.TryParse(arr[1], out int m2) && int.TryParse(arr[2], out int m3) && int.TryParse(arr[3], out int m4))
+                else if (arr.Length == 4 && byte.TryParse(arr[0], out byte m1) && byte.TryParse(arr[1], out byte m2) && byte.TryParse(arr[2], out byte m3) && byte.TryParse(arr[3], out byte m4))
                     return Color.FromArgb(m1, m2, m3, m4);
                 
                 else
