@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace QuranKareem
 {
     internal static class Coloring
     {
+        public static Color BackgroundColor = Color.Empty;
+
         public static Color AyahColor = Color.Red;
 
         public static Color QuarterStartColor = Color.DarkBlue; // 0 // is unused
@@ -99,23 +100,14 @@ namespace QuranKareem
         static int HexToInt(char c)
         {
             if (c >= '0' && c <= '9')
-                return int.Parse(c.ToString());
+                return c - '0';
 
-            if (c >= 'A' && c >= 'F')
-                c = char.ToLower(c);
-
-            if (c >= 'a')
-                return 10;
-            else if (c >= 'b')
-                return 11;
-            else if (c >= 'c')
-                return 12;
-            else if (c >= 'd')
-                return 13;
-            else if (c >= 'e')
-                return 14;
-            else if (c >= 'f')
-                return 15;
+            else if (c >= 'A' && c <= 'F')
+                return c - 'A' + 10;
+            
+            else if (c >= 'a' && c <= 'f')
+                return c - 'a' + 10;
+            
             else
                 return 0;
         }

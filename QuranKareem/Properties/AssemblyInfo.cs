@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Quran Kareem v1.4")]
-[assembly: AssemblyDescription("Quran Kareem")]
+[assembly: AssemblyDescription("Quran Kareem v1: Quran Reciters Corner")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Quran Reciters Corner")]
 [assembly: AssemblyProduct("Quran Kareem")]
