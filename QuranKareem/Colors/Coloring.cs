@@ -6,9 +6,18 @@ namespace QuranKareem
 {
     internal static class Coloring
     {
-        public static Color BackgroundColor = Color.Transparent;
-        public static Color AyahColor = Color.Red;
-        public static Color WordColor = Color.LightSeaGreen;
+        public static class Light
+        {
+            public static Color BackColor = Color.Transparent;
+            public static Color AyahColor = Color.Red;
+            public static Color WordColor = Color.LightSeaGreen;
+        }
+        public static class Night
+        {
+            public static Color BackColor = Color.Transparent;
+            public static Color AyahColor = Color.Red;
+            public static Color WordColor = Color.LightSeaGreen;
+        }
 
         public static Color QuarterStartColor = Color.DarkBlue; // 0 // is unused
         public static Color SajdaColor = Color.DarkMagenta; // 998 // is unused
@@ -19,9 +28,63 @@ namespace QuranKareem
             if (File.Exists(filePath))
             {
                 string[] arr = File.ReadAllText(filePath).Replace(" ", "").Split('*');
-                AyahColor = GetColor(arr[0]);
-                if (arr.Length > 1) WordColor = GetColor(arr[1]);
-                else WordColor = Color.Empty;
+                if (arr.Length == 1 || arr.Length == 2 || arr.Length == 4)
+                {
+                    Light.BackColor = Color.Transparent;
+                    Light.AyahColor = GetColor(arr[0]);
+
+                    if (arr.Length == 1)
+                        Light.WordColor = Color.Empty;
+                    else
+                        Light.WordColor = GetColor(arr[1]);
+
+
+                    Night.BackColor = Color.Transparent;
+
+                    if (arr.Length < 4)
+                        Night.AyahColor = GetColor(arr[0]);
+                    else
+                        Night.AyahColor = GetColor(arr[2]);
+
+                    if (arr.Length == 1)
+                        Night.WordColor = Color.Empty;
+                    else if (arr.Length == 2)
+                        Night.WordColor = GetColor(arr[1]);
+                    else
+                        Night.WordColor = GetColor(arr[3]);
+                }
+
+                else if (arr.Length == 3 || arr.Length == 5)
+                {
+                    Light.BackColor = GetColor(arr[0]);
+                    Light.AyahColor = GetColor(arr[1]);
+                    Light.WordColor = GetColor(arr[2]);
+
+
+                    Night.BackColor = GetColor(arr[0]);
+
+                    if (arr.Length == 3)
+                    {
+                        Night.AyahColor = GetColor(arr[1]);
+                        Night.WordColor = GetColor(arr[2]);
+                    }
+                    else
+                    {
+                        Night.AyahColor = GetColor(arr[3]);
+                        Night.WordColor = GetColor(arr[4]);
+                    }
+                }
+
+                else if (arr.Length >= 6)
+                {
+                    Light.BackColor = GetColor(arr[0]);
+                    Light.AyahColor = GetColor(arr[1]);
+                    Light.WordColor = GetColor(arr[2]);
+
+                    Night.BackColor = GetColor(arr[3]);
+                    Night.AyahColor = GetColor(arr[4]);
+                    Night.WordColor = GetColor(arr[5]);
+                }
             }
         }
 
@@ -30,9 +93,17 @@ namespace QuranKareem
             Constants.StringBuilder.Length = 0;
 
             Constants.StringBuilder
-                .Append(GetString(AyahColor, true))
+                .Append(GetString(Light.BackColor, true))
                 .Append("*")
-                .Append(GetString(WordColor, true))
+                .Append(GetString(Light.AyahColor, true))
+                .Append("*")
+                .Append(GetString(Light.WordColor, true))
+                .Append("*")
+                .Append(GetString(Night.BackColor, true))
+                .Append("*")
+                .Append(GetString(Night.AyahColor, true))
+                .Append("*")
+                .Append(GetString(Night.WordColor, true))
                 ;
 
             string s = Constants.StringBuilder.ToString();

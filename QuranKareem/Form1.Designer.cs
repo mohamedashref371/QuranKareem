@@ -46,7 +46,6 @@
             this.SurahRepeat = new System.Windows.Forms.NumericUpDown();
             this.time5 = new System.Windows.Forms.Label();
             this.panel = new Guna.UI2.WinForms.Guna2Panel();
-            this.ayahColorsCheck = new System.Windows.Forms.CheckBox();
             this.SurahRepeatCheck = new System.Windows.Forms.CheckBox();
             this.pause = new System.Windows.Forms.Button();
             this.Rate = new System.Windows.Forms.NumericUpDown();
@@ -100,7 +99,6 @@
             this.dark = new Guna.UI2.WinForms.Guna2Button();
             this.spellingErrors = new System.Windows.Forms.CheckBox();
             this.pageZoom = new Guna.UI2.WinForms.Guna2Button();
-            this.wordColorsCheck = new System.Windows.Forms.CheckBox();
             this.moshaf = new System.Windows.Forms.ComboBox();
             this.discri = new System.Windows.Forms.Button();
             this.pageSrtCheck = new System.Windows.Forms.CheckBox();
@@ -375,22 +373,6 @@
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(263, 821);
             this.panel.TabIndex = 0;
-            // 
-            // ayahColorsCheck
-            // 
-            this.ayahColorsCheck.AutoSize = true;
-            this.ayahColorsCheck.BackColor = System.Drawing.Color.Transparent;
-            this.ayahColorsCheck.Checked = true;
-            this.ayahColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ayahColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.ayahColorsCheck.Location = new System.Drawing.Point(172, 482);
-            this.ayahColorsCheck.Name = "ayahColorsCheck";
-            this.ayahColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ayahColorsCheck.Size = new System.Drawing.Size(90, 26);
-            this.ayahColorsCheck.TabIndex = 15;
-            this.ayahColorsCheck.Text = "لون الآية";
-            this.ayahColorsCheck.UseVisualStyleBackColor = false;
-            this.ayahColorsCheck.CheckedChanged += new System.EventHandler(this.AyahColorsCheck_CheckedChanged);
             // 
             // SurahRepeatCheck
             // 
@@ -1049,22 +1031,6 @@
             this.pageZoom.Text = "Zoom";
             this.pageZoom.Click += new System.EventHandler(this.PageZoom_Click);
             // 
-            // wordColorsCheck
-            // 
-            this.wordColorsCheck.AutoSize = true;
-            this.wordColorsCheck.BackColor = System.Drawing.Color.Transparent;
-            this.wordColorsCheck.Checked = true;
-            this.wordColorsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.wordColorsCheck.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.wordColorsCheck.Location = new System.Drawing.Point(162, 513);
-            this.wordColorsCheck.Name = "wordColorsCheck";
-            this.wordColorsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wordColorsCheck.Size = new System.Drawing.Size(106, 26);
-            this.wordColorsCheck.TabIndex = 15;
-            this.wordColorsCheck.Text = "لون الكلمة";
-            this.wordColorsCheck.UseVisualStyleBackColor = false;
-            this.wordColorsCheck.CheckedChanged += new System.EventHandler(this.WordColorsCheck_CheckedChanged);
-            // 
             // moshaf
             // 
             this.moshaf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1081,10 +1047,11 @@
             // 
             // discri
             // 
-            this.discri.Location = new System.Drawing.Point(0, 500);
+            this.discri.Location = new System.Drawing.Point(64, 492);
             this.discri.Name = "discri";
-            this.discri.Size = new System.Drawing.Size(16, 16);
+            this.discri.Size = new System.Drawing.Size(64, 32);
             this.discri.TabIndex = 86;
+            this.discri.Text = "تلوين";
             this.discri.UseVisualStyleBackColor = true;
             this.discri.Click += new System.EventHandler(this.Discri_Click);
             // 
@@ -1180,8 +1147,6 @@
             this.Controls.Add(this.SurahRepeat);
             this.Controls.Add(this.AyahRepeatCheck);
             this.Controls.Add(this.AyahRepeat);
-            this.Controls.Add(this.wordColorsCheck);
-            this.Controls.Add(this.ayahColorsCheck);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -1237,7 +1202,6 @@
         private System.Windows.Forms.NumericUpDown SurahRepeat;
         private System.Windows.Forms.Label time5;
         private Guna.UI2.WinForms.Guna2Panel panel;
-        private System.Windows.Forms.CheckBox ayahColorsCheck;
         private System.Windows.Forms.CheckBox SurahRepeatCheck;
         private System.Windows.Forms.Button pause;
         private System.Windows.Forms.NumericUpDown Rate;
@@ -1290,7 +1254,6 @@
         private Guna.UI2.WinForms.Guna2Button dark;
         private System.Windows.Forms.CheckBox spellingErrors;
         private Guna.UI2.WinForms.Guna2Button pageZoom;
-        private System.Windows.Forms.CheckBox wordColorsCheck;
         private System.Windows.Forms.ComboBox moshaf;
         private System.Windows.Forms.Button discri;
         private System.Windows.Forms.CheckBox pageSrtCheck;

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,13 +21,28 @@ namespace QuranKareem
 
         private void DiscriminatorsForm_Load(object sender, EventArgs e)
         {
+            DiscriminatorControl d;
+
+            d = new DiscriminatorControl(-3713317, "ألوان أولية", false)
+            {
+                Location = new Point(12, 12),
+            };
+            panel.Controls.Add(d);
+            d.LightPageColor = Coloring.Light.BackColor;
+            d.LightAyahColor = Coloring.Light.AyahColor;
+            d.LightAyahColor = Coloring.Light.WordColor;
+            d.NightPageColor = Coloring.Night.BackColor;
+            d.NightAyahColor = Coloring.Night.AyahColor;
+            d.NightAyahColor = Coloring.Night.WordColor;
+            //---------------
+
             Discriminator dis;
-            DiscriminatorControl d; int counter = 0;
+            int counter = 1;
             foreach (var desc in Discriminators.Descriptions)
             {
                 d = new DiscriminatorControl(desc.Key, desc.Value)
                 {
-                    Location = new Point(12, counter * (DiscriminatorControl.ControlSize.Height + 20)),
+                    Location = new Point(12, counter * (DiscriminatorControl.ControlSize.Height + 20) + 32),
                 };
                 panel.Controls.Add(d);
                 counter++;
@@ -56,7 +72,7 @@ namespace QuranKareem
             {
                 e.Cancel = true;
             }
-            
+
             else if (result == DialogResult.Yes)
             {
                 AddIn(Discriminators.WordsDiscriminators);
@@ -72,8 +88,16 @@ namespace QuranKareem
         private void AddIn(List<Discriminator> list)
         {
             list.Clear();
-            foreach (DiscriminatorControl d in panel.Controls)
+            DiscriminatorControl d = (DiscriminatorControl)Controls[0];
+            Coloring.Light.BackColor = d.LightPageColor;
+            Coloring.Light.AyahColor = d.LightAyahColor;
+            Coloring.Light.WordColor = d.LightWordColor;
+            Coloring.Night.BackColor = d.NightPageColor;
+            Coloring.Night.AyahColor = d.NightAyahColor;
+            Coloring.Night.WordColor = d.NightWordColor;
+            for (int i = 1; i < panel.Controls.Count; i++)
             {
+                d = (DiscriminatorControl)Controls[i];
                 if (d.LightPageColor != Color.Empty)
                     list.Add(new Discriminator(d.Id, 0, 0, d.LightPageColor));
                 if (d.LightAyahColor != Color.Empty)

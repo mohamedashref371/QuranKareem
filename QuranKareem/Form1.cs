@@ -30,22 +30,6 @@ namespace QuranKareem
         string[] stringArray;
 
         #region Form
-        private readonly ColorComboBox ayahColors = new ColorComboBox
-        {
-            Font = new Font("Tahoma", 13F),
-            Location = new Point(18, 479),
-            Size = new Size(143, 29),
-            TabIndex = 15
-        };
-
-        private readonly ColorComboBox wordColors = new ColorComboBox
-        {
-            Font = new Font("Tahoma", 13F),
-            Location = new Point(18, 510),
-            Size = new Size(143, 29),
-            TabIndex = 15
-        };
-
         private readonly int SizeX = 1100, SizeY = 910;
 
         public Form1() => InitializeComponent();
@@ -56,11 +40,6 @@ namespace QuranKareem
         FormSize fs;
         private void Form1_Load(object sender, EventArgs e)
         {
-            Controls.Add(ayahColors); Controls.Add(wordColors);
-            ayahColors.SelectedIndexChanged += AyahColors_SelectedIndexChanged;
-            wordColors.SelectedIndexChanged += WordColors_SelectedIndexChanged;
-            ayahColors.SelectedColor = AyahColor; // اللون الأحمر
-            wordColors.SelectedColor = WordColor;
 
             try { rtb.SaveFile(save + "XXX"); /* حل مؤقت لمشكلة ال rtb.SaveFile() */ } catch { }
 
@@ -189,7 +168,7 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, ayahColors, wordColors, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions });
             success = true;
         }
 
@@ -202,40 +181,14 @@ namespace QuranKareem
             }
             else if (moshaf.SelectedIndex > 0)
             {
-                if (qPicture == 1)
-                {
-                    quranPicture.SetInitialColors();
-                }
-                else if (qPicture == 2)
-                {
-                    quranTtf.SetInitialColors();
+                if (qPicture == 2)
                     quranTtf.PageRichText.Visible = false;
-                }
 
                 qPicture = 0;
                 if (quranPicture.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value))
                     qPicture = 1;
                 else if (quranTtf.Start($@"pictures\{moshaf.SelectedItem}", (int)Surah.Value, (int)Ayah.Value))
                     qPicture = 2;
-
-                if (qPicture != 0)
-                {
-                    if (!AyahColor.IsEmpty)
-                    {
-                        ayahColors.SelectedColor = AyahColor;
-                        ayahColorsCheck.Checked = true;
-                    }
-                    else
-                        ayahColorsCheck.Checked = false;
-
-                    if (!WordColor.IsEmpty)
-                    {
-                        wordColors.SelectedColor = WordColor;
-                        wordColorsCheck.Checked = true;
-                    }
-                    else
-                        wordColorsCheck.Checked = false;
-                }
 
                 if (qPicture == 1)
                 {
@@ -265,14 +218,10 @@ namespace QuranKareem
             // حفظ الإعدادات الحالية عند إغلاق البرنامج لاستعادتها لاحقاً
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
+
             if (!textMode && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
-            {
                 File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
-                if (qPicture == 1)
-                    quranPicture.SetInitialColors();
-                else if (qPicture == 2)
-                    quranTtf.SetInitialColors();
-            }
+            
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
             File.WriteAllText(save + "TafseerCurrent", tafseer);
             File.WriteAllText(save + "Volume", volume.Value + "");
@@ -802,49 +751,6 @@ namespace QuranKareem
         }
         #endregion
 
-        #region التلوين
-        private void AyahColorsCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ayahColorsCheck.Checked)
-            {
-                ayahColors.Enabled = true;
-                AyahColor = ayahColors.SelectedColor;
-            }
-            else
-            {
-                AyahColor = Color.Empty;
-                ayahColors.Enabled = false;
-            }
-        }
-
-        private void WordColorsCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            if (wordColorsCheck.Checked)
-            {
-                wordColors.Enabled = true;
-                WordColor = wordColors.SelectedColor;
-            }
-            else
-            {
-                WordColor = Color.Empty;
-                wordColors.Enabled = false;
-            }
-        }
-
-        private void AyahColors_SelectedIndexChanged(object sender, EventArgs e) => AyahColor = ayahColors.SelectedColor;
-
-        private void WordColors_SelectedIndexChanged(object sender, EventArgs e) => WordColor = wordColors.SelectedColor;
-
-        private void Discri_Click(object sender, EventArgs e)
-        {
-            if (new DiscriminatorsForm().ShowDialog() == DialogResult.Yes)
-                if (qPicture == 1)
-                    quranPicture.SetDiscriminators();
-                else if (qPicture == 2)
-                    quranTtf.SetDiscriminators();
-        }
-        #endregion
-
         #region نسخ القرآن وتفسيره والبحث فيه
         // نسخ الآية
         private void Copy_Click(object sender, EventArgs e)
@@ -1173,6 +1079,21 @@ namespace QuranKareem
 
         }
         #endregion
+
+        private void Discri_Click(object sender, EventArgs e)
+        {
+            if (new DiscriminatorsForm().ShowDialog() == DialogResult.Yes)
+                if (qPicture == 1)
+                {
+                    quranPicture.SetInitialColors();
+                    quranPicture.SetDiscriminators();
+                }
+                else if (qPicture == 2)
+                {
+                    quranTtf.SetInitialColors();
+                    quranTtf.SetDiscriminators();
+                }
+        }
 
         private void VideoEditor_Click(object sender, EventArgs e)
         {
