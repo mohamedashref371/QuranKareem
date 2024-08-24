@@ -75,15 +75,24 @@ namespace QuranKareem
                 if (success && value != darkMode)
                 {
                     darkMode = value;
+                    Color clr;
                     if (value)
                     {
+                        clr = Night.BackColor;
                         pageRichText.ForeColor = Color.White;
-                        pageRichText.BackColor = Color.Black;
+                        if (clr.IsEmpty || clr == Color.Transparent)
+                            pageRichText.BackColor = Color.Black;
+                        else
+                            pageRichText.BackColor = clr;
                     }
                     else
                     {
+                        clr = Light.BackColor;
                         pageRichText.ForeColor = Color.Black;
-                        pageRichText.BackColor = Color.White;
+                        if (clr.IsEmpty || clr == Color.Transparent)
+                            pageRichText.BackColor = Color.White;
+                        else
+                            pageRichText.BackColor = clr;
                     }
                     PageNumber = 0;
                     Set(SurahNumber,AyahNumber);
@@ -367,7 +376,7 @@ namespace QuranKareem
 
             if (textType == TextType.html)
             {
-                if (AyahColor.A != 0)
+                if (GetColor(1, darkMode).A != 0)
                 {
                     PageTextHTML = (start > 0 ? PageText.Substring(0, start) : "") + GetHtmlTextColor() + PageText.Substring(start, finish - start) + "</span>" + PageText.Substring(finish);
                 }
@@ -394,10 +403,10 @@ namespace QuranKareem
                     stream.Position = 0;
                     pageRichText.LoadFile(stream, RichTextBoxStreamType.RichText);
                 }
-                if (AyahColor.A != 0)
+                if (GetColor(1, darkMode).A != 0)
                 {
                     pageRichText.Select(start, finish - start);
-                    pageRichText.SelectionColor = AyahColor;
+                    pageRichText.SelectionColor = GetColor(1, darkMode);
                     pageRichText.SelectionStart = start;
                 }
                 pageRichText.DeselectAll();
@@ -490,10 +499,10 @@ namespace QuranKareem
         {
             try
             {
-                if (textType == TextType.rich && word > 0 && WordColor.A != 0 && ayahId - pageStartId < wordsPosition.Count && wordsPosition[ayahId - pageStartId] != null)
+                if (textType == TextType.rich && word > 0 && GetColor(2, darkMode).A != 0 && ayahId - pageStartId < wordsPosition.Count && wordsPosition[ayahId - pageStartId] != null)
                 {
                     pageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
-                    pageRichText.SelectionColor = WordColor;
+                    pageRichText.SelectionColor = GetColor(2, darkMode);
                     pageRichText.DeselectAll();
                 }
                 CurrentWord = word;
@@ -652,7 +661,8 @@ namespace QuranKareem
         private string GetHtmlTextColor()
         {
             string s = "<span";
-            if (AyahColor.A != 0) s += $" style=\"color: rgb({AyahColor.R},{AyahColor.G},{AyahColor.B});\"";
+            Color clr = GetColor(1, darkMode);
+            if (clr.A != 0) s += $" style=\"color: rgb({clr.R},{clr.G},{clr.B});\"";
             s += ">";
             return s;
         }

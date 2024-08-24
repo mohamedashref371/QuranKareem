@@ -30,10 +30,10 @@ namespace QuranKareem
             panel.Controls.Add(d);
             d.LightPageColor = Coloring.Light.BackColor;
             d.LightAyahColor = Coloring.Light.AyahColor;
-            d.LightAyahColor = Coloring.Light.WordColor;
+            d.LightWordColor = Coloring.Light.WordColor;
             d.NightPageColor = Coloring.Night.BackColor;
             d.NightAyahColor = Coloring.Night.AyahColor;
-            d.NightAyahColor = Coloring.Night.WordColor;
+            d.NightWordColor = Coloring.Night.WordColor;
             //---------------
 
             Discriminator dis;
@@ -88,7 +88,7 @@ namespace QuranKareem
         private void AddIn(List<Discriminator> list)
         {
             list.Clear();
-            DiscriminatorControl d = (DiscriminatorControl)Controls[0];
+            DiscriminatorControl d = (DiscriminatorControl)panel.Controls[0];
             Coloring.Light.BackColor = d.LightPageColor;
             Coloring.Light.AyahColor = d.LightAyahColor;
             Coloring.Light.WordColor = d.LightWordColor;
@@ -97,7 +97,7 @@ namespace QuranKareem
             Coloring.Night.WordColor = d.NightWordColor;
             for (int i = 1; i < panel.Controls.Count; i++)
             {
-                d = (DiscriminatorControl)Controls[i];
+                d = (DiscriminatorControl)panel.Controls[i];
                 if (d.LightPageColor != Color.Empty)
                     list.Add(new Discriminator(d.Id, 0, 0, d.LightPageColor));
                 if (d.LightAyahColor != Color.Empty)

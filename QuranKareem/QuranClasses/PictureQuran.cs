@@ -469,10 +469,10 @@ namespace QuranKareem
                 if (discri)
                 {
                     clr = Discriminators.AyahColors[reader.GetInt32(4)];
-                    clr = clr.Name != "AyahColor" ? clr : AyahColor;
+                    clr = clr.Name != "AyahColor" ? clr : GetColor(1, darkMode);
                 }
                 else
-                    clr = AyahColor;
+                    clr = GetColor(1, darkMode);
 
                 if (!clr.IsEmpty)
                     spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true);
@@ -495,7 +495,7 @@ namespace QuranKareem
             while (reader.Read())
             {
                 clr = Discriminators.WordColors[reader.GetInt32(4)];
-                if (clr.Name == "WordColor") clr = WordColor;
+                if (clr.Name == "WordColor") clr = GetColor(2, darkMode);
                 if (!clr.IsEmpty)
                     spQuranPicture.Clear(clr, reader.GetInt32(0), reader.GetInt32(2), reader.GetInt32(1), reader.GetInt32(3), textColor, 30, false, true, true);
             }
@@ -529,7 +529,7 @@ namespace QuranKareem
             Bitmap bmap = GetLine(page, pagePic, line, coords);
             if (bmap == null) return null;
             List<Bitmap> bitmaps = new List<Bitmap> { bmap };
-            if (WordColor.IsEmpty || isWordsDiscriminatorEmpty) return bitmaps;
+            if (GetColor(2, darkMode).IsEmpty || isWordsDiscriminatorEmpty) return bitmaps;
             var list = new List<int[]>();
             command.CommandText = $"SELECT min_x,max_x,min_y,max_y,ayah,word,discriminator FROM words JOIN ayat ON words.ayah_id=ayat.id WHERE page={page} AND line={line} AND " + (word == -2 ? "word>=1 AND word<=599 ORDER BY ayah_id,word" : $"ayah={ayah} AND word={word}");
             quran.Open();
@@ -572,7 +572,7 @@ namespace QuranKareem
                 for (int j = 0; j < list[i].Length / 5; j++)
                 {
                     clr = Discriminators.WordColors[list[i][j * 5 + 4]];
-                    clr = clr.Name != "WordColor" && !clr.IsEmpty ? clr : WordColor;
+                    clr = clr.Name != "WordColor" && !clr.IsEmpty ? clr : GetColor(2, darkMode);
                     sp.Clear(clr,
                         (list[i][j * 5] - coords[0]) >= 0 ? list[i][j * 5] - coords[0] : 0,
                         (list[i][j * 5 + 2] - coords[1]) >= 0 ? list[i][j * 5 + 2] - coords[1] : 0,

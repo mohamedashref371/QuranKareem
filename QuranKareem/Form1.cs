@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
-using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
@@ -71,7 +70,7 @@ namespace QuranKareem
                 quranText.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranText.AddEventHandler(PageQuranText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
-                discri.Visible = false;
+                //discri.Visible = false;
             }
 
             else
@@ -194,11 +193,13 @@ namespace QuranKareem
                 {
                     quranPic.Visible = true;
                     quranPic.BackgroundImage = quranPicture.CurrentPicture;
+                    quranPic.BackColor = dark.Text == "Dark" ? Coloring.Light.BackColor : Coloring.Night.BackColor;
                 }
                 else if (qPicture == 2)
                 {
                     quranPic.Visible = false;
                     quranTtf.PageRichText.Location = new Point(quranPic.Location.X, quranPic.Location.Y);
+                    quranTtf.PageRichText.BackColor = dark.Text == "Dark" ? Coloring.Light.BackColor : Coloring.Night.BackColor;
                     if (!Controls.Contains(quranTtf.PageRichText))
                     {
                         quranTtf.PageRichText.Click += PageFontQuranText_Click;
@@ -339,6 +340,7 @@ namespace QuranKareem
                 BackColor = Color.Black; ForeColor = Color.White;
                 dark.FillColor = Color.FromArgb(191, 191, 191);
                 dark.ForeColor = Color.Black;
+                quranPic.BackColor = Coloring.Night.BackColor;
                 quranPicture.DarkMode = true;
                 quranTtf.DarkMode = true;
                 quranText.DarkMode = true;
@@ -358,6 +360,7 @@ namespace QuranKareem
                 BackColor = SystemColors.Control; ForeColor = Color.Black;
                 dark.FillColor = Color.FromArgb(64, 64, 64);
                 dark.ForeColor = Color.White;
+                quranPic.BackColor = Coloring.Light.BackColor;
                 quranPicture.DarkMode = false;
                 quranTtf.DarkMode = false;
                 quranText.DarkMode = false;
@@ -1087,11 +1090,24 @@ namespace QuranKareem
                 {
                     quranPicture.SetInitialColors();
                     quranPicture.SetDiscriminators();
+                    if (dark.Text == "Dark")
+                        quranPic.BackColor = Coloring.Light.BackColor;
+                    else
+                        quranPic.BackColor = Coloring.Night.BackColor;
                 }
                 else if (qPicture == 2)
                 {
                     quranTtf.SetInitialColors();
                     quranTtf.SetDiscriminators();
+                    if (dark.Text == "Dark")
+                        quranTtf.PageRichText.BackColor = Coloring.Light.BackColor;
+                    else
+                        quranTtf.PageRichText.BackColor = Coloring.Night.BackColor;
+                }
+                else
+                {
+                    quranText.DarkMode = !quranText.DarkMode;
+                    quranText.DarkMode = !quranText.DarkMode;
                 }
         }
 

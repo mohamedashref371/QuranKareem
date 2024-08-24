@@ -30,7 +30,7 @@ namespace QuranKareem
                 string[] arr = File.ReadAllText(filePath).Replace(" ", "").Split('*');
                 if (arr.Length == 1 || arr.Length == 2 || arr.Length == 4)
                 {
-                    Light.BackColor = Color.Transparent;
+                    Light.BackColor = Color.Empty;
                     Light.AyahColor = GetColor(arr[0]);
 
                     if (arr.Length == 1)
@@ -39,7 +39,7 @@ namespace QuranKareem
                         Light.WordColor = GetColor(arr[1]);
 
 
-                    Night.BackColor = Color.Transparent;
+                    Night.BackColor = Color.Empty;
 
                     if (arr.Length < 4)
                         Night.AyahColor = GetColor(arr[0]);
@@ -122,7 +122,16 @@ namespace QuranKareem
             else
                 return clr.Name;
         }
-
+        public static Color GetColor(int clrPAW, bool darkMode)
+        {
+            if (clrPAW == 0 && !darkMode) return Light.BackColor;
+            if (clrPAW == 1 && !darkMode) return Light.AyahColor;
+            if (clrPAW == 2 && !darkMode) return Light.WordColor;
+            if (clrPAW == 0 && darkMode) return Night.BackColor;
+            if (clrPAW == 1 && darkMode) return Night.AyahColor;
+            if (clrPAW == 2 && darkMode) return Night.WordColor;
+            return Color.Empty;
+        }
         public static Color GetColor(string s)
         {
             s = s.Replace(" ", "");

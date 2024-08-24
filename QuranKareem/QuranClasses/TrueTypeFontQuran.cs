@@ -76,15 +76,24 @@ namespace QuranKareem
                 if (success && value != darkMode)
                 {
                     darkMode = value;
+                    Color clr;
                     if (value)
                     {
+                        clr = Night.BackColor;
                         PageRichText.ForeColor = Color.White;
-                        PageRichText.BackColor = Color.Black;
+                        if (clr.IsEmpty || clr == Color.Transparent)
+                            PageRichText.BackColor = Color.Black;
+                        else
+                            PageRichText.BackColor = clr;
                     }
                     else
                     {
+                        clr = Light.BackColor;
                         PageRichText.ForeColor = Color.Black;
-                        PageRichText.BackColor = Color.White;
+                        if (clr.IsEmpty || clr == Color.Transparent)
+                            PageRichText.BackColor = Color.White;
+                        else
+                            PageRichText.BackColor = clr;
                     }
                     PageNumber = 0;
                     isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
@@ -458,7 +467,7 @@ namespace QuranKareem
                 else if (!Discriminators.KeyExists(1, pageWords[index][2]))
                     continue;
                 clr = Discriminators.AyahColors[pageWords[index][2]];
-                if (clr.Name == "AyahColor") clr = AyahColor;
+                if (clr.Name == "AyahColor") clr = GetColor(1, darkMode);
                 if (!clr.IsEmpty)
                 {
                     PageRichText.Select(index, 1);
@@ -513,7 +522,7 @@ namespace QuranKareem
                         continue;
 
                     clr = Discriminators.WordColors[pageWords[index][2]];
-                    if (clr.Name == "WordColor") clr = WordColor;
+                    if (clr.Name == "WordColor") clr = GetColor(2, darkMode);
                     if (!clr.IsEmpty)
                     {
                         PageRichText.Select(index, 1);
@@ -546,7 +555,7 @@ namespace QuranKareem
                     else if (Discriminators.KeyExists(0, pageWords[index][2]))
                         clr = Discriminators.PageColors[pageWords[index][2]];
 
-                    if (clr.Name == "AyahColor") clr = AyahColor;
+                    if (clr.Name == "AyahColor") clr = GetColor(1, darkMode);
                     if (clr.IsEmpty) clr = PageRichText.ForeColor;
 
                     PageRichText.Select(index, 1);
@@ -732,7 +741,7 @@ namespace QuranKareem
                 if (Discriminators.KeyExists(2, reader.GetInt32(3)))
                 {
                     clr = Discriminators.WordColors[reader.GetInt32(3)];
-                    if (clr.Name == "WordColor") clr = WordColor;
+                    if (clr.Name == "WordColor") clr = GetColor(2, darkMode);
                 }
                 if (clr.IsEmpty)
                     clr = clrP;
