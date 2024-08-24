@@ -100,7 +100,7 @@ namespace QuranKareem
         }
         #endregion
 
-        public DiscriminatorControl(int id, string s)
+        public DiscriminatorControl(int id, string s, bool addAyahWordColor = true)
         {
             Id = id;
             ClientSize = ControlSize;
@@ -219,7 +219,7 @@ namespace QuranKareem
                 RightToLeft = RightToLeft.Yes,
                 Size = new Size(98, 31),
                 TabIndex = 1,
-                Text = "الصفحة",
+                Text = addAyahWordColor ? "الصفحة" : "الخلفية",
                 TextAlign = ContentAlignment.MiddleCenter,
                 UseVisualStyleBackColor = true,
                 Tag = lightPageColorComboBox
@@ -262,7 +262,7 @@ namespace QuranKareem
                 RightToLeft = RightToLeft.Yes,
                 Size = new Size(98, 31),
                 TabIndex = 7,
-                Text = "الصفحة",
+                Text = addAyahWordColor ? "الصفحة" : "الخلفية",
                 TextAlign = ContentAlignment.MiddleCenter,
                 UseVisualStyleBackColor = true,
                 Tag = nightPageColorComboBox
@@ -313,17 +313,20 @@ namespace QuranKareem
             Controls.Add(nightWordCheck);
             #endregion
 
-            #region Add Special Color
-            lightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
-            lightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
-            nightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
-            nightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
+            if (addAyahWordColor)
+            {
+                #region Add Special Color
+                lightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
+                lightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
+                nightAyahColorComboBox.SelectedColor = Color.FromName("AyahColor");
+                nightWordColorComboBox.SelectedColor = Color.FromName("WordColor");
 
-            lightAyahColorComboBox.SelectedColor = Color.Transparent;
-            lightWordColorComboBox.SelectedColor = Color.Transparent;
-            nightAyahColorComboBox.SelectedColor = Color.Transparent;
-            nightWordColorComboBox.SelectedColor = Color.Transparent;
-            #endregion
+                lightAyahColorComboBox.SelectedColor = Color.Transparent;
+                lightWordColorComboBox.SelectedColor = Color.Transparent;
+                nightAyahColorComboBox.SelectedColor = Color.Transparent;
+                nightWordColorComboBox.SelectedColor = Color.Transparent;
+                #endregion
+            }
         }
 
         private void CheckBoxes_CheckedChanged(object sender, EventArgs e)

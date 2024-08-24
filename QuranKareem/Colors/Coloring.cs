@@ -1,18 +1,44 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 
 namespace QuranKareem
 {
     internal static class Coloring
     {
-        public static Color BackgroundColor = Color.Empty;
-
+        public static Color BackgroundColor = Color.Transparent;
         public static Color AyahColor = Color.Red;
+        public static Color WordColor = Color.LightSeaGreen;
 
         public static Color QuarterStartColor = Color.DarkBlue; // 0 // is unused
-        public static Color WordColor = Color.LightSeaGreen; // 1:599
         public static Color SajdaColor = Color.DarkMagenta; // 998 // is unused
-        public static Color AyahEndColor = Color.DarkGreen; // 999
+        public static Color AyahEndColor = Color.DarkGreen; // 999 // used in TextQuran
+
+        public static void GetInitialColors(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string[] arr = File.ReadAllText(filePath).Replace(" ", "").Split('*');
+                AyahColor = GetColor(arr[0]);
+                if (arr.Length > 1) WordColor = GetColor(arr[1]);
+                else WordColor = Color.Empty;
+            }
+        }
+
+        public static void SetInitialColors(string filePath)
+        {
+            Constants.StringBuilder.Length = 0;
+
+            Constants.StringBuilder
+                .Append(GetString(AyahColor, true))
+                .Append("*")
+                .Append(GetString(WordColor, true))
+                ;
+
+            string s = Constants.StringBuilder.ToString();
+            if (!File.Exists(filePath) || File.ReadAllText(filePath) != s)
+                File.WriteAllText(filePath, s);
+        }
 
         public static string GetString(Color clr, bool isHexa = false)
         {

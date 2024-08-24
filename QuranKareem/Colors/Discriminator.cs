@@ -43,18 +43,18 @@ namespace QuranKareem
 
         public static string GetText(List<Discriminator> list)
         {
-            StringBuilder sb = new StringBuilder();
+            Constants.StringBuilder.Length = 0;
             string s;
             for (int i = 0; i < list?.Count; i++)
             {
                 s = list[i].ToString();
                 if (s != "")
                 {
-                    sb.Append(s);
-                    if (i < list.Count - 1) sb.Append("*");
+                    Constants.StringBuilder.Append(s);
+                    if (i < list.Count - 1) Constants.StringBuilder.Append("*");
                 }
             }
-            return sb.ToString();
+            return Constants.StringBuilder.ToString();
         }
 
         public override string ToString()

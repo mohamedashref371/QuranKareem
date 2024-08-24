@@ -575,25 +575,13 @@ namespace QuranKareem
         private void GetInitialColors()
         {
             if (!success) return;
-            if (File.Exists(path + "Colors0.txt"))
-            {
-                string[] arr = File.ReadAllText(path + "Colors0.txt").Replace(" ", "").Split('*');
-                AyahColor = GetColor(arr[0]);
-                if (arr.Length > 1) WordColor = GetColor(arr[1]);
-                else WordColor = Color.Empty;
-            }
+            Coloring.GetInitialColors(path + "Colors0.txt");
         }
 
         public void SetInitialColors()
         {
             if (!success) return;
-
-            str.Length = 0;
-            str.Append(GetString(AyahColor));
-            str.Append("*");
-            str.Append(GetString(WordColor));
-
-            File.WriteAllText(path + "Colors0.txt", str.ToString());
+            Coloring.SetInitialColors(path + "Colors0.txt");
         }
 
         public void SetDiscriminators()

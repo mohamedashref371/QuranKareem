@@ -10,7 +10,6 @@ namespace QuranKareem
     {
         private static int object_id;
         private static int obj_id_x, obj_id_y, obj_id_z;
-        private static readonly StringBuilder sb = new StringBuilder();
         private static int frameNum = 30;
         private static int frameDiv = 1;
         private static readonly string dataTime = "2023-10-07T06:00:00";
@@ -18,7 +17,7 @@ namespace QuranKareem
 
         public static string Build()
         {
-            sb.Clear();
+            Constants.StringBuilder.Clear();
 
             frameNum = (int)FrameRate;
             frameDiv = 1;
@@ -47,12 +46,12 @@ namespace QuranKareem
 
             Output();
 
-            return sb.ToString();
+            return Constants.StringBuilder.ToString();
         }
 
         private static void XmlStart()
         {
-            sb.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><!DOCTYPE boost_serialization><boost_serialization signature=\"serialization::archive\" version=\"19\"><project class_id=\"0\" tracking_level=\"1\" version=\"3\" object_id=\"_0\"><mProperties class_id=\"1\" tracking_level=\"0\" version=\"1\"><px class_id=\"2\" tracking_level=\"1\" version=\"4\" object_id=\"_1\"><mFrameRate class_id=\"3\" tracking_level=\"0\" version=\"1\"><rational64 class_id=\"4\" tracking_level=\"0\" version=\"0\"><numerator>")
+            Constants.StringBuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><!DOCTYPE boost_serialization><boost_serialization signature=\"serialization::archive\" version=\"19\"><project class_id=\"0\" tracking_level=\"1\" version=\"3\" object_id=\"_0\"><mProperties class_id=\"1\" tracking_level=\"0\" version=\"1\"><px class_id=\"2\" tracking_level=\"1\" version=\"4\" object_id=\"_1\"><mFrameRate class_id=\"3\" tracking_level=\"0\" version=\"1\"><rational64 class_id=\"4\" tracking_level=\"0\" version=\"0\"><numerator>")
               .Append(frameNum)
               .Append("</numerator><denominator>")
               .Append(frameDiv)
@@ -71,7 +70,7 @@ namespace QuranKareem
 
         private static void AddAudioFile()
         {
-            sb.Append("<item class_id=\"8\" tracking_level=\"0\" version=\"0\"><first class_id=\"9\" tracking_level=\"0\" version=\"2\"><filename class_id=\"10\" tracking_level=\"0\" version=\"0\"><string>")
+            Constants.StringBuilder.Append("<item class_id=\"8\" tracking_level=\"0\" version=\"0\"><first class_id=\"9\" tracking_level=\"0\" version=\"2\"><filename class_id=\"10\" tracking_level=\"0\" version=\"0\"><string>")
               .Append(AudioPath)
               .Append("</string></filename></first><second class_id=\"11\" tracking_level=\"0\" version=\"1\"><px class_id=\"12\" tracking_level=\"1\" version=\"4\" object_id=\"_3\"><LastModified class_id=\"13\" tracking_level=\"0\" version=\"0\"><datetime><string>")
               .Append(dataTime)
@@ -82,7 +81,7 @@ namespace QuranKareem
         {
             for (int i = 0; i < ImagesPaths.Count; i++)
             {
-                sb.Append("<item><first><filename><string>")
+                Constants.StringBuilder.Append("<item><first><filename><string>")
                   .Append(ImagesPaths[i])
                   .Append("</string></filename></first><second><px class_id_reference=\"12\" object_id=\"_")
                   .Append(object_id++)
@@ -98,7 +97,7 @@ namespace QuranKareem
 
         private static void AddVideoFile()
         {
-            sb.Append("<item><first><filename><string>")
+            Constants.StringBuilder.Append("<item><first><filename><string>")
               .Append(VideoPath)
               .Append("</string></filename></first><second><px class_id_reference=\"12\" object_id=\"_")
               .Append(object_id++)
@@ -116,7 +115,7 @@ namespace QuranKareem
         private static void SequencesStart()
         {
             obj_id_x = object_id++;
-            sb.Append("<mSequences class_id=\"18\" tracking_level=\"0\" version=\"0\"><count>1</count><item_version>1</item_version><item class_id=\"19\" tracking_level=\"0\" version=\"1\"><px class_id=\"20\" tracking_level=\"1\" version=\"4\" object_id=\"_")
+            Constants.StringBuilder.Append("<mSequences class_id=\"18\" tracking_level=\"0\" version=\"0\"><count>1</count><item_version>1</item_version><item class_id=\"19\" tracking_level=\"0\" version=\"1\"><px class_id=\"20\" tracking_level=\"1\" version=\"4\" object_id=\"_")
               .Append(obj_id_x)
               .Append("\"><IAudio class_id=\"21\" tracking_level=\"0\" version=\"1\"></IAudio><mName><string>")
               .Append(ProjectName)
@@ -125,18 +124,18 @@ namespace QuranKareem
 
         private static void VideoInitialize()
         {
-            sb.Append("<item class_id=\"23\" tracking_level=\"0\" version=\"1\"><px class_id=\"25\" class_name=\"model::VideoTrack\" tracking_level=\"1\" version=\"1\" object_id=\"_")
+            Constants.StringBuilder.Append("<item class_id=\"23\" tracking_level=\"0\" version=\"1\"><px class_id=\"25\" class_name=\"model::VideoTrack\" tracking_level=\"1\" version=\"1\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><Track class_id=\"24\" tracking_level=\"1\" version=\"2\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><mIndex>0</mIndex><mClips class_id=\"26\" tracking_level=\"0\" version=\"0\"><count>1</count><item_version>1</item_version><item class_id=\"27\" tracking_level=\"0\" version=\"1\"><px class_id=\"28\" class_name=\"model::VideoClip\" tracking_level=\"1\" version=\"4\" object_id=\"_");
 
             obj_id_y = object_id++;
-            sb.Append(obj_id_y)
+            Constants.StringBuilder.Append(obj_id_y)
               .Append("\"><ClipInterval class_id=\"29\" tracking_level=\"0\" version=\"6\"><Clip class_id=\"30\" tracking_level=\"0\" version=\"2\"><mLink class_id=\"31\" tracking_level=\"0\" version=\"0\"><ptr><px class_id=\"32\" class_name=\"model::AudioClip\" tracking_level=\"1\" version=\"6\" object_id=\"_");
 
             obj_id_z = object_id++;
-            sb.Append(obj_id_z)
+            Constants.StringBuilder.Append(obj_id_z)
               .Append("\"><ClipInterval><Clip><mLink><ptr><px class_id_reference=\"28\" object_id_reference=\"_")
               .Append(obj_id_y)
               .Append("\"></px></ptr></mLink></Clip><mSource class_id=\"33\" tracking_level=\"0\" version=\"1\"><px class_id=\"34\" class_name=\"model::AudioSourceAvcodec\" tracking_level=\"1\" version=\"1\" object_id=\"_")
@@ -168,7 +167,7 @@ namespace QuranKareem
 
         private static void ImagesInitialize()
         {
-            sb.Append("<item><px class_id_reference=\"25\" object_id=\"_")
+            Constants.StringBuilder.Append("<item><px class_id_reference=\"25\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><Track object_id=\"_")
               .Append(object_id++)
@@ -178,14 +177,14 @@ namespace QuranKareem
 
             for (int i = 0; i < ImagesPaths.Count; i++)
             {
-                sb.Append("<item><px class_id_reference=\"28\" object_id=\"_")
+                Constants.StringBuilder.Append("<item><px class_id_reference=\"28\" object_id=\"_")
                   .Append(object_id++)
                   .Append("\"><ClipInterval><Clip><mLink><ptr><px class_id=\"-1\"></px></ptr></mLink></Clip><mSource><px ");
                 if (i == 0)
-                    sb.Append("class_id=\"45\" class_name=\"model::VideoSourceImage\" tracking_level=\"1\" version=\"2\"");
+                    Constants.StringBuilder.Append("class_id=\"45\" class_name=\"model::VideoSourceImage\" tracking_level=\"1\" version=\"2\"");
                 else
-                    sb.Append("class_id_reference=\"45\"");
-                sb.Append(" object_id=\"_")
+                    Constants.StringBuilder.Append("class_id_reference=\"45\"");
+                Constants.StringBuilder.Append(" object_id=\"_")
                 .Append(object_id++)
                 .Append("\"><mPath><filename><string>")
                 .Append(ImagesPaths[i])
@@ -210,12 +209,12 @@ namespace QuranKareem
                 .Append("</y></mPosition><mCropTop>0</mCropTop><mCropBottom>0</mCropBottom><mCropLeft>0</mCropLeft><mCropRight>0</mCropRight></px></mDefaultKeyFrame><mSyncOffset>0</mSyncOffset></ClipInterval><IVideo></IVideo></px></item>");
             }
 
-            sb.Append("</mClips><mHeight>53</mHeight></Track><IVideo></IVideo></px></item></mVideoTracks>");
+            Constants.StringBuilder.Append("</mClips><mHeight>53</mHeight></Track><IVideo></IVideo></px></item></mVideoTracks>");
         }
 
         private static void AudioInitialize()
         {
-            sb.Append("<mAudioTracks><count>2</count><item_version>1</item_version><item><px class_id=\"46\" class_name=\"model::AudioTrack\" tracking_level=\"1\" version=\"1\" object_id=\"_")
+            Constants.StringBuilder.Append("<mAudioTracks><count>2</count><item_version>1</item_version><item><px class_id=\"46\" class_name=\"model::AudioTrack\" tracking_level=\"1\" version=\"1\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><Track object_id=\"_")
               .Append(object_id++)
@@ -242,7 +241,7 @@ namespace QuranKareem
 
         private static void Output()
         {
-            sb.Append("<mRender class_id=\"47\" tracking_level=\"0\" version=\"1\"><px class_id=\"48\" tracking_level=\"1\" version=\"5\" object_id=\"_")
+            Constants.StringBuilder.Append("<mRender class_id=\"47\" tracking_level=\"0\" version=\"1\"><px class_id=\"48\" tracking_level=\"1\" version=\"5\" object_id=\"_")
               .Append(object_id++)
               .Append("\"><filename><string>")
               .Append(OutputPath)

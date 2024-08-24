@@ -55,14 +55,13 @@ namespace QuranKareem
         public static string GetWordKeysAsString()
             => GetKeysAsString(WordColorsKeys);
 
-        public static StringBuilder sb = new StringBuilder();
         private static string GetKeysAsString(int[] keys)
         {
-            sb.Length = 0;
-            if (keys.Length > 0) sb.Append(keys[0].ToString());
+            Constants.StringBuilder.Length = 0;
+            if (keys.Length > 0) Constants.StringBuilder.Append(keys[0].ToString());
             for (int i = 1; i < keys.Length; i++)
-                sb.Append(',').Append(keys[i].ToString());
-            return sb.ToString();
+                Constants.StringBuilder.Append(',').Append(keys[i].ToString());
+            return Constants.StringBuilder.ToString();
         }
 
         private static int[] PageColorsKeys, AyahColorsKeys, WordColorsKeys;
