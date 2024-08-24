@@ -167,7 +167,7 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions, discri });
             success = true;
         }
 

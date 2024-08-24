@@ -568,7 +568,7 @@
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(142, 540);
+            this.copy.Location = new System.Drawing.Point(142, 535);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 16;
@@ -581,7 +581,7 @@
             this.normalText.AutoSize = true;
             this.normalText.BackColor = System.Drawing.Color.Transparent;
             this.normalText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.normalText.Location = new System.Drawing.Point(45, 551);
+            this.normalText.Location = new System.Drawing.Point(45, 546);
             this.normalText.Name = "normalText";
             this.normalText.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.normalText.Size = new System.Drawing.Size(91, 23);
@@ -1047,7 +1047,8 @@
             // 
             // discri
             // 
-            this.discri.Location = new System.Drawing.Point(64, 492);
+            this.discri.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.discri.Location = new System.Drawing.Point(102, 486);
             this.discri.Name = "discri";
             this.discri.Size = new System.Drawing.Size(64, 32);
             this.discri.TabIndex = 86;
