@@ -11,6 +11,17 @@ namespace QuranKareem
         private readonly ColorComboBox lightPageColorComboBox, lightAyahColorComboBox, lightWordColorComboBox, nightPageColorComboBox, nightAyahColorComboBox, nightWordColorComboBox;
         public static readonly Size ControlSize = new Size(771 /*800-17-12*/, 260);
 
+        private BorderStyle borderStyle = BorderStyle.None;
+        public BorderStyle BorderStyle
+        {
+            get => borderStyle; 
+            set
+            {
+                borderStyle = value;
+                Invalidate();
+            }
+        }
+
         #region properties
         public Color LightPageColor
         {
@@ -99,6 +110,17 @@ namespace QuranKareem
             }
         }
         #endregion
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (borderStyle == BorderStyle.FixedSingle)
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+            
+            else if (borderStyle == BorderStyle.Fixed3D)
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Black, ButtonBorderStyle.Inset);
+        }
 
         public DiscriminatorControl(int id, string s, bool addAyahWordColor = true)
         {

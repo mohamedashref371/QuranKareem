@@ -26,6 +26,7 @@ namespace QuranKareem
             d = new DiscriminatorControl(-3713317, "ألوان أولية", false)
             {
                 Location = new Point(12, 12),
+                BorderStyle = BorderStyle.FixedSingle
             };
             panel.Controls.Add(d);
             d.LightPageColor = Coloring.Light.BackColor;
