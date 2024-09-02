@@ -669,7 +669,7 @@ namespace QuranKareem
                     if (yEdit) locy -= (h - linHght) / 2;
                     linHght = h;
                 }
-                gr.DrawImage(bmp0, locx, locy, linWdth, linHght);
+                gr.DrawImage(bmp0, locx + (linWdth - bmp0.Width) / 2, locy + (linHght - bmp0.Height) / 2); //gr.DrawImage(bmp0, locx, locy, linWdth, linHght);
                 bmp.Save($"{path}\\img\\{i}.png", System.Drawing.Imaging.ImageFormat.Png);
                 paths.Add($"img\\{i}.png");
             }

@@ -467,17 +467,25 @@ namespace QuranKareem
             if (!success || isWordTableEmpty || mp3.URL == "" || ayahword == null || timestamps == null) return null;
 
             int tStart = 0, tEnd = 0, to ;
-
-            command.CommandText = $"SELECT MIN(timestamp_to),MAX(timestamp_to) FROM ayat WHERE surah={SurahNumber} AND ayah>={ayahStart-1} AND ayah<={ayahEnd}";
             quran.Open();
+
+            command.CommandText = $"SELECT MIN(id),MAX(id) FROM ayat WHERE surah={SurahNumber} AND ayah>={ayahStart} AND ayah<={ayahEnd}";
             reader = command.ExecuteReader();
             if (reader.Read())
             {
                 tStart = reader.GetInt32(0);
                 tEnd = reader.GetInt32(1);
             }
-            reader.Close();
-            command.Cancel();
+            reader.Close(); command.Cancel();
+
+            command.CommandText = $"SELECT MIN(timestamp_to),MAX(timestamp_to) FROM ayat WHERE id>={tStart-1} AND id<={tEnd}";
+            reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                tStart = reader.GetInt32(0);
+                tEnd = reader.GetInt32(1);
+            }
+            reader.Close(); command.Cancel();
 
             command.CommandText = $"SELECT ayah,word,words.timestamp_from,words.timestamp_to FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE surah={SurahNumber} AND ayah>={ayahStart} AND ayah<={ayahEnd} ORDER BY words.timestamp_from";
             reader = command.ExecuteReader();
@@ -506,7 +514,7 @@ namespace QuranKareem
             }
             reader.Close(); quran.Close();
 
-            if (tEnd - to > 0)
+            if (tEnd - to > 1)
             {
                 ayahword.Add(-1);
                 ayahword.Add(-1);

@@ -1057,6 +1057,7 @@ namespace QuranKareem
                 tafseerCopy.Visible = false;
                 saveRTF.Visible = false;
                 srtFile.Visible = false;
+                pageSrtCheck.Visible = false;
                 lExt.Visible = true;
                 extension.Text = quranAudio.Extension;
                 extension.Visible = true;
@@ -1078,6 +1079,7 @@ namespace QuranKareem
                 tafseerCopy.Visible = true;
                 saveRTF.Visible = true;
                 srtFile.Visible = true;
+                pageSrtCheck.Visible = true;
             }
 
         }
