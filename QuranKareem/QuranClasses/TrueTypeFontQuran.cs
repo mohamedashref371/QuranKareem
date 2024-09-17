@@ -107,8 +107,8 @@ namespace QuranKareem
             PageRichText.SelectAll();
             PageRichText.SelectionAlignment = HorizontalAlignment.Center;
             PageRichText.DeselectAll();
-            PageNumber = 0;
-            Set(SurahNumber, AyahNumber);
+            PageNumber = 0; //
+            Set(SurahNumber, AyahNumber); //
         }
 
 

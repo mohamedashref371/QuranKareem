@@ -1,1 +1,1 @@
-0|1|0|White*8|0|0|Blue*8|1|0|Cyan*1|2|0|Red*10|2|0|Magenta*11|0|0|Green*11|1|0|Lime*0|2|1|AyahColor*1|0|1|DarkRed*1|1|1|OrangeRed*0|2|2|WordColor*1|2|2|WordColor
+0|0|1|AyahColor*0|0|2|WordColor*0|1|0|White*0|1|1|AyahColor*0|1|2|WordColor*1|0|0|Red*1|0|1|DarkRed*1|0|2|WordColor*1|1|0|Red*1|1|1|OrangeRed*1|1|2|WordColor*8|0|0|Blue*8|1|0|Cyan*10|0|0|Magenta*10|1|0|Magenta*11|0|0|Green*11|1|0|LimeGreen
