@@ -157,7 +157,7 @@ public class SharpPixelQK
                     rgbValues[val] = Blue;
                     rgbValues[val + 1] = Green;
                     rgbValues[val + 2] = Red;
-                    if (alpha) rgbValues[val + 3] = Alpha;
+                    if (alpha || color == Color.Transparent) rgbValues[val + 3] = Alpha;
                 }
             }
         }
