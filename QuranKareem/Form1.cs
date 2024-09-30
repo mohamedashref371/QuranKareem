@@ -477,7 +477,7 @@ namespace QuranKareem
         {
             try
             {
-                string[] links = File.ReadAllText(s + "\\download links.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace('\n', '|').Split('|');
+                string[] links = File.ReadAllLines(s + "\\download links.txt", Encoding.UTF8);
                 string[] temp;
                 System.Net.WebClient client = new System.Net.WebClient();
                 if (links.Length > 0)
@@ -493,7 +493,8 @@ namespace QuranKareem
                             }
                             catch
                             {
-                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟", "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) return;
+                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟",
+                                    "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) return;
                             }
                         }
                     }
@@ -1125,7 +1126,7 @@ namespace QuranKareem
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
-        private void About_Click(object sender, EventArgs e) => Process.Start("https://facebook.com/Mohamed3713317");
+        private void About_Click(object sender, EventArgs e) => Process.Start("https://youtube.com/channel/UCS2-gBRB3I7K6xA-Vuf-lGQ");
 
         private void Guna2HtmlLabel1_Click(object sender, EventArgs e) { }
 
