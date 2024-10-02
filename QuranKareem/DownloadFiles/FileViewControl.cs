@@ -42,7 +42,7 @@ namespace QuranKareem
             BackColor = Color.FromArgb(192, 255, 192),
             FlatStyle = FlatStyle.Popup,
             Font = new Font("Tahoma", 12F),
-            Location = new Point(129, 9),
+            Location = new Point(139, 9),
             RightToLeft = RightToLeft.Yes,
             Size = new Size(105, 32),
             TabIndex = 1,
@@ -55,7 +55,7 @@ namespace QuranKareem
             Font = new Font("Tahoma", 12F),
             Location = new Point(14, 9),
             RightToLeft = RightToLeft.Yes,
-            Size = new Size(105, 32),
+            Size = new Size(119, 32),
             TextAlign = ContentAlignment.MiddleCenter
         };
 
@@ -102,11 +102,11 @@ namespace QuranKareem
                     status.ForeColor = Color.FromArgb(200, 150, 0);
                     break;
                 case Status.Downloading:
-                    status.Text = "يُحمل";
+                    status.Text = "جارٍ التحميل";
                     status.ForeColor = Color.FromArgb(0, 150, 200);
                     break;
                 case Status.Downloaded:
-                    status.Text = "تم";
+                    status.Text = "تم التحميل";
                     status.ForeColor = Color.FromArgb(0, 0, 190);
                     break;
                 case Status.Exist:
