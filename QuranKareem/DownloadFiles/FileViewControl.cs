@@ -89,30 +89,39 @@ namespace QuranKareem
             downloadBtn.Tag = this;
         }
 
-        public void SetStatus(Status _status)
+        private Status _status;
+        public Status Status
         {
-            switch (_status)
+            get
             {
-                case Status.NotExist:
-                    status.Text = "";
-                    status.ForeColor = Color.FromArgb(0, 0, 0);
-                    break;
-                case Status.Waiting:
-                    status.Text = "ينتظر";
-                    status.ForeColor = Color.FromArgb(200, 150, 0);
-                    break;
-                case Status.Downloading:
-                    status.Text = "جارٍ التحميل";
-                    status.ForeColor = Color.FromArgb(0, 150, 200);
-                    break;
-                case Status.Downloaded:
-                    status.Text = "تم التحميل";
-                    status.ForeColor = Color.FromArgb(0, 0, 190);
-                    break;
-                case Status.Exist:
-                    status.Text = "موجود";
-                    status.ForeColor = Color.FromArgb(0, 150, 0);
-                    break;
+                return _status;
+            }
+            set
+            {
+                _status = value;
+                switch (_status)
+                {
+                    case Status.NotExist:
+                        status.Text = "";
+                        status.ForeColor = Color.FromArgb(0, 0, 0);
+                        break;
+                    case Status.Waiting:
+                        status.Text = "ينتظر";
+                        status.ForeColor = Color.FromArgb(200, 150, 0);
+                        break;
+                    case Status.Downloading:
+                        status.Text = "جارٍ التحميل";
+                        status.ForeColor = Color.FromArgb(0, 150, 200);
+                        break;
+                    case Status.Downloaded:
+                        status.Text = "تم التحميل";
+                        status.ForeColor = Color.FromArgb(0, 0, 190);
+                        break;
+                    case Status.Exist:
+                        status.Text = "موجود";
+                        status.ForeColor = Color.FromArgb(0, 150, 0);
+                        break;
+                }
             }
         }
 
@@ -136,16 +145,17 @@ namespace QuranKareem
             if (inQueue)
             {
                 downloadBtn.Enabled = false;
-                SetStatus(Status.Waiting);
+                Status = Status.Waiting;
                 checkBox.Enabled = false;
             }
             else if (isExist)
             {
-                SetStatus(Status.Exist);
+                Status = Status.Exist;
                 checkBox.Enabled = false;
             }
             else
             {
+                Status = Status.NotExist;
                 checkBox.Checked = true;
             }
 
@@ -158,7 +168,7 @@ namespace QuranKareem
             if (checkBox.Enabled || (IsForce = AreYouSure()))
             {
                 downloadBtn.Enabled = false;
-                SetStatus(Status.Waiting);
+                Status = Status.Waiting;
                 checkBox.Checked = false;
                 checkBox.Enabled = false;
                 DownloadButtonClick?.Invoke(sender, e);
