@@ -111,6 +111,19 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Constants.cs" />
+    <Compile Include="DownloadFiles\DownloadAudioQuranFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DownloadFiles\DownloadAudioQuranFiles.Designer.cs">
+      <DependentUpon>DownloadAudioQuranFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadFiles\FileDownloadingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DownloadFiles\FileViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DownloadFiles\Status.cs" />
     <Compile Include="QuranClasses\TrueTypeFontQuran.cs" />
     <Compile Include="SharpPixelQK.cs" />
     <Compile Include="Form1.cs">
@@ -145,6 +158,9 @@
     </Compile>
     <EmbeddedResource Include="Colors\DiscriminatorsForm.resx">
       <DependentUpon>DiscriminatorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DownloadFiles\DownloadAudioQuranFiles.resx">
+      <DependentUpon>DownloadAudioQuranFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
