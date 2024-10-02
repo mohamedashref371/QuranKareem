@@ -84,10 +84,6 @@ namespace QuranKareem
                 _status = value;
                 switch (_status)
                 {
-                    case Status.NotExist:
-                        status.Text = "";
-                        status.ForeColor = Color.FromArgb(0, 0, 0);
-                        break;
                     case Status.Waiting:
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
@@ -99,10 +95,6 @@ namespace QuranKareem
                     case Status.Downloaded:
                         status.Text = "تم التحميل";
                         status.ForeColor = Color.FromArgb(0, 0, 190);
-                        break;
-                    case Status.Exist:
-                        status.Text = "موجود";
-                        status.ForeColor = Color.FromArgb(0, 150, 0);
                         break;
                 }
             }
@@ -123,6 +115,7 @@ namespace QuranKareem
             fileName.Text = fileViewControl.FileName;
             folderName.Text = fileViewControl.FolderName;
             Status = Status.Waiting;
+            fileViewControl.Status = Status.Waiting;
             Initialize();
         }
     }

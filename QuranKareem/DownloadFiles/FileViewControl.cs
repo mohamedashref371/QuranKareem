@@ -104,22 +104,32 @@ namespace QuranKareem
                     case Status.NotExist:
                         status.Text = "";
                         status.ForeColor = Color.FromArgb(0, 0, 0);
+                        checkBox.Enabled = true;
+                        downloadBtn.Enabled = true;
                         break;
                     case Status.Waiting:
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
+                        checkBox.Enabled = false;
+                        downloadBtn.Enabled = false;
                         break;
                     case Status.Downloading:
                         status.Text = "جارٍ التحميل";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
+                        checkBox.Enabled = false;
+                        downloadBtn.Enabled = false;
                         break;
                     case Status.Downloaded:
                         status.Text = "تم التحميل";
                         status.ForeColor = Color.FromArgb(0, 0, 190);
+                        checkBox.Enabled = false;
+                        downloadBtn.Enabled = true;
                         break;
                     case Status.Exist:
                         status.Text = "موجود";
                         status.ForeColor = Color.FromArgb(0, 150, 0);
+                        checkBox.Enabled = false;
+                        downloadBtn.Enabled = true;
                         break;
                 }
             }
@@ -136,28 +146,13 @@ namespace QuranKareem
             Initialize();
         }
 
-        public FileViewControl(string link, string filePath, string _fileName, string _folderName, bool isExist, bool inQueue)
+        public FileViewControl(string link, string filePath, string _fileName, string _folderName, bool isExist)
         {
             FileLink = link; FilePath = filePath;
             FileName = _fileName; FolderName = _folderName;
             fileName.Text = _fileName; folderName.Text = _folderName;
 
-            if (inQueue)
-            {
-                downloadBtn.Enabled = false;
-                Status = Status.Waiting;
-                checkBox.Enabled = false;
-            }
-            else if (isExist)
-            {
-                Status = Status.Exist;
-                checkBox.Enabled = false;
-            }
-            else
-            {
-                Status = Status.NotExist;
-                checkBox.Checked = true;
-            }
+            Status = isExist ? Status.Exist : Status.NotExist;
 
             downloadBtn.Click += Clicked;
             Initialize();
@@ -167,10 +162,7 @@ namespace QuranKareem
         {
             if (checkBox.Enabled || (IsForce = AreYouSure()))
             {
-                downloadBtn.Enabled = false;
-                Status = Status.Waiting;
                 checkBox.Checked = false;
-                checkBox.Enabled = false;
                 DownloadButtonClick?.Invoke(sender, e);
             }
         }

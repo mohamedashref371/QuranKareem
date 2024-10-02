@@ -77,10 +77,7 @@ namespace QuranKareem
             {
                 fileName = Path.GetFileName(links[i]);
                 fullPath = Path.Combine(path, fileName);
-                fvc = new FileViewControl(
-                        links[i], fullPath,
-                        fileName, directory,
-                        File.Exists(fullPath), false)
+                fvc = new FileViewControl(links[i], fullPath, fileName, directory, File.Exists(fullPath))
                 {
                     Location = new Point(0, FileViewControl.ControlSize.Height * (i + 1) + 15)
                 };
@@ -92,7 +89,7 @@ namespace QuranKareem
         private void DownloadBtn_Click(object sender, EventArgs e)
         {
             FileDownloadingControl control = new FileDownloadingControl((FileViewControl)((Button)sender).Tag);
-            
+            flowLayoutPanel.Controls.Add(control);
         }
 
         private void DownloadBaseBtn_Click(object sender, EventArgs e)
