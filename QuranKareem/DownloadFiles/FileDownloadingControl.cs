@@ -51,7 +51,7 @@ namespace QuranKareem
             TextAlign = ContentAlignment.MiddleCenter
         };
 
-        private readonly Button remove = new Button
+        private readonly Button removeBtn = new Button
         {
             BackColor = Color.FromArgb(255, 192, 192),
             FlatStyle = FlatStyle.Popup,
@@ -68,11 +68,10 @@ namespace QuranKareem
         public void Initialize()
         {
             ClientSize = ControlSize;
-            Controls.Add(nextBtn);
             Controls.Add(fileName);
             Controls.Add(folderName);
             Controls.Add(status);
-            Controls.Add(remove);
+            Controls.Add(removeBtn);
         }
 
         private Status _status;
@@ -90,14 +89,20 @@ namespace QuranKareem
                     case Status.Waiting:
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
+                        nextBtn.Enabled = true;
+                        break;
+                    case Status.Ready:
+                        status.Text = "يستعد";
+                        status.ForeColor = Color.FromArgb(0, 150, 200);
+                        nextBtn.Enabled = false;
                         break;
                     case Status.Downloading:
                         status.Text = "جارٍ التحميل";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
+                        removeBtn.Enabled = false;
                         break;
                     case Status.Downloaded:
-                        status.Text = "تم التحميل";
-                        status.ForeColor = Color.FromArgb(0, 0, 190);
+                        Parent.Controls.Remove(this);
                         break;
                 }
             }
@@ -124,14 +129,25 @@ namespace QuranKareem
             Status = Status.Waiting;
             fileViewControl.Status = Status.Waiting;
             Initialize();
-
+            Controls.Add(nextBtn);
             if (backColor.A == 255) BackColor = backColor;
-            remove.Click += RemoveBtn_Click;
+
+            nextBtn.Click += NextBtn_Click;
+            removeBtn.Click += RemoveBtn_Click;
+        }
+
+        private void NextBtn_Click(object sender, EventArgs e)
+        {
+            FilesList.First.Value.Status = Status.Waiting;
+            FilesList.Remove(Node);
+            FilesList.AddFirst(Node);
+            Status = Status.Ready;
         }
 
         private void RemoveBtn_Click(object sender, EventArgs e)
         {
             FileViewControl.Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+            FilesList.Remove(Node);
             Parent.Controls.Remove(this);
         }
     }

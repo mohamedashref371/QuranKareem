@@ -10,6 +10,7 @@ namespace QuranKareem
     {
         NotExist,
         Waiting,
+        Ready,
         Downloading,
         Downloaded,
         Exist,

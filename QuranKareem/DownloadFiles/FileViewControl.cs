@@ -115,12 +115,13 @@ namespace QuranKareem
                         checkBox.Enabled = false;
                         downloadBtn.Enabled = false;
                         break;
+                    case Status.Ready:
+                        status.Text = "يستعد";
+                        status.ForeColor = Color.FromArgb(0, 150, 200);
+                        break;
                     case Status.Downloading:
                         status.Text = "جارٍ التحميل";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
-                        checkBox.Checked = false;
-                        checkBox.Enabled = false;
-                        downloadBtn.Enabled = false;
                         break;
                     case Status.Downloaded:
                         status.Text = "تم التحميل";

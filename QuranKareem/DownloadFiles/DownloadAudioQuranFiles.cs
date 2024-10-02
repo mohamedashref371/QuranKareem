@@ -15,6 +15,7 @@ namespace QuranKareem
         public DownloadAudioQuranFiles()
         {
             InitializeComponent();
+            flowLayoutPanel.Controls.Add(new FileDownloadingControl());
         }
 
         private string path = "";
