@@ -86,9 +86,39 @@ namespace QuranKareem
             }
         }
 
+        private Color GetColor()
+        {
+            Color clr;
+            switch (flowLayoutPanel.Controls.Count % 7)
+            {
+                case 1:
+                    clr = Color.FromArgb(250, 200, 200);
+                    break;
+                case 2:
+                    clr = Color.FromArgb(250, 250, 200);
+                    break;
+                case 3:
+                    clr = Color.FromArgb(200, 250, 200);
+                    break;
+                case 4:
+                    clr = Color.FromArgb(200, 250, 250);
+                    break;
+                case 5:
+                    clr = Color.FromArgb(200, 200, 250);
+                    break;
+                case 6:
+                    clr = Color.FromArgb(250, 200, 250);
+                    break;
+                default:
+                    clr = Color.Empty;
+                    break;
+            }
+            return clr;
+        }
+
         private void DownloadBtn_Click(object sender, EventArgs e)
         {
-            FileDownloadingControl control = new FileDownloadingControl((FileViewControl)((Button)sender).Tag);
+            FileDownloadingControl control = new FileDownloadingControl((FileViewControl)((Button)sender).Tag, GetColor());
             flowLayoutPanel.Controls.Add(control);
         }
 
@@ -99,7 +129,7 @@ namespace QuranKareem
             {
                 fvc = (FileViewControl)currentPanel.Controls[i];
                 if (fvc.Checked)
-                    fvc.Clicked(null, null);
+                    fvc.Clicked(sender, e);
             }
         }
 

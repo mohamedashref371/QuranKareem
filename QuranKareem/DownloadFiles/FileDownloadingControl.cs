@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -8,8 +10,9 @@ namespace QuranKareem
 {
     internal class FileDownloadingControl : Control
     {
+        public static LinkedList<FileDownloadingControl> FilesList = new LinkedList<FileDownloadingControl>();
 
-        private readonly CheckBox nextBtn = new CheckBox
+        private readonly Button nextBtn = new Button
         {
             BackColor = Color.FromArgb(224, 224, 224),
             FlatStyle = FlatStyle.Popup,
@@ -108,15 +111,28 @@ namespace QuranKareem
             Initialize();
         }
 
-        private readonly FileViewControl fileViewControl;
-        public FileDownloadingControl(FileViewControl fileViewControl)
+        public readonly FileViewControl FileViewControl;
+        public readonly LinkedListNode<FileDownloadingControl> Node;
+        public FileDownloadingControl(FileViewControl fileViewControl, Color backColor)
         {
-            this.fileViewControl = fileViewControl;
+            FileViewControl = fileViewControl;
+            Node = new LinkedListNode<FileDownloadingControl>(this);
+            FilesList.AddLast(Node);
+
             fileName.Text = fileViewControl.FileName;
             folderName.Text = fileViewControl.FolderName;
             Status = Status.Waiting;
             fileViewControl.Status = Status.Waiting;
             Initialize();
+
+            if (backColor.A == 255) BackColor = backColor;
+            remove.Click += RemoveBtn_Click;
+        }
+
+        private void RemoveBtn_Click(object sender, EventArgs e)
+        {
+            FileViewControl.Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+            Parent.Controls.Remove(this);
         }
     }
 }

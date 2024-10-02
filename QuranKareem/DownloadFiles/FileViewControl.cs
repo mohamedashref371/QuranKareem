@@ -106,16 +106,19 @@ namespace QuranKareem
                         status.ForeColor = Color.FromArgb(0, 0, 0);
                         checkBox.Enabled = true;
                         downloadBtn.Enabled = true;
+                        checkBox.Checked = true;
                         break;
                     case Status.Waiting:
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
+                        checkBox.Checked = false;
                         checkBox.Enabled = false;
                         downloadBtn.Enabled = false;
                         break;
                     case Status.Downloading:
                         status.Text = "جارٍ التحميل";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
+                        checkBox.Checked = false;
                         checkBox.Enabled = false;
                         downloadBtn.Enabled = false;
                         break;
@@ -161,10 +164,7 @@ namespace QuranKareem
         public void Clicked(object sender, EventArgs e)
         {
             if (checkBox.Enabled || (IsForce = AreYouSure()))
-            {
-                checkBox.Checked = false;
-                DownloadButtonClick?.Invoke(sender, e);
-            }
+                DownloadButtonClick?.Invoke(downloadBtn, e);
         }
 
         private static bool AreYouSure() => MessageBox.Show("الملف موجود بالفعل، هل تريد إعادة تحميله؟", "؟!?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
