@@ -27,6 +27,17 @@ namespace QuranKareem
             UseVisualStyleBackColor = true
         };
 
+        public int DownloadProgress
+        {
+            set
+            {
+                if (nextBtn.InvokeRequired)
+                    nextBtn.Invoke(new Action(() => nextBtn.Text = $"{value}%"));
+                else
+                    nextBtn.Text = $"{value}%";
+            }
+        }
+
         private readonly Label fileName = new Label
         {
             Font = new Font("Tahoma", 12F),
@@ -192,10 +203,16 @@ namespace QuranKareem
                 FilesList.RemoveFirst();
             }
         }
+        private static void Client_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            if (current != null)
+                current.DownloadProgress = e.ProgressPercentage;
+        }
 
-        public static void DownloadFiles()
+        public async static void DownloadFiles()
         {
             System.Net.WebClient client = new System.Net.WebClient();
+            client.DownloadProgressChanged += Client_DownloadProgressChanged;
 
             while (FilesList.Count > 0)
             {
@@ -209,7 +226,7 @@ namespace QuranKareem
                     try
                     {
                         current.Status = Status.Downloading;
-                        client.DownloadFile(current.FileViewControl.FileLink, current.FileViewControl.FilePath);
+                        await client.DownloadFileTaskAsync(new Uri(current.FileViewControl.FileLink), current.FileViewControl.FilePath);
                         current.Status = Status.Downloaded;
                     }
                     catch
