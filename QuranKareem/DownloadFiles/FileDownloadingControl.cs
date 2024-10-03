@@ -177,6 +177,7 @@ namespace QuranKareem
                 fdc = FilesList.First.Value;
                 fdc.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
                 FilesList.RemoveFirst();
+                fdc.Parent.Controls.Remove(fdc);
             }
         }
 
