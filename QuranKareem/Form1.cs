@@ -465,7 +465,7 @@ namespace QuranKareem
             quranAudio.Start(s, (int)Surah.Value, (int)Ayah.Value);
             time5.Text = quranAudio.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
-            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2)
+            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2) // XXX
             {
                 if (downloadForm is null)
                     downloadForm = new DownloadAudioQuranFiles();

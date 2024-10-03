@@ -25,6 +25,7 @@ namespace QuranKareem
 
         public void InitializeAudioFile(string path = "")
         {
+            tabControl.SelectedTab = fileViewPage;
             if (path != null && path.Trim() != "" && this.path != path)
             {
                 if (currentPanel != null)
