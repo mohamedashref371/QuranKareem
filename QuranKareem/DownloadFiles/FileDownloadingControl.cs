@@ -150,7 +150,7 @@ namespace QuranKareem
             {
                 current = this;
                 Status = Status.Ready;
-                //Task.Run(DownloadFiles);
+                Task.Run(DownloadFiles);
             }
         }
 
@@ -191,7 +191,8 @@ namespace QuranKareem
             {
                 current = FilesList.First.Value;
                 FilesList.Remove(FilesList.First);
-                FilesList.First.Value.Status = Status.Ready;
+                if (FilesList.Count != 0)
+                    FilesList.First.Value.Status = Status.Ready;
                 try
                 {
                     current.Status = Status.Downloading;
