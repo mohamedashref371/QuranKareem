@@ -89,59 +89,61 @@ namespace QuranKareem
             downloadBtn.Tag = this;
         }
 
-        private Status _status;
         public Status Status
         {
-            get
-            {
-                return _status;
-            }
             set
             {
-                _status = value;
-                switch (_status)
-                {
-                    case Status.NotExist:
-                        status.Text = "";
-                        status.ForeColor = Color.FromArgb(0, 0, 0);
-                        checkBox.Enabled = true;
-                        downloadBtn.Enabled = true;
-                        checkBox.Checked = true;
-                        break;
-                    case Status.Waiting:
-                        status.Text = "ينتظر";
-                        status.ForeColor = Color.FromArgb(200, 150, 0);
-                        checkBox.Checked = false;
-                        checkBox.Enabled = false;
-                        downloadBtn.Enabled = false;
-                        break;
-                    case Status.Ready:
-                        status.Text = "يستعد";
-                        status.ForeColor = Color.FromArgb(0, 150, 200);
-                        break;
-                    case Status.Downloading:
-                        status.Text = "جارٍ التحميل";
-                        status.ForeColor = Color.FromArgb(0, 150, 200);
-                        break;
-                    case Status.Downloaded:
-                        status.Text = "تم التحميل";
-                        status.ForeColor = Color.FromArgb(0, 0, 190);
-                        checkBox.Enabled = false;
-                        downloadBtn.Enabled = true;
-                        break;
-                    case Status.Exist:
-                        status.Text = "موجود";
-                        status.ForeColor = Color.FromArgb(0, 150, 0);
-                        checkBox.Enabled = false;
-                        downloadBtn.Enabled = true;
-                        break;
-                    case Status.Error:
-                        status.Text = "خطأ";
-                        status.ForeColor = Color.FromArgb(255, 0, 0);
-                        checkBox.Enabled = !IsForce;
-                        downloadBtn.Enabled = true;
-                        break;
-                }
+                if (status.InvokeRequired)
+                    status.Invoke(new Action(() => UpdateUI(value)));
+                else
+                    UpdateUI(value);
+            }
+        }
+
+        private void UpdateUI(Status _status)
+        {
+            switch (_status)
+            {
+                case Status.NotExist:
+                    status.Text = "";
+                    status.ForeColor = Color.FromArgb(0, 0, 0);
+                    checkBox.Enabled = true;
+                    downloadBtn.Enabled = true;
+                    checkBox.Checked = true;
+                    break;
+                case Status.Waiting:
+                    status.Text = "ينتظر";
+                    status.ForeColor = Color.FromArgb(200, 150, 0);
+                    checkBox.Checked = false;
+                    checkBox.Enabled = false;
+                    downloadBtn.Enabled = false;
+                    break;
+                case Status.Ready:
+                    status.Text = "يستعد";
+                    status.ForeColor = Color.FromArgb(0, 150, 200);
+                    break;
+                case Status.Downloading:
+                    status.Text = "جارٍ التحميل";
+                    status.ForeColor = Color.FromArgb(0, 150, 200);
+                    break;
+                case Status.Downloaded:
+                    status.Text = "تم التحميل";
+                    status.ForeColor = Color.FromArgb(0, 0, 190);
+                    checkBox.Enabled = false;
+                    downloadBtn.Enabled = true;
+                    break;
+                case Status.Exist:
+                    status.Text = "موجود";
+                    status.ForeColor = Color.FromArgb(0, 150, 0);
+                    checkBox.Enabled = false;
+                    downloadBtn.Enabled = true;
+                    break;
+                case Status.Error:
+                    status.Text = "خطأ";
+                    status.ForeColor = Color.FromArgb(255, 0, 0);
+                    checkBox.Enabled = !IsForce;
+                    downloadBtn.Enabled = true;
+                    break;
             }
         }
 
