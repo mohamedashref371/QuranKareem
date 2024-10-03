@@ -140,5 +140,11 @@ namespace QuranKareem
                 for (int i = 1; i < currentPanel.Controls.Count; i++)
                     ((FileViewControl)currentPanel.Controls[i]).Checked = chBox.Checked;
         }
+
+        private void DownloadAudioQuranFiles_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
     }
 }

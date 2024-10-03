@@ -72,43 +72,51 @@ namespace QuranKareem
         {
             set
             {
-                switch (value)
-                {
-                    case Status.NotExist:
-                        Parent.Controls.Remove(this);
-                        FileViewControl.Status = Status.NotExist;
-                        break;
-                    case Status.Waiting:
-                        status.Text = "ينتظر";
-                        status.ForeColor = Color.FromArgb(200, 150, 0);
-                        nextBtn.Enabled = true;
-                        FileViewControl.Status = Status.Waiting;
-                        break;
-                    case Status.Ready:
-                        status.Text = "يستعد";
-                        status.ForeColor = Color.FromArgb(0, 150, 200);
-                        nextBtn.Enabled = false;
-                        FileViewControl.Status = Status.Ready;
-                        break;
-                    case Status.Downloading:
-                        status.Text = "جارٍ التحميل";
-                        status.ForeColor = Color.FromArgb(0, 150, 200);
-                        removeBtn.Enabled = false;
-                        FileViewControl.Status = Status.Downloading;
-                        break;
-                    case Status.Downloaded:
-                        Parent.Controls.Remove(this);
-                        FileViewControl.Status = Status.Downloaded;
-                        break;
-                    case Status.Error:
-                        Parent.Controls.Remove(this);
-                        FileViewControl.Status = Status.Error;
-                        break;
-                    case Status.Exist:
-                        Parent.Controls.Remove(this);
-                        FileViewControl.Status = Status.Exist;
-                        break;
-                }
+                if (status.InvokeRequired)
+                    status.Invoke(new Action(() => UpdateUI(value)));
+                else
+                    UpdateUI(value);
+            }
+        }
+
+        private void UpdateUI(Status _status)
+        {
+            switch (_status)
+            {
+                case Status.NotExist:
+                    Parent.Controls.Remove(this);
+                    FileViewControl.Status = Status.NotExist;
+                    break;
+                case Status.Waiting:
+                    status.Text = "ينتظر";
+                    status.ForeColor = Color.FromArgb(200, 150, 0);
+                    nextBtn.Enabled = true;
+                    FileViewControl.Status = Status.Waiting;
+                    break;
+                case Status.Ready:
+                    status.Text = "يستعد";
+                    status.ForeColor = Color.FromArgb(0, 150, 200);
+                    nextBtn.Enabled = false;
+                    FileViewControl.Status = Status.Ready;
+                    break;
+                case Status.Downloading:
+                    status.Text = "جارٍ التحميل";
+                    status.ForeColor = Color.FromArgb(0, 150, 200);
+                    removeBtn.Enabled = false;
+                    FileViewControl.Status = Status.Downloading;
+                    break;
+                case Status.Downloaded:
+                    Parent.Controls.Remove(this);
+                    FileViewControl.Status = Status.Downloaded;
+                    break;
+                case Status.Error:
+                    Parent.Controls.Remove(this);
+                    FileViewControl.Status = Status.Error;
+                    break;
+                case Status.Exist:
+                    Parent.Controls.Remove(this);
+                    FileViewControl.Status = Status.Exist;
+                    break;
             }
         }
 
@@ -148,10 +156,12 @@ namespace QuranKareem
             nextBtn.Click += NextBtn_Click;
             removeBtn.Click += RemoveBtn_Click;
 
+            if (FilesList.First.Value == this)
+                Status = Status.Ready;
+
             if (current is null)
             {
                 current = this;
-                Status = Status.Ready;
                 Task.Run(DownloadFiles);
             }
         }

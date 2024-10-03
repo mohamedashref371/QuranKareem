@@ -24,6 +24,8 @@ namespace QuranKareem
         readonly TafseerQuran quranTafseer = TafseerQuran.Instance;
         readonly TrueTypeFontQuran quranTtf = TrueTypeFontQuran.Instance;
 
+        DownloadAudioQuranFiles downloadForm;
+
         bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
         string[] stringArray;
@@ -465,10 +467,11 @@ namespace QuranKareem
             folder.SelectedPath = Path.GetFullPath(s);
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2)
             {
-                if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Task.Run(() => DownloadFiles(s));
-                }
+                if (downloadForm is null)
+                    downloadForm = new DownloadAudioQuranFiles();
+                downloadForm.InitializeAudioFile(s);
+                downloadForm.Show();
+                //if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes) Task.Run(() => DownloadFiles(s));
             }
         }
 

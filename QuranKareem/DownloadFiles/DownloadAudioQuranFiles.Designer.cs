@@ -90,6 +90,7 @@
             this.Name = "DownloadAudioQuranFiles";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Download Audio Quran Files";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DownloadAudioQuranFiles_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.fileDownloadPage.ResumeLayout(false);
             this.ResumeLayout(false);
