@@ -4,12 +4,15 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace QuranKareem
 {
     internal class FileDownloadingControl : Control
     {
+        private static FileDownloadingControl current = null;
         public static LinkedList<FileDownloadingControl> FilesList = new LinkedList<FileDownloadingControl>();
 
         private readonly Button nextBtn = new Button
@@ -65,15 +68,6 @@ namespace QuranKareem
 
         public static readonly Size ControlSize = new Size(782, 50);
 
-        public void Initialize()
-        {
-            ClientSize = ControlSize;
-            Controls.Add(fileName);
-            Controls.Add(folderName);
-            Controls.Add(status);
-            Controls.Add(removeBtn);
-        }
-
         private Status _status;
         public Status Status
         {
@@ -90,22 +84,39 @@ namespace QuranKareem
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
                         nextBtn.Enabled = true;
+                        FileViewControl.Status = Status.Waiting;
                         break;
                     case Status.Ready:
                         status.Text = "يستعد";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
                         nextBtn.Enabled = false;
+                        FileViewControl.Status = Status.Ready;
                         break;
                     case Status.Downloading:
                         status.Text = "جارٍ التحميل";
                         status.ForeColor = Color.FromArgb(0, 150, 200);
                         removeBtn.Enabled = false;
+                        FileViewControl.Status = Status.Downloading;
                         break;
                     case Status.Downloaded:
                         Parent.Controls.Remove(this);
+                        FileViewControl.Status = Status.Downloaded;
+                        break;
+                    case Status.Error:
+                        Parent.Controls.Remove(this);
+                        FileViewControl.Status = Status.Error;
                         break;
                 }
             }
+        }
+
+        public void Initialize()
+        {
+            ClientSize = ControlSize;
+            Controls.Add(fileName);
+            Controls.Add(folderName);
+            Controls.Add(status);
+            Controls.Add(removeBtn);
         }
 
         public FileDownloadingControl()
@@ -113,6 +124,7 @@ namespace QuranKareem
             fileName.Text = "إسم الملف";
             folderName.Text = "إسم المجلد";
             status.Text = "الحالة";
+            removeBtn.Click += RemoveBaseBtn_Click;
             Initialize();
         }
 
@@ -127,13 +139,18 @@ namespace QuranKareem
             fileName.Text = fileViewControl.FileName;
             folderName.Text = fileViewControl.FolderName;
             Status = Status.Waiting;
-            fileViewControl.Status = Status.Waiting;
             Initialize();
             Controls.Add(nextBtn);
             if (backColor.A == 255) BackColor = backColor;
 
             nextBtn.Click += NextBtn_Click;
             removeBtn.Click += RemoveBtn_Click;
+
+            if (current is null)
+            {
+                current = this;
+                Task.Run(DownloadFiles);
+            }
         }
 
         private void NextBtn_Click(object sender, EventArgs e)
@@ -148,7 +165,43 @@ namespace QuranKareem
         {
             FileViewControl.Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
             FilesList.Remove(Node);
+            FilesList.First.Value.Status = Status.Ready;
             Parent.Controls.Remove(this);
+        }
+
+        private static void RemoveBaseBtn_Click(object sender, EventArgs e)
+        {
+            FileDownloadingControl fdc;
+            while (FilesList.Count > 0)
+            {
+                fdc = FilesList.First.Value;
+                fdc.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+                FilesList.RemoveFirst();
+            }
+        }
+
+        public static void DownloadFiles()
+        {
+            System.Net.WebClient client = new System.Net.WebClient();
+
+            while (FilesList.Count > 0)
+            {
+                current = FilesList.First.Value;
+                FilesList.Remove(FilesList.First);
+                try
+                {
+                    current.Status = Status.Downloading;
+                    client.DownloadFile(current.FileViewControl.FileLink, current.FileViewControl.FilePath);
+                    current.Status = Status.Downloaded;
+                }
+                catch
+                {
+                    current.Status = Status.Error;
+                }
+            }
+
+            current = null;
+            client.Dispose();
         }
     }
 }

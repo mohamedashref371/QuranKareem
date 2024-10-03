@@ -135,6 +135,12 @@ namespace QuranKareem
                         checkBox.Enabled = false;
                         downloadBtn.Enabled = true;
                         break;
+                    case Status.Error:
+                        status.Text = "خطأ";
+                        status.ForeColor = Color.FromArgb(255, 0, 0);
+                        checkBox.Enabled = !IsForce;
+                        downloadBtn.Enabled = true;
+                        break;
                 }
             }
         }
