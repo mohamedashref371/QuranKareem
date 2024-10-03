@@ -259,6 +259,7 @@ namespace QuranKareem
             }
             else
             {
+                downloadForm.Owner = null;
                 Close();
             }
         }
@@ -468,44 +469,14 @@ namespace QuranKareem
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2) // XXX
             {
                 if (downloadForm is null)
+                {
                     downloadForm = new DownloadAudioQuranFiles();
+                    downloadForm.Owner = this;
+                }
                 downloadForm.InitializeAudioFile(s);
                 downloadForm.Show();
-                //if (MessageBox.Show("هل تريد تحميل المصحف لهذا الشيخ؟ .. سنطلعك بعد الانتهاء", "تحميل", MessageBoxButtons.YesNo) == DialogResult.Yes) Task.Run(() => DownloadFiles(s));
+                downloadForm.WindowState = FormWindowState.Normal;
             }
-        }
-
-        // تحميل المصاحف المسموعة في الخلفية
-        static void DownloadFiles(string s)
-        {
-            try
-            {
-                string[] links = File.ReadAllLines(s + "\\download links.txt", Encoding.UTF8);
-                string[] temp;
-                System.Net.WebClient client = new System.Net.WebClient();
-                if (links.Length > 0)
-                {
-                    for (int i = 0; i < links.Length; i++)
-                    {
-                        if (links[i].Trim().Length > 0)
-                        {
-                            try { temp = links[i].Split('/'); } catch { continue; }
-                            try
-                            {
-                                client.DownloadFile(links[i], s + "\\" + temp.Last());
-                            }
-                            catch
-                            {
-                                if (MessageBox.Show($"حدث خطأ في تحميل ملف {temp.Last()} ..\nهل تريد استكمال تحميل الملفات الأخرى؟",
-                                    "خطأ o_O", MessageBoxButtons.YesNo) == DialogResult.No) return;
-                            }
-                        }
-                    }
-                    MessageBox.Show("انتهى تحميل المصحف", ":)");
-                }
-                else MessageBox.Show("ملف تحميل المصحف فارغ", ":(");
-            }
-            catch { MessageBox.Show("حدث خطأ ما", "-_-"); }
         }
         #endregion
 
