@@ -68,18 +68,16 @@ namespace QuranKareem
 
         public static readonly Size ControlSize = new Size(782, 50);
 
-        private Status _status;
         public Status Status
         {
-            get
-            {
-                return _status;
-            }
             set
             {
-                _status = value;
-                switch (_status)
+                switch (value)
                 {
+                    case Status.NotExist:
+                        Parent.Controls.Remove(this);
+                        FileViewControl.Status = Status.NotExist;
+                        break;
                     case Status.Waiting:
                         status.Text = "ينتظر";
                         status.ForeColor = Color.FromArgb(200, 150, 0);
@@ -105,6 +103,10 @@ namespace QuranKareem
                     case Status.Error:
                         Parent.Controls.Remove(this);
                         FileViewControl.Status = Status.Error;
+                        break;
+                    case Status.Exist:
+                        Parent.Controls.Remove(this);
+                        FileViewControl.Status = Status.Exist;
                         break;
                 }
             }
@@ -164,11 +166,10 @@ namespace QuranKareem
 
         private void RemoveBtn_Click(object sender, EventArgs e)
         {
-            FileViewControl.Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+            Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
             FilesList.Remove(Node);
             if (FilesList.Count != 0)
                 FilesList.First.Value.Status = Status.Ready;
-            Parent.Controls.Remove(this);
         }
 
         private static void RemoveBaseBtn_Click(object sender, EventArgs e)
@@ -177,9 +178,8 @@ namespace QuranKareem
             while (FilesList.Count > 0)
             {
                 fdc = FilesList.First.Value;
-                fdc.FileViewControl.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+                fdc.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
                 FilesList.RemoveFirst();
-                fdc.Parent.Controls.Remove(fdc);
             }
         }
 
@@ -209,7 +209,7 @@ namespace QuranKareem
                 }
                 else
                 {
-                    current.FileViewControl.Status = Status.Exist;
+                    current.Status = Status.Exist;
                 }
             }
 
