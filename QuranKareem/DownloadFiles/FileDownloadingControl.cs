@@ -193,15 +193,23 @@ namespace QuranKareem
                 FilesList.Remove(FilesList.First);
                 if (FilesList.Count != 0)
                     FilesList.First.Value.Status = Status.Ready;
-                try
+
+                if (!File.Exists(current.FileViewControl.FilePath) || current.FileViewControl.IsForce)
                 {
-                    current.Status = Status.Downloading;
-                    client.DownloadFile(current.FileViewControl.FileLink, current.FileViewControl.FilePath);
-                    current.Status = Status.Downloaded;
+                    try
+                    {
+                        current.Status = Status.Downloading;
+                        client.DownloadFile(current.FileViewControl.FileLink, current.FileViewControl.FilePath);
+                        current.Status = Status.Downloaded;
+                    }
+                    catch
+                    {
+                        current.Status = Status.Error;
+                    }
                 }
-                catch
+                else
                 {
-                    current.Status = Status.Error;
+                    current.FileViewControl.Status = Status.Exist;
                 }
             }
 
