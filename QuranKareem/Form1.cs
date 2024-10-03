@@ -454,9 +454,28 @@ namespace QuranKareem
                     b.Cursor = Cursors.Hand;
                     b.Tag = audiosFolders[i];
                     b.Click += Button_Click; // اضافة تنبيه عند الضغط على الزر
+                    b.MouseDown += Button1_MouseDown;
                 }
                 panel.Controls.Add(b);
             }
+        }
+
+        private void Button1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                OpenDownloadForm((string)((Guna2Button)sender).Tag);
+        }
+
+        private void OpenDownloadForm(string s)
+        {
+            if (downloadForm is null)
+            {
+                downloadForm = new DownloadAudioQuranFiles();
+                downloadForm.Owner = this;
+            }
+            downloadForm.InitializeAudioFile(s);
+            downloadForm.Show();
+            downloadForm.WindowState = FormWindowState.Normal;
         }
 
         // دالة عامة لجميع الأزرار عند الضغط عليها
@@ -468,16 +487,7 @@ namespace QuranKareem
             time5.Text = quranAudio.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
             if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2) // XXX
-            {
-                if (downloadForm is null)
-                {
-                    downloadForm = new DownloadAudioQuranFiles();
-                    downloadForm.Owner = this;
-                }
-                downloadForm.InitializeAudioFile(s);
-                downloadForm.Show();
-                downloadForm.WindowState = FormWindowState.Normal;
-            }
+                OpenDownloadForm(s);
         }
         #endregion
 
