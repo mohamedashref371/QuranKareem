@@ -149,7 +149,8 @@ namespace QuranKareem
             if (current is null)
             {
                 current = this;
-                Task.Run(DownloadFiles);
+                Status = Status.Ready;
+                //Task.Run(DownloadFiles);
             }
         }
 
@@ -165,7 +166,8 @@ namespace QuranKareem
         {
             FileViewControl.Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
             FilesList.Remove(Node);
-            FilesList.First.Value.Status = Status.Ready;
+            if (FilesList.Count != 0)
+                FilesList.First.Value.Status = Status.Ready;
             Parent.Controls.Remove(this);
         }
 
@@ -175,7 +177,7 @@ namespace QuranKareem
             while (FilesList.Count > 0)
             {
                 fdc = FilesList.First.Value;
-                fdc.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
+                fdc.FileViewControl.Status = File.Exists(fdc.FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
                 FilesList.RemoveFirst();
                 fdc.Parent.Controls.Remove(fdc);
             }
@@ -189,6 +191,7 @@ namespace QuranKareem
             {
                 current = FilesList.First.Value;
                 FilesList.Remove(FilesList.First);
+                FilesList.First.Value.Status = Status.Ready;
                 try
                 {
                     current.Status = Status.Downloading;
