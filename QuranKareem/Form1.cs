@@ -24,7 +24,7 @@ namespace QuranKareem
         readonly TafseerQuran quranTafseer = TafseerQuran.Instance;
         readonly TrueTypeFontQuran quranTtf = TrueTypeFontQuran.Instance;
 
-        DownloadAudioQuranFiles downloadForm;
+        DownloadAudioQuranFiles downloadForm = null;
 
         bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
@@ -259,7 +259,8 @@ namespace QuranKareem
             }
             else
             {
-                downloadForm.Owner = null;
+                if (downloadForm != null)
+                    downloadForm.Owner = null;
                 Close();
             }
         }
