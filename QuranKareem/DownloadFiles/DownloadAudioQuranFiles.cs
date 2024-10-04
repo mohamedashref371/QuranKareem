@@ -93,7 +93,7 @@ namespace QuranKareem
         private Color GetColor()
         {
             Color clr;
-            switch (flowLayoutPanel.Controls.Count % 7)
+            switch (flowLayoutPanel.Controls.Count % 8)
             {
                 case 1:
                     clr = Color.FromArgb(250, 200, 200);
@@ -105,16 +105,19 @@ namespace QuranKareem
                     clr = Color.FromArgb(200, 250, 200);
                     break;
                 case 4:
-                    clr = Color.FromArgb(200, 250, 250);
+                    clr = Color.FromArgb(200, 200, 200);
                     break;
                 case 5:
-                    clr = Color.FromArgb(200, 200, 250);
+                    clr = Color.FromArgb(200, 250, 250);
                     break;
                 case 6:
+                    clr = Color.FromArgb(200, 200, 250);
+                    break;
+                case 7:
                     clr = Color.FromArgb(250, 200, 250);
                     break;
                 default:
-                    clr = Color.Empty;
+                    clr = Color.FromArgb(250, 250, 250);
                     break;
             }
             return clr;
