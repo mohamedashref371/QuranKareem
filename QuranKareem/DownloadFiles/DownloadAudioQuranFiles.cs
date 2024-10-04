@@ -33,6 +33,7 @@ namespace QuranKareem
                 if (currentPanel != null)
                 {
                     currentPanel.Visible = false;
+                    fileViewPage.Controls.Remove(currentPanel);
                     currentPanel = null;
                 }
                 directory = Directory.GetParent(path + "\\").Name;
@@ -40,6 +41,7 @@ namespace QuranKareem
                 {
                     currentPanel = panels[directory];
                     currentPanel.Visible = true;
+                    fileViewPage.Controls.Add(currentPanel);
                 }
                 else
                 {
@@ -47,7 +49,8 @@ namespace QuranKareem
                     {
                         Location = new Point(0, 0),
                         ClientSize = fileViewPage.ClientSize ,
-                        AutoScroll = true
+                        AutoScroll = true,
+                        Visible = true
                     };
                     fileViewPage.Controls.Add(currentPanel);
                     panels.Add(directory, currentPanel);
@@ -57,7 +60,6 @@ namespace QuranKareem
                         Location = new Point(0, 10)
                     };
                     this.path = Path.GetFullPath(path);
-                    currentPanel.Controls.Clear();
                     currentPanel.Controls.Add(baseView);
                     string s = Path.Combine(path, "download links.txt");
                     if (File.Exists(s))
@@ -69,7 +71,6 @@ namespace QuranKareem
                             InternalInitializeAudioFile(links);
                         }
                     }
-                    currentPanel.Visible = true;
                 }
             }
         }
