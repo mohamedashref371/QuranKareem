@@ -23,6 +23,8 @@ namespace QuranKareem
         private Panel currentPanel;
         private Dictionary<string, Panel> panels = new Dictionary<string, Panel>();
 
+        public void OpenDownloadingTab() => tabControl.SelectedTab = fileDownloadPage;
+
         public void InitializeAudioFile(string path = "")
         {
             tabControl.SelectedTab = fileViewPage;

@@ -260,8 +260,20 @@ namespace QuranKareem
             else
             {
                 if (downloadForm != null)
-                    downloadForm.Owner = null;
-                Close();
+                {
+                    if (FileDownloadingControl.IsBusy && MessageBox.Show("هناك ملفات ما زال يتم تحميلها، هل أنت متأكد من الخروج ؟", "؟!?", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        downloadForm.OpenDownloadingTab();
+                        downloadForm.Show();
+                        downloadForm.WindowState = FormWindowState.Normal;
+                    }
+                    else
+                    {
+                        downloadForm.Owner = null;
+                        Close();
+                    }
+                }
+                else Close();
             }
         }
 

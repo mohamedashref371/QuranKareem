@@ -13,7 +13,9 @@ namespace QuranKareem
     internal class FileDownloadingControl : Control
     {
         private static FileDownloadingControl current = null;
-        public static LinkedList<FileDownloadingControl> FilesList = new LinkedList<FileDownloadingControl>();
+        public static bool IsBusy => current != null;
+
+        private static readonly LinkedList<FileDownloadingControl> FilesList = new LinkedList<FileDownloadingControl>();
 
         private readonly Button nextBtn = new Button
         {
@@ -150,7 +152,7 @@ namespace QuranKareem
         }
 
         public readonly FileViewControl FileViewControl;
-        public readonly LinkedListNode<FileDownloadingControl> Node;
+        private readonly LinkedListNode<FileDownloadingControl> Node;
         public FileDownloadingControl(FileViewControl fileViewControl, Color backColor)
         {
             FileViewControl = fileViewControl;
@@ -209,7 +211,7 @@ namespace QuranKareem
                 current.DownloadProgress = e.ProgressPercentage;
         }
 
-        public async static void DownloadFiles()
+        public static async void DownloadFiles()
         {
             System.Net.WebClient client = new System.Net.WebClient();
             client.DownloadProgressChanged += Client_DownloadProgressChanged;
