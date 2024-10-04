@@ -223,14 +223,15 @@ namespace QuranKareem
 
                 if (!File.Exists(current.FileViewControl.FilePath) || current.FileViewControl.IsForce)
                 {
+                    current.Status = Status.Downloading;
                     try
                     {
-                        current.Status = Status.Downloading;
                         await client.DownloadFileTaskAsync(new Uri(current.FileViewControl.FileLink), current.FileViewControl.FilePath);
                         current.Status = Status.Downloaded;
                     }
                     catch
                     {
+                        File.Delete(current.FileViewControl.FilePath);
                         current.Status = Status.Error;
                     }
                 }
