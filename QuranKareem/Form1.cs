@@ -465,17 +465,26 @@ namespace QuranKareem
                     b.Size = new Size(fs.GetNewX(243), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
                     b.Tag = audiosFolders[i];
-                    b.Click += Button_Click; // اضافة تنبيه عند الضغط على الزر
-                    b.MouseDown += Button1_MouseDown;
+                    b.KeyUp += Button_KeyUp;
+                    b.MouseClick += Button1_MouseClick;
                 }
                 panel.Controls.Add(b);
             }
         }
 
-        private void Button1_MouseDown(object sender, MouseEventArgs e)
+        private void Button_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+                QuranAudioStart((string)((Guna2Button)sender).Tag);
+        }
+
+        private void Button1_MouseClick(object sender, MouseEventArgs e)
+        {
+            string s = (string)((Guna2Button)sender).Tag;
             if (e.Button == MouseButtons.Right)
-                OpenDownloadForm((string)((Guna2Button)sender).Tag);
+                OpenDownloadForm(s);
+            else if (e.Button == MouseButtons.Left)
+                QuranAudioStart(s);
         }
 
         private void OpenDownloadForm(string s)
@@ -490,16 +499,12 @@ namespace QuranKareem
             downloadForm.WindowState = FormWindowState.Normal;
         }
 
-        // دالة عامة لجميع الأزرار عند الضغط عليها
-        private void Button_Click(object sender /* الزر الذي ضغطت عليه */, EventArgs e)
+        private void QuranAudioStart(string s)
         {
-            string s = (string)((Guna2Button)sender).Tag;
             moshafAudio = s;
             quranAudio.Start(s, (int)Surah.Value, (int)Ayah.Value);
             time5.Text = quranAudio.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
-            if (File.Exists(s + "\\download links.txt") && Directory.GetFiles(s).Length <= 2) // XXX
-                OpenDownloadForm(s);
         }
         #endregion
 
