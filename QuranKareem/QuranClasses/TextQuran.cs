@@ -65,6 +65,7 @@ namespace QuranKareem
 
         public int CurrentWord { get; private set; } = -1;
         private bool isWordTableEmpty = true;
+        public bool WordMode { get; set; } = true;
 
         private bool darkMode = false;
         public bool DarkMode
@@ -454,7 +455,7 @@ namespace QuranKareem
             reader.Close(); quran.Close();
             pageRichText.Text = "";
 
-            if (!isWordTableEmpty) AyatWords(i);
+            if (WordMode && !isWordTableEmpty) AyatWords(i);
         }
 
         private void AyatWords(int page)
@@ -524,7 +525,7 @@ namespace QuranKareem
                 }
                 i++;
             }
-            if (successful && !isWordTableEmpty && i < wordsPosition.Count)
+            if (successful && WordMode && !isWordTableEmpty && i < wordsPosition.Count)
             {
                 for (int j = 1; j < wordsPosition[i]?.Count; j++)
                 {

@@ -64,6 +64,7 @@ namespace QuranKareem
         #region Words
         public int CurrentWord { get; private set; } = -1;
         private int wordsCount = 0;
+        public bool WordMode { get; set; } = true;
         private bool isWordTableEmpty = true;
         private bool isWordsDiscriminatorEmpty = false;
         #endregion
@@ -327,7 +328,7 @@ namespace QuranKareem
 
             AyahDecorations(Discriminators.AyahColors.Count > 0 || !isWordTableEmpty);
 
-            if (!isWordTableEmpty)
+            if (WordMode && !isWordTableEmpty)
             {
                 quran.Open();
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} AND word<=599 ORDER BY word DESC LIMIT 1";
@@ -383,7 +384,7 @@ namespace QuranKareem
 
         public void WordOf(int word)// سيتم تعديله ان شاء الله
         {
-            if (isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
+            if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
             {
                 CurrentWord = -1;
                 return;
@@ -400,7 +401,7 @@ namespace QuranKareem
             yMouse = (int)(yMouse * (Height / (decimal)height)) + 1;
             int word = -1; int tempInt = -371, tempInt2 = 0;
             quran.Open();
-            bool words = !isWordTableEmpty;
+            bool words = WordMode && !isWordTableEmpty;
             if (words)
             {
                 command.CommandText = $"SELECT surah,ayah,word FROM ayat JOIN words ON ayat.id = words.ayah_id WHERE page={PageNumber} AND min_x<={xMouse} AND max_x>={xMouse} AND min_y<={yMouse} AND max_y>={yMouse}";
@@ -689,7 +690,7 @@ namespace QuranKareem
         {
             if (!success) return;
             Discriminators.SetDiscriminators(path + "Colors.txt");
-            Discriminators.ActiveDiscriminators(darkMode);
+            isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
         }
 
         private void DiscriminatorsReader()

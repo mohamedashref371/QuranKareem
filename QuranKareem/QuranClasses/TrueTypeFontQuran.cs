@@ -38,6 +38,7 @@ namespace QuranKareem
         public int PageNumber { get; private set; }
         public int AyahNumber { get; private set; }
         public int CurrentWord { get; private set; } = -1;
+        public bool WordMode { get; set; } = true;
 
         private int wordsCount;
         private int glyphsCount;
@@ -505,7 +506,7 @@ namespace QuranKareem
             if (prevWord >= 0) PrevWord(prevWord);
 
             CurrentWord = -1; prevWord = -1;
-            if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
+            if (WordMode && !isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
                 int index = pageWords.FindIndex(ayahIdIndex, arr => arr?[1] == word);
                 wordIndex = index;
@@ -538,7 +539,7 @@ namespace QuranKareem
 
         private void PrevWord(int word)
         {
-            if (!isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
+            if (WordMode && !isWordsDiscriminatorEmpty && word > 0 && word <= wordsCount)
             {
                 int index = wordIndex;
                 if (index == -1) return;
@@ -597,7 +598,7 @@ namespace QuranKareem
         {
             if (!success) return;
             Discriminators.SetDiscriminators(path + "Colors.txt");
-            Discriminators.ActiveDiscriminators(darkMode);
+            isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
         }
 
         private void DiscriminatorsReader()

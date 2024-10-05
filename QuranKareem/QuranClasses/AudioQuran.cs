@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace QuranKareem
 {
@@ -78,6 +77,7 @@ namespace QuranKareem
 
         private readonly Timer wordsTimer = new Timer();
         public int CurrentWord { get; private set; } = -1;
+        public bool WordMode { get; set; } = true;
         private bool isWordTableEmpty = true;
 
         private bool added = false;
@@ -300,7 +300,7 @@ namespace QuranKareem
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); CurrentWord = -1; idWord = 0;
-            if (!isWordTableEmpty)
+            if (WordMode && !isWordTableEmpty)
             {
                 int wordCount;
                 command.CommandText = $"SELECT word FROM words WHERE ayah_id={ayahId} ORDER BY word DESC";
@@ -327,13 +327,13 @@ namespace QuranKareem
             quran.Close();
             ok = true;
             timer.Start();
-            if (!isWordTableEmpty) Words();
+            if (WordMode && !isWordTableEmpty) Words();
         }
 
         private readonly List<int> words = new List<int>();
         public void WordOf(int word)
         {
-            if (success && !isWordTableEmpty && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
+            if (success && WordMode && !isWordTableEmpty && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
             {
                 wordsTimer.Stop();
                 timer.Interval = (int)((To - words[word - 1]) / rate);
