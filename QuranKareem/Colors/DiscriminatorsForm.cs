@@ -109,6 +109,7 @@ namespace QuranKareem
             if (result != DialogResult.Cancel)
             {
                 shouldClose = true;
+                Owner = null;
                 this.Hide();
             }
         }

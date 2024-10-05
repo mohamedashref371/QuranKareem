@@ -1083,7 +1083,7 @@ namespace QuranKareem
         }
         #endregion
 
-        DiscriminatorsForm discriminatorsForm = null;
+        private DiscriminatorsForm discriminatorsForm = null;
         private void Discri_Click(object sender, EventArgs e)
         {
             if (discriminatorsForm == null)
@@ -1092,6 +1092,7 @@ namespace QuranKareem
                 discriminatorsForm.FormClosedWithYesResult += DiscriminatorsForm_Closed;
             }
             discriminatorsForm.InitializeDiscriminator();
+            discriminatorsForm.Owner = this;
             discriminatorsForm.Show();
             discriminatorsForm.WindowState = FormWindowState.Normal;
         }
