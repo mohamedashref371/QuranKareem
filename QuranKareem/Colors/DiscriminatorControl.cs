@@ -6,7 +6,8 @@ namespace QuranKareem
 {
     internal class DiscriminatorControl : Control
     {
-        public readonly int Id;
+        public int Id;
+        public string WordText { set => Controls[0].Text = value; }
         private readonly CheckBox lightPageCheck, lightAyahCheck, lightWordCheck, nightPageCheck, nightAyahCheck, nightWordCheck;
         private readonly ColorComboBox lightPageColorComboBox, lightAyahColorComboBox, lightWordColorComboBox, nightPageColorComboBox, nightAyahColorComboBox, nightWordColorComboBox;
         public static readonly Size ControlSize = new Size(771 /*800-17-12*/, 260);

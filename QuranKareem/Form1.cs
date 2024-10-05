@@ -1083,32 +1083,44 @@ namespace QuranKareem
         }
         #endregion
 
+        DiscriminatorsForm discriminatorsForm = null;
         private void Discri_Click(object sender, EventArgs e)
         {
-            if (new DiscriminatorsForm().ShowDialog() == DialogResult.Yes)
-                if (qPicture == 1)
-                {
-                    quranPicture.SetInitialColors();
-                    quranPicture.SetDiscriminators();
-                    if (dark.Text == "Dark")
-                        quranPic.BackColor = Coloring.Light.BackColor;
-                    else
-                        quranPic.BackColor = Coloring.Night.BackColor;
-                }
-                else if (qPicture == 2)
-                {
-                    quranTtf.SetInitialColors();
-                    quranTtf.SetDiscriminators();
-                    if (dark.Text == "Dark")
-                        quranTtf.PageRichText.BackColor = Coloring.Light.BackColor;
-                    else
-                        quranTtf.PageRichText.BackColor = Coloring.Night.BackColor;
-                }
+            if (discriminatorsForm == null)
+            {
+                discriminatorsForm = new DiscriminatorsForm();
+                discriminatorsForm.FormClosedWithYesResult += DiscriminatorsForm_Closed;
+            }
+            discriminatorsForm.InitializeDiscriminator();
+            discriminatorsForm.Show();
+            discriminatorsForm.WindowState = FormWindowState.Normal;
+        }
+
+        private void DiscriminatorsForm_Closed(object sender, EventArgs e)
+        {
+            if (qPicture == 1)
+            {
+                quranPicture.SetInitialColors();
+                quranPicture.SetDiscriminators();
+                if (dark.Text == "Dark")
+                    quranPic.BackColor = Coloring.Light.BackColor;
                 else
-                {
-                    quranText.DarkMode = !quranText.DarkMode;
-                    quranText.DarkMode = !quranText.DarkMode;
-                }
+                    quranPic.BackColor = Coloring.Night.BackColor;
+            }
+            else if (qPicture == 2)
+            {
+                quranTtf.SetInitialColors();
+                quranTtf.SetDiscriminators();
+                if (dark.Text == "Dark")
+                    quranTtf.PageRichText.BackColor = Coloring.Light.BackColor;
+                else
+                    quranTtf.PageRichText.BackColor = Coloring.Night.BackColor;
+            }
+            else
+            {
+                quranText.DarkMode = !quranText.DarkMode;
+                quranText.DarkMode = !quranText.DarkMode;
+            }
         }
 
         private void VideoEditor_Click(object sender, EventArgs e)

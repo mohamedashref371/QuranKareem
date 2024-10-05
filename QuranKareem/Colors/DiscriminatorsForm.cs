@@ -19,16 +19,24 @@ namespace QuranKareem
             InitializeComponent();
         }
 
-        private void DiscriminatorsForm_Load(object sender, EventArgs e)
-        {
-            DiscriminatorControl d;
+        public event EventHandler FormClosedWithYesResult;
 
-            d = new DiscriminatorControl(-3713317, "ألوان أولية", false)
+        private int dCount;
+        private DiscriminatorControl d;
+        public void InitializeDiscriminator()
+        {
+            shouldClose = false;
+            if (panel.Controls.Count == 0)
             {
-                Location = new Point(12, 12),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-            panel.Controls.Add(d);
+                d = new DiscriminatorControl(-3713317, "ألوان أولية", false)
+                {
+                    Location = new Point(12, 12),
+                    BorderStyle = BorderStyle.FixedSingle
+                };
+                panel.Controls.Add(d);
+            }
+            else d = (DiscriminatorControl)panel.Controls[0];
+
             d.LightPageColor = Coloring.Light.BackColor;
             d.LightAyahColor = Coloring.Light.AyahColor;
             d.LightWordColor = Coloring.Light.WordColor;
@@ -38,51 +46,70 @@ namespace QuranKareem
             //---------------
 
             Discriminator dis;
-            int counter = 1;
+            int counter = 0;
+            Color clr;
+
             foreach (var desc in Discriminators.Descriptions)
             {
-                d = new DiscriminatorControl(desc.Key, desc.Value)
-                {
-                    Location = new Point(12, counter * (DiscriminatorControl.ControlSize.Height + 20) + 32),
-                };
-                panel.Controls.Add(d);
                 counter++;
+                if (counter > dCount)
+                {
+                    d = new DiscriminatorControl(desc.Key, desc.Value)
+                    {
+                        Location = new Point(12, counter * (DiscriminatorControl.ControlSize.Height + 20) + 32),
+                    };
+                    panel.Controls.Add(d);
+                    dCount = counter;
+                }
+                else
+                {
+                    d = (DiscriminatorControl)panel.Controls[counter];
+                    d.Id = desc.Key;
+                    d.WordText = desc.Value;
+                    d.Visible = true;
+                }
+
                 for (int i = 0; i <= 1; i++)
                 {
                     for (int j = 0; j <= 2; j++)
                     {
                         dis = Discriminators.WordsDiscriminators.FirstOrDefault(x => x.Id == desc.Key && (x.Lighting == i || x.Lighting == 2) && x.Condition == j);
-                        if (dis != null)
-                        {
-                            if (i == 0 && j == 0) d.LightPageColor = dis.Color;
-                            else if (i == 0 && j == 1) d.LightAyahColor = dis.Color;
-                            else if (i == 0 && j == 2) d.LightWordColor = dis.Color;
-                            else if (i == 1 && j == 0) d.NightPageColor = dis.Color;
-                            else if (i == 1 && j == 1) d.NightAyahColor = dis.Color;
-                            else if (i == 1 && j == 2) d.NightWordColor = dis.Color;
-                        }
+                        clr = dis == null ? Color.Empty : dis.Color;
+
+                        if (i == 0 && j == 0) d.LightPageColor = clr;
+                        else if (i == 0 && j == 1) d.LightAyahColor = clr;
+                        else if (i == 0 && j == 2) d.LightWordColor = clr;
+                        else if (i == 1 && j == 0) d.NightPageColor = clr;
+                        else if (i == 1 && j == 1) d.NightAyahColor = clr;
+                        else if (i == 1 && j == 2) d.NightWordColor = clr;
                     }
                 }
             }
+
+            while (counter < dCount)
+            {
+                counter++;
+                d = (DiscriminatorControl)panel.Controls[counter];
+                d.Visible = false;
+            }
         }
 
+        private bool shouldClose = false;
         private void DiscriminatorsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (shouldClose) return;
             DialogResult result = MessageBox.Show("هل تريد حفظ التغييرات؟", "رسالة", MessageBoxButtons.YesNoCancel);
-            if (result == DialogResult.Cancel)
-            {
-                e.Cancel = true;
-            }
+            e.Cancel = true;
 
-            else if (result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 AddIn(Discriminators.WordsDiscriminators);
-                DialogResult = DialogResult.Yes;
+                FormClosedWithYesResult?.Invoke(this, e);
             }
-
-            else
+            if (result != DialogResult.Cancel)
             {
-                DialogResult = DialogResult.No;
+                shouldClose = true;
+                this.Hide();
             }
         }
 

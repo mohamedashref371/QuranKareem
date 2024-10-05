@@ -52,7 +52,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Words Discriminators";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DiscriminatorsForm_FormClosing);
-            this.Load += new System.EventHandler(this.DiscriminatorsForm_Load);
             this.ResumeLayout(false);
 
         }
