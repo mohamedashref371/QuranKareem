@@ -127,6 +127,8 @@ namespace QuranKareem
             for (int i = 1; i < panel.Controls.Count; i++)
             {
                 d = (DiscriminatorControl)panel.Controls[i];
+                if (!d.Visible) break;
+
                 if (d.LightPageColor != Color.Empty)
                     list.Add(new Discriminator(d.Id, 0, 0, d.LightPageColor));
                 if (d.LightAyahColor != Color.Empty)
