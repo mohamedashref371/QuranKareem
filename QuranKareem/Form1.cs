@@ -257,23 +257,15 @@ namespace QuranKareem
                     quranPic.Location = quranPictureLocation;
                 }
             }
+            else if (downloadForm != null && FileDownloadingControl.IsBusy && MessageBox.Show("هناك ملفات ما زال يتم تحميلها، هل أنت متأكد من الخروج ؟", "؟!?", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                downloadForm.OpenDownloadingTab();
+                downloadForm.Show();
+                downloadForm.WindowState = FormWindowState.Normal;
+            }
             else
             {
-                if (downloadForm != null)
-                {
-                    if (FileDownloadingControl.IsBusy && MessageBox.Show("هناك ملفات ما زال يتم تحميلها، هل أنت متأكد من الخروج ؟", "؟!?", MessageBoxButtons.YesNo) == DialogResult.No)
-                    {
-                        downloadForm.OpenDownloadingTab();
-                        downloadForm.Show();
-                        downloadForm.WindowState = FormWindowState.Normal;
-                    }
-                    else
-                    {
-                        downloadForm.Owner = null;
-                        Close();
-                    }
-                }
-                else Close();
+                Close();
             }
         }
 
@@ -490,10 +482,9 @@ namespace QuranKareem
         private void OpenDownloadForm(string s)
         {
             if (downloadForm is null)
-            {
                 downloadForm = new DownloadAudioQuranFiles();
-                downloadForm.Owner = this;
-            }
+
+            downloadForm.Owner = this;
             downloadForm.InitializeAudioFile(s);
             downloadForm.Show();
             downloadForm.WindowState = FormWindowState.Normal;

@@ -150,8 +150,12 @@ namespace QuranKareem
 
         private void DownloadAudioQuranFiles_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            this.Hide();
+            Owner = null;
+            if (e.CloseReason != CloseReason.FormOwnerClosing)
+            {
+                e.Cancel = true;
+                this.Hide();
+            }
         }
     }
 }
