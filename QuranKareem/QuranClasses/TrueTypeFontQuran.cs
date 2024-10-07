@@ -5,11 +5,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using TheArtOfDevHtmlRenderer.Adapters;
 using static QuranKareem.Coloring;
 
 namespace QuranKareem
