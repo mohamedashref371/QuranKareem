@@ -64,7 +64,7 @@ namespace QuranKareem
                     string s = Path.Combine(path, "download links.txt");
                     if (File.Exists(s))
                     {
-                        string[] links = File.ReadAllLines(s, Encoding.UTF8).Where(link => link.Trim() != "").ToArray();
+                        string[] links = File.ReadAllLines(s, Encoding.UTF8).Select(link => link.Trim()).Where(link => link != "").ToArray();
 #warning links.Length > 1
                         if (links.Length > 1)
                         {
@@ -80,7 +80,8 @@ namespace QuranKareem
             string fileName, fullPath;
             for (int i = 0; i < links.Length; i++)
             {
-                fileName = Path.GetFileName(links[i]);
+                try { fileName = Path.GetFileName(links[i]); }
+                catch { continue; }
                 fullPath = Path.Combine(path, fileName);
                 fvc = new FileViewControl(links[i], fullPath, fileName, directory, File.Exists(fullPath))
                 {
