@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace QuranKareem
 {
@@ -29,7 +26,7 @@ namespace QuranKareem
             UseVisualStyleBackColor = true
         };
 
-        public int DownloadProgress
+        public int ProgressPercentage
         {
             set
             {
@@ -37,6 +34,34 @@ namespace QuranKareem
                     nextBtn.Invoke(new Action(() => nextBtn.Text = $"{value}%"));
                 else
                     nextBtn.Text = $"{value}%";
+            }
+        }
+
+        private static readonly string[] sizes = { "Bytes", "KB", "MB", "GB", "TB" };
+        public long TotalBytesToReceive
+        {
+            set
+            {
+                if (removeBtn.Text != "إزالة") return;
+                string s;
+                if (value <= 0) s = "Size: ?";
+                else
+                {
+                    double len = value;
+                    int order = 0;
+                    while (len >= 1024 && order < sizes.Length - 1)
+                    {
+                        order++;
+                        len /= 1024;
+                    }
+                    if (len >= 1000) len = Math.Round(len);
+                    s = $"{len:0.##} {sizes[order]}";
+                }
+
+                if (removeBtn.InvokeRequired)
+                    removeBtn.Invoke(new Action(() => removeBtn.Text = s));
+                else
+                    removeBtn.Text = s;
             }
         }
 
@@ -72,9 +97,9 @@ namespace QuranKareem
             BackColor = Color.FromArgb(255, 192, 192),
             FlatStyle = FlatStyle.Popup,
             Font = new Font("Tahoma", 12F),
-            Location = new Point(14, 9),
-            RightToLeft = RightToLeft.Yes,
-            Size = new Size(97, 32),
+            Location = new Point(11, 9),
+            //RightToLeft = RightToLeft.Yes,
+            Size = new Size(100, 32),
             TabIndex = 1,
             Text = "إزالة"
         };
@@ -152,12 +177,12 @@ namespace QuranKareem
         }
 
         public readonly FileViewControl FileViewControl;
-        private readonly LinkedListNode<FileDownloadingControl> Node;
+        private readonly LinkedListNode<FileDownloadingControl> node;
         public FileDownloadingControl(FileViewControl fileViewControl, Color backColor)
         {
             FileViewControl = fileViewControl;
-            Node = new LinkedListNode<FileDownloadingControl>(this);
-            FilesList.AddLast(Node);
+            node = new LinkedListNode<FileDownloadingControl>(this);
+            FilesList.AddLast(node);
 
             fileName.Text = fileViewControl.FileName;
             folderName.Text = fileViewControl.FolderName;
@@ -182,15 +207,15 @@ namespace QuranKareem
         private void NextBtn_Click(object sender, EventArgs e)
         {
             FilesList.First.Value.Status = Status.Waiting;
-            FilesList.Remove(Node);
-            FilesList.AddFirst(Node);
+            FilesList.Remove(node);
+            FilesList.AddFirst(node);
             Status = Status.Ready;
         }
 
         private void RemoveBtn_Click(object sender, EventArgs e)
         {
             Status = File.Exists(FileViewControl.FilePath) ? Status.Exist : Status.NotExist;
-            FilesList.Remove(Node);
+            FilesList.Remove(node);
             if (FilesList.Count != 0)
                 FilesList.First.Value.Status = Status.Ready;
         }
@@ -208,7 +233,10 @@ namespace QuranKareem
         private static void Client_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
         {
             if (current != null)
-                current.DownloadProgress = e.ProgressPercentage;
+            {
+                current.ProgressPercentage = e.ProgressPercentage;
+                current.TotalBytesToReceive = e.TotalBytesToReceive;
+            }
         }
 
         public static async void DownloadFiles()
