@@ -57,7 +57,7 @@
             // vttPath
             // 
             this.vttPath.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vttPath.Location = new System.Drawing.Point(462, 120);
+            this.vttPath.Location = new System.Drawing.Point(462, 117);
             this.vttPath.Name = "vttPath";
             this.vttPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.vttPath.Size = new System.Drawing.Size(104, 36);
@@ -70,18 +70,18 @@
             // 
             this.vttPathLabel.AutoSize = true;
             this.vttPathLabel.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.vttPathLabel.Location = new System.Drawing.Point(593, 127);
+            this.vttPathLabel.Location = new System.Drawing.Point(593, 112);
             this.vttPathLabel.Name = "vttPathLabel";
             this.vttPathLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.vttPathLabel.Size = new System.Drawing.Size(195, 23);
+            this.vttPathLabel.Size = new System.Drawing.Size(195, 46);
             this.vttPathLabel.TabIndex = 6;
-            this.vttPathLabel.Text = "مسار الـ  captions.vtt :";
+            this.vttPathLabel.Text = "مسار الـ  captions.vtt :\r\nأو TimedText.json";
             this.vttPathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtNameLabel
             // 
             this.txtNameLabel.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.txtNameLabel.Location = new System.Drawing.Point(12, 180);
+            this.txtNameLabel.Location = new System.Drawing.Point(12, 181);
             this.txtNameLabel.Name = "txtNameLabel";
             this.txtNameLabel.Size = new System.Drawing.Size(444, 36);
             this.txtNameLabel.TabIndex = 7;
@@ -96,7 +96,7 @@
             // openVttDialog
             // 
             this.openVttDialog.FileName = "captions.vtt";
-            this.openVttDialog.Filter = "VTT Files|*.vtt";
+            this.openVttDialog.Filter = "VTT Files|*.vtt|JSON Files|*.json";
             // 
             // label1
             // 
@@ -175,7 +175,7 @@
             // textPath
             // 
             this.textPath.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.textPath.Location = new System.Drawing.Point(462, 181);
+            this.textPath.Location = new System.Drawing.Point(462, 182);
             this.textPath.Name = "textPath";
             this.textPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.textPath.Size = new System.Drawing.Size(104, 36);
@@ -193,7 +193,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.label3.Location = new System.Drawing.Point(619, 172);
+            this.label3.Location = new System.Drawing.Point(619, 173);
             this.label3.Name = "label3";
             this.label3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label3.Size = new System.Drawing.Size(158, 46);
@@ -301,7 +301,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 14F);
-            this.label5.Location = new System.Drawing.Point(218, 127);
+            this.label5.Location = new System.Drawing.Point(218, 124);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label5.Size = new System.Drawing.Size(228, 23);
@@ -314,7 +314,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 569);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.arrow3);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.arrow4);
@@ -323,7 +322,6 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.arrow1);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.textPath);
             this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.mp3NameLabel);
@@ -333,7 +331,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.vttPath);
             this.Controls.Add(this.vttPathLabel);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.txtNameLabel);
+            this.Controls.Add(this.label5);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "YoutubeCaptionsForm";

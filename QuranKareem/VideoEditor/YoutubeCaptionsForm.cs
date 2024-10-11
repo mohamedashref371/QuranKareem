@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace QuranKareem
@@ -18,7 +19,11 @@ namespace QuranKareem
             {
                 if (saveTextDialog.ShowDialog() == DialogResult.OK)
                 {
-                    YoutubeCaptions.SetCaptionsVTT(openVttDialog.FileName, saveTextDialog.FileName);
+                    string s = Path.GetExtension(openVttDialog.FileName).ToLower();
+                    if (s == ".vtt")
+                        YoutubeCaptions.SetCaptionsVTT(openVttDialog.FileName, saveTextDialog.FileName);
+                    else if (s == ".json")
+                        YoutubeTimedText.JsonDeserializing(openVttDialog.FileName, saveTextDialog.FileName);
                     txtNameLabel.Text = saveTextDialog.FileName;
                 }
             }

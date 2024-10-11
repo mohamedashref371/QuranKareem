@@ -21,11 +21,11 @@ namespace QuranKareem
         private string path = "";
         private string directory = "";
         private Panel currentPanel;
-        private Dictionary<string, Panel> panels = new Dictionary<string, Panel>();
+        private readonly Dictionary<string, Panel> panels = new Dictionary<string, Panel>();
 
         public void OpenDownloadingTab() => tabControl.SelectedTab = fileDownloadPage;
 
-        public void InitializeAudioFile(string path = "")
+        public void InitializeAudioFile(string path)
         {
             tabControl.SelectedTab = fileViewPage;
             if (path != null && path.Trim() != "" && this.path != path)
@@ -76,6 +76,7 @@ namespace QuranKareem
         }
         private void InternalInitializeAudioFile(string[] links)
         {
+            //currentPanel.SuspendLayout();
             FileViewControl fvc;
             string fileName, fullPath;
             for (int i = 0; i < links.Length; i++)
@@ -88,8 +89,9 @@ namespace QuranKareem
                     Location = new Point(0, FileViewControl.ControlSize.Height * (i + 1) + 15)
                 };
                 fvc.DownloadButtonClick += DownloadBtn_Click;
-                currentPanel.Controls.Add(fvc);
+                currentPanel.Controls.Add(fvc); // error at call InitializeAudioFile 16 times
             }
+            //currentPanel.ResumeLayout();
         }
 
         private Color GetColor()
