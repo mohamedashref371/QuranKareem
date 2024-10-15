@@ -42,7 +42,6 @@ namespace QuranKareem
         {
             set
             {
-                if (removeBtn.Text != "إزالة") return;
                 string s;
                 if (value <= 0) s = "Size: ?";
                 else
@@ -235,7 +234,8 @@ namespace QuranKareem
             if (current != null)
             {
                 current.ProgressPercentage = e.ProgressPercentage;
-                current.TotalBytesToReceive = e.TotalBytesToReceive;
+                if (current.removeBtn.Text == "إزالة")
+                    current.TotalBytesToReceive = e.TotalBytesToReceive;
             }
         }
 
@@ -271,8 +271,8 @@ namespace QuranKareem
                 }
             }
 
-            current = null;
             client.Dispose();
+            current = null;
         }
     }
 }
