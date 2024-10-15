@@ -232,11 +232,10 @@ namespace QuranKareem
         private static void Client_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
         {
             if (current != null)
-            {
                 current.ProgressPercentage = e.ProgressPercentage;
-                if (current.removeBtn.Text == "إزالة")
-                    current.TotalBytesToReceive = e.TotalBytesToReceive;
-            }
+
+            if (current?.removeBtn.Text == "إزالة")
+                current.TotalBytesToReceive = e.TotalBytesToReceive;
         }
 
         public static async void DownloadFiles()
