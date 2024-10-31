@@ -116,6 +116,8 @@ namespace QuranKareem
 
         public static float[] SetFinalText(string path, int surah, int ayahStart, int ayahEnd, List<int> ayahword, List<float> timestamps)
         {
+            ayahword.Clear();
+            timestamps.Clear();
             List<string> lines = File.ReadAllLines(path).ToList();
             lines = lines.Where(ln => !string.IsNullOrWhiteSpace(ln)).ToList();
 
