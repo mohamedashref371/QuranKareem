@@ -21,7 +21,7 @@ https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chap
 
 'The idea of recitation by selecting words' was taken from [Quran.com](https://quran.com)<br>
 Since I quoted the words timings from [Quran.com](https://quran.com), I will adopt their calculation of the words of the Quran,<br>
-which is 77429 words for visual quran or 77430 words for audio quran.<br>(the difference is in Surah 037, Ayah 130, the third word - I will choose 77430 then I separate the word -بعدما-)
+which is 77429 words for visual quran or 77430 words for audio quran.<br>(the difference is in Surah 037, Ayah 130, the third word - I will choose 77430) then I separate the word -بعدما-
 
 You can now add any sheikh you want smoothly and easily through the program.<br>
 Databases are publicly readable, so you can add Al-Mashaykh in any other way you prefer.
