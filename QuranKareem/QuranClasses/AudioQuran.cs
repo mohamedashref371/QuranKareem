@@ -4,7 +4,9 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace QuranKareem
 {
@@ -458,6 +460,69 @@ namespace QuranKareem
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
+        public bool MushafCombiner(string folderPath)
+        {
+            try { folderPath = Path.GetFullPath(folderPath); } catch { return false; }
+            if (folderPath[folderPath.Length - 1] != '\\') folderPath += "\\";
+            if (!Directory.Exists(folderPath) || File.Exists(folderPath + "000.db") || !File.Exists("audios\\database for audios.db")) return false;
+
+            string newFolder = $"{folderPath}\\{Path.GetDirectoryName(folderPath)} - {DateTime.Now.Ticks}\\";
+            Directory.CreateDirectory(newFolder);
+            File.Copy("audios\\database for audios.db", newFolder + "000.db");
+            Stop();
+
+            Regex regex = new Regex(@"^(s\d{1,3}a\d{1,3}|s?\d{3}a?\d{3})\.mp3$", RegexOptions.IgnoreCase);
+
+            List<AudioFile> audioFiles = Directory.GetFiles(folderPath)
+                .Where(file => regex.IsMatch(Path.GetFileName(file)))
+                .Select(file => new AudioFile
+                {
+                    Surah = int.Parse(regex.Match(Path.GetFileName(file)).Groups[1].Value),
+                    Ayah = int.Parse(regex.Match(Path.GetFileName(file)).Groups[2].Value),
+                    FilePath = file,
+                })
+                .OrderBy(file => file.Surah).ThenBy(file => file.Ayah)
+                .ToList();
+
+            quran.ConnectionString = $"Data Source={newFolder}000.db;Version=3;";
+            quran.Open();
+
+            int index = 0;
+            string outputFilePath;
+            for (int surah = 0; surah <= 114; surah++)
+            {
+                int timestamp_to = 0;
+                outputFilePath = Path.Combine(newFolder, surah.ToString().PadLeft(3, '0') + ".mp3");
+                using (var outputWaveFile = new WaveFileWriter(outputFilePath, new WaveFormat()))
+                {
+                    while (index < audioFiles.Count)
+                    {
+                        if (audioFiles[index].Surah != surah) break;
+                        using (var reader = new Mp3FileReader(audioFiles[index].FilePath))
+                        {
+                            timestamp_to += (int)reader.TotalTime.TotalMilliseconds;
+                            command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
+                            command.ExecuteNonQuery();
+
+                            byte[] buffer = new byte[reader.Length];
+                            reader.Read(buffer, 0, (int)reader.Length);
+                            outputWaveFile.Write(buffer, 0, buffer.Length);
+                        }
+                        index++;
+                    }
+                }
+            }
+
+            quran.Close();
+            return true;
+        }
+        private struct AudioFile
+        {
+            public int Surah;
+            public int Ayah;
+            public string FilePath;
+        }
+
         public float[] WordsList(int ayahStart, int ayahEnd, out string mp3Url, List<int> ayahword, List<float> timestamps)
         {
             mp3Url = mp3.URL;
@@ -466,7 +531,7 @@ namespace QuranKareem
 
             if (!success || isWordTableEmpty || mp3.URL == "" || ayahword == null || timestamps == null) return null;
 
-            int tStart = 0, tEnd = 0, to ;
+            int tStart = 0, tEnd = 0, to;
             quran.Open();
 
             command.CommandText = $"SELECT MIN(id),MAX(id) FROM ayat WHERE surah={SurahNumber} AND ayah>={ayahStart} AND ayah<={ayahEnd}";
@@ -478,7 +543,7 @@ namespace QuranKareem
             }
             reader.Close(); command.Cancel();
 
-            command.CommandText = $"SELECT MIN(timestamp_to),MAX(timestamp_to) FROM ayat WHERE id>={tStart-1} AND id<={tEnd}";
+            command.CommandText = $"SELECT MIN(timestamp_to),MAX(timestamp_to) FROM ayat WHERE id>={tStart - 1} AND id<={tEnd}";
             reader = command.ExecuteReader();
             if (reader.Read())
             {
