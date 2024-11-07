@@ -85,7 +85,7 @@
             this.descSave = new System.Windows.Forms.Button();
             this.timestampChangeEventCheck = new System.Windows.Forms.CheckBox();
             this.endAyatCheck = new System.Windows.Forms.CheckBox();
-            this.splitter = new System.Windows.Forms.Button();
+            this.combiner = new System.Windows.Forms.Button();
             this.splitAll = new System.Windows.Forms.Button();
             this.srtFile = new System.Windows.Forms.Button();
             this.saveSRTFile = new System.Windows.Forms.SaveFileDialog();
@@ -872,15 +872,15 @@
             this.endAyatCheck.Visible = false;
             this.endAyatCheck.CheckedChanged += new System.EventHandler(this.EndAyatCheck_CheckedChanged);
             // 
-            // splitter
+            // combiner
             // 
-            this.splitter.Location = new System.Drawing.Point(930, 3);
-            this.splitter.Name = "splitter";
-            this.splitter.Size = new System.Drawing.Size(71, 22);
-            this.splitter.TabIndex = 36;
-            this.splitter.Text = "حفظ الآية";
-            this.splitter.UseVisualStyleBackColor = true;
-            this.splitter.Click += new System.EventHandler(this.Splitter_Click);
+            this.combiner.Location = new System.Drawing.Point(923, 3);
+            this.combiner.Name = "combiner";
+            this.combiner.Size = new System.Drawing.Size(83, 22);
+            this.combiner.TabIndex = 36;
+            this.combiner.Text = "تجميع الآيات";
+            this.combiner.UseVisualStyleBackColor = true;
+            this.combiner.Click += new System.EventHandler(this.Combiner_Click);
             // 
             // splitAll
             // 
@@ -1109,7 +1109,7 @@
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.splitAll);
-            this.Controls.Add(this.splitter);
+            this.Controls.Add(this.combiner);
             this.Controls.Add(this.endAyatCheck);
             this.Controls.Add(this.timestampChangeEventCheck);
             this.Controls.Add(this.descSave);
@@ -1241,7 +1241,7 @@
         private System.Windows.Forms.Button descSave;
         private System.Windows.Forms.CheckBox timestampChangeEventCheck;
         private System.Windows.Forms.CheckBox endAyatCheck;
-        private System.Windows.Forms.Button splitter;
+        private System.Windows.Forms.Button combiner;
         private System.Windows.Forms.Button splitAll;
         private System.Windows.Forms.Button srtFile;
         private System.Windows.Forms.SaveFileDialog saveSRTFile;

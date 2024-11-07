@@ -460,11 +460,11 @@ namespace QuranKareem
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
         }
 
-        public bool MushafCombiner(string folderPath)
+        public string[] MushafCombiner(string folderPath)
         {
-            try { folderPath = Path.GetFullPath(folderPath); } catch { return false; }
+            try { folderPath = Path.GetFullPath(folderPath); } catch { return null; }
             if (folderPath[folderPath.Length - 1] != '\\') folderPath += "\\";
-            if (!Directory.Exists(folderPath) || File.Exists(folderPath + "000.db") || !File.Exists("audios\\database for audios.db")) return false;
+            if (!Directory.Exists(folderPath) || File.Exists(folderPath + "000.db") || !File.Exists("audios\\database for audios.db")) return null;
 
             string newFolder = $"{folderPath}{DateTime.Now.Ticks}\\";
             Directory.CreateDirectory(newFolder);
@@ -482,6 +482,7 @@ namespace QuranKareem
             quran.ConnectionString = $"Data Source={newFolder}000.db;Version=3;";
             quran.Open();
 
+            List<string> list = new List<string>();
             int index = 0, timestamp_to;
             string outputFilePath;
             Mp3Frame frame;
@@ -494,17 +495,29 @@ namespace QuranKareem
                     while (index < audioFiles.Count)
                     {
                         if (audioFiles[index].Surah != surah) break;
-                        using (var reader = new Mp3FileReader(audioFiles[index].FilePath))
+                        try
                         {
-                            timestamp_to += (int)reader.TotalTime.TotalMilliseconds;
-                            command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
-                            command.ExecuteNonQuery();
+                            using (var reader = new Mp3FileReader(audioFiles[index].FilePath))
+                            {
+                                timestamp_to += (int)reader.TotalTime.TotalMilliseconds;
+                                command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
+                                command.ExecuteNonQuery();
 
-                            if (outputFile.Position == 0 && reader.Id3v2Tag != null)
-                                outputFile.Write(reader.Id3v2Tag.RawData, 0, reader.Id3v2Tag.RawData.Length);
-                            
-                            while ((frame = reader.ReadNextFrame()) != null)
-                                outputFile.Write(frame.RawData, 0, frame.RawData.Length);
+                                if (outputFile.Position == 0 && reader.Id3v2Tag != null)
+                                    outputFile.Write(reader.Id3v2Tag.RawData, 0, reader.Id3v2Tag.RawData.Length);
+
+                                while ((frame = reader.ReadNextFrame()) != null)
+                                    outputFile.Write(frame.RawData, 0, frame.RawData.Length);
+                            }
+                        }
+                        catch
+                        {
+                            list.Add(audioFiles[index].FilePath);
+                            if (list.Count >= 50)
+                            {
+                                quran.Close();
+                                return list.ToArray();
+                            }
                         }
                         index++;
                     }
@@ -512,7 +525,7 @@ namespace QuranKareem
             }
 
             quran.Close();
-            return true;
+            return list.ToArray();
         }
         private AudioFile GetAudioFile(string file, Regex regex)
         {

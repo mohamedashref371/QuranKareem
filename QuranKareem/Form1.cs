@@ -167,7 +167,7 @@ namespace QuranKareem
             AddMashaykhButtons();
 
             // The Controls which backcolor is not subject to the form's backcolor.
-            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, splitter, videoEditor, youtubeCaptions, discri });
+            ControlsList.AddRange(new List<Control> { Surahs, Surah, Juz, Hizb, Quarter, Page, Ayah, pause, stop, Rate, SurahRepeat, AyahRepeat, copy, search, searchClose, searchText, searchList, srtFile, extension, comment, tafasir, tafseerCopy, saveRTF, descSave, latest, moshaf, addNewMoqrea, splitAll, combiner, videoEditor, youtubeCaptions, discri });
             success = true;
         }
 
@@ -846,8 +846,18 @@ namespace QuranKareem
         // مستوى إرتفاع الصوت
         private void Volume_ValueChanged(object sender, EventArgs e) => quranAudio.Volume = volume.Value;
 
-        // حفظ الآية
-        private void Splitter_Click(object sender, EventArgs e) => quranAudio.SurahSplitter();
+        // تجميع الآيات المقطعة
+        private void Combiner_Click(object sender, EventArgs e)
+        {
+            if (folder.ShowDialog() == DialogResult.OK)
+            {
+                // S002A003.mp3 , S2A3.mp3 , 002003.mp3
+                string[] arr = quranAudio.MushafCombiner(folder.SelectedPath);
+                if (arr == null) MessageBox.Show("تأكد انك تختار المجلد الصحيح");
+                else if (arr.Length == 0) MessageBox.Show("نعتقد أنه قد تمت العملية بنجاح");
+                else MessageBox.Show("حدثت أخطاء في الملفات الآتية: " + string.Join(", ", arr));
+            }
+        }
 
         // تقطيع السورة لآيات
         private void SplitAll_Click(object sender, EventArgs e)
@@ -1006,7 +1016,7 @@ namespace QuranKareem
             {
                 addNewMoqrea.Text = "إلغاء"; stop.Enabled = false;
                 moshafAudio = folder.SelectedPath;
-                splitter.Visible = false; splitAll.Visible = false;
+                combiner.Visible = false; splitAll.Visible = false;
                 videoEditor.Visible = false;
                 youtubeCaptions.Visible = false;
                 timestampChangeEventCheck.Visible = true;
@@ -1021,7 +1031,7 @@ namespace QuranKareem
                 timestampChangeEventCheck.Visible = false;
                 endAyatCheck.Visible = false;
                 ShaykhDesc.Enabled = false; addShaykhInfo.Enabled = false;
-                splitter.Visible = true; splitAll.Visible = true;
+                combiner.Visible = true; splitAll.Visible = true;
                 videoEditor.Visible = true;
                 youtubeCaptions.Visible = true;
             }
@@ -1133,7 +1143,7 @@ namespace QuranKareem
 
         private void About_Click(object sender, EventArgs e) => Process.Start("https://youtube.com/channel/UCS2-gBRB3I7K6xA-Vuf-lGQ");
 
-        private void Guna2HtmlLabel1_Click(object sender, EventArgs e) { }
+        private void Guna2HtmlLabel1_Click(object sender, EventArgs e) => About_Click(null, null);
 
     }
 }
