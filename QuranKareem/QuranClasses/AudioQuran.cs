@@ -512,7 +512,7 @@ namespace QuranKareem
                         }
                         catch
                         {
-                            list.Add(audioFiles[index].FilePath);
+                            list.Add(Path.GetFileName(audioFiles[index].FilePath));
                             if (list.Count >= 50)
                             {
                                 quran.Close();
