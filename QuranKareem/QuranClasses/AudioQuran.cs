@@ -466,33 +466,29 @@ namespace QuranKareem
             if (folderPath[folderPath.Length - 1] != '\\') folderPath += "\\";
             if (!Directory.Exists(folderPath) || File.Exists(folderPath + "000.db") || !File.Exists("audios\\database for audios.db")) return false;
 
-            string newFolder = $"{folderPath}\\{Path.GetDirectoryName(folderPath)} - {DateTime.Now.Ticks}\\";
+            string newFolder = $"{folderPath}{DateTime.Now.Ticks}\\";
             Directory.CreateDirectory(newFolder);
             File.Copy("audios\\database for audios.db", newFolder + "000.db");
             Stop();
 
-            Regex regex = new Regex(@"^(s\d{1,3}a\d{1,3}|s?\d{3}a?\d{3})\.mp3$", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"^(s(\d{1,3})a(\d{1,3})|s?(\d{3})a?(\d{3}))\.mp3$", RegexOptions.IgnoreCase);
 
             List<AudioFile> audioFiles = Directory.GetFiles(folderPath)
                 .Where(file => regex.IsMatch(Path.GetFileName(file)))
-                .Select(file => new AudioFile
-                {
-                    Surah = int.Parse(regex.Match(Path.GetFileName(file)).Groups[1].Value),
-                    Ayah = int.Parse(regex.Match(Path.GetFileName(file)).Groups[2].Value),
-                    FilePath = file,
-                })
+                .Select(file => GetAudioFile(file, regex))
                 .OrderBy(file => file.Surah).ThenBy(file => file.Ayah)
                 .ToList();
 
             quran.ConnectionString = $"Data Source={newFolder}000.db;Version=3;";
             quran.Open();
 
-            int index = 0;
+            int index = 0, timestamp_to;
             string outputFilePath;
-            for (int surah = 0; surah <= 114; surah++)
+            byte[] buffer;
+            for (int surah = 1; surah <= 114; surah++)
             {
-                int timestamp_to = 0;
-                outputFilePath = Path.Combine(newFolder, surah.ToString().PadLeft(3, '0') + ".mp3");
+                timestamp_to = 0;
+                outputFilePath = newFolder + surah.ToString().PadLeft(3, '0') + ".mp3";
                 using (var outputWaveFile = new WaveFileWriter(outputFilePath, new WaveFormat()))
                 {
                     while (index < audioFiles.Count)
@@ -504,7 +500,7 @@ namespace QuranKareem
                             command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
                             command.ExecuteNonQuery();
 
-                            byte[] buffer = new byte[reader.Length];
+                            buffer = new byte[reader.Length];
                             reader.Read(buffer, 0, (int)reader.Length);
                             outputWaveFile.Write(buffer, 0, buffer.Length);
                         }
@@ -515,6 +511,16 @@ namespace QuranKareem
 
             quran.Close();
             return true;
+        }
+        private AudioFile GetAudioFile(string file, Regex regex)
+        {
+            GroupCollection group = regex.Match(Path.GetFileName(file)).Groups;
+            return new AudioFile
+            {
+                Surah = int.Parse(group[2].Success ? group[2].Value : group[4].Value),
+                Ayah = int.Parse(group[3].Success ? group[3].Value : group[5].Value),
+                FilePath = file
+            };
         }
         private struct AudioFile
         {
