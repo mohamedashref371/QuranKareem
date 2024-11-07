@@ -484,12 +484,12 @@ namespace QuranKareem
 
             int index = 0, timestamp_to;
             string outputFilePath;
-            byte[] buffer;
+            Mp3Frame frame;
             for (int surah = 1; surah <= 114; surah++)
             {
                 timestamp_to = 0;
                 outputFilePath = newFolder + surah.ToString().PadLeft(3, '0') + ".mp3";
-                using (var outputWaveFile = new WaveFileWriter(outputFilePath, new WaveFormat()))
+                using (var outputFile = new FileStream(outputFilePath, FileMode.CreateNew))
                 {
                     while (index < audioFiles.Count)
                     {
@@ -500,9 +500,11 @@ namespace QuranKareem
                             command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
                             command.ExecuteNonQuery();
 
-                            buffer = new byte[reader.Length];
-                            reader.Read(buffer, 0, (int)reader.Length);
-                            outputWaveFile.Write(buffer, 0, buffer.Length);
+                            if (outputFile.Position == 0 && reader.Id3v2Tag != null)
+                                outputFile.Write(reader.Id3v2Tag.RawData, 0, reader.Id3v2Tag.RawData.Length);
+                            
+                            while ((frame = reader.ReadNextFrame()) != null)
+                                outputFile.Write(frame.RawData, 0, frame.RawData.Length);
                         }
                         index++;
                     }
