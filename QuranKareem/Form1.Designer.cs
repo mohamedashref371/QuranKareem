@@ -289,6 +289,7 @@
             // folder
             // 
             this.folder.SelectedPath = "audios";
+            this.folder.ShowNewFolderButton = false;
             // 
             // AyahRepeat
             // 
