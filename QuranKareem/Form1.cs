@@ -853,7 +853,7 @@ namespace QuranKareem
             if (folder.ShowDialog() == DialogResult.OK)
             {
                 // S002A003.mp3 , S2A3.mp3 , 002003.mp3
-                string[] arr = AudioQuranCombiner.MushafCombiner(folder.SelectedPath);
+                string[] arr = AudioQuranCombiner.MushafCombine(folder.SelectedPath);
                 if (arr == null) MessageBox.Show("تأكد انك تختار المجلد الصحيح");
                 else if (arr.Length == 0) MessageBox.Show("نعتقد أنه قد تمت العملية بنجاح");
                 else MessageBox.Show("حدثت أخطاء في الملفات الآتية: " + string.Join(", ", arr));

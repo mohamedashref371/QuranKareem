@@ -12,7 +12,7 @@ namespace QuranKareem
 {
     internal class AudioQuranCombiner
     {
-        public static string[] MushafCombiner(string folderPath)
+        public static string[] MushafCombine(string folderPath)
         {
             try { folderPath = Path.GetFullPath(folderPath); } catch { return null; }
             if (folderPath[folderPath.Length - 1] != '\\') folderPath += "\\";
