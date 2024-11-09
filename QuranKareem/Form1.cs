@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 
@@ -852,7 +853,7 @@ namespace QuranKareem
             if (folder.ShowDialog() == DialogResult.OK)
             {
                 // S002A003.mp3 , S2A3.mp3 , 002003.mp3
-                string[] arr = quranAudio.MushafCombiner(folder.SelectedPath);
+                string[] arr = AudioQuranCombiner.MushafCombiner(folder.SelectedPath);
                 if (arr == null) MessageBox.Show("تأكد انك تختار المجلد الصحيح");
                 else if (arr.Length == 0) MessageBox.Show("نعتقد أنه قد تمت العملية بنجاح");
                 else MessageBox.Show("حدثت أخطاء في الملفات الآتية: " + string.Join(", ", arr));
@@ -1129,15 +1130,10 @@ namespace QuranKareem
             }
         }
 
-        private void VideoEditor_Click(object sender, EventArgs e)
-        {
-            new VideoEditorForm(qPicture).ShowDialog();
-        }
-
-        private void YoutubeCaptions_Click(object sender, EventArgs e)
-        {
-            new YoutubeCaptionsForm(qPicture).ShowDialog();
-        }
+        private void VideoEditor_Click(object sender, EventArgs e) => new VideoEditorForm(qPicture).ShowDialog();
+        
+        private void YoutubeCaptions_Click(object sender, EventArgs e) => new YoutubeCaptionsForm(qPicture).ShowDialog();
+        
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 

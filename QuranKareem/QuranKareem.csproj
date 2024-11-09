@@ -157,6 +157,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DownloadFiles\Status.cs" />
+    <Compile Include="QuranClasses\AudioQuranCombiner.cs" />
     <Compile Include="QuranClasses\TrueTypeFontQuran.cs" />
     <Compile Include="SharpPixelQK.cs" />
     <Compile Include="Form1.cs">

@@ -4,9 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using NAudio.Wave;
 
 namespace QuranKareem
 {
@@ -458,90 +456,6 @@ namespace QuranKareem
             byte[] ayah = new byte[unit * (To - From)];
             Array.Copy(surahArray, start + unit * From, ayah, 0, ayah.Length);
             File.WriteAllBytes($@"splits\S{SurahNumber.ToString().PadLeft(3, '0')}A{AyahNumber.ToString().PadLeft(3, '0')}{Extension}", ayah);
-        }
-
-        public string[] MushafCombiner(string folderPath)
-        {
-            try { folderPath = Path.GetFullPath(folderPath); } catch { return null; }
-            if (folderPath[folderPath.Length - 1] != '\\') folderPath += "\\";
-            if (!Directory.Exists(folderPath) || File.Exists(folderPath + "000.db") || !File.Exists("audios\\database for audios.db")) return null;
-
-            string newFolder = $"{folderPath}{DateTime.Now.Ticks}\\";
-            Directory.CreateDirectory(newFolder);
-            File.Copy("audios\\database for audios.db", newFolder + "000.db");
-            Stop();
-
-            Regex regex = new Regex(@"^(s(\d{1,3})a(\d{1,3})|s?(\d{3})a?(\d{3}))\.mp3$", RegexOptions.IgnoreCase);
-
-            List<AudioFile> audioFiles = Directory.GetFiles(folderPath)
-                .Where(file => regex.IsMatch(Path.GetFileName(file)))
-                .Select(file => GetAudioFile(file, regex))
-                .OrderBy(file => file.Surah).ThenBy(file => file.Ayah)
-                .ToList();
-
-            quran.ConnectionString = $"Data Source={newFolder}000.db;Version=3;";
-            quran.Open();
-
-            List<string> list = new List<string>();
-            int index = 0, timestamp_to;
-            string outputFilePath;
-            Mp3Frame frame;
-            for (int surah = 1; surah <= 114; surah++)
-            {
-                timestamp_to = 0;
-                outputFilePath = newFolder + surah.ToString().PadLeft(3, '0') + ".mp3";
-                using (var outputFile = new FileStream(outputFilePath, FileMode.CreateNew))
-                {
-                    while (index < audioFiles.Count)
-                    {
-                        if (audioFiles[index].Surah != surah) break;
-                        try
-                        {
-                            using (var reader = new Mp3FileReader(audioFiles[index].FilePath))
-                            {
-                                timestamp_to += (int)reader.TotalTime.TotalMilliseconds;
-                                command.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
-                                command.ExecuteNonQuery();
-
-                                if (outputFile.Position == 0 && reader.Id3v2Tag != null)
-                                    outputFile.Write(reader.Id3v2Tag.RawData, 0, reader.Id3v2Tag.RawData.Length);
-
-                                while ((frame = reader.ReadNextFrame()) != null)
-                                    outputFile.Write(frame.RawData, 0, frame.RawData.Length);
-                            }
-                        }
-                        catch
-                        {
-                            list.Add(Path.GetFileName(audioFiles[index].FilePath));
-                            if (list.Count >= 50)
-                            {
-                                quran.Close();
-                                return list.ToArray();
-                            }
-                        }
-                        index++;
-                    }
-                }
-            }
-
-            quran.Close();
-            return list.ToArray();
-        }
-        private AudioFile GetAudioFile(string file, Regex regex)
-        {
-            GroupCollection group = regex.Match(Path.GetFileName(file)).Groups;
-            return new AudioFile
-            {
-                Surah = int.Parse(group[2].Success ? group[2].Value : group[4].Value),
-                Ayah = int.Parse(group[3].Success ? group[3].Value : group[5].Value),
-                FilePath = file
-            };
-        }
-        private struct AudioFile
-        {
-            public int Surah;
-            public int Ayah;
-            public string FilePath;
         }
 
         public float[] WordsList(int ayahStart, int ayahEnd, out string mp3Url, List<int> ayahword, List<float> timestamps)
