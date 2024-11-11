@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Windows.Forms;
 
 namespace QuranKareem
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {

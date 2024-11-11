@@ -38,7 +38,6 @@ namespace QuranKareem
         public bool WordMode { get; set; } = true;
 
         private int wordsCount;
-        private int glyphsCount;
         private int ayahId;
 
         private bool isWordsDiscriminatorEmpty = false;
@@ -202,7 +201,7 @@ namespace QuranKareem
         private bool AyahAt(int id)
         {
             quran.Open();
-            command.CommandText = $"SELECT id,surah,quarter,page,ayah,words_count,glyphs_count FROM ayat WHERE id >= {id} AND ayah >= 0 LIMIT 1";
+            command.CommandText = $"SELECT id,surah,quarter,page,ayah,words_count FROM ayat WHERE id >= {id} AND ayah >= 0 LIMIT 1";
             reader = command.ExecuteReader();
             if (!reader.Read())
             {
@@ -214,7 +213,6 @@ namespace QuranKareem
             QuarterNumber = reader.GetInt32(2);
             AyahNumber = reader.GetInt32(4);
             wordsCount = reader.GetInt32(5);
-            glyphsCount = reader.GetInt32(6);
             reader.Close(); quran.Close();
 
             if (surah != SurahNumber) SurahData(surah);
@@ -230,7 +228,7 @@ namespace QuranKareem
 
             #region SQL Building
             str.Length = 0;
-            str.Append("SELECT id,surah,quarter,page,ayah,words_count,glyphs_count FROM ayat WHERE ");
+            str.Append("SELECT id,surah,quarter,page,ayah,words_count FROM ayat WHERE ");
             #region Surah and Ayah
             // Ayah
             if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
@@ -325,7 +323,6 @@ namespace QuranKareem
             page = reader.GetInt32(3);
             AyahNumber = reader.GetInt32(4);
             wordsCount = reader.GetInt32(5);
-            glyphsCount = reader.GetInt32(6);
             reader.Close(); quran.Close();
             #endregion
 

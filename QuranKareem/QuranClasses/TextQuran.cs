@@ -40,15 +40,12 @@ namespace QuranKareem
         #endregion
         //public int QuartersCount { get; private set; }
         public int PagesCount { get; private set; }
-        private int tempInt;
 
         public int SurahsCount { get; private set; }
 
         public int SurahNumber { get; private set; }
         public int AyahNumber { get; private set; }
         public int AyatCount { get; private set; }
-
-        private int version;
 
         public int Narration { get; private set; }
 
@@ -535,11 +532,10 @@ namespace QuranKareem
                     }
                 }
             }
-            return tempInt != -1;
+            return true;
         }
         #endregion
 
-        private string tempString;
         public string AyahText(int sura, int aya)
         {
             if (!success) return "";
@@ -547,7 +543,7 @@ namespace QuranKareem
             command.CommandText = $"SELECT text FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
             reader.Read();
-            tempString = reader.GetString(0);
+            string tempString = reader.GetString(0);
             reader.Close(); quran.Close();
             return tempString.Replace(Environment.NewLine, " ").Trim();
         }
@@ -559,7 +555,7 @@ namespace QuranKareem
             command.CommandText = $"SELECT abstract_text FROM ayat WHERE surah={sura} AND ayah={aya}";
             reader = command.ExecuteReader();
             reader.Read();
-            tempString = reader.GetString(0);
+            string tempString = reader.GetString(0);
             reader.Close(); quran.Close();
             return tempString;
         }
@@ -572,6 +568,7 @@ namespace QuranKareem
             command.CommandText = $"SELECT ayah,abstract_text FROM ayat WHERE surah={sura}";
             reader = command.ExecuteReader();
             string[] words;
+            string tempString;
             while (reader.Read())
             {
                 tempString = reader.GetString(1);
