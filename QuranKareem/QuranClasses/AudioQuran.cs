@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static QuranKareem.Constants;
 
 namespace QuranKareem
 {
@@ -70,8 +71,6 @@ namespace QuranKareem
             }
         }
 
-        public int CurrentPosition { get; private set; }
-
         private readonly Timer timer = new Timer(); private bool ok = true;
         private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
@@ -118,7 +117,7 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version < 1 || version > 4) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version != 5) return;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 SurahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
@@ -146,7 +145,6 @@ namespace QuranKareem
 
         #region التنقلات في المصحف
 
-        readonly StringBuilder sql = new StringBuilder();
         /// <summary>
         /// Implementation Priority:<br/>
         ///   - Surah (1:114), its Ayah (0:{AyatCount}).<br/>
@@ -164,8 +162,8 @@ namespace QuranKareem
             if (!success) return false;
 
             #region SQL Building
-            sql.Length = 0;
-            sql.Append("SELECT id,surah,ayah,timestamp_to FROM ayat WHERE ");
+            StrBuilder.Length = 0;
+            StrBuilder.Append("SELECT id,surah,ayah,timestamp_from,timestamp_to FROM ayat WHERE ");
             #region Surah and Ayah
             // Ayah
             if ((surah <= 0 || surah == SurahNumber) && ayah >= -1)
@@ -184,7 +182,7 @@ namespace QuranKareem
                     surah = SurahNumber;
 
                 if (ayah < 0) ayah = 0;
-                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
+                StrBuilder.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Surah and Ayah
@@ -192,7 +190,7 @@ namespace QuranKareem
             {
                 if (surah == SurahsCount + 1) surah = 1;
                 if (ayah < 0) ayah = 0;
-                sql.Append($"surah >= {surah} AND ayah >= {ayah}");
+                StrBuilder.Append($"surah >= {surah} AND ayah >= {ayah}");
             }
 
             // Ayah Plus
@@ -202,35 +200,35 @@ namespace QuranKareem
                 {
                     AyahRepeatCounter += 1;
                     ok = true;
-                    sql.Append($"id = {ayahId}");
+                    StrBuilder.Append($"id = {ayahId}");
                 }
                 else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
                 {
                     SurahRepeatCounter += 1;
                     AyahRepeatCounter = 0;
                     ok = true;
-                    sql.Append($"surah = {SurahNumber} AND ayah >= 0");
+                    StrBuilder.Append($"surah = {SurahNumber} AND ayah >= 0");
                 }
                 else
                 {
                     AyahRepeatCounter = 0;
                     if (SurahNumber == SurahsCount && AyahNumber == AyatCount)
-                        sql.Append("ayah >= 0");
+                        StrBuilder.Append("ayah >= 0");
                     else
-                        sql.Append($"id > {ayahId} AND ayah >= 0");
+                        StrBuilder.Append($"id > {ayahId} AND ayah >= 0");
                 }
             }
             #endregion
             else
             {
-                sql.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
+                StrBuilder.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
             }
-            sql.Append(" LIMIT 1");
+            StrBuilder.Append(" LIMIT 1");
             #endregion
 
             #region SQL Execution
             quran.Open();
-            command.CommandText = sql.ToString();
+            command.CommandText = StrBuilder.ToString();
             reader = command.ExecuteReader();
             if (!reader.Read())
             {
@@ -240,7 +238,8 @@ namespace QuranKareem
             int id = reader.GetInt32(0);
             surah = reader.GetInt32(1);
             ayah = reader.GetInt32(2);
-            To = reader.GetInt32(3);
+            From = Math.Abs(reader.GetInt32(3));
+            To = reader.GetInt32(4);
             reader.Close(); quran.Close();
             #endregion
 
@@ -275,24 +274,14 @@ namespace QuranKareem
 
         private void AyahData()
         {
-            quran.Open();
-
-            command.CommandText = $"SELECT * FROM ayat WHERE id={ayahId - 1}";
-            reader = command.ExecuteReader();
-            reader.Read();
-            From = Math.Abs(reader.GetInt32(3));
-            reader.Close();
-            command.Cancel();
-            CurrentPosition = From;
-
             if (To <= 0 && AyahNumber > 0)
             {
-                quran.Close();
                 if (ok && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
                 ok = true;
                 return;
             }
 
+            quran.Open();
             if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
                 timer.Interval = (int)((To - From) / /*mp3.settings.rate*/ rate);
             else timer.Interval = 1;
@@ -524,25 +513,26 @@ namespace QuranKareem
         }
 
         // Mp3 Current Position String
-        public string GetCurrentPosition() => GetPositionOf(CurrentPosition);
-        string s;
+        public string GetCurrentPosition() => GetPositionOf(From);
         public string GetPositionOf(int num)
         {
+            StrBuilder.Clear();
+
             int temp = num / 3600000;
-            s = temp.ToString().PadLeft(2, '0') + ":";
+            StrBuilder.Append(temp.ToString().PadLeft(2, '0')).Append(":");
 
             num -= temp * 3600000;
             temp = num / 60000;
-            s += temp.ToString().PadLeft(2, '0') + ":";
+            StrBuilder.Append(temp.ToString().PadLeft(2, '0')).Append(":");
 
             num -= temp * 60000;
             temp = num / 1000;
-            s += temp.ToString().PadLeft(2, '0') + ".";
+            StrBuilder.Append( temp.ToString().PadLeft(2, '0') ).Append(".");
 
             num -= temp * 1000;
-            s += num.ToString().PadLeft(3, '0');
+            StrBuilder.Append(num.ToString().PadLeft(3, '0'));
 
-            return s;
+            return StrBuilder.ToString();
         }
 
         public string[] GetPositionsOf(int surah, int ayahStart = -1, int ayahEnd = 287)
@@ -588,7 +578,7 @@ namespace QuranKareem
                 if (!reader.HasRows) return false;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0) != 3 || version < 1 || version > 4) return false;
+                if (reader.GetInt32(0) != 3 || version != 5) return false;
                 Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
@@ -615,20 +605,6 @@ namespace QuranKareem
             }
         }
 
-        public int GetTimestamp(int sura, int aya)
-        {
-            if (!success) return 0;
-            int temp;
-            quran.Open();
-            command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura} AND ayah={aya}";
-            reader = command.ExecuteReader();
-            reader.Read();
-            temp = reader.GetInt32(0);
-            reader.Close();
-            quran.Close();
-            return temp;
-        }
-
         public int[] GetTimestamps(int sura, int ayahStart = -1, int ayahEnd = 287)
         {
             if (!success) return null;
@@ -637,11 +613,9 @@ namespace QuranKareem
             quran.Open();
             command.CommandText = $"SELECT timestamp_to FROM ayat WHERE surah={sura} AND ayah>={ayahStart - 1} AND ayah<={ayahEnd}";
             reader = command.ExecuteReader();
-            if (ayahStart >= 0)
-            {
-                if (reader.Read())
+            if (ayahStart >= 0 && reader.Read())
                     shift = reader.GetInt32(0);
-            }
+            
             while (reader.Read()) list.Add(reader.GetInt32(0) - shift);
             reader.Close();
             quran.Close();
@@ -661,10 +635,10 @@ namespace QuranKareem
         {
             if (!success) return;
             quran.Open();
-            command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya}";
+            command.CommandText = $"UPDATE ayat SET timestamp_to={timestampTo} WHERE surah={sura} AND ayah={aya};";
+            command.CommandText += $"UPDATE ayat SET timestamp_from={timestampTo} WHERE surah={sura} AND ayah={aya + 1}";
             command.ExecuteNonQuery();
             quran.Close();
-            if (aya == AyatCount && timestampTo != 0) SetSurah(sura, timestampTo);
         }
 
         public void SetDescription(string extension, string comment)

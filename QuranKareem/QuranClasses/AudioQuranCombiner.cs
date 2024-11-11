@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace QuranKareem
@@ -36,12 +34,13 @@ namespace QuranKareem
             string outputFilePath;
             Mp3Frame frame;
             byte[] buffer;
-
+            
             using (var conn = new SQLiteConnection($"Data Source={newFolder}000.db;Version=3;"))
             {
                 conn.Open();
                 using (var comm = new SQLiteCommand(conn))
                 {
+                    if (!CheckAudioDatabase(comm)) return new string[] { "audios\\database for audios.db" };
                     for (int surah = 1; surah <= 114; surah++)
                     {
                         if (index >= audioFiles.Count) break;
@@ -78,7 +77,8 @@ namespace QuranKareem
                                             timestamp_to += (int)reader.TotalTime.TotalMilliseconds;
                                         }
                                     }
-                                    comm.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah}";
+                                    comm.CommandText = $"UPDATE ayat SET timestamp_to={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah};";
+                                    comm.CommandText += $"UPDATE ayat SET timestamp_from={timestamp_to} WHERE surah={audioFiles[index].Surah} AND ayah={audioFiles[index].Ayah + 1}";
                                     comm.ExecuteNonQuery();
                                 }
                                 catch
@@ -93,6 +93,20 @@ namespace QuranKareem
                     return list.ToArray();
                 }
             }
+        }
+
+        private static bool CheckAudioDatabase(SQLiteCommand comm)
+        {
+            SQLiteDataReader sqlReader;
+            comm.CommandText = $"SELECT type,version FROM description";
+            sqlReader = comm.ExecuteReader();
+            if (!sqlReader.Read()) return false;
+            int type = sqlReader.GetInt32(0),
+                version = sqlReader.GetInt32(1);
+            sqlReader.Close();
+            comm.Cancel();
+            return type == 3 && version == 5;
+
         }
 
         private static AudioFile GetAudioFile(string file, Regex regex)
