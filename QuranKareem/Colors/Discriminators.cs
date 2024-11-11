@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static QuranKareem.Constants;
 
 namespace QuranKareem
 {
@@ -57,11 +55,11 @@ namespace QuranKareem
 
         private static string GetKeysAsString(int[] keys)
         {
-            Constants.StringBuilder.Length = 0;
-            if (keys.Length > 0) Constants.StringBuilder.Append(keys[0].ToString());
+            StrBuilder.Length = 0;
+            if (keys.Length > 0) StrBuilder.Append(keys[0].ToString());
             for (int i = 1; i < keys.Length; i++)
-                Constants.StringBuilder.Append(',').Append(keys[i].ToString());
-            return Constants.StringBuilder.ToString();
+                StrBuilder.Append(',').Append(keys[i].ToString());
+            return StrBuilder.ToString();
         }
 
         private static int[] PageColorsKeys, AyahColorsKeys, WordColorsKeys;

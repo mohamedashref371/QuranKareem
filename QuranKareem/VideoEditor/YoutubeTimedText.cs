@@ -2,8 +2,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
+using static QuranKareem.Constants;
 
 namespace QuranKareem
 {
@@ -11,25 +10,25 @@ namespace QuranKareem
     {
         class Event
         {
-            public int tStartMs { get; set; }
-            public int dDurationMs { get; set; }
-            public List<Seg> segs { get; set; }
+            public int tStartMs;
+            public int dDurationMs;
+            public List<Seg> segs;
         }
 
         class Time
         {
-            public List<Event> events { get; set; }
+            public List<Event> events;
         }
 
         class Seg
         {
-            public string utf8 { get; set; }
-            public int? tOffsetMs { get; set; }
+            public string utf8;
+            public int? tOffsetMs;
         }
 
         public static void JsonDeserializing(string path, string savePath)
         {
-            Constants.StringBuilder.Length = 0;
+            StrBuilder.Length = 0;
             string jsonText = File.ReadAllText(path);
             Time json = JsonConvert.DeserializeObject<Time>(jsonText);
             int start, end;
@@ -49,10 +48,10 @@ namespace QuranKareem
                     else
                         end = currentEvent.tStartMs + (currentEvent.segs[j + 1].tOffsetMs ?? 0);
                     if (currentEvent.segs[j].utf8.Trim() != "" && !currentEvent.segs[j].utf8.Contains('['))
-                        Constants.StringBuilder.Append(start).Append("|").Append(end).Append("|").Append(currentEvent.segs[j].utf8.Trim()).AppendLine();
+                        StrBuilder.Append(start).Append("|").Append(end).Append("|").Append(currentEvent.segs[j].utf8.Trim()).AppendLine();
                 }
             }
-            File.WriteAllText(savePath, Constants.StringBuilder.ToString());
+            File.WriteAllText(savePath, StrBuilder.ToString());
         }
     }
 }

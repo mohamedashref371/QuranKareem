@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using static QuranKareem.Constants;
 
 namespace QuranKareem
 {
@@ -90,9 +91,9 @@ namespace QuranKareem
 
         public static void SetInitialColors(string filePath)
         {
-            Constants.StringBuilder.Length = 0;
+            StrBuilder.Length = 0;
 
-            Constants.StringBuilder
+            StrBuilder
                 .Append(GetString(Light.BackColor, true))
                 .Append("*")
                 .Append(GetString(Light.AyahColor, true))
@@ -106,7 +107,7 @@ namespace QuranKareem
                 .Append(GetString(Night.WordColor, true))
                 ;
 
-            string s = Constants.StringBuilder.ToString();
+            string s = StrBuilder.ToString();
             if (!File.Exists(filePath) || File.ReadAllText(filePath) != s)
                 File.WriteAllText(filePath, s);
         }

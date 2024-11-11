@@ -1,11 +1,7 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using static QuranKareem.Constants;
 
 namespace QuranKareem
 {
@@ -43,18 +39,18 @@ namespace QuranKareem
 
         public static string GetText(List<Discriminator> list)
         {
-            Constants.StringBuilder.Length = 0;
+            StrBuilder.Length = 0;
             string s;
             for (int i = 0; i < list?.Count; i++)
             {
                 s = list[i].ToString();
                 if (s != "")
                 {
-                    Constants.StringBuilder.Append(s);
-                    if (i < list.Count - 1) Constants.StringBuilder.Append("*");
+                    StrBuilder.Append(s);
+                    if (i < list.Count - 1) StrBuilder.Append("*");
                 }
             }
-            return Constants.StringBuilder.ToString();
+            return StrBuilder.ToString();
         }
 
         public override string ToString()
