@@ -1,5 +1,5 @@
 Quran.com Mushafs APIs:<br>
-`﻿https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true`
+﻿https://<!-- not link -->api.qurancdn.com/api/qdc/audio/reciters/`{sheikh_number}`/audio_files?chapter=`{surah_number}`&segments=true
 
 {sheikh_number} - {folder}
 
