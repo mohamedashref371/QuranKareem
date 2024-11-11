@@ -287,7 +287,8 @@ namespace QuranKareem
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
-            words.Clear(); CurrentWord = -1; idWord = 0;
+            words.Clear(); FullWords.Clear();
+            CurrentWord = -1; idWord = 0;
             if (WordMode && !isWordTableEmpty)
             {
                 int wordCount;
