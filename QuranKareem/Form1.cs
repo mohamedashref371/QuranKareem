@@ -853,7 +853,7 @@ namespace QuranKareem
             FolderBrowserDialog folder = new FolderBrowserDialog
             {
                 ShowNewFolderButton = false,
-                Description = "إنشاء نسخة للبرنامج خلال مصاحف مقسمة لآيات\nS002A003.mp3 , S2A3.mp3 , 002003 .mp3 or .wav\nyoutu.be/WFhlSB4Y2vg ( l is small L, not capital i )"
+                Description = "إنشاء نسخة للبرنامج خلال مصاحف مقسمة لآيات\nS002A003.mp3 , S2A3.mp3 , 002003.mp3 or .wav\nyoutu.be/WFhlSB4Y2vg ( l is small L, not capital i )"
             };
             if (folder.ShowDialog() == DialogResult.OK)
             {

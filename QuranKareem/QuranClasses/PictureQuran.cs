@@ -676,7 +676,6 @@ namespace QuranKareem
         #region Colors
         private void GetInitialColors()
         {
-            if (!success) return;
             Coloring.GetInitialColors(path + "Colors0.txt");
         }
 
