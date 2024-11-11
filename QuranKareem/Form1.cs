@@ -824,10 +824,10 @@ namespace QuranKareem
                 if (pageSrtCheck.Checked)
                 {
                     int[] minmax = PictureQuran.Instance.GetStartAndEndOfPage();
-                    File.WriteAllText(saveSRTFile.FileName, quranTafseer.SubRipText(quranAudio.GetPositionsOf((int)Surah.Value, minmax[0], minmax[1]), (int)Surah.Value, minmax[0], minmax[1]), Encoding.UTF8);
+                    File.WriteAllText(saveSRTFile.FileName, quranTafseer.SubRipText(quranAudio.GetPositionsOf((int)Surah.Value, minmax[0], minmax[1]), (int)Surah.Value, minmax[0], minmax[1]));
                 }
                 else
-                    File.WriteAllText(saveSRTFile.FileName, quranTafseer.SubRipText(quranAudio.GetPositionsOf((int)Surah.Value), (int)Surah.Value), Encoding.UTF8);
+                    File.WriteAllText(saveSRTFile.FileName, quranTafseer.SubRipText(quranAudio.GetPositionsOf((int)Surah.Value), (int)Surah.Value));
             }
         }
         #endregion
