@@ -931,7 +931,7 @@ namespace QuranKareem
                     Size = numSize,
                     Tag = k,
                     TextAlign = HorizontalAlignment.Center,
-                    Minimum = -99999,
+                    Minimum = 0,
                     Maximum = 99999,
                     Increment = 0.1M,
                     Value = ayat[i] / 1000M

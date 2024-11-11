@@ -237,7 +237,7 @@ namespace QuranKareem
             int id = reader.GetInt32(0);
             surah = reader.GetInt32(1);
             ayah = reader.GetInt32(2);
-            From = Math.Abs(reader.GetInt32(3));
+            From = reader.GetInt32(3);
             To = reader.GetInt32(4);
             reader.Close(); quran.Close();
             #endregion
