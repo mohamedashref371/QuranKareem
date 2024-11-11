@@ -1,4 +1,5 @@
-﻿https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true
+Quran.com Mushafs APIs:<br>
+`﻿https://api.qurancdn.com/api/qdc/audio/reciters/{sheikh_number}/audio_files?chapter={surah_number}&segments=true`
 
 {sheikh_number} - {folder}
 
@@ -49,3 +50,14 @@
 172 - [hadi_toure](محمد%20الهادي%20توري) <br>
 173 - [mishari_al_afasy year1427](مشاري%20العفاسي%20(1427%20هـ)) <br>
 174 - [yasser_ad-dussary qdc](ياسر%20الدوسري) <br>
+
+=================================================
+
+How will this program benefit from the audio mushafs that is pre-divided into ayat?
+
+Like this:<br>
+https://everyayah.com/recitations_ayat.html<br>
+https://mazameer.com/vb/threads/214324
+
+The explanation:<br>
+https://youtu.be/WFhlSB4Y2vg
