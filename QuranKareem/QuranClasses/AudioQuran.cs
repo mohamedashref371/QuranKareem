@@ -70,7 +70,7 @@ namespace QuranKareem
             }
         }
 
-        private readonly Timer timer = new Timer(); private bool ok = true;
+        private readonly Timer timer = new Timer(); private bool setPosEnabled = true;
         private readonly AxWMPLib.AxWindowsMediaPlayer mp3 = new AxWMPLib.AxWindowsMediaPlayer();
 
         private readonly Timer wordsTimer = new Timer();
@@ -102,7 +102,7 @@ namespace QuranKareem
             this.path = path; success = false;
 
             SurahNumber = 0;
-            timer.Stop(); ok = true;
+            timer.Stop(); setPosEnabled = true;
 
             try
             {
@@ -156,7 +156,7 @@ namespace QuranKareem
         /// <returns>true if everything goes well.</returns>
         public bool Set(int surah = 0, int ayah = -2, bool next = false)
         {
-            if (!timer.Enabled) ok = true;
+            if (!timer.Enabled) setPosEnabled = true;
             timer.Stop(); wordsTimer.Stop();
             if (!success) return false;
 
@@ -198,14 +198,14 @@ namespace QuranKareem
                 if (AyahRepeatCounter < AyahRepeat - 1 && AyahNumber != 0)
                 {
                     AyahRepeatCounter += 1;
-                    ok = true;
+                    setPosEnabled = true;
                     StrBuilder.Append($"id={ayahId}");
                 }
                 else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
                 {
                     SurahRepeatCounter += 1;
                     AyahRepeatCounter = 0;
-                    ok = true;
+                    setPosEnabled = true;
                     StrBuilder.Append($"surah={SurahNumber} AND ayah>=0");
                 }
                 else
@@ -275,18 +275,16 @@ namespace QuranKareem
         {
             if (To <= 0 && AyahNumber > 0)
             {
-                if (ok && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
-                ok = true;
+                if (setPosEnabled && From > 0) mp3.Ctlcontrols.currentPosition = From / 1000.0;
+                setPosEnabled = true;
                 return;
             }
 
             quran.Open();
-            if ((int)((To - From) / rate) > 0)
-                timer.Interval = (int)((To - From) / rate);
-            else
-                timer.Interval = 1;
+            int num = (int)((To - (setPosEnabled ? From : mp3.Ctlcontrols.currentPosition)) / rate);
+            timer.Interval = (num > 0) ? num : 1;
 
-            if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
+            if (setPosEnabled) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
             words.Clear(); FullWords.Clear();
             CurrentWord = -1; idWord = 0;
@@ -315,7 +313,7 @@ namespace QuranKareem
                 reader.Close();
             }
             quran.Close();
-            ok = true;
+            setPosEnabled = true;
             timer.Start();
             if (WordMode && !isWordTableEmpty) Words();
         }
@@ -342,7 +340,7 @@ namespace QuranKareem
             int num = (int)(mp3.Ctlcontrols.currentPosition * 1000); // Error At Program Closing
             for (int i = idWord; i < FullWords.Count / 3; i++)
             {
-                if (num >= FullWords[i * 3 + 1] && num <= FullWords[i * 3 + 2])
+                if (num >= FullWords[i * 3 + 1] && num < FullWords[i * 3 + 2])
                 {
                     wordsTimer.Interval = FullWords[i * 3 + 2] - num > 0 ? FullWords[i * 3 + 2] - num : 1;
                     CurrentWord = FullWords[i * 3];
@@ -416,7 +414,7 @@ namespace QuranKareem
             mp3.URL = ""; CapturedAudio = false;
         }
 
-        void Timer_Tick(object sender, EventArgs e) { ok = false; Set(next: true); }
+        void Timer_Tick(object sender, EventArgs e) { setPosEnabled = false; Set(next: true); }
         void WordsTimer_Tick(object sender, EventArgs e) => Words();
 
         public void AddEventHandlerOfAyah(EventHandler eH) => timer.Tick += eH;
@@ -559,7 +557,7 @@ namespace QuranKareem
             this.path = path; success = false;
 
             CapturedAudio = false;
-            timer.Stop(); ok = true;
+            timer.Stop(); setPosEnabled = true;
             try
             {
                 if (!File.Exists(path + "000.db") && !File.Exists(path + "0.db"))
