@@ -491,7 +491,9 @@ namespace QuranKareem
         private void QuranAudioStart(string s)
         {
             moshafAudio = s;
+            int curr = quranAudio.CurrentWord;
             quranAudio.Start(s, (int)Surah.Value, (int)Ayah.Value);
+            if (curr > 1) quranAudio.WordOf(curr);
             time5.Text = quranAudio.GetCurrentPosition();
             folder.SelectedPath = Path.GetFullPath(s);
         }
