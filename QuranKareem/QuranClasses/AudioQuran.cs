@@ -116,20 +116,16 @@ namespace QuranKareem
                 if (!reader.HasRows) return;
                 reader.Read();
                 version = reader.GetInt32(1);
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3:audios*/ != 3 || version != 5) return;
-                Narration = reader.GetInt32(2); // العمود الثالث
+                if (reader.GetInt32(0) /*type 1:text, 2:picture, 3:audio*/ != 3 || version != 5) return;
+                Narration = reader.GetInt32(2);
                 SurahsCount = reader.GetInt32(3);
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
                 reader.Close();
 
-                isWordTableEmpty = true;
-                if (version != 1)
-                {
-                    command.CommandText = $"SELECT * FROM words LIMIT 1";
-                    reader = command.ExecuteReader();
-                    isWordTableEmpty = !reader.HasRows;
-                }
+                command.CommandText = $"SELECT * FROM words LIMIT 1";
+                reader = command.ExecuteReader();
+                isWordTableEmpty = !reader.HasRows;
 
                 success = true;
             }
@@ -244,7 +240,7 @@ namespace QuranKareem
 
             if (surah != SurahNumber || !CapturedAudio || mp3.Ctlcontrols.currentPosition == 0)
             {
-                surahArray = null; start = -1;
+                ResetSurahSplitter();
                 if (!CaptureAudio(surah))
                 {
                     mp3.URL = "";
@@ -428,6 +424,11 @@ namespace QuranKareem
         }
 
         byte[] surahArray = null; int start = -1, unit;
+        private void ResetSurahSplitter()
+        {
+            surahArray = null;
+            start = -1;
+        }
         public void SurahSplitter()
         {
             if (!success || mp3.URL == "" || To <= From || mp3.currentMedia.duration == 0) return;
@@ -583,15 +584,10 @@ namespace QuranKareem
                 Extension = reader.GetString(4);
                 Comment = reader.GetString(5);
 
-                isWordTableEmpty = true;
-                if (version != 1)
-                {
-                    reader.Close();
-                    command.Cancel();
-                    command.CommandText = $"SELECT * FROM words LIMIT 1";
-                    reader = command.ExecuteReader();
-                    isWordTableEmpty = !reader.HasRows;
-                }
+                reader.Close(); command.Cancel();
+                command.CommandText = $"SELECT * FROM words LIMIT 1";
+                reader = command.ExecuteReader();
+                isWordTableEmpty = !reader.HasRows;
 
                 success = true;
                 return true;
