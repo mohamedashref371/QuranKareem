@@ -181,7 +181,7 @@ namespace QuranKareem
                     surah = SurahNumber;
 
                 if (ayah < 0) ayah = 0;
-                StrBuilder.Append($"surah >= {surah} AND ayah >= {ayah}");
+                StrBuilder.Append($"surah>={surah} AND ayah>={ayah}");
             }
 
             // Surah and Ayah
@@ -189,7 +189,7 @@ namespace QuranKareem
             {
                 if (surah == SurahsCount + 1) surah = 1;
                 if (ayah < 0) ayah = 0;
-                StrBuilder.Append($"surah >= {surah} AND ayah >= {ayah}");
+                StrBuilder.Append($"surah>={surah} AND ayah>={ayah}");
             }
 
             // Ayah Plus
@@ -199,28 +199,28 @@ namespace QuranKareem
                 {
                     AyahRepeatCounter += 1;
                     ok = true;
-                    StrBuilder.Append($"id = {ayahId}");
+                    StrBuilder.Append($"id={ayahId}");
                 }
                 else if (AyahNumber == AyatCount && SurahRepeatCounter < SurahRepeat - 1)
                 {
                     SurahRepeatCounter += 1;
                     AyahRepeatCounter = 0;
                     ok = true;
-                    StrBuilder.Append($"surah = {SurahNumber} AND ayah >= 0");
+                    StrBuilder.Append($"surah={SurahNumber} AND ayah>=0");
                 }
                 else
                 {
                     AyahRepeatCounter = 0;
                     if (SurahNumber == SurahsCount && AyahNumber == AyatCount)
-                        StrBuilder.Append("ayah >= 0");
+                        StrBuilder.Append("ayah>=0");
                     else
-                        StrBuilder.Append($"id > {ayahId} AND ayah >= 0");
+                        StrBuilder.Append($"id>{ayahId} AND ayah>=0");
                 }
             }
             #endregion
             else
             {
-                StrBuilder.Append($"surah >= {SurahNumber} AND ayah >= {AyahNumber}");
+                StrBuilder.Append($"surah>={SurahNumber} AND ayah>={AyahNumber}");
             }
             StrBuilder.Append(" LIMIT 1");
             #endregion
@@ -281,9 +281,10 @@ namespace QuranKareem
             }
 
             quran.Open();
-            if ((int)((To - From) / /*mp3.settings.rate*/ rate) > 0)
-                timer.Interval = (int)((To - From) / /*mp3.settings.rate*/ rate);
-            else timer.Interval = 1;
+            if ((int)((To - From) / rate) > 0)
+                timer.Interval = (int)((To - From) / rate);
+            else
+                timer.Interval = 1;
 
             if (ok) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 

@@ -78,6 +78,7 @@
             // vidiotRadio
             // 
             this.vidiotRadio.AutoSize = true;
+            this.vidiotRadio.Enabled = false;
             this.vidiotRadio.Font = new System.Drawing.Font("Tahoma", 16F);
             this.vidiotRadio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(45)))), ((int)(((byte)(200)))));
             this.vidiotRadio.Location = new System.Drawing.Point(12, 12);
@@ -90,6 +91,7 @@
             // vidiotLink
             // 
             this.vidiotLink.AutoSize = true;
+            this.vidiotLink.Enabled = false;
             this.vidiotLink.Font = new System.Drawing.Font("Tahoma", 14F);
             this.vidiotLink.Location = new System.Drawing.Point(191, 16);
             this.vidiotLink.Name = "vidiotLink";
