@@ -25,7 +25,6 @@ namespace QuranKareem
 
         bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
-        string[] stringArray;
 
         #region Form
         private readonly int SizeX = 1100, SizeY = 910;
@@ -120,6 +119,7 @@ namespace QuranKareem
             // الوقوف عند الآية التي كنت فيها قبل اغلاق البرنامج آخر مرة
             try
             {
+                string[] stringArray;
                 if (File.Exists(save + "AyahNumberCurrent"))
                 {
                     stringArray = File.ReadAllText(save + "AyahNumberCurrent").Split(',');
@@ -387,85 +387,117 @@ namespace QuranKareem
 
         #region أزرار المشايخ
         // اضافة ازرار المشايخ
-        void AddMashaykhButtons() /* ليست أفضل شيئ */
+        void AddMashaykhButtons()
         {
-            List<string> audiosFolders = new List<string>();
+            string audioFolder = Path.Combine(Application.StartupPath, "audios\\");
             bool distinct = false;
-            if (File.Exists("audios\\favourite.txt") && File.ReadAllText("audios\\favourite.txt").Trim() != "")
+            string[] stringArray;
+
+            #region read favourite.txt file
+            string temp = audioFolder + "favourite.txt";
+            if (!File.Exists(temp)) return;
+            List<string> audioFolders = File.ReadAllLines(temp).SelectMany(line => line.Split('*')).Select(item => item.Trim()).Where(item => item != "").ToList();
+            if (audioFolders.Count == 0) return;
+            for (int i = 0; i < audioFolders.Count; i++)
             {
-                audiosFolders.AddRange(File.ReadAllText("audios\\favourite.txt", Encoding.UTF8).Replace("\r\n", "\n").Replace('\n', '*').Split('*').ToList());
-                for (int i = 0; i < audiosFolders.Count; i++)
+                stringArray = audioFolders[i].Split('|');
+                temp = stringArray[0].Trim();
+                if (temp.Length == 0)
                 {
-                    stringArray = audiosFolders[i].Split('|');
-                    if (stringArray[0].Trim() != "" && Directory.Exists("audios\\" + stringArray[0])) audiosFolders[i] = "audios\\" + audiosFolders[i];
-                    else if (Directory.Exists(stringArray[0]) || stringArray[0].Trim() == ":line:" || stringArray[0].Trim() == ":space:") { }
-                    else if (stringArray[0].Trim() == ":distinct:") { audiosFolders[i] = ""; distinct = true; }
-                    else audiosFolders[i] = "";
+                    audioFolders.RemoveAt(i);
+                    i--;
+                }
+                else if (Directory.Exists(audioFolder + temp))
+                {
+                    audioFolders[i] = Path.GetFullPath(audioFolder + audioFolders[i]);
+                }
+                else if (Directory.Exists(temp))
+                {
+                    audioFolders[i] = Path.GetFullPath(audioFolders[i]);
+                }
+                else if (temp == ":distinct:")
+                {
+                    distinct = true;
+                    audioFolders.RemoveAt(i);
+                    i--;
+                }
+                else if (temp != ":space:" && temp != ":line:")
+                {
+                    audioFolders.RemoveAt(i);
+                    i--;
                 }
             }
-            panel.Controls.Clear();
-            try { audiosFolders.AddRange(Directory.GetDirectories("audios").ToList()); } catch { } // البحث في مجلد الصوتيات
+            #endregion
 
-
+            #region get all folders from audios folder
+            List<string> list = Directory.GetDirectories(audioFolder).ToList();
             if (distinct)
             {
-                string temp, temp2;
-                for (int i = 0; i < audiosFolders.Count; i++)
+                for (int i = 0; i < audioFolders.Count; i++)
                 {
-                    temp = audiosFolders[i].Split('|').First().Trim('\\', '/');
-                    try { temp = Path.GetFullPath(temp); } catch { continue; }
-                    for (int j = i + 1; j < audiosFolders.Count; j++)
+                    temp = audioFolders[i].Split('|').First().Trim('\\', '/');
+                    for (int j = 0; j < list.Count; j++)
                     {
-                        temp2 = audiosFolders[j].Split('|').First().Trim('\\', '/');
-                        try { temp2 = Path.GetFullPath(temp2); } catch { continue; }
-                        if (temp == temp2) audiosFolders[j] = "";
+                        if (temp == list[j])
+                        {
+                            list.RemoveAt(j);
+                            j--;
+                        }
                     }
                 }
             }
+            audioFolders.AddRange(list);
+            #endregion
 
-            Guna2Button b;
+            #region add mashaykh buttons in the panel
+            Color clr;
             int y = -45;
-            Color clr; Random rand = new Random();
-            for (int i = 0; i < audiosFolders.Count; i++)
+            Guna2Button b;
+            panel.Controls.Clear();
+            Random rand = new Random();
+            for (int i = 0; i < audioFolders.Count; i++)
             {
-                if (audiosFolders[i].Trim() == "") continue;
-                stringArray = audiosFolders[i].Split('|');
-                if (stringArray[0].Trim() == ":space:") { y += 5; continue; }
+                stringArray = audioFolders[i].Split('|');
+                temp = stringArray[0].Trim();
+                if (temp == ":space:") { y += 5; continue; }
                 y += 50;
-                if (stringArray.Length > 1 && stringArray[1].Trim() != "") clr = Color.FromName(stringArray[1].Trim());
+                if (stringArray.Length > 1 && stringArray[1].Trim() != "") clr = Coloring.GetColor(stringArray[1].Trim());
                 else clr = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 200), rand.Next(0, 256));
-                audiosFolders[i] = stringArray[0];
                 b = new Guna2Button
                 {
                     FillColor = clr,
                     Location = new Point(fs.GetNewX(3), fs.GetNewY(y)),
                     BorderRadius = 15
                 };
-                if (stringArray != null && stringArray.Length > 2 && stringArray[2].Trim() != "") b.ForeColor = Color.FromName(stringArray[2].Trim());
-                if (stringArray != null && stringArray.Length > 3 && stringArray[3].Trim() != "") b.Text = stringArray[3];
-                if (audiosFolders[i].Trim() == ":line:")
+                if (stringArray.Length > 2 && stringArray[2].Trim() != "") b.ForeColor = Coloring.GetColor(stringArray[2].Trim());
+                if (stringArray.Length > 3 && stringArray[3].Trim() != "") b.Text = stringArray[3];
+                if (temp == ":line:")
                 {
                     b.Size = new Size(fs.GetNewX(243), fs.GetNewY(10));
                     y -= 35;
                 }
                 else
                 {
-                    if (b.Text == "") b.Text = audiosFolders[i].Trim('\\', '/').Split('\\').Last();
+                    if (b.Text == "") b.Text = temp.Trim('\\', '/').Split('\\').Last();
                     b.Font = new Font("Segoe UI", fs.GetNewX(12));
                     b.Size = new Size(fs.GetNewX(243), fs.GetNewY(45));
                     b.Cursor = Cursors.Hand;
-                    b.Tag = audiosFolders[i];
+                    b.Tag = temp;
                     b.KeyUp += Button_KeyUp;
                     b.MouseClick += Button1_MouseClick;
                 }
                 panel.Controls.Add(b);
             }
+            #endregion
         }
 
         private void Button_KeyUp(object sender, KeyEventArgs e)
         {
+            string s = (string)((Guna2Button)sender).Tag;
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
-                QuranAudioStart((string)((Guna2Button)sender).Tag);
+                QuranAudioStart(s);
+            else if (e.KeyCode == Keys.D)
+                OpenDownloadForm(s);
         }
 
         private void Button1_MouseClick(object sender, MouseEventArgs e)
@@ -495,7 +527,7 @@ namespace QuranKareem
             quranAudio.Start(s, (int)Surah.Value, (int)Ayah.Value);
             if (curr > 1) quranAudio.WordOf(curr);
             time5.Text = quranAudio.GetCurrentPosition();
-            folder.SelectedPath = Path.GetFullPath(s);
+            folder.SelectedPath = s;
         }
         #endregion
 
