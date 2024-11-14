@@ -603,7 +603,7 @@ namespace QuranKareem
                 if (s.Contains(words))
                 {
                     s = reader.GetString(3);
-                    lst.Add($"{(s.Length > 50 ? s.Substring(0, 50) + "..." : s)}");
+                    lst.Add($"{(s.Length > 60 ? s.Substring(0, 60) + "..." : s)}");
                     SearchIDs.Add(reader.GetInt32(0));
                 }
             }

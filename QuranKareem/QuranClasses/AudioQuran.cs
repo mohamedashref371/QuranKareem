@@ -277,7 +277,8 @@ namespace QuranKareem
             }
 
             quran.Open();
-            int num = (int)((To - (setPosEnabled ? From : mp3.Ctlcontrols.currentPosition)) / rate);
+            double curr = mp3.Ctlcontrols.currentPosition * 1000;
+            int num = (int)((To - ((setPosEnabled || curr == 0) ? From : curr)) / rate);
             timer.Interval = (num > 0) ? num : 1;
 
             if (setPosEnabled) mp3.Ctlcontrols.currentPosition = From / 1000.0;

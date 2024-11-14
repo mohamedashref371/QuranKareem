@@ -64,7 +64,6 @@
             this.searchText = new System.Windows.Forms.TextBox();
             this.searchClose = new System.Windows.Forms.Button();
             this.tafasir = new System.Windows.Forms.ComboBox();
-            this.lTafseer = new System.Windows.Forms.Label();
             this.tafseerCopy = new System.Windows.Forms.Button();
             this.saveRTF = new System.Windows.Forms.Button();
             this.saveRichText = new System.Windows.Forms.SaveFileDialog();
@@ -103,6 +102,7 @@
             this.pageSrtCheck = new System.Windows.Forms.CheckBox();
             this.videoEditor = new System.Windows.Forms.Button();
             this.youtubeCaptions = new System.Windows.Forms.Button();
+            this.preventWordSelection = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Surah)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Page)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Ayah)).BeginInit();
@@ -570,7 +570,7 @@
             // copy
             // 
             this.copy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.copy.Location = new System.Drawing.Point(149, 481);
+            this.copy.Location = new System.Drawing.Point(152, 578);
             this.copy.Name = "copy";
             this.copy.Size = new System.Drawing.Size(90, 42);
             this.copy.TabIndex = 16;
@@ -581,10 +581,10 @@
             // searchList
             // 
             this.searchList.FormattingEnabled = true;
-            this.searchList.Location = new System.Drawing.Point(12, 11);
+            this.searchList.Location = new System.Drawing.Point(12, 570);
             this.searchList.Name = "searchList";
             this.searchList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.searchList.Size = new System.Drawing.Size(262, 524);
+            this.searchList.Size = new System.Drawing.Size(279, 290);
             this.searchList.TabIndex = 48;
             this.searchList.Visible = false;
             this.searchList.SelectedIndexChanged += new System.EventHandler(this.SearchList_SelectedIndexChanged);
@@ -592,7 +592,7 @@
             // search
             // 
             this.search.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.search.Location = new System.Drawing.Point(153, 539);
+            this.search.Location = new System.Drawing.Point(153, 533);
             this.search.Name = "search";
             this.search.Size = new System.Drawing.Size(90, 32);
             this.search.TabIndex = 18;
@@ -603,7 +603,7 @@
             // searchText
             // 
             this.searchText.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchText.Location = new System.Drawing.Point(16, 577);
+            this.searchText.Location = new System.Drawing.Point(12, 503);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(262, 27);
             this.searchText.TabIndex = 20;
@@ -612,7 +612,7 @@
             // searchClose
             // 
             this.searchClose.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.searchClose.Location = new System.Drawing.Point(46, 539);
+            this.searchClose.Location = new System.Drawing.Point(46, 533);
             this.searchClose.Name = "searchClose";
             this.searchClose.Size = new System.Drawing.Size(90, 32);
             this.searchClose.TabIndex = 19;
@@ -626,41 +626,30 @@
             this.tafasir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tafasir.Font = new System.Drawing.Font("Tahoma", 13F);
             this.tafasir.FormattingEnabled = true;
-            this.tafasir.Location = new System.Drawing.Point(16, 681);
+            this.tafasir.Location = new System.Drawing.Point(16, 701);
             this.tafasir.Name = "tafasir";
             this.tafasir.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tafasir.Size = new System.Drawing.Size(262, 29);
             this.tafasir.TabIndex = 22;
             this.tafasir.SelectedIndexChanged += new System.EventHandler(this.Tafasir_SelectedIndexChanged);
             // 
-            // lTafseer
-            // 
-            this.lTafseer.AutoSize = true;
-            this.lTafseer.BackColor = System.Drawing.Color.Transparent;
-            this.lTafseer.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lTafseer.Location = new System.Drawing.Point(142, 654);
-            this.lTafseer.Name = "lTafseer";
-            this.lTafseer.Size = new System.Drawing.Size(136, 22);
-            this.lTafseer.TabIndex = 54;
-            this.lTafseer.Text = "التفاسير والتراجم";
-            // 
             // tafseerCopy
             // 
             this.tafseerCopy.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tafseerCopy.Location = new System.Drawing.Point(168, 714);
+            this.tafseerCopy.Location = new System.Drawing.Point(168, 734);
             this.tafseerCopy.Name = "tafseerCopy";
-            this.tafseerCopy.Size = new System.Drawing.Size(90, 51);
+            this.tafseerCopy.Size = new System.Drawing.Size(90, 36);
             this.tafseerCopy.TabIndex = 23;
-            this.tafseerCopy.Text = "نسخ التفسير";
+            this.tafseerCopy.Text = "نسخ";
             this.tafseerCopy.UseVisualStyleBackColor = true;
             this.tafseerCopy.Click += new System.EventHandler(this.TafseerCopy_Click);
             // 
             // saveRTF
             // 
             this.saveRTF.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.saveRTF.Location = new System.Drawing.Point(22, 714);
+            this.saveRTF.Location = new System.Drawing.Point(22, 734);
             this.saveRTF.Name = "saveRTF";
-            this.saveRTF.Size = new System.Drawing.Size(126, 51);
+            this.saveRTF.Size = new System.Drawing.Size(126, 36);
             this.saveRTF.TabIndex = 24;
             this.saveRTF.Text = "save .rtf";
             this.saveRTF.UseVisualStyleBackColor = true;
@@ -786,7 +775,7 @@
             this.lExt.AutoSize = true;
             this.lExt.BackColor = System.Drawing.Color.Transparent;
             this.lExt.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lExt.Location = new System.Drawing.Point(216, 661);
+            this.lExt.Location = new System.Drawing.Point(222, 679);
             this.lExt.Name = "lExt";
             this.lExt.Size = new System.Drawing.Size(62, 22);
             this.lExt.TabIndex = 64;
@@ -796,7 +785,7 @@
             // extension
             // 
             this.extension.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.extension.Location = new System.Drawing.Point(12, 658);
+            this.extension.Location = new System.Drawing.Point(18, 676);
             this.extension.Name = "extension";
             this.extension.Size = new System.Drawing.Size(198, 28);
             this.extension.TabIndex = 25;
@@ -807,7 +796,7 @@
             this.lComment.AutoSize = true;
             this.lComment.BackColor = System.Drawing.Color.Transparent;
             this.lComment.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.lComment.Location = new System.Drawing.Point(226, 703);
+            this.lComment.Location = new System.Drawing.Point(232, 711);
             this.lComment.Name = "lComment";
             this.lComment.Size = new System.Drawing.Size(52, 22);
             this.lComment.TabIndex = 66;
@@ -817,7 +806,7 @@
             // comment
             // 
             this.comment.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.comment.Location = new System.Drawing.Point(12, 700);
+            this.comment.Location = new System.Drawing.Point(18, 708);
             this.comment.Name = "comment";
             this.comment.Size = new System.Drawing.Size(198, 28);
             this.comment.TabIndex = 26;
@@ -826,7 +815,7 @@
             // descSave
             // 
             this.descSave.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.descSave.Location = new System.Drawing.Point(55, 738);
+            this.descSave.Location = new System.Drawing.Point(61, 740);
             this.descSave.Name = "descSave";
             this.descSave.Size = new System.Drawing.Size(155, 35);
             this.descSave.TabIndex = 27;
@@ -887,7 +876,7 @@
             // srtFile
             // 
             this.srtFile.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.srtFile.Location = new System.Drawing.Point(16, 654);
+            this.srtFile.Location = new System.Drawing.Point(138, 674);
             this.srtFile.Name = "srtFile";
             this.srtFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.srtFile.Size = new System.Drawing.Size(96, 25);
@@ -998,7 +987,7 @@
             // spellingErrors
             // 
             this.spellingErrors.AutoSize = true;
-            this.spellingErrors.Location = new System.Drawing.Point(179, 604);
+            this.spellingErrors.Location = new System.Drawing.Point(168, 483);
             this.spellingErrors.Name = "spellingErrors";
             this.spellingErrors.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.spellingErrors.Size = new System.Drawing.Size(99, 17);
@@ -1040,7 +1029,7 @@
             // discri
             // 
             this.discri.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.discri.Location = new System.Drawing.Point(47, 486);
+            this.discri.Location = new System.Drawing.Point(56, 584);
             this.discri.Name = "discri";
             this.discri.Size = new System.Drawing.Size(64, 32);
             this.discri.TabIndex = 86;
@@ -1051,7 +1040,7 @@
             // pageSrtCheck
             // 
             this.pageSrtCheck.AutoSize = true;
-            this.pageSrtCheck.Location = new System.Drawing.Point(18, 635);
+            this.pageSrtCheck.Location = new System.Drawing.Point(37, 678);
             this.pageSrtCheck.Name = "pageSrtCheck";
             this.pageSrtCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.pageSrtCheck.Size = new System.Drawing.Size(93, 17);
@@ -1079,12 +1068,27 @@
             this.youtubeCaptions.UseVisualStyleBackColor = true;
             this.youtubeCaptions.Click += new System.EventHandler(this.YoutubeCaptions_Click);
             // 
+            // preventWordSelection
+            // 
+            this.preventWordSelection.AutoSize = true;
+            this.preventWordSelection.BackColor = System.Drawing.Color.Transparent;
+            this.preventWordSelection.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.preventWordSelection.Location = new System.Drawing.Point(63, 634);
+            this.preventWordSelection.Name = "preventWordSelection";
+            this.preventWordSelection.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.preventWordSelection.Size = new System.Drawing.Size(174, 26);
+            this.preventWordSelection.TabIndex = 90;
+            this.preventWordSelection.Text = "منع القراءة بالكلمات";
+            this.preventWordSelection.UseVisualStyleBackColor = false;
+            this.preventWordSelection.CheckedChanged += new System.EventHandler(this.PreventWordSelection_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 910);
             this.Controls.Add(this.searchList);
+            this.Controls.Add(this.preventWordSelection);
             this.Controls.Add(this.youtubeCaptions);
             this.Controls.Add(this.videoEditor);
             this.Controls.Add(this.pageSrtCheck);
@@ -1117,7 +1121,6 @@
             this.Controls.Add(this.rtb);
             this.Controls.Add(this.saveRTF);
             this.Controls.Add(this.tafseerCopy);
-            this.Controls.Add(this.lTafseer);
             this.Controls.Add(this.tafasir);
             this.Controls.Add(this.searchClose);
             this.Controls.Add(this.searchText);
@@ -1213,7 +1216,6 @@
         private System.Windows.Forms.Button search;
         private System.Windows.Forms.Button searchClose;
         private System.Windows.Forms.Button tafseerCopy;
-        private System.Windows.Forms.Label lTafseer;
         private System.Windows.Forms.ComboBox tafasir;
         private System.Windows.Forms.Button saveRTF;
         private System.Windows.Forms.SaveFileDialog saveRichText;
@@ -1250,6 +1252,7 @@
         private System.Windows.Forms.CheckBox pageSrtCheck;
         private System.Windows.Forms.Button videoEditor;
         private System.Windows.Forms.Button youtubeCaptions;
+        private System.Windows.Forms.CheckBox preventWordSelection;
     }
 }
 

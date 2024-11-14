@@ -1093,7 +1093,6 @@ namespace QuranKareem
             if (ShaykhDesc.Text == "الوصف" && ShaykhDesc.Enabled == true)
             {
                 ShaykhDesc.Text = "إلغاء";
-                lTafseer.Visible = false;
                 tafasir.Visible = false;
                 tafseerCopy.Visible = false;
                 saveRTF.Visible = false;
@@ -1115,7 +1114,6 @@ namespace QuranKareem
                 lComment.Visible = false;
                 comment.Visible = false;
                 descSave.Visible = false;
-                lTafseer.Visible = true;
                 tafasir.Visible = true;
                 tafseerCopy.Visible = true;
                 saveRTF.Visible = true;
@@ -1170,7 +1168,15 @@ namespace QuranKareem
         private void VideoEditor_Click(object sender, EventArgs e) => new VideoEditorForm(qPicture).ShowDialog();
         
         private void YoutubeCaptions_Click(object sender, EventArgs e) => new YoutubeCaptionsForm(qPicture).ShowDialog();
-        
+
+        private void PreventWordSelection_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isAllow = !preventWordSelection.Checked;
+            quranText.WordMode = isAllow;
+            quranPicture.WordMode = isAllow;
+            quranAudio.WordMode = isAllow;
+            quranTtf.WordMode = isAllow;
+        }
 
         private void Latest_Click(object sender, EventArgs e) => Process.Start("https://github.com/mohamedashref371/QuranKareem");
 
