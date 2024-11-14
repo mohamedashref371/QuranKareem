@@ -789,8 +789,7 @@ namespace QuranKareem
             try
             {
                 Clipboard.Clear();
-                if (normalText.Checked) Clipboard.SetText(quranText.AyahAbstractText((int)Surah.Value, (int)Ayah.Value));
-                else Clipboard.SetText(quranText.AyahText((int)Surah.Value, (int)Ayah.Value));
+                Clipboard.SetText(quranText.AyahAbstractText((int)Surah.Value, (int)Ayah.Value) + "\n\n\n" + quranText.AyahText((int)Surah.Value, (int)Ayah.Value));
             }
             catch { }
         }
