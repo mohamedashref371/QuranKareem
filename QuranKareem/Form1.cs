@@ -227,6 +227,7 @@ namespace QuranKareem
             File.WriteAllText(save + "Volume", volume.Value + "");
         }
 
+        private readonly string visibleEqualTrue = "Visible == true";
         private void ExitForm_Click(object sender, EventArgs e) // زر الإغلاق
         {
             if (zoom) // البرنامج في وضعية الزوم
@@ -234,7 +235,7 @@ namespace QuranKareem
                 zoom = !zoom; // الخروج من وضعية الزوم
                 for (int i = 0; i < Controls.Count; i++)
                 {
-                    if ((string)Controls[i].Tag == "Visible == true")
+                    if ((string)Controls[i].Tag == visibleEqualTrue)
                     {
                         Controls[i].Visible = true;
                         Controls[i].Tag = null;
@@ -282,7 +283,7 @@ namespace QuranKareem
                 {
                     if (Controls[i].Visible == true)
                     {
-                        Controls[i].Tag = "Visible == true";
+                        Controls[i].Tag = visibleEqualTrue;
                         Controls[i].Visible = false;
                     }
                 }
@@ -435,6 +436,7 @@ namespace QuranKareem
             {
                 for (int i = 0; i < audioFolders.Count; i++)
                 {
+                    if (audioFolders[i][0] == ':') continue;
                     temp = audioFolders[i].Split('|').First().Trim('\\', '/');
                     for (int j = 0; j < list.Count; j++)
                     {

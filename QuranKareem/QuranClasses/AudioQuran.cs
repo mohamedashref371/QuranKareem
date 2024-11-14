@@ -282,7 +282,7 @@ namespace QuranKareem
 
             if (setPosEnabled) mp3.Ctlcontrols.currentPosition = From / 1000.0;
 
-            words.Clear(); FullWords.Clear();
+            words.Clear(); fullWords.Clear();
             CurrentWord = -1; idWord = 0;
             if (WordMode && !isWordTableEmpty)
             {
@@ -304,7 +304,7 @@ namespace QuranKareem
 
                     command.CommandText = $"SELECT word,timestamp_from,timestamp_to FROM words WHERE ayah_id={ayahId}";
                     reader = command.ExecuteReader();
-                    while (reader.Read()) FullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
+                    while (reader.Read()) fullWords.AddRange(new int[] { reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2) });
                 }
                 reader.Close();
             }
@@ -314,7 +314,8 @@ namespace QuranKareem
             if (WordMode && !isWordTableEmpty) Words();
         }
 
-        private readonly List<int> words = new List<int>();
+        private int idWord = 0;
+        private readonly List<int> words = new List<int>(), fullWords = new List<int>();
         public void WordOf(int word)
         {
             if (success && WordMode && !isWordTableEmpty && timer.Enabled && word > 0 && word <= words.Count && words[word - 1] >= 0 && To - words[word - 1] > 0)
@@ -325,21 +326,20 @@ namespace QuranKareem
                 idWord = 0;
                 Words();
             }
-
         }
-        private readonly List<int> FullWords = new List<int>(); int idWord = 0;
+        
         private void Words()
         {
             wordsTimer.Stop();
             CurrentWord = -1;
             wordsTimer.Interval = 100;
             int num = (int)(mp3.Ctlcontrols.currentPosition * 1000); // Error At Program Closing
-            for (int i = idWord; i < FullWords.Count / 3; i++)
+            for (int i = idWord; i < fullWords.Count / 3; i++)
             {
-                if (num >= FullWords[i * 3 + 1] && num < FullWords[i * 3 + 2])
+                if (num >= fullWords[i * 3 + 1] && num < fullWords[i * 3 + 2])
                 {
-                    wordsTimer.Interval = FullWords[i * 3 + 2] - num > 0 ? FullWords[i * 3 + 2] - num : 1;
-                    CurrentWord = FullWords[i * 3];
+                    wordsTimer.Interval = fullWords[i * 3 + 2] - num > 0 ? fullWords[i * 3 + 2] - num : 1;
+                    CurrentWord = fullWords[i * 3];
                     idWord++;
                     break;
                 }
