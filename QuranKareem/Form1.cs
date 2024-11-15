@@ -20,6 +20,7 @@ namespace QuranKareem
         readonly AudioQuran quranAudio = AudioQuran.Instance;
         readonly TafseerQuran quranTafseer = TafseerQuran.Instance;
         readonly TrueTypeFontQuran quranTtf = TrueTypeFontQuran.Instance;
+        private IVisualQuran quranVisual = null;
 
         DownloadAudioQuranFiles downloadForm = null;
 
@@ -64,11 +65,11 @@ namespace QuranKareem
                 moshaf.SelectedIndex = 0;
                 moshaf.Items.Add("تحميل ...");
                 textMode = true; // التبديل إلى RichTextBox
+                quranVisual = quranText;
                 pageZoom.Enabled = false; // تعطيل خاصية تكبير الصفحة
                 quranText.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
                 quranText.AddEventHandler(PageQuranText_Click); // اضافة دالة تُنفذ عند الضغط بالماوس
                 quranPic.Visible = false;
-                //discri.Visible = false;
             }
 
             else
@@ -193,6 +194,7 @@ namespace QuranKareem
                     quranPic.Visible = true;
                     quranPic.BackgroundImage = quranPicture.CurrentPicture;
                     quranPic.BackColor = dark.Text == "Dark" ? Coloring.Light.BackColor : Coloring.Night.BackColor;
+                    quranVisual = quranPicture;
                 }
                 else if (qPicture == 2)
                 {
@@ -208,6 +210,7 @@ namespace QuranKareem
                     quranTtf.PageRichText.Size = new Size(quranPic.Width, quranPic.Height);
                     quranTtf.SetWidth();
                     quranTtf.PageRichText.Visible = true;
+                    quranVisual = quranTtf;
                 }
             }
         }

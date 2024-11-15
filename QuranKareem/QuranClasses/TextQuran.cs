@@ -11,7 +11,7 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    internal class TextQuran
+    internal class TextQuran : IVisualQuran
     {
         #region Create The Class
         private bool success = false;
@@ -132,10 +132,9 @@ namespace QuranKareem
                 catch { }
         }
 
-        public void Start(string file, int sura = 1, int aya = 0)
+        public bool Start(string file, int sura = 1, int aya = 0)
         {
-
-            if (!File.Exists(file)) return;
+            if (!File.Exists(file)) return false;
 
             quran.ConnectionString = $"Data Source={file}; Version=3;";
             success = false;
@@ -146,10 +145,10 @@ namespace QuranKareem
                 command.CommandText = $"SELECT * FROM description";
                 reader = command.ExecuteReader();
 
-                if (!reader.HasRows) return;
+                if (!reader.HasRows) return false;
                 reader.Read();
 
-                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 1 || reader.GetInt32(1) != 4) return;
+                if (reader.GetInt32(0)/*type 1:text, 2:picture, 3: audios*/ != 1 || reader.GetInt32(1) != 4) return false;
                 Narration = reader.GetInt32(2); // العمود الثالث
                 SurahsCount = reader.GetInt32(3);
                 //quartersCount = reader.GetInt32(4);
@@ -180,6 +179,7 @@ namespace QuranKareem
                 GetChars();
                 Set(sura, aya);
             }
+            return success;
         }
 
         private void GetChars()
@@ -493,7 +493,7 @@ namespace QuranKareem
         }
         #endregion
 
-        public void WordOf(int word)
+        public bool WordOf(int word)
         {
             try
             {
@@ -502,10 +502,12 @@ namespace QuranKareem
                     pageRichText.Select(wordsPosition[ayahId - pageStartId][word - 1], wordsPosition[ayahId - pageStartId][word] - wordsPosition[ayahId - pageStartId][word - 1]);
                     pageRichText.SelectionColor = GetColor(2, darkMode);
                     pageRichText.DeselectAll();
+                    CurrentWord = word;
+                    return true;
                 }
-                CurrentWord = word;
             }
             catch { }
+            return false;
         }
 
         public bool SetCursor(int position = -1)

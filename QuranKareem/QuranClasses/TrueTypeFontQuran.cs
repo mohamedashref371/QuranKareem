@@ -11,7 +11,7 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    internal class TrueTypeFontQuran
+    internal class TrueTypeFontQuran : IVisualQuran
     {
         private bool success = false;
         private string path;

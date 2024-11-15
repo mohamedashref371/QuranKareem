@@ -9,7 +9,7 @@ using static QuranKareem.Coloring;
 
 namespace QuranKareem
 {
-    internal class PictureQuran
+    internal class PictureQuran : IVisualQuran
     {
         #region Create The Class
         private bool success = false;
@@ -382,15 +382,16 @@ namespace QuranKareem
         }
         #endregion
 
-        public void WordOf(int word)// سيتم تعديله ان شاء الله
+        public bool WordOf(int word)// سيتم تعديله ان شاء الله
         {
             if (!WordMode || isWordTableEmpty || isWordsDiscriminatorEmpty || word <= 0 || word > wordsCount)
             {
                 CurrentWord = -1;
-                return;
+                return false;
             }
             CurrentWord = word;
             WordDecorations();
+            return true;
         }
 
         public bool SetXY(int xMouse, int yMouse) => SetXY(xMouse, yMouse, Width, Height);
