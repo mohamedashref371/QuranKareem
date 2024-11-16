@@ -562,6 +562,7 @@ namespace QuranKareem
 
         public bool SetCursor(int position = -1)
         {
+            PageRichText.Enabled = false; PageRichText.Enabled = true;
             if (!success) return false;
             if (position < 0) position = PageRichText.SelectionStart;
             if (position > pageWords.Count) return false;
