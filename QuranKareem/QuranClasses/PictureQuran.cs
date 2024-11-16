@@ -86,6 +86,10 @@ namespace QuranKareem
                     isWordsDiscriminatorEmpty = !Discriminators.ActiveDiscriminators(darkMode);
                     Set();
                 }
+                else
+                {
+                    darkMode = value;
+                }
             }
         }
 
@@ -154,6 +158,11 @@ namespace QuranKareem
                 CurrentPicture = new Bitmap(Width, Height);
                 PagePicture = CurrentPicture;
                 GetInitialColors();
+                if (darkMode)
+                {
+                    if (background.A != 0) background = Color.FromArgb(background.A, 255 - background.R, 255 - background.G, 255 - background.B);
+                    if (!textColor.IsEmpty) textColor = Color.FromArgb(255 - background.R, 255 - background.G, 255 - background.B);
+                }
                 Set(sura, aya);
             }
             return success;

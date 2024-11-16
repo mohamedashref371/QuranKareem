@@ -24,7 +24,6 @@ namespace QuranKareem
 
         DownloadAudioQuranFiles downloadForm = null;
 
-        bool textMode = false;
         string moshafText = "", moshafAudio = "", tafseer = "";
 
         #region Form
@@ -64,7 +63,7 @@ namespace QuranKareem
             {
                 moshaf.SelectedIndex = 0;
                 moshaf.Items.Add("تحميل ...");
-                textMode = true; // التبديل إلى RichTextBox
+                qPicture = 0; // التبديل إلى RichTextBox
                 quranVisual = quranText;
                 pageZoom.Enabled = false; // تعطيل خاصية تكبير الصفحة
                 quranText.AddRichTextBoxInControls(Controls, quranPic.Location.X, quranPic.Location.Y, quranPic.Width, quranPic.Height); // اظهاره في النافذة
@@ -82,9 +81,7 @@ namespace QuranKareem
                 quranText.Start(textsFiles[0], (int)Surah.Value, (int)Ayah.Value);
 
             Surahs.Items.Clear(); // إفراغ قائمة ال ComboBox
-            if (textMode) Surahs.Items.AddRange(quranText.GetSurahNames()); // ملأها بأسماء السور;
-            else if (qPicture == 2) Surahs.Items.AddRange(quranTtf.GetSurahNames());
-            else Surahs.Items.AddRange(quranPicture.GetSurahNames());
+            Surahs.Items.AddRange(quranVisual.GetSurahNames()); // ملأها بأسماء السور
             Surahs.SelectedIndex = (int)Surah.Value - 1; // الإشارة على أول سورة
 
             quranAudio.AddInControls(Controls); // اضافة المشغل الصوتي إلى خلفية النافذة
@@ -222,7 +219,7 @@ namespace QuranKareem
             File.WriteAllText(save + "AyahNumberCurrent", Surah.Value + "," + Ayah.Value);
             File.WriteAllText(save + "MoshafTextCurrent", moshafText);
 
-            if (!textMode && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
+            if (qPicture != 0 && moshaf.SelectedIndex > 0 && moshaf.SelectedIndex < moshaf.Items.Count - 1)
                 File.WriteAllText(@"pictures\TheChosenMoshaf.txt", (string)moshaf.SelectedItem, Encoding.UTF8);
             
             File.WriteAllText(save + "MoshafAudioCurrent", moshafAudio);
@@ -385,7 +382,7 @@ namespace QuranKareem
                 ShaykhDesc.BackColor = BackColor;
                 ShaykhDesc.UseVisualStyleBackColor = true;
             }
-            if (!textMode && qPicture == 1) quranPic.BackgroundImage = quranPicture.CurrentPicture;
+            if (qPicture == 1) quranPic.BackgroundImage = quranPicture.CurrentPicture;
         }
         #endregion
 
@@ -547,32 +544,12 @@ namespace QuranKareem
         {
             Surahs.SelectedIndex = (int)Surah.Value - 1;
 
-            if (textMode)
-            {
-                if (allow) quranText.Set((int)Surah.Value);
-                //Ayah.Minimum = quranText.AyahStart;
-                ayahMaximumIsChanged = true;
-                Ayah.Maximum = quranText.AyatCount;
-                ayahMaximumIsChanged = false;
-                SetAyah();
-            }
-            else if (qPicture == 2)
-            {
-                if (allow) quranTtf.Set((int)Surah.Value);
-                ayahMaximumIsChanged = true;
-                Ayah.Maximum = quranTtf.AyatCount;
-                ayahMaximumIsChanged = false;
-                SetAyah();
-            }
-            else
-            {
-                if (allow) quranPicture.Set((int)Surah.Value); //
-                //Ayah.Minimum = quranPicture.AyahStart;
-                ayahMaximumIsChanged = true;
-                Ayah.Maximum = quranPicture.AyatCount;
-                ayahMaximumIsChanged = false;
-                SetAyah(); //
-            }
+            if (allow) quranVisual.Set((int)Surah.Value);
+            ayahMaximumIsChanged = true;
+            Ayah.Maximum = quranVisual.AyatCount;
+            ayahMaximumIsChanged = false;
+            SetAyah();
+
             if (addNewMoqrea.Text == "إلغاء") EditMoqreaSurah((int)Surah.Value);
         }
 
@@ -596,35 +573,18 @@ namespace QuranKareem
             Hizb.Value = Math.Ceiling(Quarter.Value / 4);
             allowJuz = true;
 
-            if (textMode && allow)
+            if (allow)
             {
-                quranText.Set(quarter: (int)Quarter.Value);
-                SetAyah();
-            }
-            else if (allow)
-            {
-                if (qPicture == 2)
-                    quranTtf.Set(quarter: (int)Quarter.Value);
-                else
-                    quranPicture.Set(quarter: (int)Quarter.Value);
+                quranVisual.Set(quarter: (int)Quarter.Value);
                 SetAyah();
             }
         }
 
         private void Page_ValueChanged(object sender, EventArgs e) /* فهرس بالصفحات */
         {
-
-            if (textMode && allow)
+            if (allow)
             {
-                quranText.Set(page: (int)Page.Value);
-                SetAyah();
-            }
-            else if (allow)
-            {
-                if (qPicture == 2)
-                    quranTtf.Set(page: (int)Page.Value);
-                else
-                    quranPicture.Set(page: (int)Page.Value);
+                quranVisual.Set(page: (int)Page.Value);
                 SetAyah();
             }
         }
@@ -632,24 +592,11 @@ namespace QuranKareem
         void SetAyah() // الجزء المتكرر في تنقلات المصحف
         {
             allow = false;
-            if (textMode)
-            {
-                Surah.Value = quranText.SurahNumber;
-                if (Ayah.Value == quranText.AyahNumber) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranText.AyahNumber;
-            }
-            else if (qPicture == 2)
-            {
-                Surah.Value = quranTtf.SurahNumber;
-                if (Ayah.Value == quranTtf.AyahNumber) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranTtf.AyahNumber;
-            }
-            else
-            {
-                Surah.Value = quranPicture.SurahNumber;
-                if (Ayah.Value == quranPicture.AyahNumber) Ayah_ValueChanged(null, null);
-                else Ayah.Value = quranPicture.AyahNumber;
-            }
+
+            Surah.Value = quranVisual.SurahNumber;
+            if (Ayah.Value == quranVisual.AyahNumber) Ayah_ValueChanged(null, null);
+            else Ayah.Value = quranVisual.AyahNumber;
+
             allow = true;
         }
 
@@ -658,61 +605,25 @@ namespace QuranKareem
         private void Ayah_ValueChanged(object sender, EventArgs e)
         {
             if (ayahMaximumIsChanged) return;
-            if (textMode)
+            if (allow)
             {
-                if (allow)
-                {
-                    quranText.Set((int)Surah.Value, (int)Ayah.Value);
-                    allow = false;
-                }
-                Quarter.Value = quranText.QuarterNumber;
-                Page.Value = quranText.PageNumber;
+                quranVisual.Set((int)Surah.Value, (int)Ayah.Value);
+                allow = false;
             }
-            else
-            {
-                if (allow)
-                {
-                    if (qPicture == 2)
-                        quranTtf.Set((int)Surah.Value, (int)Ayah.Value);
-                    else
-                        quranPicture.Set((int)Surah.Value, (int)Ayah.Value);
-                    allow = false;
-                }
+            Quarter.Value = quranVisual.QuarterNumber;
+            Page.Value = quranVisual.PageNumber;
 
-                if (qPicture == 2)
-                {
-                    Quarter.Value = quranTtf.QuarterNumber;
-                    Page.Value = quranTtf.PageNumber;
-                }
-                else if (qPicture == 1)
-                {
-                    Quarter.Value = quranPicture.QuarterNumber;
-                    Page.Value = quranPicture.PageNumber;
-                    quranPic.BackgroundImage = null;
-                    quranPic.BackgroundImage = quranPicture.CurrentPicture;
-                }
+            if (qPicture == 1)
+            {
+                quranPic.BackgroundImage = null;
+                quranPic.BackgroundImage = quranPicture.CurrentPicture;
             }
 
-            if (isAllow && textMode)
+            if (isAllow)
             {
-                quranAudio.Set(quranText.SurahNumber, quranText.AyahNumber);
-                if (quranText.CurrentWord > 0)
-                    quranAudio.WordOf(quranText.CurrentWord);
-            }
-            else if (isAllow)
-            {
-                if (qPicture == 2)
-                {
-                    quranAudio.Set(quranTtf.SurahNumber, quranTtf.AyahNumber);
-                    if (quranTtf.CurrentWord > 0)
-                        quranAudio.WordOf(quranTtf.CurrentWord);
-                }
-                else
-                {
-                    quranAudio.Set(quranPicture.SurahNumber, quranPicture.AyahNumber);
-                    if (quranPicture.CurrentWord > 0)
-                        quranAudio.WordOf(quranPicture.CurrentWord);
-                }
+                quranAudio.Set(quranVisual.SurahNumber, quranVisual.AyahNumber);
+                if (quranVisual.CurrentWord > 0)
+                    quranAudio.WordOf(quranVisual.CurrentWord);
             }
 
             time5.Text = quranAudio.GetCurrentPosition();
@@ -724,17 +635,9 @@ namespace QuranKareem
         private void AyahAudio(object sender, EventArgs e)
         {
             isAllow = false;
-            if (textMode && allow)
+            if (allow)
             {
-                quranText.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
-                SetAyah();
-            }
-            else if (allow)
-            {
-                if (qPicture == 2)
-                    quranTtf.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
-                else
-                    quranPicture.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
+                quranVisual.Set(quranAudio.SurahNumber, quranAudio.AyahNumber);
                 SetAyah();
             }
             isAllow = true;
@@ -743,23 +646,13 @@ namespace QuranKareem
         // quranAudios -> AddEventHandlerOfWord
         private void WordAudio(object sender, EventArgs e)
         {
-            if (textMode)
-            {
-                quranText.WordOf(quranAudio.CurrentWord);
-            }
-            else
-            {
-                if (quranAudio.CurrentWord > 0)
-                    if (qPicture == 2)
-                        quranTtf.WordOf(quranAudio.CurrentWord);
-                    else
-                        quranPicture.WordOf(quranAudio.CurrentWord);
+            if (quranAudio.CurrentWord > 0)
+                quranVisual.WordOf(quranAudio.CurrentWord);
 
-                if (qPicture == 1)
-                {
-                    quranPic.BackgroundImage = null;
-                    quranPic.BackgroundImage = quranPicture.CurrentPicture;
-                }
+            if (qPicture == 1)
+            {
+                quranPic.BackgroundImage = null;
+                quranPic.BackgroundImage = quranPicture.CurrentPicture;
             }
         }
 
