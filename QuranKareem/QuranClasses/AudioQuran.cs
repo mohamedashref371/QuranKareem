@@ -153,6 +153,7 @@ namespace QuranKareem
         public bool Set(int surah = 0, int ayah = -2, bool next = false)
         {
             if (!timer.Enabled) setPosEnabled = true;
+            if (setPosEnabled) RepeatReset();
             timer.Stop(); wordsTimer.Stop();
             if (!success) return false;
 
@@ -258,7 +259,7 @@ namespace QuranKareem
         private void SurahData(int surah)
         {
             SurahNumber = surah;
-            SurahRepeatCounter = 0;
+            RepeatReset();
             command.CommandText = $"SELECT ayat_count FROM surahs WHERE id={surah}";
             quran.Open();
             reader = command.ExecuteReader();
@@ -422,6 +423,11 @@ namespace QuranKareem
         {
             this.SurahRepeat = (SurahRepeat >= 1) ? SurahRepeat : 1;
             this.AyahRepeat = (AyahRepeat >= 1) ? AyahRepeat : 1;
+        }
+        public void RepeatReset()
+        {
+            SurahRepeatCounter = 0;
+            AyahRepeatCounter = 0;
         }
 
         byte[] surahArray = null; int start = -1, unit;
